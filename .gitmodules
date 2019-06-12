@@ -1,3 +1,6 @@
 [submodule "Argonne2019/reveal.js"]
 	path = Argonne2019/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "template/reveal.js"]
+	path = template/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
