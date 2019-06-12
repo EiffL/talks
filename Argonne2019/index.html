@@ -30,13 +30,348 @@
 	</head>
 	<body>
 		<div class="reveal">
-
-			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+			<!-- Any section element inside of this container is displayed as a slide -->
+
+							<section data-background-image="assets/lsst_stills_0009.jpg" >
+
+									<div class="container">
+										<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+											<h1>Machine Learning for Modern Cosmological Surveys</h1>
+											<h3>AI Seminar @ Argonne National Laboratory, June 12th, 2019</h3>
+									</div>
+								</div>
+
+								<hr>
+								<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+										<div class="container" >
+												<div class="col">
+													<div align="left" style="margin-left: 20px;">
+													<br>
+													<h2>François Lanusse</h2>
+													<p>	University of California, Berkeley</p>
+
+													<img src="assets/logo_bccp.png" class="plain" height="100"></img>
+													<br>
+
+													</div>
+												</div>
+												<div class="col">
+													<br>
+													<br>
+													<img src="assets/BIDS-Logo-Acronym-Color.png" class="plain" height="175"></img>
+													<img src="assets/desc-logo-inv.png" class="plain" height="200"></img>
+												</div>
+											</div>
+									</div>
+								</section>
+
+
+								<section>
+								<section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
+									<h3>A motivating example: the Large Synoptic Survey Telescope</h3>
+								<div class="container">
+								<div class="col">
+									<ul>
+										<li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
+										<li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
+										<li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
+									</ul>
+									<br >
+									<p class="fragment fade-up"> $\Longrightarrow$ Incredible potential for discovery, along with <b>unprecedented challenges</b >.</p>
+								</div>
+
+							 <div class="col">
+									<video class="fragment fade-up"  data-fragment-index="1" data-autoplay data-src="assets/obsim.mp4" type="video/mp4" />
+							 </div>
+						 </div>
+
+						 </section>
+						 			<section data-transition="fade-in fade-out" data-background="assets/gal_sdss.png" data-vertical-align-top>
+										<p>Previous generation survey: SDSS</p>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+						 			</section>
+						 			<section data-transition="fade-in fade-out" data-background="assets/gal_des.png" data-vertical-align-top>
+										<p>Current generation survey: DES</p>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+						 			</section>
+									<section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
+										<p>LSST precursor survey: HSC</p>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+					 			</section>
+								<section>
+								<h3>The challenges of modern surveys</h3>
+								<br>
+										<ul>
+											<li class="fragment fade-up"> Handling the increased data rates </li>
+											<br>
+											<li class="fragment fade-up"> Accessing the information present in the data </li>
+											<br >
+											<li class="fragment fade-up"> Controlling systematic errors </li>
+										</ul>
+								</section>
+
+							</section>
+
+							<section>
+								<h1>Towards a New Inference Paradigm with Deep Learning </h1>
+							</section>
+							<section>
+
+							<h3 class='slide-title'> traditional cosmological inference </h3>
+							<div class='container'>
+								<div class='col'>
+									<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+									<div class="fragment current-visible" style="position:absolute;top:0;"  data-fragment-index="1">HSC cosmic shear power spectrum</div>
+									<div class="fragment" style="position:absolute;top:0;"  data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+								</div>
+									<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+										<div class="fragment current-visible"  style="position:absolute;top:0;left:0;" data-fragment-index="0" >
+									  	<img class="plain" data-src="assets/alonso_g1.png" />
+									  	<img class="plain" data-src="assets/alonso_g2.png" />
+										</div>
+									  <img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+									  <img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+									</div>
+									<div class="fragment"  data-fragment-index="1" style="float:right; font-size: 20px">(Hikage,..., Lanusse, et al. 2018)</div>
+								</div>
+
+								<div class='col'>
+							<ul>
+								<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
+		$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
+								<br>
+								<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+								<br>
+								<li class="fragment" data-fragment-index="2"> Run an  MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+										$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}}  \  \underbrace{p(\theta)}_{\mathrm{prior}}$$
+								</li>
+							</ul>
+								</div>
+							</div>
+
+						<div class="block fragment">
+							<div class="block-title">
+								Main limitation: the need for an explicit likelihood
+							</div>
+							<div class="block-content">
+							We can only compute the likelihood for <b>simple summary statistics</b> and on <b>large scales</b>
+							<br>
+							<br>
+							<div class="fragment"> $\Longrightarrow$ We are dismissing most of the information! </div>
+						</div>
+					</div>
+				</section>
+
+				<section class="inverted" data-background="#000">
+					<h2>
+					Can I use a Deep Learning to perform proper Bayesian
+							inference without likelihoods?</h2>
+				</section>
+
+				<section>
+							<h3 class='slide-title'> let us rephrase the question </h3>
+
+							<ul>
+								<li> I assume a forward model of the observations:
+							    \begin{equation}
+							    		p( x ) = p(x | \theta) \ p(\theta) \nonumber
+							    \end{equation}
+							    All I ask is the ability to sample  from the model, to obtain $\mathcal{D} = \{x_i, \theta_i \}_{i\in \mathbb{N}}$
+								</li>
+								<br>
+								<li> I am going to assume $q_\phi(\theta | x)$ a <b>parametric conditional density</b>
+								</li>
+								<br>
+								<li>Optimize the parameters $\phi$ of $q_{\phi}$ according to
+											\begin{equation}
+												\min\limits_{\phi}  \sum\limits_{i} - \log  q_{\phi}(\theta_i | x_i)   \nonumber
+											\end{equation}
+										In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+										\begin{equation}
+										\boxed{q_{\phi^\ast}(\theta | x) \approx p(\theta | x)}  \nonumber
+										\end{equation}
+								</li>
+							</ul>
+
+								<div style="position:relative; height:30px; margin-left: 4em;">
+							<div class="fragment current-visible" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+								 optimizing  a <b>parametric estimator</b> over<br> the <b>Bayesian joint distribution</b>
+							</div>
+							<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+								optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+							</div>
+						</div>
+				</section>
+
+				<section>
+
+							<h3 class='slide-title'> Neural Density Estimation </h3>
+
+								<div class="container">
+									<div class="col">
+									  <img class="plain" data-src="assets/MDN.png" style="height:550px"/>
+										<br>
+									<div style="float:left; font-size: 20px">Bishop (1994)</div>
+									</div>
+									<div class="col">
+
+										<ul>
+										<li> Mixture Density Networks (MDN)
+												\begin{equation}
+												p(\theta | x)	 = \prod_i \pi_i(x) \  \mathcal{N}\left(\mu_i(x),  \ \sigma_i(x) \right) \nonumber
+												\end{equation}
+												 DELFI method (Alsing et al. 2018) based on Papamakarios & Murray (2016)
+										</li>
+										<br>
+
+										<li>Flourishing Machine Learning literature on density estimators
+											<img class="plain" data-src="assets/glow.png" />
+										</li>
+
+									</ul>
+									<div style="float:right; font-size: 20px">GLOW, (Kingma & Dhariwal, 2018)</div>
+									</div>
+								</div>
+				</section>
+
+				<section>
+					<h3 class='slide-title'> deep residual networks for amortized inference </h3>
+
+							<div class="container">
+
+									<div class="col" style="flex: 0 0 15em;">
+										<img class="plain" data-src="assets/deeplens.png"  style="height:550px"/><br>
+										<div style="float:center; font-size: 20px">Lanusse & Lin, in prep.</div>
+										</div>
+										<div class="col" >
+											<ul>
+													<li> Deep Residual Network (ResNet-36) with mixture density output
+													</li>
+													<br>
+													<li>Training on raw weak lensing maps simulated for different cosmologies</li>
+							        <div class="container" >
+													<div class="col" style="flex: 0 0 26em;">
+													<img class="plain" data-src="assets/mass_maps.png"/><br>
+												</div>
+												<div class="col">
+													<img class="plain" data-src="assets/TF_FullColor_Horizontal.png"/>
+													<br>
+													<br>
+													<br>
+													<img class="plain" data-src="assets/google-cloud-platform-logo.png"/>
+												</div>
+											</div>
+	 											</ul>
+									 </div>
+							</div>
+				</section>
+
+				<section>
+
+					<h3 class='slide-title'> extremely fast emulator for convergence maps</h3>
+
+						<img class="plain" data-src="assets/LK_model_2.png" style="height: 300px;"/>
+
+						<div class="container" >
+
+												<div class="col">
+													<img class="plain" data-src="assets/camelus.png" style="height: 300px;"/>
+												</div>
+
+												<div class="col">
+													<img class="plain" data-src="assets/Maps_and_mask.png" style="height: 300px;"/>
+												</div>
+						</div>
+				</section>
+
+				<section>
+					<h3 class='slide-title'> recovered posterior </h3>
+
+
+						<div class="container" >
+
+												<div class="col">
+														<img class="plain" data-src="assets/sselfi-contours.png" style="height: 300px;"/>
+										</div>
+
+												<div class="col">
+														<img class="plain" data-src="assets/SBC-omega_m.png" />
+														<img class="plain" data-src="assets/SBC-sigma8.png" />
+
+														Simulation-Based Calibration (Talts et al. 2018)
+
+														\begin{equation}
+   p(\theta) = \int p(\theta | \tilde{x} )  \  p(\tilde{x} | \tilde{\theta})  p(\tilde{\theta}) d \tilde{x} d \tilde{\theta} \nonumber
+\end{equation}
+$\longrightarrow$ Data averaged posterior reduces to prior
+												</div>
+						</div>
+				</section>
 			</div>
 		</div>
+
+
+		<style>
+		.reveal .slides {
+		    border: 5px solid red;
+		    min-height: 100%;
+		    width: 128mm;
+		    height: 96mm;
+		}
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding:8px 35px 8px 14px;
+  		color: #FFAA7F;
+  		font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding:8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+  		color: #FFAA7F;
+  		font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+/*
+	    /* .reveal .alert {
+	             padding:8px 35px 8px 14px; margin-bottom:18px;
+	             text-shadow:0 1px 0 rgba(255,255,255,1);
+	             border:5px solid #FFAA7F;
+	             -webkit-border-radius: 14px; -moz-border-radius: 14px;
+	             border-radius:14px
+	             background-position: 10px 10px;
+	             background-repeat: no-repeat;
+	             background-size: 38px;
+	             padding-left: 30px; /* 55px; if icon
+	     }
+	     .reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	     .reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	     /*.reveal .alert li {margin-top: 1em}
+	     .reveal .alert-block p+p {margin-top:5px} */
+
+		</style>
 
 		<script src="reveal.js/js/reveal.js"></script>
 
@@ -45,19 +380,44 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
-				controls: true,
-				progress: true,
-				center: true,
+				controls: false,
+
+				//center: false,
 				hash: true,
 
+				// Visibility rule for backwards navigation arrows; "faded", "hidden"
+				// or "visible"
+				controlsBackArrows: 'hidden',
+
+				// Display a presentation progress bar
+				progress: true,
+
+				// Display the page number of the current slide
+				slideNumber: true,
+
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1280,
+				height: 720,
+
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
 
 				dependencies: [
 					{ src: 'reveal.js/plugin/markdown/marked.js' },
 					{ src: 'reveal.js/plugin/markdown/markdown.js' },
 					{ src: 'reveal.js/plugin/notes/notes.js', async: true },
+					{ src: 'reveal.js/plugin/math/math.js', async: true },
 					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true }
 				]
+
 			});
 		</script>
 	</body>
