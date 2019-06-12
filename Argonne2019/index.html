@@ -4,11 +4,17 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Machine Learning for Modern Cosmological Surveys</title>
+
+		<meta name="description" content="Argonne 2019">
+		<meta name="author" content="Francois Lanusse">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 		<link rel="stylesheet" href="reveal.js/css/reset.css">
 		<link rel="stylesheet" href="reveal.js/css/reveal.css">
-		<link rel="stylesheet" href="reveal.js/css/theme/black.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/darkenergy.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="reveal.js/lib/css/monokai.css">
@@ -24,6 +30,8 @@
 	</head>
 	<body>
 		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>Slide 1</section>
 				<section>Slide 2</section>
@@ -37,6 +45,13 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
 				dependencies: [
 					{ src: 'reveal.js/plugin/markdown/marked.js' },
 					{ src: 'reveal.js/plugin/markdown/markdown.js' },
