@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>Massive Black II</title>
+  <style>
+body{
+    	background: black;
+    	font-family: "Open Sans", "Helvetica Neue";
+		font-weight: 300;
+		font-size: 12px;
+		color: white;
+    }
+
+    canvas{
+		position: fixed;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		bottom: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div id="network"></div>
+
+  <script src="js/three.min.js"></script>
+  <script src="js/d3.v3.min.js"></script>
+  <script src="js/crossfilter.v1.min.js"></script>
+
+<script>
+  var pointGeo = new THREE.Geometry();
+  var image = document.createElement('img');
+  var texture = new THREE.Texture('image');
+
+  var mat = new THREE.PointCloudMaterial({
+    vertexColors: true,
+    size: 5,
+    color: 0xffffff,
+    map: THREE.ImageUtils.loadTexture('assets/med-stars.png'),
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthTest: false
+  });
+
+  var points = new THREE.PointCloud(pointGeo, mat);
+
+  function loadStars(data){
+  	pointGeo.dispose();
+    pointGeo.vertices = [];
+
+    var pointCount = data.length;
+      for (var i = 0; i < pointCount; i ++) {
+        var x = scale(data[i].x);
+        var y = scale(data[i].y);
+        var z = scale(data[i].z);
+        var m = data[i].m/100;
+        pointGeo.vertices.push(new THREE.Vector3(x, y, z));
+
+        var color = new THREE.Color('skyblue');
+        color.setHSL( color.getHSL().h, m, 1.);
+        pointGeo.colors.push(color);
+      }
+    scene.add(points);
+  }
+
+  function filter(filterSelect) {
+
+d3.csv("assets/mb2_0_nodes.csv", function(data) {
+
+  data.forEach(function(d,i) {
+    d.index = i;
+    d.x = +d.x;
+    d.y = +d.y;
+    d.z = +d.z;
+    d.vll_gwc = +d.vll_gwc;
+    d.vll_gsc = +d.vll_gsc;
+    d.fll_gsc = +d.fll_gsc;
+    d.nn_gwc = +d.nn_gwc;
+    d.nn_gsc = +d.nn_gsc;
+    d.m = +d.m;
+  })
+
+
+    // Create the crossfilter for the relevant dimensions and groups.
+    var filteredData = crossfilter(data),
+      all = filteredData.groupAll(),
+      index = filteredData.dimension(function(d) { return  d.index; }),
+      fll_gsc = filteredData.dimension(function(d) { return  d.fll_gsc; }),
+      fll_gscs = fll_gsc.group(function(d) { return Math.floor(d); }),
+      vll_gwc = filteredData.dimension(function(d) { return  d.vll_gwc; }),
+      vll_gwcs = vll_gwc.group(function(d) { return Math.floor(d); }),
+      vll_gsc = filteredData.dimension(function(d) { return  d.vll_gsc; }),
+      vll_gscs = vll_gsc.group(function(d) { return Math.floor(d); }),
+      nn_gwc = filteredData.dimension(function(d) { return  d.nn_gwc; }),
+      nn_gwcs = nn_gwc.group(function(d) { return Math.floor(d); }),
+      nn_gsc = filteredData.dimension(function(d) { return  d.nn_gsc; }),
+      nn_gscs = nn_gsc.group(function(d) { return Math.floor(d); });
+
+  var charts = [
+    barChart()
+        .dimension(fll_gsc)
+        .group(fll_gscs)
+        .x(d3.scale.linear()
+        .domain([0, 51])
+        .rangeRound([0, 300])),
+
+    barChart()
+        .dimension(vll_gwc)
+        .group(vll_gwcs)
+        .x(d3.scale.linear()
+        .domain([0, 25])
+        .rangeRound([0, 300])),
+
+    barChart()
+        .dimension(vll_gsc)
+        .group(vll_gscs)
+        .x(d3.scale.linear()
+        .domain([0, 51])
+        .rangeRound([0, 300])),
+
+    barChart()
+        .dimension(nn_gwc)
+        .group(nn_gwcs)
+        .x(d3.scale.linear()
+        .domain([0, 8])
+        .rangeRound([0, 300])),
+
+    barChart()
+        .dimension(nn_gsc)
+        .group(nn_gscs)
+        .x(d3.scale.linear()
+        .domain([0, 20])
+        .rangeRound([0, 300]))
+  ]
+
+  var chart = d3.selectAll(".chart")
+      .data(charts)
+      .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
+
+  renderAll();
+
+  // Renders the specified chart or list.
+  function render(method) {
+    d3.select(this).call(method);
+  }
+
+  // Whenever the brush moves, re-rendering everything.
+  function renderAll() {
+    chart.each(render);
+
+    throttle(passValues);
+  }
+
+  function throttle(method) {
+    clearTimeout(method._tId);
+    method._tId = setTimeout(function(){
+        method.call();
+    }, 20);
+  }
+
+  function passValues() {
+
+    var infos = index.top(Infinity);
+
+    var len = data.length;
+
+    var nodes = [];
+
+    while(len--){
+      if(typeof infos[len] != 'undefined') { nodes.splice(infos[len].index, 0, infos[len]); }
+      else { nodes.push(''); }
+    }
+
+    stars(nodes);
+    loadStars(infos);
+  }
+
+  window.filter = function(filters) {
+    // filters.forEach(function(d, i) { charts[i].filter(d); });
+    renderAll();
+  };
+
+  window.reset = function(i) {
+    charts[i].filter(null);
+    renderAll();
+  };
+
+  function barChart() {
+    if (!barChart.id) barChart.id = 0;
+
+    var margin = {top: 10, right: 10, bottom: 20, left: 10},
+        x,
+        y = d3.scale.linear().range([50, 0]),
+        id = barChart.id++,
+        axis = d3.svg.axis().orient("bottom"),
+        brush = d3.svg.brush(),
+        brushDirty,
+        dimension,
+        group,
+        round;
+
+    function chart(div) {
+      var width = x.range()[1],
+          height = y.range()[0];
+
+      y.domain([0, group.top(1)[0].value]);
+
+      div.each(function() {
+        var div = d3.select(this),
+            g = div.select("g");
+
+        // Create the skeletal chart.
+        if (g.empty()) {
+          div.select(".title").append("a")
+              .attr("href", "javascript:reset(" + id + ")")
+              .attr("class", "reset")
+              .text("reset")
+              .style("display", "none");
+
+          g = div.append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          g.append("clipPath")
+              .attr("id", "clip-" + id)
+            .append("rect")
+              .attr("width", width)
+              .attr("height", height);
+
+          g.selectAll(".bar")
+              .data(["background", "foreground"])
+              .enter().append("path")
+              .attr("class", function(d) { return d + " bar"; })
+              .datum(group.all());
+
+          g.selectAll(".foreground.bar")
+              .attr("clip-path", "url(#clip-" + id + ")");
+
+          g.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(axis);
+
+          // Initialize the brush component with pretty resize handles.
+          var gBrush = g.append("g").attr("class", "brush").call(brush);
+          gBrush.selectAll("rect").attr("height", height);
+          gBrush.selectAll(".resize").append("path").attr("d", resizePath);
+        }
+
+        // Only redraw the brush if set externally.
+        if (brushDirty) {
+          brushDirty = false;
+          g.selectAll(".brush").call(brush);
+          div.select(".title a").style("display", brush.empty() ? "none" : null);
+          if (brush.empty()) {
+            g.selectAll("#clip-" + id + " rect")
+                .attr("x", 0)
+                .attr("width", width);
+          } else {
+            var extent = brush.extent();
+            g.selectAll("#clip-" + id + " rect")
+                .attr("x", x(extent[0]))
+                .attr("width", x(extent[1]) - x(extent[0]));
+          }
+        }
+
+        g.selectAll(".bar").attr("d", barPath);
+      });
+
+      function barPath(groups) {
+        var path = [],
+            i = -1,
+            n = groups.length,
+            d;
+        while (++i < n) {
+          d = groups[i];
+          path.push("M", x(d.key), ",", height, "V", y(d.value), "h4V", height);
+        }
+        return path.join("");
+      }
+
+      function resizePath(d) {
+        var e = +(d == "e"),
+            x = e ? 1 : -1,
+            y = height / 3;
+        return "M" + (.5 * x) + "," + y
+            + "A6,6 0 0 " + e + " " + (6.5 * x) + "," + (y + 6)
+            + "V" + (2 * y - 6)
+            + "A6,6 0 0 " + e + " " + (.5 * x) + "," + (2 * y);
+      }
+    }
+
+    brush.on("brushstart.chart", function() {
+      var div = d3.select(this.parentNode.parentNode.parentNode);
+      div.select(".title a").style("display", null);
+    });
+
+    brush.on("brush.chart", function() {
+      var g = d3.select(this.parentNode),
+          extent = brush.extent();
+      if (round) g.select(".brush")
+          .call(brush.extent(extent = extent.map(round)))
+        .selectAll(".resize")
+          .style("display", null);
+      g.select("#clip-" + id + " rect")
+          .attr("x", x(extent[0]))
+          .attr("width", x(extent[1]) - x(extent[0]));
+      dimension.filterRange(extent);
+    });
+
+    brush.on("brushend.chart", function() {
+      if (brush.empty()) {
+        var div = d3.select(this.parentNode.parentNode.parentNode);
+        div.select(".title a").style("display", "none");
+        div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
+        dimension.filterAll();
+      }
+    });
+
+    chart.margin = function(_) {
+      if (!arguments.length) return margin;
+      margin = _;
+      return chart;
+    };
+
+    chart.x = function(_) {
+      if (!arguments.length) return x;
+      x = _;
+      axis.scale(x);
+      brush.x(x);
+      return chart;
+    };
+
+    chart.y = function(_) {
+      if (!arguments.length) return y;
+      y = _;
+      return chart;
+    };
+
+    chart.dimension = function(_) {
+      if (!arguments.length) return dimension;
+      dimension = _;
+      return chart;
+    };
+
+    chart.filter = function(_) {
+      if (_) {
+        brush.extent(_);
+        dimension.filterRange(_);
+      } else {
+        brush.clear();
+        dimension.filterAll();
+      }
+      brushDirty = true;
+      return chart;
+    };
+
+    chart.group = function(_) {
+      if (!arguments.length) return group;
+      group = _;
+      return chart;
+    };
+
+    chart.round = function(_) {
+      if (!arguments.length) return round;
+      round = _;
+      return chart;
+    };
+
+    return d3.rebind(chart, brush, "on");
+  }
+});
+
+}
+
+  var scale = d3.scale.linear()
+    .domain([0,50000])
+    .range([-50,50]);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  container = document.getElementById( 'network' );
+  document.body.appendChild( container );
+  container.appendChild(renderer.domElement);
+
+  // renderer.setSize(window.innerWidth, window.innerHeight);
+  // document.body.appendChild(renderer.domElement);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+  camera.position.set(0, 0, 150);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  scene = new THREE.Scene();
+
+  var geometry = new THREE.Geometry();
+
+  var material = new THREE.LineBasicMaterial({
+      color: 0x999999,
+      opacity: 0.2,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      transparent: true
+  });
+
+  var line = new THREE.Line(geometry, material, THREE.LinePieces);
+
+function nodes() {
+
+  var pushHistory =  '#3'
+    d3.csv("assets/mb2_0_edges.csv", function(data) {
+
+      edges = data;
+
+      filter(pushHistory);
+      return edges;
+
+    });
+}
+
+
+function stars(nodes) {
+
+  geometry.dispose();
+
+  geometry.vertices = [];
+
+  var i = edges.length;
+
+  while(i--){
+
+    var edge = edges[i];
+
+    if( nodes[edge.source] !== "" && nodes[edge.target] !== "" ) {
+
+      geometry.vertices.push(
+
+        new THREE.Vector3(
+          scale(nodes[edge.source].x),
+          scale(nodes[edge.source].y),
+          scale(nodes[edge.source].z)),
+
+        new THREE.Vector3(
+          scale(nodes[edge.target].x),
+          scale(nodes[edge.target].y),
+          scale(nodes[edge.target].z))
+
+      );
+
+    }
+
+  }
+
+  scene.add(line);
+
+}
+
+nodes();
+
+  renderer.render(scene, camera);
+
+    var paused = false;
+    var down = false;
+    var sx = 0,
+        sy = 0,
+        sz = 0;
+
+    container.onmousedown = function(ev) {
+        down = true;
+        sx = ev.clientX;
+        sy = ev.clientY;
+    };
+    container.onmouseup = function() {
+        down = false;
+    };
+
+    window.onmousemove = function(ev) {
+        if (down) {
+            var dx = ev.clientX - sx;
+            var dy = ev.clientY - sy;
+            scene.rotation.y += dx * 0.01;
+            scene.rotation.x += dy * 0.01;
+            // camera.position.y += dy;
+            sx += dx;
+            sy += dy;
+        }
+    }
+
+    window.addEventListener("touchmove", function(ev){
+        var dx = ev.clientX - sx;
+        var dy = ev.clientY - sy;
+        scene.rotation.y += dx * 0.01;
+        scene.rotation.x += dy * 0.01;
+        // camera.position.y += dy;
+        sx += dx;
+        sy += dy;
+    });
+
+    window.onmousewheel = function(ev){
+      var dz = 0;
+
+      dz -= event.wheelDeltaY * 0.05;
+
+      if (camera.position.z <= 200 && camera.position.z >= 0 ) { camera.position.z -= dz } else{ camera.position.z = 200 };
+
+    }
+
+    window.onkeypress= function(ev) {
+      animating = ! animating;
+    }
+
+    var animating = true;
+    var speed = 0.2
+    function animate(t) {
+
+        if(animating){
+
+        scene.rotation.y += speed * 0.01;
+        sx += speed;
+
+        if (camera.position.z <= 200 && camera.position.z >= 5 )
+          { camera.position.z -= 0.4*speed }
+        else
+          {  };
+
+        }
+
+        renderer.clear();
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+        window.requestAnimationFrame(animate);
+
+    };
+    window.requestAnimationFrame(animate);
+
+</script>
+
+</body>
