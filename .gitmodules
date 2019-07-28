@@ -4,3 +4,6 @@
 [submodule "template/reveal.js"]
 	path = template/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "SantaCruz2019/reveal.js"]
+	path = SantaCruz2019/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
