@@ -243,6 +243,39 @@
 											</section>
 
 											<section>
+												<section>
+												<h3 class="slide-title">Deep Learning applied to deblending (Reiman & Gohre 2018)</h3>
+															<div>
+															<img class="plain" data-src="assets/Reiman2018_1.png" />
+																Branched GAN model for deblending
+															</div>
+
+														<div class="block fragment">
+															<div class="block-title">
+																The issue with <i>black-box</i> models
+															</div>
+															<div class="block-content">
+																<ul>
+																	<li> No explicit control of noise, PSF, depth, number of sources.
+																			<ul>
+																				<li> Model would have to be retrained for all observing configurations
+																				</li>
+																			</ul>
+																	</li>
+																	<br>
+																	<li> No guarantees on the network output (e.g. flux preservation, artifacts)
+																	</li>
+																</ul>
+														</div>
+													</div>
+												</section>
+
+												<section>
+															<img class="plain" data-src="assets/Reiman2018_2.png"/>
+												</section>
+											</section>
+
+											<section>
 											<section>
 												<h3 class="slide-title">Linear inverse problems</h3>
 
@@ -581,16 +614,25 @@
 															the <b class="alert">volume and complexity</b> at the image level</li>
 														<br>
 
-														<li class="fragment"> Our automated lens finder is faster and more reliable than human volunteers.
-															<br> $\Longrightarrow$  Larger and more robust samples for the science analysis.
-														</li>
-														<br>
-
 														<li class="fragment">Likelihood-based Deep Generative Models are an ideal tool to <b>complement physical modeling</b><br> $\Longrightarrow$ They interface directly with our existing Bayesian machinery for solving inverse problems.</li>
-
 													</ul>
 												</div>
 											</div>
+
+											<div class="fragment">
+												Other examples:
+												<div class="container">
+													<div class="col">
+														<img class="plain" data-src="assets/huang2019_small.png"/>
+														(Huang et al. 2019) finding strong gravitational lenses with CMU DeepLens (Lanusse et al. 2018)
+													</div>
+													<div class="col">
+														<img class="plain" data-src="assets/vae_samples2.png"/>
+														Generative models for galaxy morphology (Ravanbakhsh, Lanusse, et al. 2017)
+													</div>
+												</div>
+											</div>
+
 										</section>
 
 
@@ -1016,7 +1058,7 @@ euclidean data.
 									  <img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
 									  <img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
 									</div>
-									<div class="fragment"  data-fragment-index="1" style="float:right; font-size: 20px">(Hikage,..., Lanusse, et al. 2018)</div>
+									<div class="fragment"  data-fragment-index="1" style="float:right; font-size: 20px">(Hikage, et al. 2018)</div>
 								</div>
 
 								<div class='col'>
@@ -1196,12 +1238,40 @@ $\longrightarrow$ Data averaged posterior reduces to prior
 														<img class="plain" data-src="assets/SBC-sigma8.png" />
 													</div>
 														<br>
-
-
 												</div>
 						</div>
 				</section>
 
+
+				<section>
+					<h3 class="slide-title"> wait... what happened to summary statistics?</h3>
+
+					<div class="container" class="fragment">
+						<div class="col">
+							<img class="plain" data-src="assets/nnexample.png"/>
+						</div>
+
+						<div class="col">
+							<img class="plain" data-src="assets/mutual_information.png"/>
+						</div>
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							Dimensionality reduction by Variational Mutual Information Maximization
+						</div>
+						<div class="block-content">
+							$$ I(y ; \theta) \ = \ \mathbb{E}_{y, \theta} [ \log p(\theta | y) ] + H(\Theta) \ \ge \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | y) ] + H(\Theta) $$
+
+							<ul>
+								<li class="fragment">Not derived from Fisher information around a fiducial value, asymptotically optimal over
+the entire parameter space</li>
+								<br>
+								<li class="fragment"> Comes for free by training a deep MDN with a bottleneck, can be reused</li>
+							</ul>
+						</div>
+					</div>
+				</section>
 
 				<section>
 					<h3 class="slide-title"> takeaway message</h3>
