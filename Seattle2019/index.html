@@ -37,7 +37,8 @@
         <section data-background-image="assets/lsst_stills_0009_crop.jpg" >
             <div class="container">
               <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
-                <h1>Deep Generative Models of Galaxy Morphology<br>Application to Deblending</h1>
+                <h1>Deep Generative Models of Galaxy Morphology</h1>
+                <h2>From Image Simulation to Deblending </h2>
             </div>
           </div>
 
@@ -210,6 +211,27 @@
 
         <section>
           <h2>Generative Models for Galaxy Image Simulation</h2>
+
+          <br>
+          <br>
+
+          <hr>
+          <br>
+          <br>
+          <div align="left" style="margin-left: 20px;">
+          <h3>Work in collaboration with <br>
+          Rachel Mandelbaum, Siamak Ravanbakhsh, Barnabas Poczos</h3>
+          </div>
+
+
+          <br>
+          <br>
+
+          <div style="float:center; font-size: 25px"><b>Lanusse</b> et al., in prep <br>
+            Mandelbaum, <b> Lanusse</b>, et al. (2018)<br>
+            Ravanbakhsh, <b>Lanusse</b>, et al. (2017)
+           </div>
+
         </section>
         <!-- - Motivation of image simulations from the point of view of shape measurement
              - Illustration on the HSC survey calibration effort
@@ -625,14 +647,173 @@
     <section>
 			<h3 class="slide-title"> Conditional sampling in VAE latent space</h3>
 
+    <div class="container">
+    <div class="col">
+      <img data-src="assets/conditional_flow.png" class="plain" ></img>
+    </div>
+      <div class="col">
 
+        <ul>
+          <li> We build a latent space model $p_\varphi(z)$ using a Masked Autoregressive Flow (MAF) (Papamakarios, et al. 2017)
+          </li>
+          <br>
+          <li class="fragment"> While we are learning to sample from the latent space, we can also <b class="alert"> learn to sample conditionaly</b>:
+                $$  p_\varphi(z | y) $$
+          </li>
+          <br>
 
-    </section>
+          <li class="fragment"> Here we learn to sample images conditioned on:
+            <ul>
+              <li> Size: half-light radius $r$
+              </li>
+              <li> Brightness: I band magnitude $mag\_auto$
+              </li>
+              <li> Redshift: COSMOS photometric redshift $zphot$
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
+  </section>
+
+  <section>
+
+  <section>
+			<h3 class="slide-title"> Flow-VAE samples</h3>
+      <br>
+      <br>
+
+      <div style="position:relative; width:1250px; height:700px; margin:0 auto;">
+        <img class="current-visible plain" data-src="assets/flow_vae_samples1.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+        <img class="fragment current-visible plain fade-in" data-src="assets/flow_vae_samples.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+      </div>
+  </section>
+
+  <section>
+			<h3 class="slide-title"> Testing conditional sampling</h3>
+
+    <div class="container">
+    <div class="col">
+      <img data-src="assets/Figure_flux_error.png" class="plain"></img>
+
+    </div>
+    <div class="col">
+    <img data-src="assets/Figure_size_error.png" class="plain fragment fade-up"></img>
+    </div>
+    </div>
+
+    <div class="fragment">$\Longrightarrow$ We can successfully condition galaxy generation.</div>
+  </section>
+
+  <section>
+			<h3 class="slide-title"> Testing galaxy morphologies </h3>
+
+      <br>
+      <br>
+
+    <img data-src="assets/gini_m20.png" class="plain"></img>
+
+<br>
+<br>
+
+
+  </section>
+</section>
+
+  <section>
+			<h3 class="slide-title"> Takeaway message</h3>
+
+      <br>
+
+      <ul>
+        <li class="fragment"> We have <b class="alert">combined physical and deep learning components</b> to model
+          observed noisy and PSF-convoled galaxy images. <br>
+          $\Longrightarrow$ This framework can handle multi-band, multi-resolution, multi-instrument data.
+        </li>
+
+        <br>
+
+        <li class="fragment"> We are overcoming the limitations of standard VAEs with an additional latent space model.
+          <br>$\Longrightarrow$ Can produce sharp and meaningful images.
+        </li>
+
+        <br>
+
+        <li class="fragment"> We demonstrate conditional sampling of galaxy light profiles<br>
+          $\Longrightarrow$ Image simulation can be combined with larger survey simulation efforts, e.g. LSST DESC DC2
+        </li>
+      </ul>
+
+
+<br>
+<br>
+
+      <div class="block fragment fade-up">
+      <div class="block-title">
+        <b>GalSim Hub</b>
+      </div>
+      <div class="block-content">
+
+<br>
+
+      <div class="container">
+      <div class="col">
+        <img data-src="assets/TF_FullColor_Horizontal.png" class="plain"></img>
+      </div>
+
+      <div class="col">
+
+        <ul>
+
+          <li> Framework for sampling from deep generative models
+            directly from within GalSim.
+          </li>
+
+          <br>
+
+          <li>  Go check out the alpha version:  https://github.com/McWilliamsCenter/galsim_hub
+          </li>
+
+        </ul>
+
+      </div>
+      </div>
+
+    </div>
+    </div>
+
+
+
+  </section>
+
+
 
 
       <section>
       	<h2> Hybrid physics-ML models for image inverse problems</h2>
+
+
+                  <br>
+                  <br>
+
+                  <hr>
+                  <br>
+                  <br>
+                  <div align="left" style="margin-left: 20px;">
+                  <h3>Work in collaboration with <br>
+                  Peter Melchior, Fred Moolekamp, Remy Joseph</h3>
+                  </div>
+
+
+                  <br>
+                  <br>
+
+                  <div style="float:center; font-size: 25px"><b>Lanusse</b>, Melchior, Moolekamp (2019)<br>
+                   </div>
+
+
       </section>
 
       <section>
@@ -982,10 +1163,18 @@
 			</section>
 
 
+      <section>
+				<h3 class="slide-title"> Extending to multi-band images</h3>
+
+						<img class=" plain" data-src="assets/scarlet_hsc.png" />
+
+      </section>
+
+
 			<section>
 				<h3 class="slide-title"> takeaway message</h3>
 
-				<br> <br>
+				<br>
 
 				<div class="block ">
 					<div class="block-title">
@@ -1003,15 +1192,12 @@
 				</div>
 
 				<div class="fragment">
-					Other examples:
+					Other example:
 					<div class="container">
 						<div class="col">
-							<img class="plain" data-src="assets/huang2019_small.png"/>
+							<img class="plain" data-src="assets/huang2019_small.png" style="width: 500px;"/>
+              <br>
 							(Huang et al. 2019) finding strong gravitational lenses with CMU DeepLens (Lanusse et al. 2018)
-						</div>
-						<div class="col">
-							<img class="plain" data-src="assets/vae_samples2.png"/>
-							Generative models for galaxy morphology (Ravanbakhsh, Lanusse, et al. 2017)
 						</div>
 					</div>
 				</div>
