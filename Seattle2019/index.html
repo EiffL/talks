@@ -220,7 +220,7 @@
           <br>
           <div align="left" style="margin-left: 20px;">
           <h3>Work in collaboration with <br>
-          Rachel Mandelbaum, Siamak Ravanbakhsh, Barnabas Poczos</h3>
+          Rachel Mandelbaum, Siamak Ravanbakhsh, Barnabas Poczos, Peter Freeman</h3>
           </div>
 
 
@@ -588,7 +588,7 @@
     </section>
 
     <section>
-			<h3 class="slide-title"> Balance between code regularization and image quality</h3>
+			<h3 class="slide-title"> Tradeoff between code regularization and image quality</h3>
 
       <br>
       $$\log p_\theta(x| \Sigma, \Pi ) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)  \right]}_{\mbox{reconstruction error}} $$
@@ -773,7 +773,7 @@
 
           <br>
 
-          <li>  Go check out the alpha version:  https://github.com/McWilliamsCenter/galsim_hub
+          <li>  Go check out the alpha version: <a href="https://github.com/McWilliamsCenter/galsim_hub">https://github.com/McWilliamsCenter/galsim_hub</a>
           </li>
 
         </ul>
@@ -1046,7 +1046,6 @@
 				<h3 class="slide-title"> The Scarlet algorithm: deblending as an optimization problem</h3>
 						<div style="float:right; font-size: 20px">Melchior et al. 2018</div>
 
-						<br>
 						$$ \mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i) + \sum_{i=1}^K g_i(A_i) +  \sum_{i=1}^K f_i(S_i)$$
 
 				<div class="container">
@@ -1072,8 +1071,6 @@
 				</div>
 			</div>
 
-			<br>
-			<br>
 			<span class="fragment fade-up">$\Longrightarrow$ Explicit physical modeling of the observed sky</span>
 			</section>
 
@@ -1172,37 +1169,105 @@
 
 
 			<section>
-				<h3 class="slide-title"> takeaway message</h3>
+				<h3 class="slide-title"> Takeaway message</h3>
 
 				<br>
 
-				<div class="block ">
-					<div class="block-title">
-						Deep Learning for Low Level Processing
-					</div>
-					<div class="block-content">
-						<ul>
-							<li class="fragment"> An example of Deep Learning allowing us to handle
-								the <b class="alert">volume and complexity</b> at the image level</li>
-							<br>
-
-							<li class="fragment">Likelihood-based Deep Generative Models are an ideal tool to <b>complement physical modeling</b><br> $\Longrightarrow$ They interface directly with our existing Bayesian machinery for solving inverse problems.</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="fragment">
-					Other example:
-					<div class="container">
-						<div class="col">
-							<img class="plain" data-src="assets/huang2019_small.png" style="width: 500px;"/>
+        <ul>
+          <li> We have introduce an <b class="alert">hybrid physical/deep learning model for inverse problems</b>
+            <ul>
               <br>
-							(Huang et al. 2019) finding strong gravitational lenses with CMU DeepLens (Lanusse et al. 2018)
-						</div>
-					</div>
-				</div>
+              <li class="fragment"> Incorporate prior astrophysical knowledge as a data-driven prior
+              </li>
+              <br>
+
+              <li class="fragment"> Interpretable in terms of physical components of the astronomical scene
+              </li>
+              <br>
+
+              <li class="fragment"> Can accomodate different observing conditions and instruments
+                <br> $\Longrightarrow$ For instance, for the joint modeling of  LSST/Euclid data
+              </li>
+            </ul>
+          </li>
+
+          <br>
+          <br>
+
+          <li class="fragment"> We are now in the process of evaluating the benefits of the approach compared to standard scarlet.
+            Some potential complications:
+            <ul>
+              <li> Accounting for color gradients in this new model
+              </li>
+              <br>
+              <li> Evaluating prior-induced biases on lensing related quantities.
+              </li>
+            </ul>
+
+
+          </li>
+
+        </ul>
 
 			</section>
+
+
+
+      				<section>
+      					<h1> Conclusion </h1>
+      				</section>
+
+
+      						<section>
+      							<h3 class="slide-title"> Conclusion </h3>
+
+      													<div class="block ">
+      														<div class="block-title">
+                                    How can Deep Generative Models help us make sense of increasingly complex images ?
+      														</div>
+      														<div class="block-content">
+                                    <br>
+      															<ul>
+      																<li class="fragment"> Produce more <b>realistic image simulations</b> using data-driven models
+      																	<ul>
+      																		<li>Essential tool for validating/calibrating pipelines</il>
+      																	</ul>
+      																</il>
+      																<br>
+
+      																<li class="fragment"> Provide <b>data-driven priors</b> for imaging inverse problems
+      																	<ul>
+      																		<li> Application to deblending, but also deconvolution, inpainting, anomaly detecion.</li>
+      																	</ul>
+      																</li>
+      																<br>
+      															</ul>
+      													</div>
+      												</div>
+
+      													<br>
+      										<div class="fragment">
+      												<u>Advertisement:</u>
+                              <br>
+      												<br>
+      													<ul>
+      														<li> <a href="https://github.com/ml4astro/galaxy2galaxy">Galaxy2Galaxy (github.com/ml4astro/galaxy2galaxy)</a>: Repository of models and datasets for accelerating research in ML for astro.
+      														</li>
+
+      														<br>
+
+      														<li> <a href="https://gitter.im/ml4astro/GalaxyEmulationTaskForce">Galaxy Emulation Task Force (gitter.im/ml4astro/GalaxyEmulationTaskForce)</a>: Group of people working on applications of generative models to the study of galaxies, join the conversation :-) .
+      														</li>
+
+      													</ul>
+      												</div>
+
+      													<br>
+      												<p class="fragment">Thank you ! </p>
+      																		 <br> <br>
+
+
+      						</section>
 
 
 			</div>
@@ -1210,12 +1275,12 @@
 
 
     		<style>
-    		.reveal .slides {
+    		/* .reveal .slides {
     		    border: 5px solid red;
     		    min-height: 100%;
     		    width: 128mm;
     		    height: 96mm;
-    		}
+    		} */
 
     		.reveal .block {
     			background-color: #191919;
