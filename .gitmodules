@@ -13,3 +13,6 @@
 [submodule "YuGroup2019/reveal.js"]
 	path = YuGroup2019/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Ringberg2019/reveal.js"]
+	path = Ringberg2019/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
