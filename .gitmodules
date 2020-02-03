@@ -16,3 +16,6 @@
 [submodule "Ringberg2019/reveal.js"]
 	path = Ringberg2019/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Cosmostat2019/reveal.js"]
+	path = Cosmostat2019/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
