@@ -22,3 +22,6 @@
 [submodule "BlendingUpdate2020/reveal.js"]
 	path = BlendingUpdate2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Argonne2019b/reveal.js"]
+	path = Argonne2019b/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
