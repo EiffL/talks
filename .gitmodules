@@ -25,3 +25,6 @@
 [submodule "Argonne2019b/reveal.js"]
 	path = Argonne2019b/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "ICLR2020/reveal.js"]
+	path = ICLR2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
