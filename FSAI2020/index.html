@@ -33,7 +33,6 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-
         <section data-background-image="assets/lsst_stills_0009_crop.jpg" >
             <div class="container">
               <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
@@ -46,7 +45,6 @@
               <div class="container" >
                   <div class="col">
                     <div align="left" style="margin-left: 20px;">
-                    <br>
                     <h2>François Lanusse</h2>
                     <br>
                     <img src="assets/CosmoStatDarkBK.png" class="plain"></img>
@@ -59,21 +57,40 @@
                     <br>
                     <br>
                     <br>
-                    <br>
                     <img src="assets/logo_cnrs.png" class="plain" height="150"></img>
                   </div>
 
                   <div class="col">
                     <br>
-                    <br>
+
                     <br>
                     <img src="assets/desc-logo-inv.png" class="plain" height="200"></img>
                   </div>
                 </div>
+                <div> slides at <a href="https://eiffl.github.io/talks/FSAI2020">eiffl.github.io/talks/FSAI2020</a> </div>
             </div>
           </section>
 
-            <section>
+          <section data-background-image="assets/WMAP_timeline_large.jpg">
+            <h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
+<br>	<br>
+            <div class="container">
+              <div class="col" style="flex: 0 0 40em;">
+
+              </div>
+              <div class="col">
+
+              <img class="plain" data-src="assets/Euclid.png" style="width: 300px"/>
+
+              <img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px"/>
+
+              <img class="plain" data-src="assets/vrro.png" style="width: 300px"/>
+              </div>
+            </div>
+                <br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
+          </section>
+
+            <!-- <section> -->
                     <section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
                       <h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time </h3>
                       <br>
@@ -83,8 +100,8 @@
                       <ul>
                         <li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
                         <br>
-                        <li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
-                        <br>
+                        <!-- <li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
+                        <br> -->
                         <li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
                       </ul>
                       <br >
@@ -97,88 +114,58 @@
                  </div>
                  </section>
 
-                 <section data-transition="fade-in fade-out" data-background="assets/gal_sdss.png" data-vertical-align-top>
-                   <p>Previous generation survey: SDSS</p>
-                   <br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
-                   <br>	<br>	<br>	<br>	<br>	<br>	<br>
-                           <div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
-                 </section>
-                 <section data-transition="fade-in fade-out" data-background="assets/gal_des.png" data-vertical-align-top>
-                   <p>Current generation survey: DES</p>
-                   <br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
-                   <br>	<br>	<br>	<br>	<br>	<br>	<br>
-                           <div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
-                 </section>
-                 <section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
-                     <p>Rubin Observatory precursor survey: HSC</p>
-
-                     <br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
-                     <br>	<br>	<br>	<br>	<br>	<br>	<br>
-                             <div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
-                 </section>
-               </section>
-
                  <section>
                  <section data-background="assets/fig1w.png">
+                   <div style="float:right; font-size: 20px">Credit: NAOJ</div>
+
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
                  </section>
 
                  <section data-background="assets/fig1.png">
+                   <div style="float:right; font-size: 20px">Credit: NAOJ</div>
+                   <img class="fragment fade-up" data-src="assets/eye_of_horus.jpg" style="height:600px"/>
+
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
+                   <br> <br> <br> <br> <br>
                  </section>
-
-   							<section>
-   								<canvas data-chart="bar">
-   								<!--
-   								{
-   								 "data": {
-   								  "labels": ["CFHTLS"," DES", "LSST"],
-   								  "datasets": [
-   								   {
-   								    "data":[220, 2400, 120000],
-   								    "label":"Number of strong lenses","backgroundColor":"#374A67"
-   								   },
-   								   {
-   								    "data":[75, 2500, 10000],
-   								    "label":"Person-hour required for visual inspection with conventional techniques","backgroundColor":"#A63446"
-   								   }
-   								  ]
-   								 },
-   								 "options": { "responsive": "true",
-   			        "scales": {
-   			            "yAxes": [{
-   			                "type": "logarithmic"
-   			            }]
-   			        }
-   			 					}
-   								}
-   								-->
-   							</canvas>
-   							<div style="float:right; font-size: 20px">Gavazzi et al. (2014), Collett (2015)</div>
-   								<br>
-   								<div class="fragment fade-up">$\Longrightarrow$ Plainly intractable at the scale of LSST</div>
-   							</section>
-
 
                 <section>
                   <h3 class="slide-title">A perfect task for Deep Learning</h3>
 
   								<div class="container">
-  									<div class="col fragment">
+  									<div class="col">
   										<img height="550px"  data-src="assets/deeplens.png" class="plain">
   										<br>
   										CMUDeepLens Architecture<br> (Lanusse et al. 2017)
   									</div>
 
                     <div class="col">
-                      <!-- <img height=200 data-src="assets/candidates.png" class="plain">
-                      <br> Simulated gravitational lenses used for training<br>
+                        <div class="container" style="position:relative; width:600px; height:500px; margin:0 auto;">
+                          <div class="fragment current-visible" style="position:absolute;top:0;left:0;height:500px;" data-fragment-index="0">
+                            <img height=200 data-src="assets/candidates.png" class="plain">
+                            <!-- <br> Simulated gravitational lenses used for training<br><br> -->
+                            <!-- $\Longrightarrow$ was found to outperform human visual inspection. -->
+                          </div>
+                          <div class="fragment " style="position:absolute;top:0;left:0;height:500px;" data-fragment-index="0">
+                            <img height=450 data-src="assets/huang2019.png" data-fragment-index="1" ></img>
+                            <div style="float:center; font-size: 20px">Huang et al. (2019) - arXiv:1906.00970</div>
+                          </div>
+
+                        </div>
+                      <br>
                       <ul>
-                        <li>Was found to outperform human inspection</li>
-                        <li>  </li>
-                        </ul> -->
-
-                      <img height=450 data-src="assets/huang2019.png"></img>
-                      <div style="float:center; font-size: 20px">Huang et al. (2019) - arXiv:1906.00970</div>
-
+                      <li class="fragment">This works great, as long as you don't care too much about <b class="alert">which</b> lenses are identified and <b class="alert">why</b>
+                      </li>
+                      </ul>
                     </div>
                   </div>
   							</section>
@@ -193,17 +180,26 @@
 
          <div class="col">
            <ul>
-             <li class="fragment">Deep Learning for event detection, reconstruction.</li>
-             <li class="fragment">Bayesian Neural Networks </li>
-             <li class="fragment">Baysian inference </li>
+             <li class="fragment">Deep Learning for astronomical data reduction</li>
+             <br>
+             <li class="fragment">Bayesian Neural Networks</li>
+             <br>
+             <li class="fragment">Physical Bayesian inference</li>
            </ul>
-
+           <br>
+           <br>
            <div class="block fragment">
            <div class="block-title">
             This talk:
            </div>
            <div class="block-content">
-             Bonjour
+             Generic approach to <b>uncertainty quantification</b> and <b>interpretability</b>:
+             <br>
+              <ul>
+                <li>Physical Forward Models</li>
+                <li>Deep Generative Models</li>
+                <li>Bayesian Inference</li>
+              </ul>
            </div>
          </div>
        </div>
@@ -336,6 +332,7 @@
             The Bayesian view of the problem:
                  $$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
              where:
+             <br>
                <ul>
                  <li>$p( z | x )$ is the <b class="alert">posterior</b></li>
                  <li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
@@ -442,7 +439,7 @@
      </div>
      </section>
 
-     <section>
+     <!-- <section>
      <h3 class="slide-title">The famous Variational Auto-Encoder</h3>
      <img data-src="assets/vae.png" class="plain" style="height: 450px;"> </img>
      <br>
@@ -474,12 +471,12 @@
      </section>
 
      <section data-background-image=https://media.giphy.com/media/3o85xIO33l7RlmLR4I/source.gif>
-     </section>
+     </section> -->
 
      <section>
        <h3 class="slide-title"> Latent space modeling with Normalizing Flows</h3>
        <br>
-       $\Longrightarrow$ All we need to do is <b class="alert">sample from the aggregate posterior</b> of the data instead of sampling from the prior.
+       $\Longrightarrow$ The latent space data distribution rarely match the assumed Gaussian prior.
      <br>
      <br>
      <div class="container">
@@ -568,7 +565,8 @@
     </section>
 
     <section class="inverted" data-background="#000">
-       <h2>Wait a minute... how did we train a <br>neural network inside of a physical simulator?</h2>
+       <!-- <h2>Wait a minute... how did we train a</h2> <br><h2> neural network inside of a physical simulator?</h2> -->
+          <h2>Did we train a DNN inside of a physical simulator?</h2>
     </section>
 
     <section>
@@ -587,7 +585,6 @@
             (mostly PSF convolution)
             <br>
             <br>
-
         </div>
         <div class="col fragment">
           <img data-src="assets/github.png" class="plain" style="height:70px"/>
@@ -595,7 +592,7 @@
           </div>
           <br>
           <ul>
-            <li>Framework for training genrative models on astronomical images</li>
+            <li>Framework for training generative models on astronomical images</li>
             <br>
             <li>TensorFlow implementation of PSF convolutions for galaxy image simulations</li>
           </ul>
@@ -617,7 +614,7 @@
 
     </section>
 
-    <section>
+    <!-- <section> -->
     <section>
       <h3 class='slide-title'>FlowPM: Particle-Mesh N-body Simulations in TensorFlow</h3>
 
@@ -651,9 +648,9 @@
                       sim = sess.run(final_field)
                </code></pre>
               <ul>
-                <li class="fragment" data-fragment-index="1"> Seamless interfacing with deep learning components
+                <li> Seamless interfacing with deep learning components
                 </li>
-                <li class="fragment" data-fragment-index="2"> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers
+                <li> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers
                 </li>
               </ul>
             </div>
@@ -664,7 +661,7 @@
             </div>
           </div>
     </section>
-
+<!--
            <section>
              <h3 class='slide-title'>the Fast Particle-Mesh scheme</h3>
 
@@ -717,7 +714,7 @@
                    </div>
                  </div>
            </section>
-         </section>
+         </section> -->
 
             <section>
               <section>
@@ -811,12 +808,12 @@
 
 
         		<style>
-        		.reveal .slides {
+        		/* .reveal .slides {
         		    border: 5px solid red;
         		    min-height: 100%;
         		    width: 128mm;
         		    height: 96mm;
-        		}
+        		} */
 
         		.reveal .block {
         			background-color: #191919;
