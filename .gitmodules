@@ -28,3 +28,6 @@
 [submodule "ICLR2020/reveal.js"]
 	path = FSAI2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "LIneA2020/reveal.js"]
+	path = LIneA2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
