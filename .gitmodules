@@ -31,3 +31,6 @@
 [submodule "LIneA2020/reveal.js"]
 	path = LIneA2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "GalSimHub2020/reveal.js"]
+	path = Lanusse2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
