@@ -1,0 +1,752 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>AI &Cosmology in the Exascale Era</title>
+
+		<meta name="description" content="BASE 2020 Wokshop">
+		<meta name="author" content="Francois Lanusse">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<link rel="stylesheet" href="reveal.js/css/reset.css">
+		<link rel="stylesheet" href="reveal.js/css/reveal.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/darkenergy.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="reveal.js/lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+			<!-- Any section element inside of this container is displayed as a slide -->
+
+								<section data-background-image="assets/lsst_stills_0009_crop.jpg" >
+												            <div class="container">
+												              <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+												                <h1>Bridging Physics & AI for Cosmology in the Exascale Era</h1>
+												                <h2>BASE Workshop - September 28th, 2020</h2>
+												            </div>
+												          </div>
+
+												          <hr>
+																	<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+																	              <div class="container" >
+																	                  <div class="col">
+																	                    <div align="left" style="margin-left: 20px;">
+																	                    <h2>François Lanusse</h2>
+																	                    <br>
+																	                    <img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+																	                    <br>
+																	                    </div>
+																	                  </div>
+
+																	                  <div class="col">
+																	                    <br>
+																	                    <br>
+																	                    <br>
+																	                    <br>
+																	                    <img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+																	                  </div>
+
+																	                  <div class="col">
+																	                    <br>
+
+																	                    <br>
+																	                    <img src="assets/desc-logo-inv.png" class="plain" height="200"></img>
+																	                  </div>
+																	                </div>
+																	            </div>
+												          </section>
+
+								<section>
+
+								<section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
+									<h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time</h3>
+								<div class="container">
+								<div class="col">
+									<ul>
+										<li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
+										<br>
+										<li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
+										<br>
+										<li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
+									</ul>
+									<br >
+									<p class="fragment fade-up"> $\Longrightarrow$ Incredible potential for discovery, along with <b>unprecedented challenges</b >.</p>
+								</div>
+
+							 <div class="col">
+									<video class="fragment fade-up"  data-fragment-index="1" data-autoplay data-src="assets/obsim.mp4" type="video/mp4" />
+							 </div>
+						 </div>
+
+						 </section>
+						 			<!-- <section data-transition="fade-in fade-out" data-background="assets/gal_sdss.png" data-vertical-align-top>
+										<p>Previous generation survey: SDSS</p>
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+						 			</section>
+						 			<section data-transition="fade-in fade-out" data-background="assets/gal_des.png" data-vertical-align-top>
+										<p>Current generation survey: DES</p>
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+						 			</section>
+									<section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
+										<p>LSST precursor survey: HSC</p>
+
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
+										<br>	<br>	<br>	<br>	<br>	<br>	<br>
+						 								<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+					 			</section> -->
+							</section>
+
+							<section class="inverted" data-background="#000">
+								<h2>
+								How do we make sense of this vast amount <br> of complex data?</h2>
+							</section>
+
+
+
+							     <section>
+							     <section>
+							       <h3 class="slide-title" style="position:absolute;top:0;">A Motivating Example: Deconvolution</h3>
+							       <br>
+							       <br>
+							        <div class="container">
+							          <div class="col">
+							              <img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px"/>
+							              <br><b class="alert">Hubble Space Telescope</b>
+							          </div>
+
+							          <div class="col fragment fade-up">
+							              <img class="plain " data-src="assets/generic_network.png" style="height: 250px; width:500px"/>
+							              <br>some deep neural network
+							          </div>
+
+							          <div class="col">
+							            <img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px"/>
+							            <br><b class="alert">Simulated Ground-Based Telescope</b>
+							          </div>
+							        </div>
+							<!--
+							        <div> <img class="plain" data-src="assets/galaxygan.png"></div> -->
+							        <br>
+							        <br>
+
+							        <div class="block fragment" >
+							        <div class="block-title">
+							         The issue with generic black box deep learning inference
+							        </div>
+							        <div class="block-content">
+							            <ul>
+							              <li class="fragment">No explicit control of noise, PSF, depth.
+							                <ul>
+							                  <li>Unless covered by the training data, the result becomes unpredictable.
+							                  </li>
+							                </ul>
+							              </li>
+							              <br>
+							              <li class="fragment">No guarantees some physical properties are preserved
+							                <br>$\Longrightarrow$ In this case, the flux of the deconvolved object
+							              </li>
+							              <br>
+							              <li class="fragment"><b>Robust</b> quantification of uncertainties is extremely difficult.
+							              </li>
+							            </ul>
+							        <br>
+							      </div>
+							      </div>
+
+							     </section>
+
+							     <section>
+							        <h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
+							        <br>
+							        <br>
+							        <div class="container">
+							          <div class="col">
+							              <img class="plain fragment" data-src="assets/rand_z_square.png" style="height: 150px" data-fragment-index="4"/>
+							          </div>
+							          <div class="col">
+							              <img class="plain fragment" data-src="assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3"/>
+							          </div>
+							          <div class="col">
+							            <img class="plain fragment" data-src="assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2"/>
+							          </div>
+
+							          <div class="col">
+							            <img class="plain fragment" data-src="assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1"/>
+							          </div>
+
+							          <div class="col">
+							            <img class="plain fragment" data-src="assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0"/>
+							          </div>
+							        </div>
+
+							      <div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+							        <div class='col fragment' data-fragment-index='4'> <font size="10"> $\longrightarrow$ </font> <br> $g_\theta$ </div>
+							        <div class='col fragment' data-fragment-index='3'> <font size="10"> $\longrightarrow$ </font> <br> PSF </div>
+							        <div class='col fragment' data-fragment-index='2'> <font size="10"> $\longrightarrow$ </font> <br> Pixelation</div>
+							        <div class='col fragment' data-fragment-index='1'> <font size="10"> $\longrightarrow$ </font> <br> Noise </div>
+							      </div>
+
+							      <div class="container">
+							          <div class="col">
+							            <div style="position:relative; width:400px; height:300px; margin:0 auto;">
+							            <img data-src="assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0"/>
+							            <img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1"/>
+							            <img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2"/>
+							            <img data-src="assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3"/>
+							            <img data-src="assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4"/>
+							            </div>
+							          </div>
+							          <div class=" col">
+							            <div class="block fragment" data-fragment-index="0">
+							            <div class="block-title">
+							             Probabilistic model
+							            </div>
+							            <div class="block-content">
+							            <div style="position:relative; width:400px; height:100px; margin:0 auto;">
+							              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+							              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+							              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised galaxy image</div>
+							              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved, super-resolved, and denoised galaxy image </div>
+							              <div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$ is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+							            </div>
+							            <br>
+							            <br>
+							            <br>
+							          </div>
+							          </div>
+							          </div>
+							      </div>
+							      <div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+							     </section>
+
+							    <section>
+							      <h3 class="slide-title">Bayesian Inference a.k.a. Uncertainty Quantification</h3>
+							      <div class="container">
+							          <div class="col">
+							            <img data-src="assets/pgm.png" class="plain" style="height: 250px;" ></img>
+							          </div>
+							          <div class="col">
+							            The Bayesian view of the problem:
+							                 $$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
+							             where:
+							             <br>
+							               <ul>
+							                 <li>$p( z | x )$ is the <b class="alert">posterior</b></li>
+							                 <li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
+							                 <li>$p( z )$ is the <b>prior</b> </li>
+							               </ul>
+							          </div>
+							      </div>
+
+							      <div class="container">
+							          <div class="col">
+							            <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							              <img class="plain fragment current-visible" data-src="assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" />
+							              <img class="plain fragment" data-src="assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+							            </div>
+							            <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							              <div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data<br> $x_n$</div>
+							              <div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Truth<br> $x_0$ </div>
+							            </div>
+							            <br>
+							          </div>
+
+							          <div class="col fragment" data-fragment-index='0' >
+							            <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							              <div><video data-autoplay data-loop data-src="assets/rec_samples.mp4" type="video/mp4" style="height: 200px;"/>
+							              </div>
+							            </div>
+							            <div>Posterior samples<br> $g_\theta(z)$</div>
+							          </div>
+
+							          <div class="col">
+							            <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							              <div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/rec_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0"/></div>
+							              <img class="plain fragment " data-src="assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+							            </div>
+
+							            <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							              <div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;">  <br> $\mathbf{P} (\Pi \ast g_\theta(z))$</div>
+							              <div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Median </div>
+							            </div>
+							          </div>
+
+							          <div class="col">
+							            <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							              <div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/res_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0"/></div>
+							              <img class="plain fragment " data-src="assets/rec_std.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+							            </div>
+
+							            <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							              <div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data residuals <br> $x_n - \mathbf{P} (\Pi \ast g_\theta(z))$</div>
+							              <div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Standard Deviation </div>
+							            </div>
+							          </div>
+							      </div>
+							      <div class="fragment"> $\Longrightarrow$ <b class="alert">Uncertainties are fully captured by the posterior</b>.</div>
+							    </section>
+							  </section>
+
+								<section>
+
+								<section>
+									<h3 class="slide-title"> The Scarlet algorithm: deblending as an optimization problem</h3>
+											<div style="float:right; font-size: 20px">Melchior et al. 2018; Lanusse et al. 2019</div>
+
+											$$ \mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i) + \sum_{i=1}^K g_i(A_i) +  \sum_{i=1}^K f_i(S_i)$$
+
+									<div class="container">
+									<div class="col">
+											<img data-src="assets/scarlet_data.png" height=450 class="plain"></img>
+									</div>
+
+									<div class="col">
+
+										Where for a $K$ component blend:
+										<br>
+											<ul>
+											<li>$P$ is the convolution with the instrumental response</li>
+											<br>
+											<li>$A_i$ are channel-wise galaxy SEDs, $S_i$ are the morphology models</li>
+											<br>
+											<li>$\mathbf{\Sigma}$ is the noise covariance</li>
+											<br>
+											<li>$\log p_\theta$ is a PixelCNN prior</li>
+											<br>
+											<li>$f_i$ and $g_i$ are arbitrary additional non-smooth consraints, e.g. positivity, monotonicity...</li>
+											</ul>
+									</div>
+								</div>
+
+								<span class="fragment fade-up">$\Longrightarrow$ Explicit physical modeling of the observed sky</span>
+								</section>
+
+									<section>
+									<h3 class="slide-title">Scarlet in action</h3>
+
+									<div class="container">
+										<div class="col">
+											Input blend
+										<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+										<img data-src="assets/scar_input.png" class="plain"></img>
+									</div>
+										</div>
+
+									<div class="col">
+										<span class="fragment" data-fragment-index="0">Solution</span>
+										<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+												  <img class="fragment current-visible plain" data-src="assets/old_rec.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+												  <img class="fragment  plain" data-src="assets/pix_rec.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+										</div>
+									</div>
+
+									<div class="col">
+										<span class="fragment" data-fragment-index="0">Residuals</span>
+										<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+												  <img class="fragment current-visible plain" data-src="assets/old_res.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+												  <img class="fragment  plain" data-src="assets/pix_res.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+										</div>
+									</div>
+									</div>
+
+									<ul>
+											<li class="fragment fade-up" data-fragment-index="0">Classic priors (monotonicity, symmetry).</li>
+											<br>
+
+											<li class="fragment fade-up" data-fragment-index="1">Deep Morphology prior.</li>
+									</ul>
+
+								</section>
+								<section>
+									<div class="container">
+										<div class="col">
+											True Galaxy
+										<img data-src="assets/true_input.png" class="plain"></img>
+									</div>
+
+									<div class="col">
+										Deep Morphology Prior Solution
+
+													<img class=" plain" data-src="assets/pix_rec2.png"  />
+
+									</div>
+
+									<div class="col">
+										Monotonicity + Symmetry Solution
+													<img class=" plain" data-src="assets/scar_rec2.png" />
+										</div>
+									</div>
+								</section>
+							</section>
+
+							<section>
+								<h3 class="slide-title"> Beyond astrophysics: MRI Reconstruction</h3>
+								<img data-src="assets/example_mri.png"></img><br>
+								From left to right: raw reconstruction, posterior <b>sample</b>, ground truth
+								<br>
+								<br>
+								<br>
+								<ul>
+									<li>Super preliminary...</li>
+									<br>
+									<li>Same idea of learning a neural prior from example data and<br>using
+										it in a standard Bayesian inference scheme.</li>
+								</ul>
+
+							</section>
+
+							<section>
+									<h3 class="slide-title">Takeaway message</h3>
+										<br>
+										<br>
+									<ul>
+										<li class="fragment grow"> Generative models are a data-driven way of complementing
+											physical models
+											<br>
+											$\Longrightarrow$ This makes use of the vast amount of data.
+										</li>
+
+										<br>
+										<br>
+
+										<li class="fragment grow"> Most of these tasks can be split into independent jobs.
+											<br>
+											$\Longrightarrow$ Requires High Throughput more than High Performance Computing.
+										</li>
+									</ul>
+							</section>
+
+						<section class="inverted" data-background="#000">
+							<h2>
+							How do we manage when the <b>size</b> of the inverse problems become large?</h2>
+						</section>
+
+						<section>
+							<h3 class='slide-title'>Reconstructing the Initial Conditions of the Universe</h3>
+							<img data-src="assets/evolvingLSS.jpg" class="plain"/><br>
+							<div class="fragment">Going back to simpler times...</div>
+
+							<div class="fragment">
+							$$\arg\max_z \  \log p(x_{dm} = f(z)) \  + \  p(z) $$
+							where:<br>
+							<ul>
+								<li> $f$ is an N-body cosmological simulaion.</b>
+								</li>
+								<li> $z$ are the initial conditions (early universe)
+								</li>
+								<li> $x_{dm}$ is the present day dark matter distribution
+								</li>
+							</ul>
+							</div>
+						</section>
+
+        <section>
+          <h3 class='slide-title'>introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
+
+          	<div class='container'>
+								<div class='col'>
+                  <img data-src="assets/github.png" class="plain" style="height:70px"/>
+                  <div> <a href="https://github.com/modichirag/flowpm">https://github.com/modichirag/flowpm</a>
+                  </div>
+                  	<pre><code data-trim data-noescape>
+                      import tensorflow as tf
+                      import flowpm
+                      # Defines integration steps
+                      stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+                      initial_conds = flowpm.linear_field(32,        # size of the cube
+                                                          100,       # Physical size
+                                                          ipklin,    # Initial powerspectrum
+                                                          batch_size=16)
+
+                      # Sample particles and displace them by LPT
+                      state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+                      # Evolve particles down to z=0
+                      final_state = flowpm.nbody(state, stages, 32)
+
+                      # Retrieve final density field
+                      final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+                                                     final_state[0])
+
+                      with tf.Session() as sess:
+                          sim = sess.run(final_field)
+                  	</code></pre>
+                  <ul>
+                    <li class="fragment" data-fragment-index="1"> Seamless interfacing with deep learning components
+                    </li>
+                    <li class="fragment" data-fragment-index="2"> Gradients readily available
+                    </li>
+                  </ul>
+                </div>
+
+								<div class='col'>
+                  <div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
+                  <img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;"/>
+                </div>
+              </div>
+        </section>
+
+				<section>
+					<h3 class="slide-title"> MAP optimization in action</h3>
+					$$\arg\max_z \  \log p(x_{dm} = f(z)) \  + \  p(z) $$
+					<div style="float:right; font-size: 16px">credit: <a href="https://github.com/modichirag">C. Modi</a></div>
+					<br>
+					 <div class="container">
+						 <div class="col fragment fade-up">
+							 <img data-src="assets/init_field.png" style='height:250px;'/>
+							 <br> True initial conditions <br> $z_0$
+						 </div>
+
+						 <div class="col">
+							 <img data-src="assets/reconim_init.gif"style='height:250px;' />
+							 <br> Reconstructed initial conditions $z$
+						 </div>
+
+						 <div class="col">
+							 <img data-src="assets/reconim_fin.gif" style='height:250px;'/>
+							 <br> Reconstructed dark matter distribution $x = f(z)$
+						 </div>
+
+						 <div class="col">
+							 <img data-src="assets/fin_field.png" style='height:250px;' />
+							 <br> Data <br> $x_{DM} = f(z_0)$
+						 </div>
+					 </div>
+					 <br>
+					 <br>
+
+					 <div class="fragment">
+					 Check out this blogpost for more details <br> <a href=https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html>
+					 https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html</a>
+				 </div>
+				</section>
+
+        <section>
+          <h3 class='slide-title'>The practical challenges</h3>
+
+          <br>
+          <br>
+
+          <div class="container">
+          		<div class="col">
+              <ul>
+                <li> Simulations of scientifically interesting sizes <b>do not fit on a single GPU RAM</b>.<br>
+                  $\Longrightarrow$ We need for a distributed Machine Learning Framework
+                </li>
+
+                <br>
+
+                <li class="fragment" data-fragment-index="1">Most common form of distribution is <b>data-parallelism</b>
+                  $\Longrightarrow$ Reached Exascale on scientific deep learning applications
+                </li>
+
+                <br>
+
+                <li class="fragment"> What we need is <b>model-parallelism</b> on HPC environments
+                </li>
+              </ul>
+            </div>
+
+          	<div class="col">
+              <img data-src="assets/summit.png" class="fragment" data-fragment-index="1">
+            </div>
+          </div>
+
+          <br>
+          <br>
+
+            <div class="fragment">
+              $\Longrightarrow$ We have started investigating <b class="alert">Mesh TensorFlow at NERSC</b>.
+            </div>
+        </section>
+
+        <section>
+          <h3 class='slide-title'>Mesh TensorFlow in a few words</h3>
+
+          <img data-fragment-index="3" data-src="assets/mesh_tensorflow.png"/><br>
+          <div data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div>
+        </section>
+
+        <section>
+          <h3 class='slide-title'>Mesh FlowPM</h3>
+          <br>
+          <img data-src="assets/mesh_flopwm.png" class="plain" style="height:450px;"/>
+
+          <ul>
+            <li> Successfully ran on multiple Cori-GPU nodes, and on TPUv3-32 slice
+            </li>
+
+						<li class="fragment grow"> In general, efficient <b class="alert">model parallelism on GPU clusters is NOT a solved problem</b>.
+						</li>
+          </ul>
+        </section>
+
+
+				<section>
+					<h1> Conclusion </h1>
+				</section>
+
+
+						<section>
+							<h3 class="slide-title"> Conclusion </h3>
+
+							<br> <br> <br>
+
+							<ul>
+									<li> Upcoming surveys will probably rely on machine learning for part
+									of their low level processing.
+										<ul>
+											<li>Deep Learning can be embedded in physical models.</li>
+											<li>Most likely only requires High Throughput computing.</li>
+										</ul>
+									<br>
+
+									<br><br>
+									<li class="fragment"> The full scientific analysis of data will most likely evolve towards hybrid
+										physical and ML simulations, which require HPC infrastructures and associated software frameworks.</li>
+							</ul>
+													<br>
+													<br>
+												<p class="fragment">Thank you ! </p>
+																		 <br> <br>
+
+
+						</section>
+
+			</div>
+		</div>
+
+
+		<style>
+		/* .reveal .slides {
+		    border: 5px solid red;
+		    min-height: 100%;
+		    width: 128mm;
+		    height: 96mm;
+		} */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding:8px 35px 8px 14px;
+  		color: #FFAA7F;
+  		font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding:8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+  		color: #FFAA7F;
+  		font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+/*
+	    /* .reveal .alert {
+	             padding:8px 35px 8px 14px; margin-bottom:18px;
+	             text-shadow:0 1px 0 rgba(255,255,255,1);
+	             border:5px solid #FFAA7F;
+	             -webkit-border-radius: 14px; -moz-border-radius: 14px;
+	             border-radius:14px
+	             background-position: 10px 10px;
+	             background-repeat: no-repeat;
+	             background-size: 38px;
+	             padding-left: 30px; /* 55px; if icon
+	     }
+	     .reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	     .reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	     /*.reveal .alert li {margin-top: 1em}
+	     .reveal .alert-block p+p {margin-top:5px} */
+
+		</style>
+
+		<script src="reveal.js/js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				controls: false,
+
+				//center: false,
+				hash: true,
+
+				// Visibility rule for backwards navigation arrows; "faded", "hidden"
+				// or "visible"
+				controlsBackArrows: 'hidden',
+
+				// Display a presentation progress bar
+				progress: true,
+
+				// Display the page number of the current slide
+				slideNumber: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1280,
+				height: 720,
+
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
+
+				dependencies: [
+					{ src: 'reveal.js/plugin/markdown/marked.js' },
+					{ src: 'reveal.js/plugin/markdown/markdown.js' },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true },
+					{ src: 'reveal.js/plugin/math/math.js', async: true },
+					{ src: 'reveal.js/plugin/reveal.js-d3/reveald3.js' },
+					{ src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js' },
+					{ src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js' },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true }
+				]
+
+			});
+		</script>
+	</body>
+</html>
