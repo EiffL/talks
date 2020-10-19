@@ -1059,10 +1059,9 @@
 				</div>
 			</section>
 
-			<!--
 			<section>
 				<h3 class='slide-title'>You can try to learn the simulation...</h3>
-				<div style="float:right; font-size: 25px">S. He, et al. (2019)</div><br><br>
+				<div style="float:right; font-size: 25px">Learning particle displacement with a UNet. S. He, et al. (2019)</div><br><br>
 
 				<img data-src="assets/Model-Comparison.jpg" style="height:400px;" />
 
@@ -1079,8 +1078,7 @@
 						</ul>
 					</div>
 				</div>
-			</section> -->
-
+			</section>
 
 			<section>
 				<h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
@@ -1296,87 +1294,73 @@
 
 				</section>
 			</section>
-			<!--
-						<section>
-						<h3 class='slide-title'>The practical challenge for inference at scale</h3>
 
-						<br>
-						<br>
+			<section>
+				<h3 class='slide-title'>The practical challenge for inference at scale</h3>
 
-						<div class="container">
-						<div class="col">
-						<ul>
-						<li> Simulations of scientifically interesting sizes <b class="alert">do not fit on a single GPU RAM</b> <br>
-						e.g. $128^3$ operational, need $1024^3$ for survey volumes <br>
-						$\Longrightarrow$ We need a <b>distributed Machine Learning Framework</b><br>
-					</li>
-					<br>
-					<li class="fragment" data-fragment-index="1">Most common form of distribution is <b>data-parallelism</b>
-					$\Longrightarrow$ Reached Exascale on scientific deep learning applications
-				</li>
 				<br>
-				<li class="fragment"> What we need is <b>model-parallelism</b> on HPC environments
-			</li>
-			</ul>
-			</div>
+				<br>
 
-			<div class="col">
-			<img data-src="assets/summit.png" class="fragment" data-fragment-index="1">
-			</div>
-			</div>
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li> Simulations of scientifically interesting sizes <b class="alert">do not fit on a single GPU RAM</b> <br>
+								e.g. $128^3$ operational, need $1024^3$ for survey volumes <br>
+								$\Longrightarrow$ We need a <b>distributed Machine Learning Framework</b><br>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">Most common form of distribution is <b>data-parallelism</b>
+								$\Longrightarrow$ Reached Exascale on scientific deep learning applications
+							</li>
+							<br>
+							<li class="fragment"> What we need is <b>model-parallelism</b> on HPC environments
+							</li>
+						</ul>
+					</div>
 
-			<br>
-			<br>
+					<div class="col">
+						<img data-src="assets/summit.png" class="fragment" data-fragment-index="1">
+					</div>
+				</div>
 
-			<div class="fragment">
-			$\Longrightarrow$ We have started investigating <b class="alert">Mesh TensorFlow at NERSC and Google TPUs</b>.
-			</div>
+				<br>
+				<br>
+
+				<div class="fragment">
+					$\Longrightarrow$ We have investigatded the <b class="alert">Mesh TensorFlow</b> framework on the NERSC Cori machine and Google TPUs</b>.
+				</div>
 			</section>
 
 			<section>
-			<h3 class='slide-title'>Mesh TensorFlow in a few words</h3>
-			<ul>
-			<li> Redefines the TensorFlow API, in terms of <b class="alert">abstract logical tensors</b>
-			with actual <b class="alert">memory instantiation on multiple devices</b> defined by:
-			<ul>
-			<li class="fragment" data-fragment-index="1" > The specification of the mesh of computing devices
-			</li>
-			<li class="fragment" data-fragment-index="2" > The specification of rules for which dimensions can be splitted
-			</li>
-			</ul>
-			</li>
-			</ul>
+				<h3 class='slide-title'>Mesh TensorFlow in a few words</h3>
+				<ul>
+					<li> Redefines the TensorFlow API, in terms of <b class="alert">abstract logical tensors</b>
+						with actual <b class="alert">memory instantiation on multiple devices</b>.
+					</li>
+				</ul>
 
-			<img class="fragment"  data-fragment-index="3" data-src="assets/mesh_tensorflow.png"/><br>
-			<div class="fragment"  data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div>
+				<div class="" data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div><br>
+				<br>
+				<img class="" data-fragment-index="3" data-src="assets/mesh_tensorflow.png" style="height:300px;" /><br>
+
+				<div class="block fragment">
+					<div class="block-title">
+						Our assessment so far
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Provides an easy framework to write down distributed differentiable simulations
+								and large scale Machine Learning tasks
+							</li>
+
+							<li class="fragment"> The Mesh TensorFlow project is still young, limited in scope, and with limited GPU parallelization support<br>
+								<b class="alert"> $\Longrightarrow$ we need help from the Physics community to develop it for our needs!</b>
+							</li>
+
+						</ul>
+					</div>
+				</div>
 			</section>
-
-			<section>
-			<h3 class="slide-title">Proof of concept with Mesh FlowPM and why should you care :-)</h3>
-			<div>
-			<img data-src="assets/mesh_flopwm.png" class="plain" style="height:350px;"/><br>
-			Evolution from initial conditions to z=0 distributed on 2 Nodes 16 GPUs
-			</div>
-
-			<div class="block fragment">
-			<div class="block-title">
-			Our assessment so far
-			</div>
-			<div class="block-content">
-			<ul>
-			<li> Provides an easy framework to write down distributed differentiable simulations
-			and large scale Machine Learning tasks
-			</li>
-
-			<li class="fragment"> The Mesh TensorFlow project is still young and limited in scope:<br>
-			<b class="alert"> $\Longrightarrow$ we need help from the Physics community to develop it for our needs!</b>
-			</li>
-
-			</ul>
-			</div>
-			</div>
-			</section>
-			-->
 
 			<section>
 				<h3 class="slide-title"> Takeaway message</h3>
