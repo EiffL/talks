@@ -40,3 +40,6 @@
 [submodule "BASE2020/reveal.js"]
 	path = BASE2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Saclay2020/reveal.js"]
+	path = Saclay2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
