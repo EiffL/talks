@@ -7,7 +7,7 @@
 
 	<title>Merging deep learning with physical models for the analysis of modern cosmological surveys</title>
 
-	<meta name="description" content="DAp Seminar, October 20th 2020">
+	<meta name="description" content="Oxford Seminar, October 20th 2020">
 	<link rel="stylesheet" href="reveal.js/dist/reset.css">
 	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
 	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
@@ -54,7 +54,7 @@
 							<img src="assets/aim.png" class="plain" height="150"></img>
 						</div>
 					</div>
-					<div> slides at <a href="https://eiffl.github.io/talks/Saclay2020">eiffl.github.io/talks/Saclay2020</a> </div>
+					<div> slides at <a href="https://eiffl.github.io/talks/Oxford2020">eiffl.github.io/talks/Oxford2020</a> </div>
 				</div>
 			</section>
 
@@ -1080,7 +1080,6 @@
 				</div>
 			</section>
 
-
 			<section>
 				<h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
 				<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
@@ -1296,7 +1295,6 @@
 				</section>
 			</section>
 
-
 			<section>
 				<h3 class='slide-title'>The practical challenge for inference at scale</h3>
 
@@ -1363,88 +1361,6 @@
 					</div>
 				</div>
 			</section>
-
-			<!--
-						<section>
-						<h3 class='slide-title'>The practical challenge for inference at scale</h3>
-
-						<br>
-						<br>
-
-						<div class="container">
-						<div class="col">
-						<ul>
-						<li> Simulations of scientifically interesting sizes <b class="alert">do not fit on a single GPU RAM</b> <br>
-						e.g. $128^3$ operational, need $1024^3$ for survey volumes <br>
-						$\Longrightarrow$ We need a <b>distributed Machine Learning Framework</b><br>
-					</li>
-					<br>
-					<li class="fragment" data-fragment-index="1">Most common form of distribution is <b>data-parallelism</b>
-					$\Longrightarrow$ Reached Exascale on scientific deep learning applications
-				</li>
-				<br>
-				<li class="fragment"> What we need is <b>model-parallelism</b> on HPC environments
-			</li>
-			</ul>
-			</div>
-
-			<div class="col">
-			<img data-src="assets/summit.png" class="fragment" data-fragment-index="1">
-			</div>
-			</div>
-
-			<br>
-			<br>
-
-			<div class="fragment">
-			$\Longrightarrow$ We have started investigating <b class="alert">Mesh TensorFlow at NERSC and Google TPUs</b>.
-			</div>
-			</section>
-
-			<section>
-			<h3 class='slide-title'>Mesh TensorFlow in a few words</h3>
-			<ul>
-			<li> Redefines the TensorFlow API, in terms of <b class="alert">abstract logical tensors</b>
-			with actual <b class="alert">memory instantiation on multiple devices</b> defined by:
-			<ul>
-			<li class="fragment" data-fragment-index="1" > The specification of the mesh of computing devices
-			</li>
-			<li class="fragment" data-fragment-index="2" > The specification of rules for which dimensions can be splitted
-			</li>
-			</ul>
-			</li>
-			</ul>
-
-			<img class="fragment"  data-fragment-index="3" data-src="assets/mesh_tensorflow.png"/><br>
-			<div class="fragment"  data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div>
-			</section>
-
-			<section>
-			<h3 class="slide-title">Proof of concept with Mesh FlowPM and why should you care :-)</h3>
-			<div>
-			<img data-src="assets/mesh_flopwm.png" class="plain" style="height:350px;"/><br>
-			Evolution from initial conditions to z=0 distributed on 2 Nodes 16 GPUs
-			</div>
-
-			<div class="block fragment">
-			<div class="block-title">
-			Our assessment so far
-			</div>
-			<div class="block-content">
-			<ul>
-			<li> Provides an easy framework to write down distributed differentiable simulations
-			and large scale Machine Learning tasks
-			</li>
-
-			<li class="fragment"> The Mesh TensorFlow project is still young and limited in scope:<br>
-			<b class="alert"> $\Longrightarrow$ we need help from the Physics community to develop it for our needs!</b>
-			</li>
-
-			</ul>
-			</div>
-			</div>
-			</section>
-			-->
 
 			<section>
 				<h3 class="slide-title"> Takeaway message</h3>
