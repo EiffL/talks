@@ -46,3 +46,6 @@
 [submodule "Oxford2020/reveal.js"]
 	path = Oxford2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "MasterIMA2020/reveal.js"]
+	path = MasterIMA2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
