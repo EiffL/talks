@@ -1,0 +1,1278 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Solving Inverse Problems with Deep Learning</title>
+
+	<meta name="description" content="November 18th 2020">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Solving Inverse Problems with Deep Learning</h1>
+						<h2>Applications to Astrophysics</h2>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<!-- <div> slides at <a href="https://eiffl.github.io/talks/Oxford2020">eiffl.github.io/talks/Oxford2020</a> </div> -->
+				</div>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">Linear inverse problems</h3>
+
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					$\mathbf{A}$ is known and encodes our physical understanding of the problem.
+					<span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse problem is ill-posed <b class="alert">with no unique solution $x$</b></span>
+					<div class="container fragment fade-up">
+						<div class="col">
+							<img data-src="assets/pluto_smooth.png" class="plain"></img>
+							Deconvolution
+						</div>
+						<div class="col">
+							<img data-src="assets/pluto_missing.png" class="plain"></img>
+							Inpainting
+						</div>
+						<div class="col">
+							<img data-src="assets/plutoNoise.png" class="plain"></img>
+							Denoising
+						</div>
+					</div>
+				</section>
+
+
+				<section data-background="assets/gal_hsc.png">
+					<h3 class='slide-title'>Can AI solve all of our problems?</h3>
+					<div class="fragment">
+						<div style="float:right; font-size: 20px">Branched GAN model for deblending <a href="https://arxiv.org/abs/1810.10098">(Reiman & Göhre, 2018)</a></div>
+
+						<img class="plain" data-src="assets/Reiman2018_1.png" />
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							The issue with using deep learning as a <i>black-box</i>
+						</div>
+						<div class="block-content">
+							<ul>
+								<li> No explicit control of noise, PSF, depth, number of sources.
+									<ul>
+										<li> Model would have to be retrained for all observing configurations
+										</li>
+									</ul>
+								</li>
+								<li class="fragment"> No guarantees on the network output (e.g. flux preservation, artifacts)
+								</li>
+								<li class="fragment"> No proper uncertainty quantification.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<img class="plain" data-src="assets/Reiman2018_3.png" />
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Focus of this talk</h3>
+				<div class=container>
+					<div class="col">
+						<div class="fig-container" data-file="venn.html" data-style="height: 600px;"></div>
+					</div>
+
+					<div class="col">
+						<ul>
+							<li class="fragment">Deep Learning for Data Processing</li>
+							<br>
+							<li class="fragment">Bayesian Neural Networks</li>
+							<br>
+							<li class="fragment">Physical Bayesian inference</li>
+						</ul>
+						<br>
+						<br>
+						<div class="block fragment">
+							<div class="block-title">
+								This talk
+							</div>
+							<div class="block-content">
+								<p>
+									Combine <b class="alert">Deep Learning</b>,
+									<b class="alert">Bayesian Statistics</b>, and <b class="alert">Physics</b>
+									for:
+								</p>
+								<ul>
+									<li> <b>interpretability</b>
+									</li>
+
+									<li><b>uncertainty quantification</b>
+									</li>
+								</ul>
+								<p>in inverse problems.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2>Can we understand how a Neural Network solves an Inverse Problem?</h2>
+			</section>
+
+			<!-- How can we frame the problem? For instance a denoising problem -->
+			<section>
+				<section>
+					<h3 class="slide-title" style="position:absolute;top:0;">A Motivating Example: Image Deconvolution</h3>
+					<br>
+					<br>
+
+					$ y = P \ast x + n $
+
+					<div class="container">
+
+						<div class="col">
+							<p> <b class="alert"> Observed $y$</b></p>
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<br>Ground-Based Telescope
+						</div>
+
+						<div class="col fragment fade-up" data-fragment-index='0'>
+							<p> <b class="alert">$f_\theta$</b> </p>
+							<img class="plain " data-src="assets/generic_network_inv.png" style="height: 250px; width:500px" />
+							<br>some deep Convolutional Neural Network
+						</div>
+
+						<div class="col">
+							<p><b class="alert"> Unknown $x$</b> </p>
+							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<br>Hubble Space Telescope
+						</div>
+					</div>
+					<br>
+					<br>
+					<ul>
+						<li class="fragment fade-up" data-fragment-index='0'> A standard approach would be to train a neural network $f_\theta$ to <b class="alert">estimate $x$ given $y$</b>.
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<ul>
+						<li> <i>Step I</i>: Assemble from <b>data</b> or <b>simulations</b> a <b class="alert">training set</b> of images
+							$$\mathcal{D} = \{(x_0, y_0),
+							(x_1, y_1), \ldots, (x_N, y_N) \}$$
+							$\Longrightarrow$ the dataset contains <b class="alert">hardcoded assumptions</b> about PSF $P$
+							noise $n$, and galaxy morphology $x$.
+						</li>
+						<li class="fragment fade-up"> Step II: Train the neural network $f_\theta$ under a <b class="alert">regression loss</b> of the type:
+							$$ \mathcal{L} = \sum_{i=0}^N \parallel x_i - f_\theta(y_i)\parallel^2 $$
+						</li>
+					</ul>
+					<div class="container fragment">
+						<div class="col">
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<p>$$ y $$</p>
+						</div>
+
+						<div class="col">
+							<img class="plain " data-src="assets/generic_network_inv.png" style="height: 250px; width:500px" />
+							<p>$$f_\theta$$</p>
+						</div>
+
+						<div class="col">
+							<img class="plain" data-src="assets/rec_median.png" style="width: 250px" />
+							$$f_\theta(y)$$
+						</div>
+
+						<div class="col fragment fade-up" style="float:center;">
+							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<br>
+							<p>$$ \mbox{True } x $$</p>
+						</div>
+					</div>
+					<div class="fragment">$\Longrightarrow$Why is the network output different from the truth? If it's not the truth, then <b>what is $f_\theta(y)$?</b></div>
+				</section>
+
+				<section>
+					<p>Let's try to understand the neural network output by looking at the <b class="alert">loss function</b></p>
+					$$ \mathcal{L} = \sum_{(x_i, y_i) \in \mathcal{D}} \parallel x_i - f_\theta(y_i)\parallel^2 \quad \simeq \quad \int \parallel x - f_\theta(y) \parallel^2 \ p(x,y) \ dx dy $$
+
+					<div class="fragment" data-fragment-index="1">$$\Longrightarrow \int \left[ \int \parallel x - f_\theta(y) \parallel^2 \ p(x|y) \ dx \right] p(y) dy $$ </div>
+
+					<div class="block fragment" data-fragment-index="2">
+						<div class="block-content">
+							$\mathcal{L}$ minimized when $f_{\theta^\star}(y) = \int x \ p(x|y) \ dx $, i.e.
+							when <b class="alert">$f_{\theta^\star}(x)$ is predicting the mean of $p(x|y)$</b>.
+						</div>
+					</div>
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="assets/nn_l2.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+								<img class="fragment current-visible plain" data-src="assets/nn_l2_mean.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+								<img class="fragment current-visible plain" data-src="assets/nn_l1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="5" />
+								<img class="fragment plain" data-src="assets/nn_l1_median.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="6" />
+							</div>
+						</div>
+						<div class="col">
+							<ul>
+								<li class="fragment" data-fragment-index="3"> Using an <b class="alert">$\ell_2$ loss learns the mean</b> of the $p(x | y)$
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="5"> Using an <b class="alert">$\ell_1$ loss learns the median</b> of $p(x|y)$
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="6"> In general, training a neural network for regression doesn't
+									achieve de mode of the distribution.<br>
+									<br>
+									<div style='vertical-align:middle; display:inline;'>Check this <a href="https://medium.com/cosmostat/regression-in-the-presence-of-uncertainties-with-tensorflow-probability-1b7449f1083b" target="blank_">blogpost</a> and this
+										notebook to learn how to do that: <a href=" https://colab.research.google.com/drive/1yi_BY09LCS8qHCfJqvCIftKuW6jNe-t1" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"
+												class="plain" style="height:25px;vertical-align:middle; display:inline;" /></a></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">A Bayesian understanding of a regression network</h3>
+				<div class="container">
+					<div class="col">
+						<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" />
+						</div>
+						<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col ' style="position:absolute;top:0;left:0;width:200px;"> Data $y$</div>
+						</div>
+						<br>
+					</div>
+
+					<div class="col" data-fragment-index='0'>
+						<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<div><video data-autoplay data-loop data-src="assets/rec_samples.mp4" type="video/mp4" style="height: 200px;" />
+							</div>
+						</div>
+						<div>Posterior samples</div>
+					</div>
+
+					<div class="col">
+						<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<img class="plain " data-src="assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" />
+						</div>
+						<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col' style="position:absolute;top:0;left:0;width:200px;">Posterior mean</div>
+						</div>
+					</div>
+
+					<div class="col">
+						<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<img class="plain " data-src="assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" />
+						</div>
+
+						<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> True $x$</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<ul>
+					<li> The distribution $p(x|y)$ can be understood as a <b>Bayesian posterior distribution</b>:
+						$$ p(x | y) \propto \underbrace{p(y | x)}_{\mbox{likelihood}} \quad \underbrace{p(x)}_{\mbox{prior}} $$
+					</li>
+					<br>
+					<li class="fragment"> Both priors and likelihoods are <b>learned implicitly</b> by the neural network from the training set.
+						<br>$\Longrightarrow$ <b class="alert">priors AND likelihoods are hardcoded</b> in the training set.
+					</li>
+				</ul>
+			</section>
+
+			<section data-background-image="assets/">
+				<h2>Application to Weak Lensing Mass-Mapping</h2>
+
+				<a href="https://arxiv.org/abs/1908.00543"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1908.00543-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<a href="https://github.com/NiallJeffrey/DeepMass" target="_blank"><img src="https://badgen.net/badge/icon/github?icon=github&label" class="plain" style="height:25px;" /></a>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h3>Work in collaboration with: <br>
+								<b class="alert">Niall Jeffrey</b>, Ofer Lahav, Jean-Luc Starck
+							</h3>
+
+							<br> <br> <br>
+
+							$\Longrightarrow$ Use Deep Learning to reconstruct the projected
+							mass distribution in the Universe.
+
+						</div>
+					</div>
+					<div class="col">
+						<img src="assets/deepmass1.png" style="width:450px;" />
+					</div>
+				</div>
+				<br>
+			</section>
+
+			<section>
+				<section data-background-image="assets/gravitational-lensing-diagram.jpg">
+					<h3 class="slide-title"> Gravitational lensing</h3>
+					<div class="fragment fade-up">
+						<img class="plain" data-src="assets/great.jpg" />
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							Galaxy shapes as estimators for gravitational shear
+						</div>
+						<div class="block-content">
+							$$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
+							<ul>
+								<li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
+									galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">The Weak Lensing Mass-Mapping as an Inverse Problem</h3>
+					<div class="container">
+						<div class="col">
+							Shear <b class="alert">$\gamma$</b><br>
+							<img data-src="assets/shear_cat1.png" style="width:450px;"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							Convergence <b class="alert">$\kappa$</b><br>
+							<img data-src="assets/kappa.png" style="width:450px;"></img>
+						</div>
+					</div>
+
+					<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+						</div>
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\boxed{\gamma = \mathbf{P} \kappa}$$
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Illustration on the Dark Energy Survey (DES) simulations</h3>
+					<div style="float:right; font-size: 20px">Jeffrey, Abdalla, Lahav, <b>Lanusse</b> et al. (2018)
+					</div><br>
+					<img data-src="assets/des_sv_sims.png" style="height:600px;"></img>
+				</section>
+
+			</section>
+
+			<section>
+				<h3 class='slide-title'>The <b class="alert">DeepMass</b> approach: Posterior mean estimation by Deep Learning</h3>
+
+				$$\boxed{e = \mathbf{P} \kappa + e_i}$$
+
+				<div class="container">
+					<div class="col">
+						<br>
+						<br>
+						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="assets/deepmass_inputs.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+							<img class="fragment plain" data-src="assets/unet.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+						</div>
+					</div>
+
+					<div class="col">
+						<ul>
+							<li> Preprocess the galaxy shapes data with a Wiener Filter $\tilde{\kappa}^{wf} = \mathbf{WF}(e)$
+							</li>
+							<li class="fragment" data-fragment-index="0"> Building training set on simulations
+								$$\mathcal{D} = \{ (\tilde{\kappa}_0^{wf}, \kappa_0), \ldots, (\tilde{\kappa}_N^{wf}, \kappa_n)\} $$
+								$\Longrightarrow$ <b class="alert">Incorporates our prior knownledge $p(\kappa)$</b>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Train a UNet under an $\ell_2$
+								loss:
+								$$\mathcal{L} = \sum_{i=0}^N \parallel \kappa_i - f_\theta(\tilde{\kappa}_i^{wf}) \parallel^2 $$
+								$\Longrightarrow$ <b class="alert">CNN optimized to estimate the posterior mean</b>:
+								$$ f_{\theta^\star}(\tilde{\kappa}^{wf})= \int \kappa \ p(\kappa | \kappa^{wf}) d\kappa$$
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Results</h3>
+				<div style="float:center;">
+					<div style="position:relative; width:1200px; height:500px; margin:0 auto;">
+						<img class="fragment current-visible plain" data-src="assets/deepmass_sims.png" style="position:absolute;top:0;left:0;width:1200px;" data-fragment-index="0" />
+						<img class="fragment plain" data-src="assets/deepmass_des.png" style="position:absolute;top:0;left:0;width:1200px;" data-fragment-index="1" />
+					</div>
+				</div>
+
+				<ul>
+					<li class="fragment current-visible" data-fragment-index="0"> Simulations
+					</li>
+					<li class="fragment" data-fragment-index="1"> Application to DES Science Verification data
+					</li>
+				</ul>
+				<br>
+				<br>
+			</section>
+
+			<section>
+				<h3 class='slide-title'>Takeaway</h3>
+				<br>
+				<ul>
+					<li> Training a deep neural network for regression in an inverse problem is doing <b>Bayesian
+							Inference</b>.<br>
+						$\Longrightarrow$ Using an $\ell_2$ loss returns the posterior mean.
+					</li>
+					<br>
+					<br>
+					<li class="fragment">Both <b>likelihood and prior are learned implicitly</b> from the training set.
+					</li>
+					<br>
+					<br>
+					<li class="fragment">Can be used to <b>achieve superior results</b> to conventional methods on inverse problems like mass-mapping.
+					</li>
+					<br>
+					<br>
+				</ul>
+				<div class="block fragment">
+					<div class="block-title">
+						Limitations of this black-box approach
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> No guarantees on the network output!<br>
+								$\Longrightarrow$ We don't know how far it is from the actual posterior mean.
+							</li>
+							<br>
+							<li class="fragment"> The posterior mean is not the Maximum a Posteriori (MAP) solution.
+							</li>
+							<br>
+							<li class="fragment"> The likelihood is harcoded.<br>
+								<ul>
+									<li> If the noise changes, the model needs to be retrained.
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+
+				<section data-vertical-align-top>
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					The Bayesian view of the problem:
+					<br>
+					<br>
+					$$ p(x | y) \propto p(y | x) \ p(x) $$
+					<br>
+
+					<ul>
+						<li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the physics</b><br>
+						</li>
+						<br>
+						<li class="fragment fade-up">$p(x)$ is the prior knowledge on the solution.</li>
+					</ul>
+					<br>
+					<br>
+					<div class="fragment fade-up">
+						With these concepts in hand, we can estimate for instance the Maximum A Posteriori solution:
+						<br>
+						<br>
+						$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+						<br>
+						For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ \frac{1}{2} \parallel y - \mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						<h3>How do you choose the prior ?</h3>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Classical examples of signal priors </h3>
+					<div class="container">
+						<div class="col">
+							Sparse
+							<img data-src="assets/wavelet.png" height="400" class="plain"></img><br>
+							$$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+						</div>
+						<div class="col">
+							Gaussian
+							<img data-src="assets/zknj8.jpg" height="400" class="plain"></img>
+							$$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+						</div>
+						<div class="col">
+							Total Variation
+							<img data-src="assets/shepp-Logan.ppm" class="plain"></img>
+							$$ \log p(x) = \parallel \nabla x \parallel_1 $$
+
+						</div>
+					</div>
+				</section>
+
+				<section data-background="assets/hsc_screen.png">
+					<h2>But what about this?</h2>
+
+				</section>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2>Can we open the black-box and use the neural network to only <b>learn a prior from data</b>?</h2>
+			</section>
+
+
+			<section data-background-iframe="https://www.thispersondoesnotexist.com/">
+				<h3 class="slide-title" style="background: rgba(0, 0, 0, 0.3);"> Do you know this person?</h3>
+
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+
+				<div class="fragment fade-up" style="background: rgba(0, 0, 0, 0.3);">
+					<p>Probably not, this is a randomly generated person: <a href="https://www.thispersondoesnotexist.com/" target="_blank">thispersondoesntexist.com</a></p>
+				</div>
+			</section>
+
+			<section>
+
+				<section>
+					<h3 class="slide-title"> What is generative modeling?</h3>
+					<br>
+					<br>
+					<ul>
+						<li>The goal of generative modeling is to <b>learn the distribution $\mathbb{P}$</b>
+							from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+						</li>
+						<br>
+						<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+							that tries to be close to $\mathbb{P}$.
+						</li>
+					</ul>
+
+					<br>
+					<br>
+
+					<div class="container">
+
+						<div class="col fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							True $\mathbb{P}$
+						</div>
+
+						<div class="col  fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							Samples $x_i \sim \mathbb{P}$
+						</div>
+
+						<div class="col  fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							Model $\mathbb{P}_\theta$
+						</div>
+					</div>
+
+				</section>
+
+				<section>
+					<h3 class="slide-title">Why isn't it easy?</h3>
+					<br>
+					<ul>
+						<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+						</li>
+					</ul>
+					<div class="container">
+						<div class="col fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+							<br>Distance between pairs of points drawn from a Gaussian distribution.
+						</div>
+					</div>
+
+					<br>
+					<ul>
+						<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+						</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> The evolution of generative models </h3>
+
+				<br> <br> <br>
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+							<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+							<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+							<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+						</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+							<br>
+							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+						</ul>
+					</div>
+				</div>
+				<br> <br> <br>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> A visual Turing test </h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+					</div>
+					<div class="col">
+						<img data-src="assets/sdss5.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
+					</div>
+				</div>
+			</section>
+
+			<section data-vertical-align-top>
+				<h3 class="slide-title">Not all generative models are created equal</h3>
+				<img data-src="assets/generative_models_table.png" class="plain"></img>
+				<div style="float:right; font-size: 20px">Grathwohl et al. 2018</div>
+				<br>
+				<br>
+				<ul>
+					<li> GANs and VAEs are very common and successfull but do not fit our purposes.</li>
+					<br>
+					<li> We want a model which can <b class="alert">provide an explicit $\log p(x)$.</b></li>
+					<br>
+				</ul>
+			</section>
+
+			<section>
+				<h3 class="slide-title">PixelCNN: Likelihood-based Autoregressive generative model</h3>
+
+				<div class="container">
+					<div class="col">
+						Models the probability $p(x)$ of an image $x$ as:
+						$$ p_{\theta}(x) = \prod_{i=0}^{n} p_{\theta}(x_i | x_{i-1} \ldots x_0) $$
+						<ul>
+							<li>Some of the best log-likelihoods on the market.</li>
+							<li>Extremely stable during training.</li>
+							<li>Slow to sample from.</li>
+						</ul>
+						<br>
+						<br>
+
+						<div class="fragment fade-up">
+							<img data-src="assets/speedup.gif" class="plain"></img>
+							<br>
+							<div style="float:left; font-size: 20px">Ramachandran et al. 2017</div>
+						</div>
+					</div>
+
+					<div class="col">
+						<img data-src="assets/pixel_cnn_conv.png" class="plain"></img>
+						<div style="float:right; font-size: 20px">van den Oord et al. 2016</div>
+					</div>
+				</div>
+				<br>
+				<ul>
+					<li class="fragment"> Provides an explicit value for $\log p_\theta(x)$<br>
+						$\Longrightarrow$ <b class="alert">Can be used as a Bayesian prior for inverse problems.</b>
+					</li>
+				</ul>
+			</section>
+
+			<section>
+				<h3 class="slide-title">A deep denoising example</h3>
+				$$ \boxed{{\color{Orchid} y}  = {\color{SkyBlue} x} + n} $$
+				<div class="container">
+					<div class="col">
+						<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div>
+						Try me out at: <a href="https://eiffl.github.io/DeepPriors">https://eiffl.github.io/DeepPriors</a>
+					</div>
+
+					<div class="col">
+						<ul>
+							<li>We learn the <b class="alert">distribution of noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.</li>
+							<br>
+							<li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+							<br>
+							<li class="fragment">The solution should lie on the <b class="alert">realistic data manifold</b>, symbolized by the two-moons distribution.
+
+								<p> We want to solve for the Maximum A Posterior solution: </p>
+								$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x} \parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+
+								This can be done by <b class="alert">gradient descent</b> as long as one has access to $\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d \color{orange}x}$.
+							</li>
+						</ul>
+				</div>
+	</div>
+	</section>
+
+	<section>
+		<h2>Application to Galaxy Deblending</h2>
+
+		<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+		<a href="https://www.youtube.com/watch?v=oWOU3qNHoL0"><img src="https://img.shields.io/badge/-youtube-red?logo=youtube&labelColor=grey" class="plain" style="height:25px;" /></a>
+		<hr>
+		<div class="container">
+			<div class="col">
+				<div align="left" style="margin-left: 20px;">
+					<h3>Work in collaboration with: <br>
+						Peter Melchior, Fred Moolekamp
+					</h3>
+
+					<br> <br> <br>
+
+					$\Longrightarrow$ Use PixelCNNs as deep priors for deblending
+				</div>
+			</div>
+			<div class="col">
+				<img src="assets/scarlet_data.png" style="width:450px;" />
+			</div>
+		</div>
+		<br>
+	</section>
+
+	<section data-background="assets/gal_hsc.png">
+		<img class="plain fragment fade-up" data-src="assets/Reiman2018_3.png" />
+	</section>
+
+	<section>
+		<h3 class="slide-title"> The Scarlet algorithm: deblending as an optimization problem</h3>
+		<div style="float:right; font-size: 20px">Melchior et al. 2018</div>
+
+		$$ \mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i) + \sum_{i=1}^K g_i(A_i) + \sum_{i=1}^K f_i(S_i)$$
+
+		<div class="container">
+			<div class="col">
+				<img data-src="assets/scarlet_data.png" height=450 class="plain"></img>
+			</div>
+
+			<div class="col">
+
+				Where for a $K$ component blend:
+				<br>
+				<ul>
+					<li>$P$ is the convolution with the instrumental response</li>
+					<br>
+					<li>$A_i$ are channel-wise galaxy SEDs, $S_i$ are the morphology models</li>
+					<br>
+					<li>$\mathbf{\Sigma}$ is the noise covariance</li>
+					<br>
+					<li><b class="alert">$\log p_\theta$ is a PixelCNN prior</b></li>
+					<br>
+					<li>$f_i$ and $g_i$ are arbitrary additional non-smooth consraints, e.g. positivity, monotonicity...</li>
+				</ul>
+			</div>
+		</div>
+
+		<span class="fragment fade-up">$\Longrightarrow$ Explicit physical modeling of the observed sky</span>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Training the morphology prior</h3>
+
+		<div class="container">
+			<div class="col">
+				<img data-src="assets/cosmos_training.png" height=450 class="plain"></img>
+				<div> Postage stamps of isolated COSMOS galaxies used for training, at WFIRST resolution and fixed fiducial PSF</div>
+			</div>
+
+			<div class="col">
+				<div class="container fragment fade-in">
+					<div class="col">
+						isolated galaxy
+						<img data-src="assets/gal_1.png" class="plain"></img>
+						<span> $\log p_\theta(x) = 3293.7$ </span>
+					</div>
+
+					<div class="col">
+						artificial blend
+						<img data-src="assets/gal_2.png" class="plain"></img>
+						<span> $\log p_\theta(x) = 3100.5 $ </span>
+					</div>
+				</div>
+			</div>
+	</section>
+
+	<section>
+		<section>
+			<h3 class="slide-title">Scarlet in action</h3>
+
+			<div class="container">
+				<div class="col">
+					Input blend
+					<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+						<img data-src="assets/scar_input.png" class="plain"></img>
+					</div>
+				</div>
+
+				<div class="col">
+					<span class="fragment" data-fragment-index="0">Solution</span>
+					<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+						<img class="fragment current-visible plain" data-src="assets/old_rec.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+						<img class="fragment  plain" data-src="assets/pix_rec.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					</div>
+				</div>
+
+				<div class="col">
+					<span class="fragment" data-fragment-index="0">Residuals</span>
+					<div style="position:relative; width:480px; height:480px; margin:0 auto;">
+						<img class="fragment current-visible plain" data-src="assets/old_res.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+						<img class="fragment  plain" data-src="assets/pix_res.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					</div>
+				</div>
+			</div>
+
+			<ul>
+				<li class="fragment fade-up" data-fragment-index="0">Classic priors (monotonicity, symmetry).</li>
+				<br>
+
+				<li class="fragment fade-up" data-fragment-index="1">Deep Morphology prior.</li>
+			</ul>
+
+		</section>
+		<section>
+			<div class="container">
+				<div class="col">
+					True Galaxy
+					<img data-src="assets/true_input.png" class="plain"></img>
+				</div>
+
+				<div class="col">
+					Deep Morphology Prior Solution
+
+					<img class=" plain" data-src="assets/pix_rec2.png" />
+
+				</div>
+
+				<div class="col">
+					Monotonicity + Symmetry Solution
+					<img class=" plain" data-src="assets/scar_rec2.png" />
+				</div>
+			</div>
+		</section>
+	</section>
+
+	<section>
+		<h3 class="slide-title"> Extending to multi-band images</h3>
+
+		<img class=" plain" data-src="assets/scarlet_hsc.png" />
+		<div style="float:right; font-size: 25px"><b>Lanusse</b>, Melchior, Moolekamp (2019)<br>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slide-title"> Takeaway</h3>
+		<br>
+		<br>
+		<ul>
+			<li> Deep generative models can be used to provide <b class="alert">data driven priors</b>.
+			</li>
+			<br>
+			<br>
+			<li class="fragment"> <b class="alert">Explicit likelihood</b>, uses of all of our physical knowledge.<br>
+				$\Longrightarrow$ The method can be applied for varying PSF, noise, or even different instruments!
+			</li>
+			<br>
+			<br>
+			<li class="fragment"> Iterative optimization can include additional regularization terms.
+				<ul>
+					<li> Ensures fit to data (flux preservation).
+					</li>
+					<li> Can impose physical constraints like positivity.
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<br>
+		<br>
+
+		<br>
+		<br>
+		<p class="fragment"> But what about <b>uncertainty quantification</b>? </p>
+		<br>
+		<br>
+	</section>
+
+	<section class="inverted" data-background="#000">
+		<h2>Can we sample from the full Bayesian posterior $p(y | x)$ to estimate uncertainties?</h2>
+	</section>
+
+	<section>
+		<h2>Deep Posterior Sampling with Denoising Score Matching</h2>
+
+		<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+		<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+		<hr>
+		<div class="container">
+			<div class="col">
+				<div align="left" style="margin-left: 20px;">
+					<h3>Work in collaboration with: <br>
+						Benjamin Remy, Zaccharie Ramzi
+					</h3>
+
+					<br> <br> <br>
+
+					$\Longrightarrow$ Sample from posterior with gradient-based Monte-Carlo methods
+				</div>
+			</div>
+			<div class="col">
+						<img class="plain" data-src="assets/knee.gif" style="width:450px;" />
+			</div>
+		</div>
+		<br>
+	</section>
+
+	<section>
+		<h3 class="slide-title">The score is all you need!</h3>
+		<ul>
+			<li> Instead of learning ${\color{orange} \log {\color{orange} p\color{orange}(\color{orange} x\color{orange})}}$, learn $\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d
+				\color{orange}x}$, a.k.a. the <b class="alert">Score Function</b>
+				<br>
+				<br>
+				<ul>
+					<li> MAP estimation only need the score! Same is true for <b>Hamiltonian Monte Carlo</b>!
+					</li>
+				</ul>
+				</li>
+				<br>
+				<li class="fragment" data-fragment-index="0"> The score can be learned efficiently by training a <b class="alert">deep Gaussian denoiser</b>.
+				</li>
+				<li class="fragment" data-fragment-index="1"> The score of the full posterior is simply:
+					$$\nabla \log p(x |y) = \underbrace{\nabla \log p(y |x)}_{\mbox{known}} \quad + \quad \underbrace{\nabla \log p(x)}_{\mbox{learned}}$$
+				</li>
+				</ul>
+				<br>
+				<div class="container">
+
+					<div class="col">
+						<img data-src="assets/score_two_moons.png"></img>
+					</div>
+
+
+					<div class="col fragment" data-fragment-index="0">
+
+						<div class="container">
+							<div class="col">$\boldsymbol{x}'$
+							</div>
+							<div class="col">$\boldsymbol{x}$
+							</div>
+							<div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+							</div>
+							<div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+							</div>
+						</div>
+						<img data-src="assets/denoised_mnist.png"></img>
+
+						$$\boxed{\boldsymbol{r}^\star(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Uncertainty quantification in Magnetic Resonance Imaging (MRI)</h3>
+				<div style="float:right; font-size: 20px">Ramzi, Remy, <b>Lanusse</b> et al. 2020 <a href="https://arxiv.org/abs/1912.03980" style='vertical-align:middle; display:inline;'><img
+							src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				</div>
+				<br>
+				<br>
+				$$\boxed{y = \mathbf{F}^{-1} \mathbf{M} \mathbf{F} x + n}$$
+				<div><video data-autoplay loop="loop" data-src="assets/knee.mp4" type="video/mp4" style="width: 1280px;" />
+				</div>
+				<ul>
+					<br>
+					<li> Learn score $\nabla \log p(x)$ with UNet trained by denoising score matching.
+					</li>
+					<li> Sample 320x320pix image posterior by Annealed Hamiltonian Monte Carlo.
+					</li>
+				</ul>
+				<br>
+
+				<p class="fragment">$\Longrightarrow$ We can see which parts of the image are well constrained by data, and which regions are <b class="alert">uncertain</b>.</p>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Probabilistic Mass-Mapping of the HST COSMOS field</h3>
+				<div style="float:right; font-size: 20px">Remy, <b>Lanusse</b>, Ramzi et al. 2020 <a href="https://arxiv.org/abs/1912.03980" style='vertical-align:middle; display:inline;'><img
+							src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				</div>
+				<img data-src="assets/cosmos_massmap.png"></img>
+				<br>
+				<ul>
+					<li><b class="alert">Hybrid prior</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
+					</li>
+				</ul>
+				<br>
+				<br>
+				<div class="block fragment">
+					<div class="block-title">
+						The Ultimate DeepMass
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Uses explicit modeling of the data likelihood.
+							</li>
+							<li class="fragment"> Full uncertainty quantification thanks to posterior samples.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Conclusion</h3>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="block fragment">
+					<div class="block-title">
+						How to use Deep Learning for Inverse Problems in a Robust and Interpretable way?
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Even a simple regression network is doing <b>approximate</b> Bayesian inference.
+							</li>
+							<br>
+							<li class="fragment">Restricting Deep Learning to modeling the priors brings robustness and intrepretability.
+								<ul>
+									<li> Deep Generative Models are perfect for learning data-driven priors.
+									</li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment"> Proper <b>Uncertainty Quantification</b> is possible by sampling the Bayesian posterior of the inverse problem.
+							</li>
+						</ul>
+
+					</div>
+				</div>
+
+				<br>
+				<br>
+				<br>
+				<br>
+
+				<p class="fragment"> Thank you!</p>
+
+				<br>
+				<br>
+			</section>
+
+		</div>
+	</div>
+
+	<style>
+		.reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		}
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+
+		/*
+	/* .reveal .alert {
+	padding:8px 35px 8px 14px; margin-bottom:18px;
+	text-shadow:0 1px 0 rgba(255,255,255,1);
+	border:5px solid #FFAA7F;
+	-webkit-border-radius: 14px; -moz-border-radius: 14px;
+	border-radius:14px
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-size: 38px;
+	padding-left: 30px; /* 55px; if icon
+	}
+	.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	/*.reveal .alert li {margin-top: 1em}
+	.reveal .alert-block p+p {margin-top:5px} */
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: false,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>
