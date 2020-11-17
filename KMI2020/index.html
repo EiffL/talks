@@ -1010,7 +1010,7 @@
 				</ul>
 				</li>
 				<br>
-				<li class="fragment" data-fragment-index="0"> The score can be learned efficiently by training a <b class="alert">deep Gaussian denoiser</b>.
+				<li class="fragment" data-fragment-index="0"> The score can be learned efficiently by training a <b class="alert">deep Gaussian denoiser</b> (Denoising Score Matching).
 				</li>
 				<li class="fragment" data-fragment-index="1"> The score of the full posterior is simply:
 					$$\nabla \log p(x |y) = \underbrace{\nabla \log p(y |x)}_{\mbox{known}} \quad + \quad \underbrace{\nabla \log p(x)}_{\mbox{learned}}$$
@@ -1070,15 +1070,18 @@
 				<div style="float:right; font-size: 20px">Remy, <b>Lanusse</b>, Ramzi et al. 2020 <a href="https://arxiv.org/abs/1912.03980" style='vertical-align:middle; display:inline;'><img
 							src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
 				</div>
+				$$\boxed{\gamma = \mathbf{P} \kappa + n}$$
 				<img data-src="assets/cosmos_massmap.png"></img>
 				<br>
 				<ul>
 					<li><b class="alert">Hybrid prior</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
+						$$\underbrace{\nabla_{\boldsymbol{\kappa}} \log p(\boldsymbol{\kappa})}_\text{full prior} = \underbrace{\nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa})}_\text{gaussian prior} + \underbrace{\boldsymbol{r}_\theta(\boldsymbol{\kappa}, \nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa}))}_\text{learned residuals}$$
+						with $p_{th}(\boldsymbol{\kappa}) = \frac{1}{ \sqrt{ \det 2 \pi \boldsymbol{S}}} \exp \left( -\frac{1}{2} \boldsymbol{\kappa}^\dagger \boldsymbol{S}^{-1} \boldsymbol{\kappa} \right)$, computed from theory.
 					</li>
 				</ul>
 				<br>
 				<br>
-				<div class="block fragment">
+				<!-- <div class="block fragment">
 					<div class="block-title">
 						The Ultimate DeepMass
 					</div>
@@ -1090,7 +1093,7 @@
 							</li>
 						</ul>
 					</div>
-				</div>
+				</div> -->
 			</section>
 
 			<section>
