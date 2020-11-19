@@ -49,3 +49,6 @@
 [submodule "KMI2020/reveal.js"]
 	path = KMI2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "ITA2020/reveal.js"]
+	path = ITA2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
