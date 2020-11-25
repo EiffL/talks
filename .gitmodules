@@ -52,3 +52,6 @@
 [submodule "ITA2020/reveal.js"]
 	path = ITA2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "DSM2020/reveal.js"]
+	path = DSM2020/reveal.js
+	url = https://github.com/EiffL/reveal.js.git

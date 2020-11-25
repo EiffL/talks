@@ -10,7 +10,7 @@ Creating a new Presentation:
     $ cd reveal.js
     $ git submodule update --init --recursive
     ```
-  - copy `package.json` from  the `reveal.js` folder to the talk directory
+  - copy `package.json` and `gulpfile.js` from  the `reveal.js` folder to the talk directory
   - Update/install npm modules to make sure it  works with this version:
     ```
     $ npm install
