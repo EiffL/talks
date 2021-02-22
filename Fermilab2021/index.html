@@ -1293,11 +1293,7 @@
 
 						<section>
 							<h3 class="slide-title">Back to the convergence map log posterior</h3>
-<br>
-<br>
 							$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
-<br>
-<br>
 <br>
 							<ul>
 								<li> The likelihood term (and its score) are known analytically.
@@ -1318,6 +1314,8 @@
 								<li class="fragment fade-up"><b class="alert">Learning a Hybrid score</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
 									$$\underbrace{\nabla_{\boldsymbol{\kappa}} \log p(\boldsymbol{\kappa})}_\text{full prior} = \underbrace{\nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa})}_\text{gaussian prior} +
 									\underbrace{\boldsymbol{r}_\theta(\boldsymbol{\kappa}, \nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa}))}_\text{learned residuals}$$
+
+									<img class="fragment" data-src='assets/gauss-res023.png' />
 								</li>
 							</ul>
 						</section>
