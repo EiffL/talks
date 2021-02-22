@@ -805,7 +805,6 @@
 					<br>
 					<br>
 					$\mathbf{A}$ is known and encodes our physical understanding of the problem.
-					<span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse problem is ill-posed with no unique solution $x$</span>
 					<br>
 					<br>
 					<div class="container fragment fade-up">
@@ -1294,14 +1293,17 @@
 
 						<section>
 							<h3 class="slide-title">Back to the convergence map log posterior</h3>
-
+<br>
+<br>
 							$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
-
+<br>
+<br>
+<br>
 							<ul>
 								<li> The likelihood term (and its score) are known analytically.
 								</li>
 
-								<li> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
+								<!-- <li> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
 									<br> However:
 									<ul>
 										<li> <b>We do have an analytic prior on its 2pt function</b>, and that prior is accurate on large scales.
@@ -1311,7 +1313,7 @@
 										<li> <b>We do have access to samples of full prior</b> through simulations.
 										</li>
 									</ul>
-								</li>
+								</li> -->
 								<br>
 								<li class="fragment fade-up"><b class="alert">Learning a Hybrid score</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
 									$$\underbrace{\nabla_{\boldsymbol{\kappa}} \log p(\boldsymbol{\kappa})}_\text{full prior} = \underbrace{\nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa})}_\text{gaussian prior} +
