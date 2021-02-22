@@ -58,3 +58,6 @@
 [submodule "UdeM2021/reveal.js"]
 	path = UdeM2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Fermilab2021/reveal.js"]
+	path = Fermilab2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
