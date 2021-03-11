@@ -67,3 +67,6 @@
 [submodule "prototype_denise/reveal.js"]
 	path = prototype_denise/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "in2p3_2021/reveal.js"]
+	path = in2p3_2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
