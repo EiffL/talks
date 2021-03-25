@@ -7,7 +7,7 @@
 
 	<title>Merging deep learning with physical models for the analysis of modern cosmological surveys</title>
 
-	<meta name="description" content="UdeM Seminar, February 11th 2021">
+	<meta name="description" content="Duke Seminar, March 25th 2021">
 	<link rel="stylesheet" href="reveal.js/dist/reset.css">
 	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
 	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
@@ -1216,7 +1216,7 @@
 									<img data-src="assets/denoised_mnist.png" style='width:1200px;'></img>
 								</div>
 							</section>
-<!--
+
 							<section>
 								<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
 
@@ -1254,7 +1254,7 @@
 										</ul>
 									</div>
 								</div>
-							</section> -->
+							</section>
 						</section>
 
 						<section>
@@ -1293,11 +1293,7 @@
 
 						<section>
 							<h3 class="slide-title">Back to the convergence map log posterior</h3>
-<br>
-<br>
 							$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
-<br>
-<br>
 <br>
 							<ul>
 								<li> The likelihood term (and its score) are known analytically.
@@ -1318,6 +1314,8 @@
 								<li class="fragment fade-up"><b class="alert">Learning a Hybrid score</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
 									$$\underbrace{\nabla_{\boldsymbol{\kappa}} \log p(\boldsymbol{\kappa})}_\text{full prior} = \underbrace{\nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa})}_\text{gaussian prior} +
 									\underbrace{\boldsymbol{r}_\theta(\boldsymbol{\kappa}, \nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa}))}_\text{learned residuals}$$
+
+									<img class="fragment" data-src='assets/gauss-res023.png' />
 								</li>
 							</ul>
 						</section>
@@ -1405,8 +1403,8 @@
 				<h2>Differentiable models of the Large-Scale Structure</h2>
 
 				<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;" /></a>
-				<a href="https://github.com/modichirag/flowpm"><img src="https://badgen.net/badge/icon/github?icon=github&label" class="plain" style="height:25px;" /></a>
-				<a href="https://colab.research.google.com/github/modichirag/flowpm/blob/master/notebooks/flowpm_blog.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain"
+				<a href="https://github.com/DifferentiableUniverseInitiative/flowpm"><img src="https://badgen.net/badge/icon/github?icon=github&label" class="plain" style="height:25px;" /></a>
+				<a href="https://colab.research.google.com/github/DifferentiableUniverseInitiative/flowpm/blob/master/notebooks/flowpm_blog.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain"
 						style="height:25px;" /></a>
 				<a href="https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html"><img src="https://img.shields.io/badge/blog-TensorFlow-orange?color=FF6F00" class="plain" style="height:25px;" /> </a>
 				<hr>
@@ -1648,7 +1646,7 @@
 				<div class='container'>
 					<div class='col'>
 						<img data-src="assets/github.png" class="plain" style="height:70px" />
-						<div> <a href="https://github.com/modichirag/flowpm">https://github.com/modichirag/flowpm</a>
+						<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
 						</div>
 						<pre class="python"><code data-trim data-noescape>
 										import tensorflow as tf
@@ -1672,7 +1670,7 @@
 										final_state[0])
 
 										with tf.Session() as sess:
-										sim = sess.run(final_field)
+										  sim = sess.run(final_field)
 									</code></pre>
 						<ul>
 							<li> Seamless interfacing with deep learning components
