@@ -64,3 +64,6 @@
 [submodule "Duke2021/reveal.js"]
 	path = Duke2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Princeton2021/reveal.js"]
+	path = Princeton2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
