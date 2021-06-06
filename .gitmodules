@@ -67,3 +67,6 @@
 [submodule "Princeton2021/reveal.js"]
 	path = Princeton2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "SCMA2021/reveal.js"]
+	path = SCMA2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
