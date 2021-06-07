@@ -61,12 +61,66 @@
 
 
 			<section>
-				<h2>Is there actually any need for Deep Learning in Cosmology?<h2>
+				<section data-background-image="assets/gravitational-lensing-diagram.jpg">
+					<h3 class="slide-title"> Gravitational lensing</h3>
+					<div class="fragment fade-up">
+						<img class="plain" data-src="assets/great.jpg" />
+
+						<div class="block ">
+							<div class="block-title">
+								Galaxy shapes as estimators for gravitational shear
+							</div>
+							<div class="block-content">
+								$$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
+								<ul>
+									<li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
+										galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">The Weak Lensing Mass-Mapping as an Inverse Problem</h3>
+					<div class="container">
+						<div class="col">
+							Shear <b class="alert">$\gamma$</b><br>
+							<img data-src="assets/shear_cat1.png" style="width:450px;"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							Convergence <b class="alert">$\kappa$</b><br>
+							<img data-src="assets/kappa.png" style="width:450px;"></img>
+						</div>
+					</div>
+
+					<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+						</div>
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\boxed{\gamma = \mathbf{P} \kappa}$$
+						</div>
+					</div>
+				</section>
+
+				<!-- <section>
+					<h3 class="slide-title"> Illustration on the Dark Energy Survey (DES) Y3</h3>
+					<div style="float:right; font-size: 20px">Jeffrey, et al. (2021)
+					</div><br>
+					<img data-src="assets/DESY3map.png" style="height:600px;"></img>
+				</section> -->
 			</section>
+			<!--
+			<section>
+				<h2>Is there actually any need for Deep Learning in Cosmology?<h2>
+			</section> -->
 
 			<section>
 				<section>
-					<h3 class="slide-title">A motivating example: Linear inverse problems</h3>
+					<h3 class="slide-title">Linear inverse problems</h3>
 
 					$\boxed{y = \mathbf{A}x + n}$
 					<br>
@@ -85,6 +139,34 @@
 						<div class="col">
 							<img data-src="assets/plutoNoise.png" class="plain"></img>
 							Denoising
+						</div>
+					</div>
+				</section>
+				<section>
+					<h3 class="slide-title"> Should we just train a neural network to regress x given y?</h3>
+					<div style="float:right; font-size: 20px">Jeffrey, <b>Lanusse</b>, Lahav, Starck (2020)
+					</div><br>
+					<div style="float:center;">
+						<img class="plain" data-src="assets/deepmass_sims.png" style="width:800px;" />
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							The issue with using deep learning as a <i>black-box</i>
+						</div>
+						<div class="block-content">
+							<ul>
+								<li> No explicit control of noise or mask.
+									<ul>
+										<li> Model would have to be retrained for any modification of analysis setting.
+										</li>
+									</ul>
+								</li>
+								<li class="fragment"> No guarantees on the network output (e.g. artifacts)
+								</li>
+								<li class="fragment"> No proper uncertainty quantification.
+								</li>
+							</ul>
 						</div>
 					</div>
 				</section>
@@ -121,7 +203,8 @@
 				<section>
 					<img class="plain" data-src="assets/Reiman2018_3.png" />
 				</section> -->
-
+			</section>
+			<section>
 				<section data-vertical-align-top>
 					<h3 class="slide-title"> WWBD: What Would a Bayesian Do?</h3>
 					$\boxed{y = \mathbf{A}x + n}$
@@ -182,18 +265,18 @@
 					<div class="container">
 						<div class="col">
 							<img data-src="assets/gal_hsc.png" style="object-fit: cover; width:500px;height:500px;">
-							<div class="fragment"> $\Longrightarrow$ Data Driven Prior</div>
+							<div class="fragment"> $\Longrightarrow$ Prior in the form of existing data.</div>
 						</div>
 						<div class="col fragment fade-up">
 							<img data-src="assets/convergence.png" style="object-fit: cover; width:500px;height:500px;">
-							<div class="fragment"> $\Longrightarrow$ Simulation Driven Prior</div>
+							<div class="fragment"> $\Longrightarrow$ Prior in the form of numerical simulations.</div>
 						</div>
 					</div>
 				</section>
 			</section>
 
 			<section class="inverted" data-background="#000">
-				<h2> Can we use Deep Learning to leverage data or simulation-driven priors within a <b>physical Bayesian model</b>?</h2>
+				<h2> Can we use Deep Learning to embed data-driven or simulation-driven priors within a <b>physical Bayesian model</b>?</h2>
 			</section>
 
 			<section>
@@ -351,7 +434,7 @@
 						</li>
 					</ul>
 
-					<div class="fragment fade-up">
+					<div>
 						<div class="container">
 							<div class="col">$\boldsymbol{x}'$
 							</div>
@@ -406,7 +489,7 @@
 				</section>
 			</section>
 
-			<section>
+			<!-- <section>
 				<section>
 					<h3 class="slide-title">Efficient sampling by Annealed HMC</h3>
 
@@ -434,11 +517,11 @@
 					<img data-src="assets/knee_sampling.gif" />
 				</section>
 
-				<!-- <section>
+				<section>
 					<h3 class="slide-title">Annealed Langevin samples from DSM model in Song & Ermon (2020)</h3>
 					<img data-src="assets/song_ermon_2020.png" />
-				</section> -->
-			</section>
+				</section>
+		</section> -->
 
 			<!-- <section>
 				<h2>Probabilistic Mapping of Dark Matter by<br> Neural Score Matching</h2>
@@ -474,61 +557,6 @@
 
 				<div>Let's apply it to our problem.</div>
 			</section> -->
-
-			<section>
-				<section data-background-image="assets/gravitational-lensing-diagram.jpg">
-					<h3 class="slide-title"> Gravitational lensing</h3>
-					<div class="fragment fade-up">
-						<img class="plain" data-src="assets/great.jpg" />
-
-						<div class="block ">
-							<div class="block-title">
-								Galaxy shapes as estimators for gravitational shear
-							</div>
-							<div class="block-content">
-								$$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
-								<ul>
-									<li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
-										galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<section>
-					<h3 class="slide-title">The Weak Lensing Mass-Mapping as an Inverse Problem</h3>
-					<div class="container">
-						<div class="col">
-							Shear <b class="alert">$\gamma$</b><br>
-							<img data-src="assets/shear_cat1.png" style="width:450px;"></img>
-						</div>
-
-						<div class="col fragment fade-up">
-							Convergence <b class="alert">$\kappa$</b><br>
-							<img data-src="assets/kappa.png" style="width:450px;"></img>
-						</div>
-					</div>
-
-					<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
-						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
-							$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
-						</div>
-						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
-							$$\boxed{\gamma = \mathbf{P} \kappa}$$
-						</div>
-					</div>
-				</section>
-
-				<section>
-					<h3 class="slide-title"> Illustration on the Dark Energy Survey (DES) Y3</h3>
-					<div style="float:right; font-size: 20px">Jeffrey, et al. (2021)
-					</div><br>
-					<img data-src="assets/DESY3map.png" style="height:600px;"></img>
-				</section>
-			</section>
-
 
 			<section>
 				<section>
@@ -666,9 +694,6 @@
 				</ul>
 				<br>
 				<br>
-
-				<br>
-				<br>
 				<p class="fragment"> Thank you! </p>
 				<br>
 				<br>
@@ -679,12 +704,12 @@
 	</div>
 
 	<style>
-		/* .reveal .slides {
+		.reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		} */
+		}
 
 		.reveal .block {
 			background-color: #191919;
