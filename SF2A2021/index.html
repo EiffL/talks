@@ -417,11 +417,12 @@
 							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
 							<br> -->
 							<li class="fragment">The solution should lie on the <b class="alert">realistic data manifold</b>, symbolized by the two-moons distribution.
-
+								<div class="fragment">
 								<p> We want to solve for the Maximum A Posterior solution: </p>
 								$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x} \parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
 
 								This can be done by <b>gradient descent</b> as long as one has access to the <b class="alert">score function</b> $\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d \color{orange}x}$.
+							</div>
 							</li>
 						</ul>
 				</div>
@@ -429,6 +430,40 @@
 	</section>
 
 			<section>
+				<section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
+						<p>The galaxy deblending problem</p>
+
+						<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>	<br>
+						<br>	<br>	<br>	<br>	<br>	<br>	<br>
+										<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+
+				<section>
+				 <h3  class="slide-title">Training a morphology prior</h3>
+
+				 <div class="container">
+					 <div class="col">
+						 <img data-src="assets/cosmos_training.png" height=450 class="plain"></img>
+						 <div> Postage stamps of isolated COSMOS galaxies used for training, at fixed fiducial PSF</div>
+				 </div>
+
+				 <div class="col">
+				 <div class="container fragment fade-in">
+					 <div class="col">
+						 isolated galaxy
+					 <img data-src="assets/gal_1.png" class="plain"></img>
+					 <span> $\log p_\theta(x) = 3293.7$ </span>
+				 </div>
+
+					 <div class="col">
+						 artificial blend
+					 <img data-src="assets/gal_2.png" class="plain"></img>
+					 <span> $\log p_\theta(x) = 3100.5 $ </span>
+				 </div>
+					 </div>
+				 </div>
+			 </section>
+
 				<!-- <h3 class="slide-title">Prior on galaxy morphology for deblending</h3>
 
 					<section data-vertical-align-top>
@@ -505,32 +540,6 @@
 					</div>
 
 					<!-- <span class="fragment fade-up">$\Longrightarrow$ Explicit physical modeling of the observed sky</span> -->
-					</section>
-
-					 <section>
-						<h3  class="slide-title">Training the morphology prior</h3>
-
-						<div class="container">
-							<div class="col">
-								<img data-src="assets/cosmos_training.png" height=450 class="plain"></img>
-								<div> Postage stamps of isolated COSMOS galaxies used for training, at WFIRST resolution and fixed fiducial PSF</div>
-						</div>
-
-						<div class="col">
-						<div class="container fragment fade-in">
-							<div class="col">
-								isolated galaxy
-							<img data-src="assets/gal_1.png" class="plain"></img>
-							<span> $\log p_\theta(x) = 3293.7$ </span>
-						</div>
-
-							<div class="col">
-								artificial blend
-							<img data-src="assets/gal_2.png" class="plain"></img>
-							<span> $\log p_\theta(x) = 3100.5 $ </span>
-						</div>
-							</div>
-						</div>
 					</section>
 
 						<section>
@@ -764,7 +773,7 @@
 
 									</section>
 
-																	<section>
+																	<!-- <section>
 																		<h3 class="slide-title"> Inference becomes fast and scalable</h3>
 
 																		<div class="container">
@@ -803,7 +812,7 @@
 																				</div>
 																			</div>
 																		</div>
-																	</section>
+																	</section> -->
 								</section>
 
 
@@ -864,24 +873,24 @@
 	</section>
 	</section>
 
-
 	<section>
-		<h3 class='slide-title'>introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
-		<div class="container">
-			<div class="col">
-				<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak (2020)
-					<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+		<section>
+			<h3 class='slide-title'>FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
+			<div class="container">
+				<div class="col">
+					<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak (2020)
+						<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class='container'>
-			<div class='col'>
-				<img data-src="assets/github.png" class="plain" style="height:70px" />
-				<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
+			<div class='container'>
+				<div class='col'>
+					<img data-src="assets/github.png" class="plain" style="height:70px" />
+					<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
 
-				<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
-				</div>
-				<pre class="python"><code data-trim data-noescape>
+					<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
+					</div>
+					<pre class="python"><code data-trim data-noescape>
 import tensorflow as tf
 import flowpm
 # Defines integration steps
@@ -902,31 +911,43 @@ final_state = flowpm.nbody(state, stages, 32)
 final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
                               final_state[0])
 												</code></pre>
-				<ul>
-					<li> Seamless interfacing with deep learning components
-					</li>
-					<li> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers, to <b>hundreds of GPUs</b>!
-					</li>
-				</ul>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-			</div>
+					<ul>
+						<li> Seamless interfacing with deep learning components
+						</li>
+						<li> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers, to <b>hundreds of GPUs</b>!
+						</li>
+					</ul>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
 
-			<div class='col'>
-				<div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
-				<br>
-				<br>
-				<br>
-				<br>
+				<div class='col'>
+					<div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
 			</div>
-		</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Teaser: Differentiable lensing simulations with FlowPM</h3>
+			<br>
+			<br>
+			<img data-src="assets/flowpm_vs_kappatng.png" height="400" />
+			<br>
+			<br>
+			<br>
+			<b class="alert">$\Longrightarrow$ See Denise's talk later today!</b>
+		</section>
 	</section>
-
+	<!--
 	<section>
-		<!-- <section>
+	<section>
 			<h3 class='slide-title'>Example use-case: reconstructing initial conditions by MAP optimization</h3>
 			<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
 			<div class="fragment">Going back to simpler times...</div>
@@ -943,7 +964,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 					</li>
 				</ul>
 			</div>
-		</section> -->
+		</section>
 
 		<section>
 			<h3 class="slide-title">Example use-case: reconstructing initial conditions by MAP optimization</h3>
@@ -982,11 +1003,6 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 
 		<section>
 			<h3 class="slide-title">CosmicRIM: Recurrence Inference Machines for Initial Condition Reconstruction</h3>
-			<!-- <div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak, Spergel, Perreault-Levasseur (2021)
-				<a href="https://arxiv.org/abs/2104.12864"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2104.12864-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
-			</div>
-			<br>
-			<br> -->
 			<div class="container">
 				<div class="col">
 					<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak, Spergel, Perreault-Levasseur (2021)
@@ -1015,17 +1031,8 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 			</ul>
 		</section>
 	</section>
+ -->
 
-	<section>
-		<h3 class="slide-title">Teaser: Differentiable lensing simulations with FlowPM</h3>
-		<br>
-		<br>
-		<img data-src="assets/flowpm_vs_kappatng.png" height="400" />
-		<br>
-		<br>
-		<br>
-		<b class="alert">$\Longrightarrow$ See Denise's talk later today!</b>
-	</section>
 
 	<section>
 		<h2>Conclusion</h2>
