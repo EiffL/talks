@@ -1,0 +1,1587 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Merging deep learning with physical models for the analysis of modern cosmological surveys</title>
+
+	<meta name="description" content="UWC Seminar, June 18th 2021">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Merging deep learning with physical models</h1>
+						<h2> for the analysis of modern cosmological surveys</h2>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://eiffl.github.io/talks/UWC2021">eiffl.github.io/talks/UWC2021</a> </div>
+				</div>
+			</section>
+
+			<section data-background-image="assets/WMAP_timeline_large.jpg">
+				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
+				<br> <br>
+				<div class="container">
+					<div class="col" style="flex: 0 0 40em;">
+
+					</div>
+					<div class="col">
+
+						<img class="plain" data-src="assets/Euclid.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/vrro.png" style="width: 300px" />
+					</div>
+				</div>
+				<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+			</section>
+
+			<section>
+				<section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
+					<h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time</h3>
+					<div class="container">
+						<div class="col">
+							<ul>
+								<li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
+								<br>
+								<li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
+								<br>
+								<li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
+							</ul>
+							<br>
+							<!-- <p class="fragment fade-up"> $\Longrightarrow$ Incredible potential for discovery, along with <b>unprecedented challenges</b >.</p> -->
+						</div>
+
+						<div class="col">
+							<video class="fragment fade-up" data-fragment-index="1" data-autoplay data-src="assets/obsim.mp4" type="video/mp4" />
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="fade-in fade-out" data-background="assets/gal_sdss.png" data-vertical-align-top>
+					<p>Previous generation survey: SDSS</p>
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+				<section data-transition="fade-in fade-out" data-background="assets/gal_des.png" data-vertical-align-top>
+					<p>Current generation survey: DES</p>
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+				<section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
+					<p>LSST precursor survey: HSC</p>
+
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+			</section>
+
+			<!-- <section>
+				<h3 class='slide-title'>The challenges of modern surveys</h3>
+				<div style="float:left;">
+					$\Longrightarrow$ Modern surveys will provide <b>large volumes</b> of <b>high quality</b> data
+				</div>
+				<br>
+				<div class="container">
+					<div class="col">
+
+						<div class="block fragment">
+							<div class="block-title">
+								A Blessing
+							</div>
+							<div class="block-content">
+								<ul>
+									<li>Unprecedented statistical power
+									</li>
+									<br>
+									<li>Great potential for new discoveries
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<br>
+						<div class="block fragment">
+							<div class="block-title">
+								A Curse
+							</div>
+							<div class="block-content">
+								<ul>
+									<li> Existing methods are reaching their limits at every
+										step of the science analysis
+									</li>
+									<br>
+									<li>Control of systematics is <b>paramount</b>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+					<div class="col">
+						LSST forecast on dark energy parameters
+						<img class="plain" data-src="assets/LSST_forecast_Y10.png" style="height :400px;" />
+					</div>
+				</div>
+				<div class="fragment">
+					$\Longrightarrow$ Dire need for <b class="alert">novel analysis techniques</b> to fully realize the potential of modern surveys.
+				</div>
+			</section> -->
+
+			<section>
+				<section data-background="assets/gal_hsc.png">
+					<h3 class='slide-title'>Can AI solve all of our problems?</h3>
+					<div class="fragment">
+						<div style="float:right; font-size: 20px">Branched GAN model for deblending <a href="https://arxiv.org/abs/1810.10098">(Reiman & Göhre, 2018)</a></div>
+
+						<img class="plain" data-src="assets/Reiman2018_1.png" />
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							The issue with using deep learning as a <i>black-box</i>
+						</div>
+						<div class="block-content">
+							<ul>
+								<li> No explicit control of noise, PSF, depth, number of sources.
+									<ul>
+										<li> Model would have to be retrained for all observing configurations
+										</li>
+									</ul>
+								</li>
+								<li> No guarantees on the network output (e.g. flux preservation, artifacts)
+								</li>
+								<li> No proper uncertainty quantification.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<img class="plain" data-src="assets/Reiman2018_3.png" />
+				</section>
+			</section>
+
+
+			<section>
+				<section>
+					<h3 class="slide-title">Let us consider the general case of inverse problems</h3>
+
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					$\mathbf{A}$ is known and encodes our physical understanding of the problem.
+					<span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse problem is ill-posed <b class="alert">with no unique solution $x$</b></span>
+					<div class="container fragment fade-up">
+						<div class="col">
+							<img data-src="assets/pluto_smooth.png" class="plain"></img>
+							Deconvolution
+						</div>
+						<div class="col">
+							<img data-src="assets/pluto_missing.png" class="plain"></img>
+							Inpainting
+						</div>
+						<div class="col">
+							<img data-src="assets/plutoNoise.png" class="plain"></img>
+							Denoising
+						</div>
+					</div>
+				</section>
+
+				<section data-vertical-align-top>
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					The Bayesian view of the problem:
+					<br>
+					<br>
+					$$ p(x | y) \propto p(y | x) \ p(x) $$
+					<br>
+
+					<ul>
+						<li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b class="alert">contains the physics</b><br>
+						</li>
+						<br>
+						<li class="fragment fade-up">$p(x)$ is the prior knowledge on the solution.</li>
+					</ul>
+					<br>
+					<br>
+					<div class="fragment fade-up">
+						With these concepts in hand, we can estimate for instance the Maximum A Posteriori solution:
+						<br>
+						<br>
+						$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+						<br>
+						For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ \frac{1}{2} \parallel y - \mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						<h3>How do you choose the prior ?</h3>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Classical examples of signal priors </h3>
+					<div class="container">
+						<div class="col">
+							Sparse
+							<img data-src="assets/wavelet.png" height="400" class="plain"></img><br>
+							$$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+						</div>
+						<div class="col">
+							Gaussian
+							<img data-src="assets/zknj8.jpg" height="400" class="plain"></img>
+							$$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+						</div>
+						<div class="col">
+							Total Variation
+							<img data-src="assets/shepp-Logan.ppm" class="plain"></img>
+							$$ \log p(x) = \parallel \nabla x \parallel_1 $$
+
+						</div>
+					</div>
+				</section>
+
+				<section data-background="assets/hsc_screen.png">
+					<h2>But what about this?</h2>
+
+				</section>
+
+			</section>
+
+
+
+			<section>
+				<h3 class='slide-title'>Outline of this talk</h3>
+				<br>
+				<br>
+				<h3> How can we merge <b>Deep Learning</b> and <b>Physical Models</b> to help us make sense <br> of increasingly complex data?</h4>
+					<br>
+					<br>
+					<br>
+					<ul>
+						<li class="fragment grow">Generative Models for Galaxy Morphology</li>
+						<br>
+						<br>
+						<br>
+						<li class="fragment grow">Probabilistic Mapping of Dark Matter</li>
+						<br>
+						<br>
+						<br>
+
+					</ul>
+					<br>
+					<br>
+					<br>
+			</section>
+
+			<section>
+				<h2>Deep Generative Models of Galaxy Morphology</h2>
+
+				<br>
+				<a href="https://arxiv.org/abs/2008.03833"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2008.03833-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<a href="https://github.com/McWilliamsCenter/galsim_hub"><img src="https://badgen.net/badge/icon/github?icon=github&label" class="plain" style="height:25px;" /></a>
+				<a href="https://colab.research.google.com/github/McWilliamsCenter/galsim_hub/blob/master/notebooks/GalsimHubDemo.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain"
+						style="height:25px;" /></a>
+				<hr>
+				<br>
+				<br>
+				<div align="left" style="margin-left: 20px;">
+
+					<h3>Work in collaboration with <br>
+						Rachel Mandelbaum, Siamak Ravanbakhsh, Chun-Liang Li, Barnabas Poczos, Peter Freeman</h3>
+				</div>
+
+				<br>
+				<br>
+
+				<div style="float:center; font-size: 25px"><b>Lanusse</b> et al. (2020) <br>
+					<!-- Mandelbaum, <b> Lanusse</b>, et al. (2018)<br> -->
+					Ravanbakhsh, <b>Lanusse</b>, et al. (2017)
+				</div>
+
+			</section>
+			<section>
+				<!-- <section>
+					<h3 class="slide-title"> The weak lensing shape measurement problem</h3>
+					<div>
+						<img class="plain" data-src="assets/great.jpg" />
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							Shape measurement biases
+						</div>
+						<div class="block-content">
+							$$ < e> = \ (1 + m) \ \gamma \ + \ c $$
+
+								<ul>
+									<li class="fragment fade-up"> Can be calibrated on image simulations
+									</li>
+									<li class="fragment fade-up"> How complex do the simulations need to be?
+									</li>
+								</ul>
+						</div>
+					</div>
+				</section> -->
+
+				<!-- <section>
+						<h3 class="slide-title"> Image simulations for shear calibration in the HSC survey</h3>
+						<div style="float:right; font-size: 20px">Mandelbaum,<b>Lanusse</b>, Leauthaud, Armstrong, et al. (2018)</div>
+
+						<img class="plain" data-src="assets/fig_illustrator_red_2.png" style="height: 450px;"/>
+
+						<div class="block">
+						<div class="block-title">
+						Hyper Suprime-Cam Subaru Strategic Program
+					</div>
+					<div class="block-content">
+					<ul>
+					<li> 1400 sq. deg. in the wide survey down to 26.4 mag in i-band
+				</li>
+				<li> Essentially a smaller area precursor of LSST
+			</li>
+			</ul>
+			</div>
+			</div>
+			</section>
+
+			<section>
+			<h3 class="slide-title"> Simulation and Calibration strategy</h3>
+			<br>
+
+			<img class="plain" data-src="assets/simu.png"/>
+
+			<br>
+			<br>
+			<div class="block">
+			<div class="block-title">
+			The GREAT3 approach
+			</div>
+			<div class="block-content">
+			<ul>
+			<li> Input galaxies from deep HST/ACS COSMOS images (25.2 imag)
+			</li>
+			<br>
+			<li> Apply a range of PSFs and noise levels sampled from the survey
+			</li>
+			<br>
+			<li>  Measure response of shape measurement to a known shear
+			</li>
+			</ul>
+			</div>
+			</div>
+			</section> -->
+
+				<!-- <section>
+
+			<h3 class="slide-title"> From simple to complex simulations... Illustration from HSC calibration</h3>
+			<div style="float:right; font-size: 20px">Mandelbaum,<b>Lanusse</b>, Leauthaud, Armstrong, et al. (2018)</div>
+			<br>
+
+			<div class='container'>
+			<div class='col'>
+			<img class="plain" data-src="assets/HSC_sims.png"/>
+			</div>
+
+			<div class='col'>
+			<img class="plain fragment fade-left" data-src="assets/HSC_sims_diff.png"/>
+			</div>
+			</div>
+			</section> -->
+
+				<section>
+					<h3 class="slide-title"> Impact of galaxy morphology on shape estimation</h3>
+					<div class='container'>
+						<div class='col'>
+							<img class="plain" data-src="assets/real_gal-inv.png" style="height: 350px;" />
+							<br>
+							<div style="float:left; font-size: 20px">Mandelbaum, et al. (2013), Mandelbaum, et al. (2014)</div>
+						</div>
+
+						<div class='col'>
+							<img class="plain fragment fade-up" data-src="assets/great3_calib2-inv.png" style="height: 425px;" />
+						</div>
+					</div>
+					<br>
+
+					<div class="block fragment fade-up">
+						<div class="block-title">
+							The need for data-driven generative models
+						</div>
+						<div class="block-content">
+							<ul>
+								<li> Lack or inadequacy of physical model
+								</li>
+								<li> Extremely computationally expensive simulations
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2>
+					Can we learn a model for the signal from the data itself?</h2>
+			</section>
+
+			<!-- <section>
+				<h3 class="slide-title"> The evolution of generative models </h3>
+
+				<br> <br> <br>
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+							<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+							<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+							<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+						</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+							<br>
+							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+						</ul>
+					</div>
+				</div>
+				<br> <br> <br>
+			</section> -->
+
+			<section data-background-iframe="https://www.thispersondoesnotexist.com/">
+				<h3 class="slide-title" style="background: rgba(0, 0, 0, 0.3);"> Do you know this person?</h3>
+
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+
+				<div class="fragment fade-up" style="background: rgba(0, 0, 0, 0.3);">
+					<p>Probably not, this is a randomly generated person: <a href="https://www.thispersondoesnotexist.com/" target="_blank">thispersondoesntexist.com</a></p>
+				</div>
+			</section>
+
+			<!-- <section>
+				<h3 class="slide-title"> A visual Turing test </h3>
+				<div class="container">
+				<div class="col">
+				<img data-src="assets/samples_pixel_cnn.png" class="plain" style="height: 500px;" ></img>
+				<br>
+				<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+			</div>
+			<div class="col">
+			<img data-src="assets/sdss5.png" class="plain"  style="height: 500px;" ></img>
+			<br>
+			<div class="fragment fade-up" data-fragment-index="0"> Real SDSS </div>
+			</div>
+			</div>
+			</section> -->
+
+			<section>
+				<h3 class="slide-title"> Complications specific to astronomical images: spot the differences!</h3>
+
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/celeba.png" class="plain" style="height: 450px;"></img>
+						<br>
+						CelebA
+					</div>
+					<div class="col">
+						<img data-src="assets/hsc_images.png" class="plain" style="height: 450px;"></img>
+						<br>
+						HSC PDR-2 wide
+					</div>
+				</div>
+				<br>
+				<div>
+					<ul>
+						<li class="fragment"> There is <b class="alert">noise</b></li>
+						<li class="fragment"> We have a <b class="alert">Point Spread Function</b></li>
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
+					<br>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img class="plain fragment" data-src="assets/rand_z_square.png" style="height: 150px" data-fragment-index="4" />
+						</div>
+						<div class="col">
+							<img class="plain fragment" data-src="assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3" />
+						</div>
+						<div class="col">
+							<img class="plain fragment" data-src="assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2" />
+						</div>
+
+						<div class="col">
+							<img class="plain fragment" data-src="assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1" />
+						</div>
+
+						<div class="col">
+							<img class="plain fragment" data-src="assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0" />
+						</div>
+					</div>
+
+					<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+						<div class='col fragment' data-fragment-index='4'>
+							<font size="10"> $\longrightarrow$ </font> <br> $g_\theta$
+						</div>
+						<div class='col fragment' data-fragment-index='3'>
+							<font size="10"> $\longrightarrow$ </font> <br> PSF
+						</div>
+						<div class='col fragment' data-fragment-index='2'>
+							<font size="10"> $\longrightarrow$ </font> <br> Pixelation
+						</div>
+						<div class='col fragment' data-fragment-index='1'>
+							<font size="10"> $\longrightarrow$ </font> <br> Noise
+						</div>
+					</div>
+
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; width:400px; height:300px; margin:0 auto;">
+								<img data-src="assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0" />
+								<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1" />
+								<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2" />
+								<img data-src="assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3" />
+								<img data-src="assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4" />
+							</div>
+						</div>
+						<div class=" col">
+							<div class="block fragment" data-fragment-index="0">
+								<div class="block-title">
+									Probabilistic model
+								</div>
+								<div class="block-content">
+									<div style="position:relative; width:400px; height:100px; margin:0 auto;">
+										<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+										<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+										<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised
+											galaxy image</div>
+										<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved,
+											super-resolved, and denoised galaxy image </div>
+										<div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$
+											is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+									</div>
+									<br>
+									<br>
+									<br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">How to train your <s>dragon</s> model</h3>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/pgm.png" class="plain" style="height: 300px;"></img>
+						</div>
+						<div class="col">
+							<ul>
+								<li> Training the generative amounts to finding $\theta_\star$ that
+									<b>maximizes the marginal likelihood</b> of the model:
+									$$p_\theta(x | \Sigma, \Pi) = \int \mathcal{N}( \Pi \ast g_\theta(z), \Sigma) \ p(z) \ dz$$
+									<div> $\Longrightarrow$ This is <b class="alert">generally intractable</b></div>
+								</li>
+								<br>
+								<li class="fragment fade-up"> Efficient training of parameter $\theta$ is made possible by <b class="alert">Amortized Variational Inference</b>.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="block fragment fade-up">
+						<div class="block-title">
+							Auto-Encoding Variational Bayes (Kingma & Welling, 2014)
+						</div>
+						<div class="block-content">
+							<ul>
+								<li class="fragment fade-up"> We introduce a <b>parametric distribution</b> $q_\phi(z | x, \Pi, \Sigma)$ which aims to model the
+									posterior $p_{\theta}(z | x, \Pi, \Sigma)$.
+								</li>
+								<br>
+								<li class="fragment fade-up"> Working out the KL divergence between these two distributions leads to:
+
+									$$\log p_\theta(x | \Sigma, \Pi) \quad \geq \quad - \mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right) \quad + \quad \mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)
+									\right]$$
+
+									$\Longrightarrow$ This is the <b>Evidence Lower-Bound</b>, which is differentiable with respect to $\theta$ and $\phi$.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</section>
+				<!-- <section>
+					<h3 class="slide-title">The famous Variational Auto-Encoder</h3>
+					<img data-src="assets/vae.png" class="plain" style="height: 450px;"> </img>
+					<br>
+					<br>
+					$$\log p_\theta(x| \Sigma, \Pi ) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x
+					| z, \Sigma, \Pi) \right]}_{\mbox{reconstruction error}} $$
+				</section> -->
+
+
+				<!-- <section>
+				<h3 class="slide-title"> Conditional sampling in VAE latent space</h3>
+
+				<div class="container">
+				<div class="col">
+				<img data-src="assets/conditional_flow.png" class="plain" ></img>
+			</div>
+			<div class="col">
+
+			<ul>
+			<li> We build a latent space model $p_\varphi(z)$ using a Masked Autoregressive Flow (MAF) (Papamakarios, et al. 2017)
+			</li>
+			<br>
+			<li class="fragment"> While we are learning to sample from the latent space, we can also <b class="alert"> learn to sample conditionaly</b>:
+			$$  p_\varphi(z | y) $$
+			</li>
+			<br>
+
+			<li class="fragment"> Here we learn to sample images conditioned on:
+			<ul>
+			<li> Size: half-light radius $r$
+			</li>
+			<li> Brightness: I band magnitude $mag\_auto$
+			</li>
+			<li> Redshift: COSMOS photometric redshift $zphot$
+			</li>
+			</ul>
+			</li>
+			</ul>
+			</div>
+			</div>
+			</section> -->
+			</section>
+			<!--
+			<section>
+				<h3 class="slide-title"> Illustration on HST/ACS COSMOS images</h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/Figure_autoencode.png" class="plain"></img>
+						<br>
+						<b>Fitting observations</b> with VAE and Bulge+Disk parametric model.
+					</div>
+					<div class="col">
+						<ul>
+							<li>Training set: <b>GalSim COSMOS HST/ACS postage stamps</b>
+								<br>
+								<ul>
+									<li> 80,000 deblended galaxies from I < 25.2 sample </li>
+									<li> Drawn on 128x128 stamps at 0.03 arcsec resolution
+									</li>
+									<li> Each stamp comes with:
+										<ul>
+											<li>PSF</li>
+											<li>Noise power spectrum</li>
+											<li>Bulge+Disk parametric fit</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<br>
+							<li> Auto-Encoder model:
+								<ul>
+									<li> Deep residual autoencoder:<br> 7 stages of 2 resnet blocs each
+									</li>
+									<li> Dense bottleneck of size 16.
+									</li>
+									<li> Outputs positive, noiseless, deconvolved, galaxy surface brightness.
+									</li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment"><b class="alert">Generative models are conditioned on:</b><br>
+								<b>mag_auto, flux_radius, zphot</b>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section> -->
+
+			<section>
+
+				<section>
+					<h3 class="slide-title"> Flow-VAE samples</h3>
+					<br>
+					<br>
+					<img class="current-visible plain" data-src="assets/lanusse2020_figure1.png" />
+				</section>
+
+				<section>
+					<h3 class="slide-title">Second order moments</h3>
+					<br>
+
+					<br>
+					<img class="current-visible plain" data-src="assets/lanusse2020_fig6a.png" style="width:850px;" /><br>
+					<!-- <img class="current-visible plain" data-src="assets/lanusse2020_fig6b.png" style="width:550px;" /> -->
+					<br>
+					<br>
+				</section>
+
+				<!-- <section>
+					<h3 class="slide-title"> Testing conditional sampling</h3>
+					<img data-src="assets/lanusse2020_figure7.png" style="width:1000px;" class="plain"></img>
+					<div class="fragment">$\Longrightarrow$ We can successfully condition galaxy generation.</div>
+				</section> -->
+
+				<section>
+					<h3 class="slide-title"> Testing galaxy morphologies </h3>
+					<br>
+					<br>
+					<img data-src="assets/gini_m20.png" class="plain"></img>
+					<br>
+					<br>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">Going one step further: generative models as data-driven priors</h3>
+					<br>
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					$\mathbf{A}$ is known and encodes our physical understanding of the problem.
+					<br>
+					<br>
+					<div class="container fragment fade-up">
+						<div class="col">
+							$y$<br>
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<br><b class="alert">Simulated Rubin Observatory</b>
+						</div>
+
+						<div class="col ">
+							$$ = \qquad \Pi \qquad \ast $$
+						</div>
+
+						<div class="col">
+							$x$<br>
+							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<br><b class="alert">Hubble Space Telescope</b>
+						</div>
+
+						<div class="col ">
+							$$+ \qquad n$$
+						</div>
+					</div>
+
+				</section>
+
+				<section>
+					<h3 class="slide-title">Bayesian Inference a.k.a. Uncertainty Quantification</h3>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/pgm.png" class="plain" style="height: 250px;"></img>
+						</div>
+						<div class="col">
+							The Bayesian view of the problem:
+							$$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
+							where:
+							<br>
+							<ul>
+								<li>$p( z | x )$ is the <b class="alert">posterior</b></li>
+								<li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
+								<li>$p( z )$ is the <b>prior</b> </li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+								<img class="plain fragment current-visible" data-src="assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" />
+								<img class="plain fragment" data-src="assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+							</div>
+							<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+								<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data<br> $x_n$</div>
+								<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Truth<br> $x_0$ </div>
+							</div>
+							<br>
+						</div>
+
+						<div class="col fragment" data-fragment-index='0'>
+							<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+								<div><video data-autoplay data-loop data-src="assets/rec_samples.mp4" type="video/mp4" style="height: 200px;" />
+								</div>
+							</div>
+							<div>Posterior samples<br> $g_\theta(z)$</div>
+						</div>
+
+						<div class="col">
+							<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+								<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/rec_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
+								<img class="plain fragment " data-src="assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+							</div>
+
+							<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+								<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> <br> $\mathbf{P} (\Pi \ast g_\theta(z))$</div>
+								<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Median </div>
+							</div>
+						</div>
+
+						<div class="col">
+							<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+								<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/res_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
+								<img class="plain fragment " data-src="assets/rec_std.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+							</div>
+
+							<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+								<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data residuals <br> $x_n - \mathbf{P} (\Pi \ast g_\theta(z))$</div>
+								<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Standard Deviation </div>
+							</div>
+						</div>
+					</div>
+					<div class="fragment"> $\Longrightarrow$ <b class="alert">Uncertainties are fully captured by the posterior</b>.</div>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Example of application to deblending</h3>
+				<br>
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li><em>Hybrid Physical-Deep Learning Model for Astronomical Inverse Problems</em><br> <b> F. Lanusse</b>, P. Melchior, F. Moolekamp<br>
+								<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+								<a href="https://www.youtube.com/watch?v=oWOU3qNHoL0"><img src="https://img.shields.io/badge/-youtube-red?logo=youtube&labelColor=grey" class="plain" style="height:25px;" /></a>
+							</li>
+						</ul>
+						<br> <br>
+						$\mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i)$
+						<br> <br>
+						<img class=" plain" data-src="assets/scarlet_hsc.png" />
+						<br> <br>
+					</div>
+
+					<div class="col fragment fade-in">
+						<div class="container">
+							<div class="col">
+								isolated galaxy
+								<img data-src="assets/gal_1.png" class="plain"></img>
+								<span> $\log p_\theta(x) = 3293.7$ </span>
+							</div>
+
+							<div class="col">
+								artificial blend
+								<img data-src="assets/gal_2.png" class="plain"></img>
+								<span> $\log p_\theta(x) = 3100.5 $ </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> Takeaway message</h3>
+				<br>
+				<ul>
+					<li class="fragment"> We have <b class="alert">combined physical and deep learning components</b> to model
+						observed noisy and PSF-convolved galaxy images. <br>
+						$\Longrightarrow$ This framework can handle multi-band, multi-resolution, multi-instrument data.
+					</li>
+
+					<br>
+
+					<!-- <li class="fragment"> We are overcoming the limitations of standard VAEs with an additional latent space model.
+						<br>$\Longrightarrow$ Can produce sharp and meaningful images.
+					</li> -->
+
+					<br>
+
+					<li class="fragment"> Once trained, generative models can be used as <b class="alert">data-driven priors</b> for various inverse problems: denoising, deblending, deconvoluion, etc....
+						<br> $\Longrightarrow$ This Bayesian framework allows for robust uncertainty quantification.
+					</li>
+
+					<br>
+				</ul>
+				<br>
+				<br>
+
+				<div class="block fragment fade-up">
+					<div class="block-title">
+						<b>GalSim Hub</b>
+					</div>
+					<div class="block-content">
+
+						<br>
+
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/TF_FullColor_Horizontal.png" class="plain"></img>
+							</div>
+
+							<div class="col">
+
+								<ul>
+
+									<li> Framework for sampling from deep generative models
+										directly from within GalSim.
+									</li>
+
+									<br>
+
+									<li> Go check out the beta version: <a href="https://github.com/McWilliamsCenter/galsim_hub">https://github.com/McWilliamsCenter/galsim_hub</a>
+									</li>
+
+								</ul>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</section>
+
+			<section>
+				<h2>Probabilistic Mapping of Dark Matter by<br> Neural Score Matching</h2>
+				<a href="https://arxiv.org/abs/2011.08271"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2011.08271-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h3>Work in collaboration with: <br>
+								Benjamin Remy, Zaccharie Ramzi
+							</h3>
+							<img data-src="http://www.cosmostat.org/wp-content/uploads/2020/11/benjamin.png" style='width:200px; height:200px;'></img>
+							<img data-src="http://www.cosmostat.org/wp-content/uploads/2019/03/Portrait-2-1600x2000.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
+
+							<br>
+
+							$\Longrightarrow$ <b class="alert">Learn complex priors</b> by Neural Score Estimation and <b class="alert">sample from posterior</b> with gradient-based MCMC.
+						</div>
+					</div>
+					<div class="col">
+						<img class="plain" data-src="assets/knee.gif" style="width:450px;" />
+					</div>
+				</div>
+				<br>
+			</section>
+			<section>
+				<section data-background-image="assets/gravitational-lensing-diagram.jpg">
+					<h3 class="slide-title"> Gravitational lensing</h3>
+					<div class="fragment fade-up">
+						<img class="plain" data-src="assets/great.jpg" />
+
+						<div class="block ">
+							<div class="block-title">
+								Galaxy shapes as estimators for gravitational shear
+							</div>
+							<div class="block-content">
+								$$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
+								<ul>
+									<li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
+										galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">The Weak Lensing Mass-Mapping as an Inverse Problem</h3>
+					<div class="container">
+						<div class="col">
+							Shear <b class="alert">$\gamma$</b><br>
+							<img data-src="assets/shear_cat1.png" style="width:450px;"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							Convergence <b class="alert">$\kappa$</b><br>
+							<img data-src="assets/kappa.png" style="width:450px;"></img>
+						</div>
+					</div>
+
+					<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+						</div>
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\boxed{\gamma = \mathbf{P} \kappa}$$
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Illustration on the Dark Energy Survey (DES) simulations</h3>
+					<div style="float:right; font-size: 20px">Jeffrey, Abdalla, Lahav, <b>Lanusse</b> et al. (2018)
+					</div><br>
+					<img data-src="assets/des_sv_sims.png" style="height:600px;"></img>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Writing down the convergence map log posterior</h3>
+
+				$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+
+				<ul>
+					<li> The likelihood term is <b class="alert">known analytically</b>.
+					</li>
+					<br>
+
+					<li class="fragment fade-up"> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
+						<br> However:
+						<ul>
+							<li> <b>We do have an analytic prior on its 2pt function</b>, and that prior is accurate on large scales.
+								$$p_{th}(\boldsymbol{\kappa}) = \frac{1}{ \sqrt{ \det 2 \pi \boldsymbol{S}}} \exp \left( -\frac{1}{2} \boldsymbol{\kappa}^\dagger \boldsymbol{S}^{-1} \boldsymbol{\kappa} \right)$$
+								where $\mathbf{S}$ is the theoretical power spectrum of the convergence.
+							</li>
+							<br>
+							<li> <b>We do have access to samples of full prior</b> through simulations.
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<br>
+				<br>
+
+				<div class="fragment">$\Longrightarrow$ Our goal is to <b class="alert">learn a hybrid prior</b>, and then <b class="alert">sample the full posterior</b>.</div>
+			</section>
+			<!--
+						<section>
+							<h3 class="slide-title"> The evolution of generative models </h3>
+
+							<br> <br> <br>
+							<div class='container'>
+								<div class='col'>
+									<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+										<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+										<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+										<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+										<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+									</div>
+								</div>
+
+								<div class='col'>
+									<ul>
+										<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+										<br>
+										<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+										<br>
+										<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+										<br>
+										<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+									</ul>
+								</div>
+							</div>
+							<br> <br> <br>
+						</section>
+
+						<section data-vertical-align-top>
+							<h3 class="slide-title">Not all generative models are created equal</h3>
+							<img data-src="assets/generative_models_table.png" class="plain"></img>
+							<div style="float:right; font-size: 20px">Grathwohl et al. 2018</div>
+							<br>
+							<br>
+							<ul>
+								<li> GANs and VAEs are very common and successfull but do not fit our purposes.</li>
+								<br>
+								<li> We would want a model with <b class="alert">explicit likelihood</b>, which can evaluate $\log p_\theta(x)$.</li>
+								<br>
+							</ul>
+						</section> -->
+
+			<section>
+				<h3 class="slide-title">The score is all you need!</h3>
+				<br>
+
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+								<b class="alert">only need access to the score</b> of the posterior:
+								$$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+								d
+								\color{orange}x}$$
+								<ul>
+									<li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+									<li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+								</ul>
+							</li>
+							<br>
+						</ul>
+					</div>
+					<div class="col">
+						<img data-src="assets/score_two_moons.png"></img>
+					</div>
+				</div>
+				<br>
+				<br>
+				<ul>
+					<li class="fragment" data-fragment-index="1"> The score of the full posterior is simply:
+						$$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{can be learned}}$$
+						$\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of the prior</b>.
+					</li>
+				</ul>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+
+					<ul>
+						<li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+							<ul>
+								<li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+									$$x^\prime = x + u$$
+								</li>
+								<li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+									$$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+								</li>
+								<li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+									$$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<div class="fragment fade-up">
+						<div class="container">
+							<div class="col">$\boldsymbol{x}'$
+							</div>
+							<div class="col">$\boldsymbol{x}$
+							</div>
+							<div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+							</div>
+							<div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+							</div>
+						</div>
+						<img data-src="assets/denoised_mnist.png" style='width:1200px;'></img>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
+
+					<div class="container">
+						<div class="col">
+							<br>
+							<img data-src="assets/unet.png" data-fragment-index="1" /><br>
+							<br> A standard UNet
+						</div>
+
+						<div class="col">
+							<ul>
+								<li> We use a very standard residual UNet, and we adopt a residual
+									score matching loss:
+									$$ \mathcal{L}_{DSM} = \underset{\boldsymbol{x} \sim P}{\mathbb{E}} \underset{\begin{subarray}{c}
+									\boldsymbol{u} \sim \mathcal{N}(0, I) \\
+									\sigma_s \sim \mathcal{N}(0, s^2)
+									\end{subarray}}{\mathbb{E}} \parallel \boldsymbol{u} + \sigma_s \boldsymbol{r}_{\theta}(\boldsymbol{x} + \sigma_s \boldsymbol{u}, \sigma_s) \parallel_2^2$$
+									$\Longrightarrow$ direct estimator of the score $\nabla \log p_\sigma(x)$
+								</li>
+								<br>
+								<li class="fragment fade-up"> Lipschitz regularization to improve robustness:
+									<br><br>
+									<div class="container">
+										<div class="col">
+											Without regularization
+										</div>
+
+										<div class="col">
+											With regularization
+										</div>
+									</div>
+									<img data-src='assets/reg_score.png' />
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<!-- <section>
+								<h3 class="slide-title">Efficient sampling by Annealed HMC</h3>
+
+								<ul>
+									<li> Even with gradients, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+										$\Longrightarrow$ Use a parallel annealing strategy to effectively sample from full distribution.
+									</li>
+									<br>
+									<li class="fragment fade-up"> We use the fact that our score network $\mathbf{r}_\theta(x, \sigma)$ is learning a noise-convolved distribution $\nabla \log p_\sigma$
+
+										<div>
+											$$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+											<img data-src="assets/annealing.png" />
+										</div>
+
+									</li>
+
+									<li class="fragment fade-up"> Run many HMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+									</li>
+								</ul>
+							</section>
+
+							<section>
+									<h3 class="slide-title">Example of one chain during annealing</h3>
+									<img data-src="assets/knee_sampling.gif"/>
+							</section> -->
+
+				<section>
+					<h3 class="slide-title">Annealed Langevin samples from DSM model in Song & Ermon (2020)</h3>
+					<img data-src="assets/song_ermon_2020.png" />
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Back to the convergence map log posterior</h3>
+				<br>
+				<br>
+				$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+				<br>
+				<br>
+				<br>
+				<ul>
+					<li> The likelihood term (and its score) are known analytically.
+					</li>
+
+					<!-- <li> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
+									<br> However:
+									<ul>
+										<li> <b>We do have an analytic prior on its 2pt function</b>, and that prior is accurate on large scales.
+											$$p_{th}(\boldsymbol{\kappa}) = \frac{1}{ \sqrt{ \det 2 \pi \boldsymbol{S}}} \exp \left( -\frac{1}{2} \boldsymbol{\kappa}^\dagger \boldsymbol{S}^{-1} \boldsymbol{\kappa} \right)$$
+											where $\mathbf{S}$ is the theoretical power spectrum of the convergence.
+										</li>
+										<li> <b>We do have access to samples of full prior</b> through simulations.
+										</li>
+									</ul>
+								</li> -->
+					<br>
+					<li class="fragment fade-up"><b class="alert">Learning a Hybrid score</b>: theoretical Gaussian on large scale, data-driven on small scales using N-body simulations.
+						$$\underbrace{\nabla_{\boldsymbol{\kappa}} \log p(\boldsymbol{\kappa})}_\text{full prior} = \underbrace{\nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa})}_\text{gaussian prior} +
+						\underbrace{\boldsymbol{r}_\theta(\boldsymbol{\kappa}, \nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa}))}_\text{learned residuals}$$
+					</li>
+				</ul>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Illustration on simulations</h3>
+				<img data-src='assets/score_sims_results.png' />
+			</section>
+
+			<section>
+				<h3 class="slide-title">Probabilistic Mass-Mapping of the HST COSMOS field</h3>
+				<img data-src="assets/cosmos_massmap.png"></img>
+				<br>
+				<ul>
+					<li> COSMOS shear data from <a href=https://ui.adsabs.harvard.edu/abs/2010A%26A...516A..63S/abstract>Schrabback et al. 2010</a>
+					</li>
+					<br>
+					<li> Prior learned from MassiveNuS at fiducial cosmology (320x320 maps at 0.4 arcsec resolution).
+					</li>
+					<br>
+					<li> Known massive X-ray clusters indicated with crosses, along with their redshifts, right pannel shows cutouts of central
+						cluster from multiple posterior samples.
+					</li>
+				</ul>
+				<br>
+				<br>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Uncertainty quantification in Magnetic Resonance Imaging (MRI)</h3>
+				<div style="float:right; font-size: 20px">Ramzi, Remy, <b>Lanusse</b> et al. 2020 <a href="https://arxiv.org/abs/2011.08698" style='vertical-align:middle; display:inline;'><img
+							src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				</div>
+				<br>
+				<br>
+				$$\boxed{y = \mathbf{M} \mathbf{F} x + n}$$
+				<div><video data-autoplay loop="loop" data-src="assets/knee.mp4" type="video/mp4" style="width: 1280px;" />
+				</div>
+				<br>
+
+				<br>
+
+				<br>
+
+				<p class="fragment">$\Longrightarrow$ We can see which parts of the image are well constrained by data, and which regions are <b class="alert">uncertain</b>.</p>
+			</section>
+
+
+			<section>
+				<h3 class="slide-title"> Takeaways</h3>
+				<br>
+				<br>
+				<ul>
+					<li> Hybrid physical/deep learning modeling:
+						<ul>
+							<li> Deep generative models can be used to provide <b class="alert">data driven priors</b>.
+							</li>
+							<br>
+							<li> <b class="alert">Explicit likelihood</b>, uses of all of our physical knowledge.<br>
+								$\Longrightarrow$ The method can be applied for varying PSF, noise, or even different instruments!
+							</li>
+
+						</ul>
+					</li>
+					<br>
+					<li class="fragment"> Neural Score Estimation is a <b class="alert">scalable approach</b> to learn a prior score.
+					</li>
+					<br>
+					<li class="fragment"> Knowledge of the posterior score is all we need for Bayesian inference aka uncertain quantification.
+					</li>
+					<br>
+					<li class="fragment">We implemented the "ultimate mass-mapping method" <br>
+						$\Longrightarrow$ Recovered the best convergence map of the COSMOS field to date.</li>
+				</ul>
+				<br>
+				<br>
+
+				<br>
+				<br>
+				<br>
+				<br>
+			</section>
+
+
+
+			<section>
+				<h1> Conclusion </h1>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> Conclusion </h3>
+				<div class="block ">
+					<div class="block-title">
+						What can be gained by merging Deep Learning and Physical Models?
+					</div>
+					<div class="block-content">
+						<br>
+						<ul>
+							<li class="fragment"> Complement known physical models with data-driven components
+								<ul>
+									<li>Learn galaxy morphologies from noisy and PSF-convolved data, for simulation purposes.</il>
+									<li>Use data-driven model as prior for solving inverse problems such as deblending or deconvolution.</il>
+								</ul>
+								</il>
+								<br>
+								<br>
+
+							<li class="fragment"> Leverage simulations to provide priors on inverse problems
+								<!-- <ul>
+									<li> </li>
+									<li> </li>
+								</ul> -->
+							</li>
+							<br>
+						</ul>
+					</div>
+				</div>
+				<br>
+
+				<br>
+				<p class="fragment">Thank you ! </p>
+				<br> <br> <br>
+			</section>
+
+		</div>
+	</div>
+
+	<style>
+		/* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		} */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+
+		/*
+	/* .reveal .alert {
+	padding:8px 35px 8px 14px; margin-bottom:18px;
+	text-shadow:0 1px 0 rgba(255,255,255,1);
+	border:5px solid #FFAA7F;
+	-webkit-border-radius: 14px; -moz-border-radius: 14px;
+	border-radius:14px
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-size: 38px;
+	padding-left: 30px; /* 55px; if icon
+	}
+	.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	/*.reveal .alert li {margin-top: 1em}
+	.reveal .alert-block p+p {margin-top:5px} */
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: false,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>

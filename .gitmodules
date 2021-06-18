@@ -76,3 +76,6 @@
 [submodule "DPhP2021/reveal.js"]
 	path = DPhP2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "UWC2021/reveal.js"]
+	path = UWC2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
