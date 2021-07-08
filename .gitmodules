@@ -79,3 +79,6 @@
 [submodule "UWC2021/reveal.js"]
 	path = UWC2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "UCL2021/reveal.js"]
+	path = UCL2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
