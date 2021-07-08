@@ -836,9 +836,7 @@
 						</div>
 					</div>
 				</section>
-			</section>
 
-			<section>
 				<!-- <section>
 								<h3 class="slide-title">Efficient sampling by Annealed HMC</h3>
 
@@ -1262,40 +1260,62 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				</div>
 			</section>
 
-
 			<section>
-				<h3 class="slide-title"> MAP optimization in action</h3>
-				$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
-				<div style="float:right; font-size: 16px">credit: <a href="https://github.com/modichirag">C. Modi</a></div>
-				<br>
-				<div class="container">
-					<div class="col fragment fade-up">
-						<img data-src="assets/init_field.png" style='height:250px;' />
-						<br> True initial conditions <br> $s_0$
-					</div>
+				<section>
+					<h3 class='slide-title'>Bayesian Reconstruction of Cosmological Fields</h3>
+					<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
+					<div class="fragment">Going back to simpler times...</div>
 
-					<div class="col">
-						<img data-src="assets/reconim_init.gif" style='height:250px;' />
-						<br> Reconstructed initial conditions $s$
+					<div class="fragment">
+						$$\arg\max_s \ \log p(x | f(s)) \ + \ p(s) $$
+						where:<br>
+						<ul>
+							<li> $f$ is the <b>forward model</b>
+							</li>
+							<li> $p(x | f(s))$ is a tractable data likelihood
+							</li>
+							<li> $s$ are the <b>initial conditions</b> (early universe)
+							</li>
+							<li> $x$ is the data (e.g. galaxies, lensing, etc.)
+							</li>
+						</ul>
 					</div>
+				</section>
 
-					<div class="col">
-						<img data-src="assets/reconim_fin.gif" style='height:250px;' />
-						<br> Reconstructed dark matter distribution $x_{dm} = f(s)$
+				<section>
+					<h3 class="slide-title"> MAP optimization in action</h3>
+					$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
+					<div style="float:right; font-size: 16px">credit: <a href="https://github.com/modichirag">C. Modi</a></div>
+					<br>
+					<div class="container">
+						<div class="col fragment fade-up">
+							<img data-src="assets/init_field.png" style='height:250px;' />
+							<br> True initial conditions <br> $s_0$
+						</div>
+
+						<div class="col">
+							<img data-src="assets/reconim_init.gif" style='height:250px;' />
+							<br> Reconstructed initial conditions $s$
+						</div>
+
+						<div class="col">
+							<img data-src="assets/reconim_fin.gif" style='height:250px;' />
+							<br> Reconstructed dark matter distribution $x_{dm} = f(s)$
+						</div>
+
+						<div class="col">
+							<img data-src="assets/fin_field.png" style='height:250px;' />
+							<br> Data <br> $x_{dm} = f(s_0)$
+						</div>
 					</div>
+					<br>
+					<br>
 
-					<div class="col">
-						<img data-src="assets/fin_field.png" style='height:250px;' />
-						<br> Data <br> $x_{dm} = f(s_0)$
+					<div class="fragment">
+						Check out this blogpost for more details <br> <a href=https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html>
+							https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html</a>
 					</div>
-				</div>
-				<br>
-				<br>
-
-				<div class="fragment">
-					Check out this blogpost for more details <br> <a href=https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html>
-						https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html</a>
-				</div>
+				</section>
 			</section>
 
 			<section>
@@ -1496,6 +1516,125 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 
 				</section>
 			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title"> jax-cosmo: Finally a differentiable cosmology library, and it's in JAX!</h3>
+					<a href="https://colab.research.google.com/github/DifferentiableUniverseInitiative/jax_cosmo/blob/master/docs/notebooks/jax-cosmo-intro.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"
+							alt="Open In Colab" class="plain" style="height:25px;" /></a>
+					<div class="container">
+						<div class="col">
+							<ul>
+								<li> Easy to use, runs on GPU, and validated against the <a href="https://github.com/LSSTDESC/CCL">DESC Core Cosmology Library</a>.
+									<!-- <img data-src="assets/github.png" class="plain" style="height:70px" />
+												<div> <a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo/">https://github.com/DifferentiableUniverseInitiative/jax_cosmo</a>
+												</div> -->
+									<pre class="python"><code data-trim data-noescape>
+													import jax_cosmo as jc
+
+													# Defining a Cosmology
+													cosmo = jc.Planck15()
+
+													# Define a redshift distribution with smail_nz(a, b, z0)
+													nz = jc.redshift.smail_nz(1., 2., 1.)
+
+													# Build a lensing tracer with a single redshift bin
+													probe = probes.WeakLensing([nz])
+
+													# Compute angular Cls for some ell
+													ell = np.logspace(0.1,3)
+													cls = angular_cl(cosmo_jax, ell, [probe])
+												</code></pre>
+								</li>
+
+							</ul>
+
+							<!-- <div class="block fragment">
+													<div class="block-title">
+														Current main features
+													</div>
+													<div class="block-content">
+														<ul>
+															<li>Weak Lensing and Number counts probes</li>
+															<li>Eisenstein & Hu (1998) power spectrum + halofit</li>
+															<li>Angular $C_\ell$ under Limber approximation </li>
+														</ul>
+														<div class="fragment">$\Longrightarrow$ 3x2pt DES Y1 capable </div>
+													</div>
+												</div> -->
+						</div>
+
+						<div class="col">
+							<img class="plain" data-src="assets/jc_vs_ccl_lensing.png" />
+							<!-- <img class="plain" data-src="assets/jc_vs_ccl_clustering.png" /> -->
+						</div>
+					</div>
+
+					<div class="container fragment fade-up">
+						<div class="col">
+							<ul>
+								<li> Fisher matrices become trivial and exact!
+									<pre class="python"><code data-trim data-noescape>
+										# Fisher matrix in just one line:
+										F = - jax.hessian(gaussian_likelihood)(theta)
+										</code></pre>
+									<b class="alert">No derivatives were harmed by finite differences in the computation of this Fisher!</b>
+								</li>
+								<br>
+								<br>
+								<br>
+							</ul>
+						</div>
+
+						<div class="col">
+							<img data-src="assets/Fisher_mat.png" class="plain"><br><br>
+						</div>
+					</div>
+
+				</section>
+
+				<!-- <section>
+																		<h3 class="slide-title"> Inference becomes fast and scalable</h3>
+
+																		<div class="container">
+																			<div class="col">
+
+																				<ul>
+																					<li>Current cosmological MCMC chains take <b>days</b>, and typically require access
+																						to large computer clusters.</li>
+																					<br>
+																					<li class="fragment" data-fragment-index="1"><b class="alert">Gradients of the log posterior are required for modern efficient and scalable inference</b> techniques:
+																						<ul>
+																							<li>Variational Inference</li>
+																							<li>Hamiltonian Monte-Carlo</li>
+																						</ul>
+																					</li>
+																					<br>
+																					<li class="fragment" data-fragment-index="2">In jax-cosmo, we can trivially obtain <b>exact</b> gradients:
+																						<pre class="python"><code data-trim data-noescape>
+																	def log_posterior( theta ):
+																	    return gaussian_likelihood( theta ) + log_prior(theta)
+
+																	score = jax.grad(log_posterior)(theta)
+																	</code></pre>
+																					</li>
+
+																					<br>
+																					<li class="fragment" data-fragment-index="3">On a DES Y1 analysis, we find convergence in 70,000 samples with vanilla HMC, 140,000 with Metropolis-Hastings</li>
+																				</ul>
+
+																			</div>
+
+																			<div class="col">
+																				<div class="fragment" data-fragment-index="3">
+																					<img data-src="assets/jc_3x2pt_hmc.png" class="plain" /><br>
+																					DES Y1 posterior, jax-cosmo HMC vs Cobaya MH <br>(credit: Joe Zuntz)
+																				</div>
+																			</div>
+																		</div>
+																	</section> -->
+			</section>
+
 
 
 			<section>
