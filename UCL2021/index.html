@@ -1517,160 +1517,48 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				</section>
 			</section>
 
-			<section>
-				<section>
-					<h3 class="slide-title"> jax-cosmo: Finally a differentiable cosmology library, and it's in JAX!</h3>
-					<a href="https://colab.research.google.com/github/DifferentiableUniverseInitiative/jax_cosmo/blob/master/docs/notebooks/jax-cosmo-intro.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"
-							alt="Open In Colab" class="plain" style="height:25px;" /></a>
-					<div class="container">
-						<div class="col">
-							<ul>
-								<li> Easy to use, runs on GPU, and validated against the <a href="https://github.com/LSSTDESC/CCL">DESC Core Cosmology Library</a>.
-									<!-- <img data-src="assets/github.png" class="plain" style="height:70px" />
-												<div> <a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo/">https://github.com/DifferentiableUniverseInitiative/jax_cosmo</a>
-												</div> -->
-									<pre class="python"><code data-trim data-noescape>
-													import jax_cosmo as jc
 
-													# Defining a Cosmology
-													cosmo = jc.Planck15()
 
-													# Define a redshift distribution with smail_nz(a, b, z0)
-													nz = jc.redshift.smail_nz(1., 2., 1.)
 
-													# Build a lensing tracer with a single redshift bin
-													probe = probes.WeakLensing([nz])
-
-													# Compute angular Cls for some ell
-													ell = np.logspace(0.1,3)
-													cls = angular_cl(cosmo_jax, ell, [probe])
-												</code></pre>
-								</li>
-
-							</ul>
-
-							<!-- <div class="block fragment">
-													<div class="block-title">
-														Current main features
-													</div>
-													<div class="block-content">
+									<section>
+										<h1> Conclusion </h1>
+									</section>
+									<section>
+										<h3 class="slide-title"> Conclusion </h3>
+										<div class="block ">
+											<div class="block-title">
+												What can be gained by merging Deep Learning and Physical Models?
+											</div>
+											<div class="block-content">
+												$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models! This provides <b>robustness, interpretability, and uncertainty quantification</b>.
+												<br>
+												<br>
+												<ul>
+													<li class="fragment"> Complement known physical models with data-driven components
 														<ul>
-															<li>Weak Lensing and Number counts probes</li>
-															<li>Eisenstein & Hu (1998) power spectrum + halofit</li>
-															<li>Angular $C_\ell$ under Limber approximation </li>
+															<li>Use data-driven generative model as prior for solving inverse problems.</il>
 														</ul>
-														<div class="fragment">$\Longrightarrow$ 3x2pt DES Y1 capable </div>
-													</div>
-												</div> -->
-						</div>
+														</il>
+														<br>
+														<br>
 
-						<div class="col">
-							<img class="plain" data-src="assets/jc_vs_ccl_lensing.png" />
-							<!-- <img class="plain" data-src="assets/jc_vs_ccl_clustering.png" /> -->
-						</div>
-					</div>
+													<li class="fragment"> Differentiable physical models for fast inference
+														<ul>
+															<li> Differentiability enables Bayesian inference over large scale simulations.</li>
+															<li> Even analytic computations can benefit from differentiability.<br> <a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo">https://github.com/DifferentiableUniverseInitiative/jax_cosmo</a> </li>
+														</ul>
+													</li>
+													<br>
+												</ul>
+											</div>
+										</div>
+										<br>
 
-					<div class="container fragment fade-up">
-						<div class="col">
-							<ul>
-								<li> Fisher matrices become trivial and exact!
-									<pre class="python"><code data-trim data-noescape>
-										# Fisher matrix in just one line:
-										F = - jax.hessian(gaussian_likelihood)(theta)
-										</code></pre>
-									<b class="alert">No derivatives were harmed by finite differences in the computation of this Fisher!</b>
-								</li>
-								<br>
-								<br>
-								<br>
-							</ul>
-						</div>
+										<br>
+										<p class="fragment">Thank you ! </p>
+										<br> <br> <br>
+									</section>
 
-						<div class="col">
-							<img data-src="assets/Fisher_mat.png" class="plain"><br><br>
-						</div>
-					</div>
-
-				</section>
-
-				<!-- <section>
-																		<h3 class="slide-title"> Inference becomes fast and scalable</h3>
-
-																		<div class="container">
-																			<div class="col">
-
-																				<ul>
-																					<li>Current cosmological MCMC chains take <b>days</b>, and typically require access
-																						to large computer clusters.</li>
-																					<br>
-																					<li class="fragment" data-fragment-index="1"><b class="alert">Gradients of the log posterior are required for modern efficient and scalable inference</b> techniques:
-																						<ul>
-																							<li>Variational Inference</li>
-																							<li>Hamiltonian Monte-Carlo</li>
-																						</ul>
-																					</li>
-																					<br>
-																					<li class="fragment" data-fragment-index="2">In jax-cosmo, we can trivially obtain <b>exact</b> gradients:
-																						<pre class="python"><code data-trim data-noescape>
-																	def log_posterior( theta ):
-																	    return gaussian_likelihood( theta ) + log_prior(theta)
-
-																	score = jax.grad(log_posterior)(theta)
-																	</code></pre>
-																					</li>
-
-																					<br>
-																					<li class="fragment" data-fragment-index="3">On a DES Y1 analysis, we find convergence in 70,000 samples with vanilla HMC, 140,000 with Metropolis-Hastings</li>
-																				</ul>
-
-																			</div>
-
-																			<div class="col">
-																				<div class="fragment" data-fragment-index="3">
-																					<img data-src="assets/jc_3x2pt_hmc.png" class="plain" /><br>
-																					DES Y1 posterior, jax-cosmo HMC vs Cobaya MH <br>(credit: Joe Zuntz)
-																				</div>
-																			</div>
-																		</div>
-																	</section> -->
-			</section>
-
-
-
-			<section>
-				<h3 class="slide-title"> Conclusion </h3>
-				<div class="block ">
-					<div class="block-title">
-						What can be gained by merging Deep Learning and Physical Models?
-					</div>
-					<div class="block-content">
-						<br>
-						<ul>
-							<li class="fragment"> Complement known physical models with data-driven components
-								<ul>
-									<li>Learn galaxy morphologies from noisy and PSF-convolved data, for simulation purposes.</il>
-									<li>Use data-driven model as prior for solving inverse problems such as deblending or deconvolution.</il>
-								</ul>
-								</il>
-								<br>
-								<br>
-
-							<li class="fragment"> Leverage simulations to provide priors on inverse problems
-								<!-- <ul>
-									<li> </li>
-									<li> </li>
-								</ul> -->
-							</li>
-							<br>
-						</ul>
-					</div>
-				</div>
-				<br>
-
-				<br>
-				<p class="fragment">Thank you ! </p>
-				<br> <br> <br>
-			</section>
 
 		</div>
 	</div>
