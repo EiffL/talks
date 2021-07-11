@@ -23,7 +23,7 @@
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
 						<h1>Blurring the Line Between Deep Learning and Physical Models</h1>
-						<h3> Quarks to Cosmos with AI conference - CMU 2021 </h3>
+						<h3> Quarks to Cosmos with AI - CMU 2021 </h3>
 					</div>
 				</div>
 				<hr>
@@ -119,7 +119,7 @@
 				</section>
 			</section>
 
-			<section>
+			<!-- <section>
 				<h3 class='slide-title'>The challenges of modern surveys</h3>
 				<div style="float:left;">
 					$\Longrightarrow$ Modern surveys will provide <b>large volumes</b> of <b>high quality</b> data
@@ -169,7 +169,7 @@
 				<div class="fragment">
 					$\Longrightarrow$ Dire need for <b class="alert">novel analysis techniques</b> to fully realize the potential of modern surveys.
 				</div>
-			</section>
+			</section> -->
 
 			<section class="inverted" data-background="#000">
 				<h2> Can AI solve all of our problems?</h2>
@@ -850,7 +850,7 @@
 						</section> -->
 
 						<section>
-							<section>
+							<!-- <section>
 								<h3 class="slide-title">Writing down the convergence map log posterior</h3>
 
 								$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
@@ -877,6 +877,28 @@
 										\underbrace{\boldsymbol{r}_\theta(\boldsymbol{\kappa}, \nabla_{\boldsymbol{\kappa}} \log p_{th}(\boldsymbol{\kappa}))}_\text{learned residuals}$$
 									</li>
 								</ul>
+							</section> -->
+
+							<section>
+								<h3 class="slide-title">Back to the Mass-Mapping Problem</h3>
+
+								$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+
+								<ul>
+									<li> The likelihood term is <b class="alert">known analytically</b>.
+									</li>
+
+									<li class="fragment fade-up"> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
+										<br> However:
+										<ul>
+											<li class='fragment'> <b>We do have access to samples of full prior</b> through simulations: $X = \{x_0, x_1, \ldots, x_n \}$ with $x_i \sim \mathbb{P}$
+												<img data-src='assets/plot_massive_nu.png' />
+											</li>
+								</ul>
+								</li>
+								</ul>
+								<div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior score $\nabla \log p(\kappa)$</b> with Denoising Score Matching,
+									and then <b class="alert">sample the full posterior</b> with annealed HMC.</div>
 							</section>
 
 							<!-- <section>
@@ -941,13 +963,6 @@
 
 								<p class="fragment">$\Longrightarrow$ We can see which parts of the image are well constrained by data, and which regions are <b class="alert">uncertain</b>.</p>
 							</section>
-							<!--
-							<section>
-
-								<img data-src="assets/zoom_reconstruction_samples_1_annoted.png"></img>
-
-							</section> -->
-
 						</section>
 
 						<section>
@@ -986,14 +1001,273 @@
 							</div>
 						</section>
 
+						<section class="inverted" data-background="#000">
+							<h2>  What if I do not have access to perfect data/simulations to train my prior?</h2>
+						</section>
+
+					<section>
+						<h3 class="slide-title"> Complications specific to astronomical images: spot the differences!</h3>
+
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/celeba.png" class="plain" style="height: 450px;"></img>
+								<br>
+								CelebA
+							</div>
+							<div class="col">
+								<img data-src="assets/hsc_images.png" class="plain" style="height: 450px;"></img>
+								<br>
+								HSC PDR-2 wide
+							</div>
+						</div>
+						<br>
+						<div>
+							<ul>
+								<li class="fragment"> There is <b class="alert">noise</b></li>
+								<li class="fragment"> We have a <b class="alert">Point Spread Function</b></li>
+							</ul>
+						</div>
+					</section>
+
+					<section>
 						<section>
-							<h3 class="slide-title"> Takeaways</h3>
+							<h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
+							<br>
+							<br>
+							<div class="container">
+								<div class="col">
+									<img class="plain fragment" data-src="assets/rand_z_square.png" style="height: 150px" data-fragment-index="4" />
+								</div>
+								<div class="col">
+									<img class="plain fragment" data-src="assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3" />
+								</div>
+								<div class="col">
+									<img class="plain fragment" data-src="assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2" />
+								</div>
+
+								<div class="col">
+									<img class="plain fragment" data-src="assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1" />
+								</div>
+
+								<div class="col">
+									<img class="plain fragment" data-src="assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0" />
+								</div>
+							</div>
+
+							<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+								<div class='col fragment' data-fragment-index='4'>
+									<font size="10"> $\longrightarrow$ </font> <br> $g_\theta$
+								</div>
+								<div class='col fragment' data-fragment-index='3'>
+									<font size="10"> $\longrightarrow$ </font> <br> PSF
+								</div>
+								<div class='col fragment' data-fragment-index='2'>
+									<font size="10"> $\longrightarrow$ </font> <br> Pixelation
+								</div>
+								<div class='col fragment' data-fragment-index='1'>
+									<font size="10"> $\longrightarrow$ </font> <br> Noise
+								</div>
+							</div>
+
+							<div class="container">
+								<div class="col">
+									<div style="position:relative; width:400px; height:300px; margin:0 auto;">
+										<img data-src="assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0" />
+										<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1" />
+										<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2" />
+										<img data-src="assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3" />
+										<img data-src="assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4" />
+									</div>
+								</div>
+								<div class=" col">
+									<div class="block fragment" data-fragment-index="0">
+										<div class="block-title">
+											Probabilistic model
+										</div>
+										<div class="block-content">
+											<div style="position:relative; width:400px; height:100px; margin:0 auto;">
+												<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+												<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+												<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised
+													galaxy image</div>
+												<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved,
+													super-resolved, and denoised galaxy image </div>
+												<div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$
+													is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+											</div>
+											<br>
+											<br>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+						</section>
+
+						<section>
+							<h3 class="slide-title">How to train your <s>dragon</s> model</h3>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/pgm.png" class="plain" style="height: 300px;"></img>
+								</div>
+								<div class="col">
+									<ul>
+										<li> Training the generative amounts to finding $\theta_\star$ that
+											<b>maximizes the marginal likelihood</b> of the model:
+											$$p_\theta(x | \Sigma, \Pi) = \int \mathcal{N}( \Pi \ast g_\theta(z), \Sigma) \ p(z) \ dz$$
+											<div> $\Longrightarrow$ This is <b class="alert">generally intractable</b></div>
+										</li>
+										<br>
+										<li class="fragment fade-up"> Efficient training of parameter $\theta$ is made possible by <b class="alert">Amortized Variational Inference</b>.
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="block fragment fade-up">
+								<div class="block-title">
+									Auto-Encoding Variational Bayes (Kingma & Welling, 2014)
+								</div>
+								<div class="block-content">
+									<ul>
+										<li class="fragment fade-up"> We introduce a <b>parametric distribution</b> $q_\phi(z | x, \Pi, \Sigma)$ which aims to model the
+											posterior $p_{\theta}(z | x, \Pi, \Sigma)$.
+										</li>
+										<br>
+										<li class="fragment fade-up"> Working out the KL divergence between these two distributions leads to:
+
+											$$\log p_\theta(x | \Sigma, \Pi) \quad \geq \quad - \mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right) \quad + \quad \mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)
+											\right]$$
+
+											$\Longrightarrow$ This is the <b>Evidence Lower-Bound</b>, which is differentiable with respect to $\theta$ and $\phi$.
+										</li>
+									</ul>
+								</div>
+							</div>
+
+						</section>
+					</section>
+
+						<section>
+							<h3 class="slide-title"> Flow-VAE samples</h3>
+							<br>
+							<br>
+							<img class="current-visible plain" data-src="assets/lanusse2020_figure1.png" />
+						</section>
+
+
+
+					<section>
+						<section>
+							<h3 class="slide-title">Going one step further: generative models as data-driven priors</h3>
+							<br>
+							$\boxed{y = \mathbf{A}x + n}$
+							<br>
+							<br>
+							$\mathbf{A}$ is known and encodes our physical understanding of the problem.
+							<br>
+							<br>
+							<div class="container fragment fade-up">
+								<div class="col">
+									$y$<br>
+									<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+									<br><b class="alert">Simulated Rubin Observatory</b>
+								</div>
+
+								<div class="col ">
+									$$ = \qquad \Pi \qquad \ast $$
+								</div>
+
+								<div class="col">
+									$x$<br>
+									<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+									<br><b class="alert">Hubble Space Telescope</b>
+								</div>
+
+								<div class="col ">
+									$$+ \qquad n$$
+								</div>
+							</div>
+
+						</section>
+
+						<section>
+							<h3 class="slide-title">Bayesian Inference a.k.a. Uncertainty Quantification</h3>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/pgm.png" class="plain" style="height: 250px;"></img>
+								</div>
+								<div class="col">
+									The Bayesian view of the problem:
+									$$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
+									where:
+									<br>
+									<ul>
+										<li>$p( z | x )$ is the <b class="alert">posterior</b></li>
+										<li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
+										<li>$p( z )$ is the <b>prior</b> </li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="container">
+								<div class="col">
+									<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+										<img class="plain fragment current-visible" data-src="assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" />
+										<img class="plain fragment" data-src="assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+									</div>
+									<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+										<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data<br> $x_n$</div>
+										<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Truth<br> $x_0$ </div>
+									</div>
+									<br>
+								</div>
+
+								<div class="col fragment" data-fragment-index='0'>
+									<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+										<div><video data-autoplay data-loop data-src="assets/rec_samples.mp4" type="video/mp4" style="height: 200px;" />
+										</div>
+									</div>
+									<div>Posterior samples<br> $g_\theta(z)$</div>
+								</div>
+
+								<div class="col">
+									<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+										<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/rec_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
+										<img class="plain fragment " data-src="assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+									</div>
+
+									<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+										<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> <br> $\mathbf{P} (\Pi \ast g_\theta(z))$</div>
+										<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Median </div>
+									</div>
+								</div>
+
+								<div class="col">
+									<div style="position:relative; width:200px; height:200px; margin:0 auto;">
+										<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/res_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
+										<img class="plain fragment " data-src="assets/rec_std.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
+									</div>
+
+									<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+										<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data residuals <br> $x_n - \mathbf{P} (\Pi \ast g_\theta(z))$</div>
+										<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Standard Deviation </div>
+									</div>
+								</div>
+							</div>
+							<div class="fragment"> $\Longrightarrow$ <b class="alert">Uncertainties are fully captured by the posterior</b>.</div>
+						</section>
+					</section>
+
+						<section>
+							<h3 class="slide-title">takeaways</h3>
 							<br>
 							<br>
 
 							<div class="block ">
 								<div class="block-title">
-									Hybrid physical/deep learning Bayesian modeling
+									Benefits of Bayesian forward modeling
 								</div>
 								<div class="block-content">
 									Using a Bayesian approach has great advantages: model-based physical interpretation & uncertainty quantification.
@@ -1005,7 +1279,7 @@
 										</li>
 										<br>
 										<li> Deep generative models can be used to provide <b class="alert">data driven priors</b>.<br>
-											$\Longrightarrow$ Embed prior only accessible from samples (e.g. numerical simulations).
+											$\Longrightarrow$ Embed prior only accessible from samples (e.g. numerical simulations), can be embeded in hierarchical model.
 										</li>
 									</ul>
 								</div>
@@ -1021,357 +1295,8 @@
 							</ul>
 							<br>
 							<br>
-							<p class="fragment"> Thank you! </p>
-							<br>
 							<br>
 						</section>
-
-
-						<section>
-							<h1>Embedding Generative Model within Forward Model</h1>
-						</section>
-
-									<section>
-										<h3 class="slide-title"> Complications specific to astronomical images: spot the differences!</h3>
-
-										<div class="container">
-											<div class="col">
-												<img data-src="assets/celeba.png" class="plain" style="height: 450px;"></img>
-												<br>
-												CelebA
-											</div>
-											<div class="col">
-												<img data-src="assets/hsc_images.png" class="plain" style="height: 450px;"></img>
-												<br>
-												HSC PDR-2 wide
-											</div>
-										</div>
-										<br>
-										<div>
-											<ul>
-												<li class="fragment"> There is <b class="alert">noise</b></li>
-												<li class="fragment"> We have a <b class="alert">Point Spread Function</b></li>
-											</ul>
-										</div>
-									</section>
-
-									<section>
-										<section>
-											<h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
-											<br>
-											<br>
-											<div class="container">
-												<div class="col">
-													<img class="plain fragment" data-src="assets/rand_z_square.png" style="height: 150px" data-fragment-index="4" />
-												</div>
-												<div class="col">
-													<img class="plain fragment" data-src="assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3" />
-												</div>
-												<div class="col">
-													<img class="plain fragment" data-src="assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2" />
-												</div>
-
-												<div class="col">
-													<img class="plain fragment" data-src="assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1" />
-												</div>
-
-												<div class="col">
-													<img class="plain fragment" data-src="assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0" />
-												</div>
-											</div>
-
-											<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
-												<div class='col fragment' data-fragment-index='4'>
-													<font size="10"> $\longrightarrow$ </font> <br> $g_\theta$
-												</div>
-												<div class='col fragment' data-fragment-index='3'>
-													<font size="10"> $\longrightarrow$ </font> <br> PSF
-												</div>
-												<div class='col fragment' data-fragment-index='2'>
-													<font size="10"> $\longrightarrow$ </font> <br> Pixelation
-												</div>
-												<div class='col fragment' data-fragment-index='1'>
-													<font size="10"> $\longrightarrow$ </font> <br> Noise
-												</div>
-											</div>
-
-											<div class="container">
-												<div class="col">
-													<div style="position:relative; width:400px; height:300px; margin:0 auto;">
-														<img data-src="assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0" />
-														<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1" />
-														<img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2" />
-														<img data-src="assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3" />
-														<img data-src="assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4" />
-													</div>
-												</div>
-												<div class=" col">
-													<div class="block fragment" data-fragment-index="0">
-														<div class="block-title">
-															Probabilistic model
-														</div>
-														<div class="block-content">
-															<div style="position:relative; width:400px; height:100px; margin:0 auto;">
-																<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
-																<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
-																<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised
-																	galaxy image</div>
-																<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved,
-																	super-resolved, and denoised galaxy image </div>
-																<div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$
-																	is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
-															</div>
-															<br>
-															<br>
-															<br>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
-										</section>
-
-										<section>
-											<h3 class="slide-title">How to train your <s>dragon</s> model</h3>
-											<div class="container">
-												<div class="col">
-													<img data-src="assets/pgm.png" class="plain" style="height: 300px;"></img>
-												</div>
-												<div class="col">
-													<ul>
-														<li> Training the generative amounts to finding $\theta_\star$ that
-															<b>maximizes the marginal likelihood</b> of the model:
-															$$p_\theta(x | \Sigma, \Pi) = \int \mathcal{N}( \Pi \ast g_\theta(z), \Sigma) \ p(z) \ dz$$
-															<div> $\Longrightarrow$ This is <b class="alert">generally intractable</b></div>
-														</li>
-														<br>
-														<li class="fragment fade-up"> Efficient training of parameter $\theta$ is made possible by <b class="alert">Amortized Variational Inference</b>.
-														</li>
-													</ul>
-												</div>
-											</div>
-
-											<div class="block fragment fade-up">
-												<div class="block-title">
-													Auto-Encoding Variational Bayes (Kingma & Welling, 2014)
-												</div>
-												<div class="block-content">
-													<ul>
-														<li class="fragment fade-up"> We introduce a <b>parametric distribution</b> $q_\phi(z | x, \Pi, \Sigma)$ which aims to model the
-															posterior $p_{\theta}(z | x, \Pi, \Sigma)$.
-														</li>
-														<br>
-														<li class="fragment fade-up"> Working out the KL divergence between these two distributions leads to:
-
-															$$\log p_\theta(x | \Sigma, \Pi) \quad \geq \quad - \mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right) \quad + \quad \mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)
-															\right]$$
-
-															$\Longrightarrow$ This is the <b>Evidence Lower-Bound</b>, which is differentiable with respect to $\theta$ and $\phi$.
-														</li>
-													</ul>
-												</div>
-											</div>
-
-										</section>
-										<!-- <section>
-											<h3 class="slide-title">The famous Variational Auto-Encoder</h3>
-											<img data-src="assets/vae.png" class="plain" style="height: 450px;"> </img>
-											<br>
-											<br>
-											$$\log p_\theta(x| \Sigma, \Pi ) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x
-											| z, \Sigma, \Pi) \right]}_{\mbox{reconstruction error}} $$
-										</section> -->
-
-
-										<!-- <section>
-										<h3 class="slide-title"> Conditional sampling in VAE latent space</h3>
-
-										<div class="container">
-										<div class="col">
-										<img data-src="assets/conditional_flow.png" class="plain" ></img>
-									</div>
-									<div class="col">
-
-									<ul>
-									<li> We build a latent space model $p_\varphi(z)$ using a Masked Autoregressive Flow (MAF) (Papamakarios, et al. 2017)
-									</li>
-									<br>
-									<li class="fragment"> While we are learning to sample from the latent space, we can also <b class="alert"> learn to sample conditionaly</b>:
-									$$  p_\varphi(z | y) $$
-									</li>
-									<br>
-
-									<li class="fragment"> Here we learn to sample images conditioned on:
-									<ul>
-									<li> Size: half-light radius $r$
-									</li>
-									<li> Brightness: I band magnitude $mag\_auto$
-									</li>
-									<li> Redshift: COSMOS photometric redshift $zphot$
-									</li>
-									</ul>
-									</li>
-									</ul>
-									</div>
-									</div>
-									</section> -->
-									</section>
-									<!--
-									<section>
-										<h3 class="slide-title"> Illustration on HST/ACS COSMOS images</h3>
-										<div class="container">
-											<div class="col">
-												<img data-src="assets/Figure_autoencode.png" class="plain"></img>
-												<br>
-												<b>Fitting observations</b> with VAE and Bulge+Disk parametric model.
-											</div>
-											<div class="col">
-												<ul>
-													<li>Training set: <b>GalSim COSMOS HST/ACS postage stamps</b>
-														<br>
-														<ul>
-															<li> 80,000 deblended galaxies from I < 25.2 sample </li>
-															<li> Drawn on 128x128 stamps at 0.03 arcsec resolution
-															</li>
-															<li> Each stamp comes with:
-																<ul>
-																	<li>PSF</li>
-																	<li>Noise power spectrum</li>
-																	<li>Bulge+Disk parametric fit</li>
-																</ul>
-															</li>
-														</ul>
-													</li>
-													<br>
-													<li> Auto-Encoder model:
-														<ul>
-															<li> Deep residual autoencoder:<br> 7 stages of 2 resnet blocs each
-															</li>
-															<li> Dense bottleneck of size 16.
-															</li>
-															<li> Outputs positive, noiseless, deconvolved, galaxy surface brightness.
-															</li>
-														</ul>
-													</li>
-													<br>
-													<li class="fragment"><b class="alert">Generative models are conditioned on:</b><br>
-														<b>mag_auto, flux_radius, zphot</b>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</section> -->
-
-										<section>
-											<h3 class="slide-title"> Flow-VAE samples</h3>
-											<br>
-											<br>
-											<img class="current-visible plain" data-src="assets/lanusse2020_figure1.png" />
-										</section>
-
-
-
-									<section>
-										<section>
-											<h3 class="slide-title">Going one step further: generative models as data-driven priors</h3>
-											<br>
-											$\boxed{y = \mathbf{A}x + n}$
-											<br>
-											<br>
-											$\mathbf{A}$ is known and encodes our physical understanding of the problem.
-											<br>
-											<br>
-											<div class="container fragment fade-up">
-												<div class="col">
-													$y$<br>
-													<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
-													<br><b class="alert">Simulated Rubin Observatory</b>
-												</div>
-
-												<div class="col ">
-													$$ = \qquad \Pi \qquad \ast $$
-												</div>
-
-												<div class="col">
-													$x$<br>
-													<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
-													<br><b class="alert">Hubble Space Telescope</b>
-												</div>
-
-												<div class="col ">
-													$$+ \qquad n$$
-												</div>
-											</div>
-
-										</section>
-
-										<section>
-											<h3 class="slide-title">Bayesian Inference a.k.a. Uncertainty Quantification</h3>
-											<div class="container">
-												<div class="col">
-													<img data-src="assets/pgm.png" class="plain" style="height: 250px;"></img>
-												</div>
-												<div class="col">
-													The Bayesian view of the problem:
-													$$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
-													where:
-													<br>
-													<ul>
-														<li>$p( z | x )$ is the <b class="alert">posterior</b></li>
-														<li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
-														<li>$p( z )$ is the <b>prior</b> </li>
-													</ul>
-												</div>
-											</div>
-
-											<div class="container">
-												<div class="col">
-													<div style="position:relative; width:200px; height:200px; margin:0 auto;">
-														<img class="plain fragment current-visible" data-src="assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" />
-														<img class="plain fragment" data-src="assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
-													</div>
-													<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
-														<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data<br> $x_n$</div>
-														<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Truth<br> $x_0$ </div>
-													</div>
-													<br>
-												</div>
-
-												<div class="col fragment" data-fragment-index='0'>
-													<div style="position:relative; width:200px; height:200px; margin:0 auto;">
-														<div><video data-autoplay data-loop data-src="assets/rec_samples.mp4" type="video/mp4" style="height: 200px;" />
-														</div>
-													</div>
-													<div>Posterior samples<br> $g_\theta(z)$</div>
-												</div>
-
-												<div class="col">
-													<div style="position:relative; width:200px; height:200px; margin:0 auto;">
-														<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/rec_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
-														<img class="plain fragment " data-src="assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
-													</div>
-
-													<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
-														<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> <br> $\mathbf{P} (\Pi \ast g_\theta(z))$</div>
-														<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Median </div>
-													</div>
-												</div>
-
-												<div class="col">
-													<div style="position:relative; width:200px; height:200px; margin:0 auto;">
-														<div><video class="fragment current-visible" data-autoplay data-loop data-src="assets/res_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" /></div>
-														<img class="plain fragment " data-src="assets/rec_std.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1" />
-													</div>
-
-													<div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
-														<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data residuals <br> $x_n - \mathbf{P} (\Pi \ast g_\theta(z))$</div>
-														<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Standard Deviation </div>
-													</div>
-												</div>
-											</div>
-											<div class="fragment"> $\Longrightarrow$ <b class="alert">Uncertainties are fully captured by the posterior</b>.</div>
-										</section>
-									</section>
 
 			<section>
 				<h1> Automatically Differentiable Physics </h1>
