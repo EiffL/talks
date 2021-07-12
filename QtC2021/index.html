@@ -471,24 +471,6 @@
 							<h2> Can we use Deep Learning to embed simulation-driven priors within a <b>physical Bayesian model</b>?</h2>
 						</section>
 
-
-									<section data-background-iframe="https://www.thispersondoesnotexist.com/">
-										<h3 class="slide-title" style="background: rgba(0, 0, 0, 0.3);"> Do you know this person?</h3>
-
-										<br><br><br>
-										<br><br><br>
-										<br><br><br>
-										<br><br><br>
-										<br><br><br>
-										<br><br><br>
-
-										<div class="fragment fade-up" style="background: rgba(0, 0, 0, 0.3);">
-											<p>Probably not, this is a randomly generated person: <a href="https://www.thispersondoesnotexist.com/" target="_blank">thispersondoesntexist.com</a></p>
-										</div>
-									</section>
-
-
-
 									<section>
 										<section>
 											<h3 class="slide-title"> What is generative modeling?</h3>
@@ -530,6 +512,21 @@
 												</li>
 											</ul>
 
+										</section>
+
+										<section data-background-iframe="https://www.thispersondoesnotexist.com/">
+											<h3 class="slide-title" style="background: rgba(0, 0, 0, 0.3);"> Do you know this person?</h3>
+
+											<br><br><br>
+											<br><br><br>
+											<br><br><br>
+											<br><br><br>
+											<br><br><br>
+											<br><br><br>
+
+											<div class="fragment fade-up" style="background: rgba(0, 0, 0, 0.3);">
+												<p>Probably not, this is a randomly generated person: <a href="https://www.thispersondoesnotexist.com/" target="_blank">thispersondoesntexist.com</a></p>
+											</div>
 										</section>
 									</section>
 
@@ -1936,6 +1933,41 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 
 				</section>
 			</section>
+
+			<section>
+	<h3 class='slide-title'>Mesh FlowPM: distributed, GPU-accelerated, and automatically differentiable simulations</h3>
+	<!--
+	<img data-src="assets/mesh_flopwm.png" class="plain" style="height:450px;" /> -->
+
+	<div class="container">
+		<div class="col">
+			<img data-src="assets/mfpm_demo_1024.png" />
+		</div>
+
+		<div class="col">
+			<ul>
+				<li> Developed a <b class="alert">Mesh TensorFlow</b> implementation that can scale on GPU clusters (horovod+NCCL).
+				</li>
+				<br>
+				<br>
+				<li> For a $2048^3$ simulation:
+					<ul>
+						<li>Distributed on <b>256</b> NVIDIA V100 GPUs</li>
+						<li>Runtime: 3 mins</li>
+					</ul>
+				</li>
+				<br>
+				<br>
+				<li> Don't hesitate to reach out if you have a use case for model parallelism!<br>
+					<img data-src="assets/github.png" class="plain" style="height:70px" /><br>
+
+					<div> <a href="https://github.com/DifferentiableUniverseInitiative/mesh">https://github.com/DifferentiableUniverseInitiative/mesh</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
 
 
 
