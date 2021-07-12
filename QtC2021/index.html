@@ -1028,7 +1028,7 @@
 							</ul>
 						</div>
 					</section>
-
+<!--
 					<section>
 						<section>
 							<h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
@@ -1147,7 +1147,77 @@
 							</div>
 
 						</section>
-					</section>
+					</section> -->
+
+
+								     <section>
+								        <h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
+												<div class="container">
+													<div class="col">
+														<div style="float:right; font-size: 20px"> <b>Lanusse</b> et al. (2020) <a href="https://arxiv.org/abs/2008.03833"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2008.03833-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+													</div>
+												</div>
+								        <div class="container">
+								          <div class="col">
+								              <img class="plain fragment" data-src="assets/rand_z_square.png" style="height: 150px" data-fragment-index="4"/>
+								          </div>
+								          <div class="col">
+								              <img class="plain fragment" data-src="assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3"/>
+								          </div>
+								          <div class="col">
+								            <img class="plain fragment" data-src="assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2"/>
+								          </div>
+
+								          <div class="col">
+								            <img class="plain fragment" data-src="assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1"/>
+								          </div>
+
+								          <div class="col">
+								            <img class="plain fragment" data-src="assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0"/>
+								          </div>
+								        </div>
+
+								      <div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+								        <div class='col fragment' data-fragment-index='4'> <font size="10"> $\longrightarrow$ </font> <br> $g_\theta$ </div>
+								        <div class='col fragment' data-fragment-index='3'> <font size="10"> $\longrightarrow$ </font> <br> PSF </div>
+								        <div class='col fragment' data-fragment-index='2'> <font size="10"> $\longrightarrow$ </font> <br> Pixelation</div>
+								        <div class='col fragment' data-fragment-index='1'> <font size="10"> $\longrightarrow$ </font> <br> Noise </div>
+								      </div>
+
+								      <div class="container">
+								          <div class="col">
+								            <div style="position:relative; width:400px; height:300px; margin:0 auto;">
+								            <img data-src="assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0"/>
+								            <img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1"/>
+								            <img data-src="assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2"/>
+								            <img data-src="assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3"/>
+								            <img data-src="assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4"/>
+								            </div>
+								          </div>
+								          <div class=" col">
+								            <div class="block fragment" data-fragment-index="0">
+								            <div class="block-title">
+								             Probabilistic model
+								            </div>
+								            <div class="block-content">
+								            <div style="position:relative; width:400px; height:100px; margin:0 auto;">
+								              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+								              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+								              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised galaxy image</div>
+								              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved, super-resolved, and denoised galaxy image </div>
+								              <div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$ is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+								            </div>
+								            <br>
+								            <br>
+								            <br>
+								          </div>
+								          </div>
+								          </div>
+								      </div>
+								      <div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+								     </section>
+
+
 
 						<section>
 							<h3 class="slide-title"> Flow-VAE samples</h3>
@@ -1319,7 +1389,7 @@
 							<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
 							<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
 						</div>
-						<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage,..., <b>Lanusse</b>, et al. 2018)</div>
+						<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
 					</div>
 
 					<div class='col'>
@@ -1617,7 +1687,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 					<div class="fragment">Going back to simpler times...</div>
 
 					<div class="fragment">
-						$$\arg\max_s \ \log p(x | f(s)) \ + \ p(s) $$
+						$$\arg\max_s \ \log p(x | f(s)) \ + \ \log p(s) $$
 						where:<br>
 						<ul>
 							<li> $f$ is the <b>forward model</b>
@@ -1634,7 +1704,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 
 				<section>
 					<h3 class="slide-title"> MAP optimization in action</h3>
-					$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
+					$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ \log p(s) $$
 					<div style="float:right; font-size: 16px">credit: <a href="https://github.com/modichirag">C. Modi</a></div>
 					<br>
 					<div class="container">
@@ -1671,7 +1741,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 			<section>
 				<h3 class="slide-title">If only MAP optimization was easy...</h3>
 
-				$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
+				$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ \log p(s) $$
 
 				<div class="container">
 					<div class="col">
@@ -1712,7 +1782,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 
 				<br>
 
-				$$\arg\max_x \ \log p(y | f(x)) \ + \ p(x) $$
+				$$\arg\max_x \ \log p(y | f(x)) \ + \ \log p(x) $$
 
 				<div class="container">
 					<div class="col">
@@ -1766,12 +1836,12 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 						</div>
 					</div>
 				</section>
-
+<!--
 				<section>
 					<h3 class="slide-title">Inside an RNN Cell</h3>
 					<img data-src="assets/LSTM_GRU.png" height="600px" />
 					(<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21">source</a>)
-				</section>
+				</section> -->
 
 				<section>
 					<h3 class="slide-title">Illustration on inverse problems</h3>
@@ -1914,12 +1984,12 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 	</div>
 
 	<style>
-	  .reveal .slides {
+	  /* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}
+		} */
 
 		.reveal .block {
 			background-color: #191919;
