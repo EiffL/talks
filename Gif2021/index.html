@@ -23,7 +23,7 @@
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
 						<h1>Machine Learning Techniques Impact on Cosmology</h1>
-						<h3> Ecole de Gif - Marseille, 2021 </h3>
+						<h3>Ecole de Gif - Marseille, 2021</h3>
 					</div>
 				</div>
 				<hr>
@@ -57,50 +57,802 @@
 				</div>
 			</section>
 
-			<section>
+
+
+			<section data-background-image="assets/WMAP_timeline_large.jpg">
+				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
+				<br> <br>
+				<div class="container">
+					<div class="col" style="flex: 0 0 40em;">
+
+					</div>
+					<div class="col">
+
+						<img class="plain" data-src="assets/Euclid.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/vrro.png" style="width: 300px" />
+					</div>
+				</div>
+				<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+			</section>
 
 			<section>
-				<h3 class="title">Let's address the elephant in the room</h3>
+				<section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
+					<h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time</h3>
+					<div class="container">
+						<div class="col">
+							<ul>
+								<li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
+								<br>
+								<li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
+								<br>
+								<li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
+							</ul>
+							<br>
+							<!-- <p class="fragment fade-up"> $\Longrightarrow$ Incredible potential for discovery, along with <b>unprecedented challenges</b >.</p> -->
+						</div>
 
-				<canvas data-chart="bar">
-				<!--
-				{
-				 "data": {
-					"labels": ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008",
-					"2009", "2010", "2011", "2012", "2013",
-					"2014", "2015", "2016" ,"2017", "2018", "2019", "2020", "2021"],
-					"datasets": [
-					 {
-						"data":[ 3,9, 5, 9 , 5,10, 10, 13, 6, 14, 16, 15 , 13, 10, 21, 15, 17, 22, 31, 71, 113, 231, 322, 317],
-						"label":"Deep Learning || CNN || Neural Network ","backgroundColor":"#A63446"
-					},
-					 {
-						"data":[18, 19, 21, 22, 23,23, 46, 48, 73, 89, 78, 114, 125, 164, 239, 233, 248, 251, 288, 320, 435, 448, 483, 478],
-						"label":"Bayesian || MCMC","backgroundColor":"#374A67"
-					 }
-					]
-				 },
-				 "options": { "responsive": "true",
-			"scales": {
-					"yAxes": [{
-							"type": "linear"
-					}]
-			}
-				}
-				}
+						<div class="col">
+							<video class="fragment fade-up" data-fragment-index="1" data-autoplay data-src="assets/obsim.mp4" type="video/mp4" />
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="fade-in fade-out" data-background="assets/gal_sdss.png" data-vertical-align-top>
+					<p>Previous generation survey: SDSS</p>
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+				<section data-transition="fade-in fade-out" data-background="assets/gal_des.png" data-vertical-align-top>
+					<p>Current generation survey: DES</p>
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+				<section data-transition="fade-in fade-out" data-background="assets/gal_hsc.png" data-vertical-align-top>
+					<p>LSST precursor survey: HSC</p>
+
+					<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+					<br> <br> <br> <br> <br> <br> <br>
+					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
+				</section>
+			</section>
+
+			<section>
+				<h3 class='slide-title'> limits of traditional cosmological inference </h3>
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+							<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
+							<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+						</div>
+						<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+							<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+								<img class="plain" data-src="assets/alonso_g1.png" />
+								<img class="plain" data-src="assets/alonso_g2.png" />
+							</div>
+							<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+							<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+						</div>
+						<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
+								$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+								$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="block fragment">
+					<div class="block-title">
+						Main limitation: the need for an explicit likelihood
+					</div>
+					<div class="block-content">
+						We can only compute the likelihood for <b>simple summary statistics</b> and on <b>large scales</b>
+						<br>
+						<br>
+						<div class="fragment"> $\Longrightarrow$ We are dismissing most of the information! </div>
+					</div>
+				</div>
+			</section>
+
+
+			<section>
+				<h3 class='slide-title'>The challenges of modern surveys</h3>
+				<div style="float:left;">
+					$\Longrightarrow$ Modern surveys will provide <b>large volumes</b> of <b>high quality</b> data
+				</div>
+				<br>
+				<div class="container">
+					<div class="col">
+
+						<div class="block fragment">
+							<div class="block-title">
+								A Blessing
+							</div>
+							<div class="block-content">
+								<ul>
+									<li>Unprecedented statistical power
+									</li>
+									<br>
+									<li>Great potential for new discoveries
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<br>
+						<div class="block fragment">
+							<div class="block-title">
+								A Curse
+							</div>
+							<div class="block-content">
+								<ul>
+									<li> Existing methods are reaching their limits at every
+										step of the science analysis
+									</li>
+									<br>
+									<li>Control of systematics is <b>paramount</b>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+					<div class="col">
+						LSST forecast on dark energy parameters
+						<img class="plain" data-src="assets/LSST_forecast_Y10.png" style="height :400px;" />
+					</div>
+				</div>
+				<div class="fragment">
+					$\Longrightarrow$ Dire need for <b class="alert">novel analysis techniques</b> to fully realize the potential of modern surveys.
+				</div>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2> Can AI solve all of our problems?</h2>
+			</section>
+
+			<section>
+				<section data-background="assets/fig1w.png">
+				</section>
+
+				<section data-background="assets/fig1.png">
+				</section>
+
+				<section>
+					<h3 class='slide-title'>example of application: gravitational time delays</h3>
+
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/figure3.jpg" class="plain" style="height: 400px;">
+						</div>
+						<div class="col">
+							<img data-src="assets/heic1702b.jpg" class="plain" style="height: 400px;">
+						</div>
+					</div>
+					<div>
+						<script type="math/tex; mode=display">
+							\Delta t_{i j} = \frac{1 + z_{L}}{c} \ \underbrace{\frac{D_{L} \  D_{S}}{ D_{L S}}}_{\propto \ H_0^{-1}} \ \left[ \frac{(\theta_i -\beta)^2}{2} - \psi(\theta_i) + \frac{(\theta_j - \beta)^2}{2} + \psi(\theta_j) \right]
+																</script>
+					</div>
+				</section>
+
+				<section data-background="assets/hsc_illustration_tract.png">
+					<h3>WWAD: <span class="fragment">What Would an Astrophysicist Do ?</span></h3>
+					<div class="fragment fade-up">
+						<img data-src="assets/fig2.png" style="height: 525px;">
+						<div class="container">
+							<div class="col"> gri composite </div>
+							<div class="col"> g - $\alpha$ i </div>
+							<div class="col"> detected areas </div>
+							<div class="col"> HST images </div>
+						</div>
+						<div style="float:right; font-size: 20px;"> RingFinder (Gavazzi et al. 2014) </div>
+					</div>
+					<br>
+				</section>
+
+				<section>
+					<canvas data-chart="bar">
+						<!--
+											{
+											 "data": {
+											  "labels": ["CFHTLS"," DES", "LSST"],
+											  "datasets": [
+											   {
+											    "data":[220, 2400, 120000],
+											    "label":"Number of strong lenses","backgroundColor":"#374A67"
+											   },
+											   {
+											    "data":[75, 2500, 10000],
+											    "label":"Person-hour required for visual inspection [RingFinder]","backgroundColor":"#A63446"
+											   }
+											  ]
+											 },
+											 "options": { "responsive": "true",
+						        "scales": {
+						            "yAxes": [{
+						                "type": "logarithmic"
+						            }]
+						        }
+						 					}
+											}
+											-->
+					</canvas>
+					<div style="float:right; font-size: 20px">Gavazzi et al. (2014), Collett (2015)</div>
+					<br>
+					<div class="fragment fade-up">$\Longrightarrow$ Plainly intractable at the scale of LSST</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> The Deep Learning approach: Convolutional Neural Networks</h3>
+					<img data-src="assets/single_layer.png" class="plain"></img>
+				</section>
+
+				<section>
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; height:600px; margin:0 auto;">
+								<img height="600px" data-src="assets/deeplens.png" class="plain" style="position:absolute;top:0;left:200px;" />
+								<img height="600px" data-src="assets/candidates.png" class="plain fragment" style="position:absolute;top:200px;left:0;height:300px;" data-fragment-index="1" />
+							</div>
+
+							<br>
+							CMUDeepLens Architecture<br> (Lanusse et al. 2017)
+						</div>
+						<div class="col">
+							The Deep Learning approach in three steps:
+							<br>
+							<br>
+							<ul>
+								<li> <b>Step I</b>: Introduce a <b class="alert">parameteric function $f_\theta$</b>, this is your neural network. For images, choose a CNN.
+								</li>
+								<br>
+								<br>
+								<li class="fragment" data-fragment-index="1"> <b>Step II</b>: Create a <b class="alert">dataset $\mathcal{D}$</b> of examples $x_i$ and associated labels $y_i$:
+									$$\mathcal{D} = \{ (x_i, y_i) \}_{i \in [0, N]}$$
+								</li>
+								<br>
+								<li class="fragment"> <b>Step III</b>: <b class="alert">Optimize the parameters $\theta$</b> as to minimize an
+									appropriate loss function.<br> For classification, the binary cross
+									entropy:
+									$$\arg\min_\theta \sum_{i=1}^N y_i \log f_\theta(x_i) + (1 - y_i) \log f_{\theta}(x_i)$$
+								</li>
+							</ul>
+
+							<!--
+							<div class="block">
+								<div class="block-title">
+									A probabilistic point of view of deep learning
+								</div>
+								<div class="block-content">
+
+									<ul>
+										<li class="fragment"> Step I: Conditional Density Estimation<br>
+											$$ q_\theta(y=1 | x) = \mathrm{Bernoulli}(f_\theta(x))$$
+										</li>
+										<br>
+										<li class="fragment"> Step II: Target Posterior distribution<br>
+											We want to fit this CDE to a probability $p(y | x)$.
+										</li>
+										<br>
+										<li class="fragment"> Step III: Kullback–Leibler divergence<br>
+											<img data-src="assets/kl_divergence.gif" />
+										</li>
+										<br>
+									</ul>
+								</div>
+							</div> -->
+
+
+							<!--
+
+							<img data-src="assets/candidates.png" class="plain">
+							<br>Simulated training set of lenses<br> -->
+
+							<!-- <div class="block">
+								<div class="block-title">
+									What does it mean to train a Neural Network?
+								</div>
+								<div class="block-content">
+									<ul>
+										<li class="fragment"> This is nothing more than a parametric
+											conditional density estimator:
+											$$ q_\theta(y=1 | x) = \mathrm{Bernoulli}(f_\theta(x))$$
+
+
+
+
+											ny neural network, you can think of as a function $f_\theta$</li>
+										<ul>
+											<li> In this case, $f_\theta$ parametrizes a Bernoulli distribution<br>
+												$\Longrightarrow$
+											</li>
+										</ul>
+										<br>
+										<li class="fragment"> $\mathcal{L} = \mathbb{E}_{x, y} \left[ \parallel f_\theta(x) - y \parallel_2^2 \right]$
+										</li>
+										<br>
+									</ul>
+								</div>
+							</div> -->
+
+						</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">The Euclid strong-lens finding challenge</h3>
+					<div style="float:right; font-size: 20px">Metcalf, . . ., <b>Lanusse</b>, et al. (2018)</div>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img height=500 data-src="assets/ground_lenses.png"></img>
+						</div>
+						<div class="col">
+							<img height=500 data-src="assets/space_based.jpg"></img>
+						</div>
+					</div>
+
+				</section>
+				<section>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/roc_ground_small.png" class="plain" style="height: 250px;"></img>
+
+							<br>
+							<div class="fragment fade-up"> <b class="alert">Better accuracy than human visual inspection!</b></div>
+						</div>
+
+						<div class="col fragment">
+							<iframe src="https://giphy.com/embed/Ztzt8zhmmpVPUiSNMX" width="480" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+							<p><a href="https://giphy.com/gifs/theoffice-episode-13-the-office-tv-Ztzt8zhmmpVPUiSNMX">via GIPHY</a></p>
+						</div>
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							A true paradigm shift in image processing
+						</div>
+						<div class="block-content">
+							<ul>
+								<li class="fragment"> <b>Before</b>: <b class="alert">Experts</b> would carefully craft image statistics they would expect a priori to be useful for their problem.</li>
+								<br>
+								<li class="fragment"> <b>After</b>: <b class="alert">Reframe the task as an optimization problem</b>, and let the optimization figure out how to solve the task </li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">The AI bubble</h3>
+
+				<div class="container">
+					<canvas data-chart="bar">
+						<!--
+								{
+								 "data": {
+									"labels": ["2012", "2013", "2014","2015", "2016" ,"2017", "2018", "2019", "2020", "2021"],
+									"datasets": [
+									 {
+										"data":[ 21, 15, 17, 22, 31, 71, 113, 231, 322, 317],
+										"label":"Deep Learning || CNN || Neural Network ","backgroundColor":"#A63446"
+									}
+									]
+								 },
+								 "options": { "responsive": "true",
+							"scales": {
+									"yAxes": [{
+											"type": "linear"
+									}]
+							}
+								}
+								}
+								-->
+					</canvas><br>
+				</div>
+				<div><b>astro-ph</b> abstracts mentioning <b>Deep Learning</b>, <b>CNN</b>, or <b>Neural Networks</b></div>
+			</section>
+
+			<!-- <section>
+										<section>
+											<h3 class="title">Let's address the elephant in the room</h3>
+
+											<canvas data-chart="bar">
+												<!--
+										{
+										 "data": {
+											"labels": ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008",
+											"2009", "2010", "2011", "2012", "2013",
+											"2014", "2015", "2016" ,"2017", "2018", "2019", "2020", "2021"],
+											"datasets": [
+											 {
+												"data":[ 3,9, 5, 9 , 5,10, 10, 13, 6, 14, 16, 15 , 13, 10, 21, 15, 17, 22, 31, 71, 113, 231, 322, 317],
+												"label":"Deep Learning || CNN || Neural Network ","backgroundColor":"#A63446"
+											},
+											 {
+												"data":[18, 19, 21, 22, 23,23, 46, 48, 73, 89, 78, 114, 125, 164, 239, 233, 248, 251, 288, 320, 435, 448, 483, 478],
+												"label":"Bayesian || MCMC","backgroundColor":"#374A67"
+											 }
+											]
+										 },
+										 "options": { "responsive": "true",
+									"scales": {
+											"yAxes": [{
+													"type": "linear"
+											}]
+									}
+										}
+										}
+										-->
+			<!-- 				</canvas>
+										</section>
+									</section> -->
+
+
+			<section>
+				<section>
+					<h3 class="slide-title">Be careful to ask the right questions!</h3>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/danger_zone.png" />
+						</div>
+
+						<div class="col">
+
+							<ul>
+								<li>High precision is not always a good thing!</li>
+
+								<li>The training set acts as a prior.</li>
+								<img data-src="assets/ae_rec_error.png" />
+								Example of AE reconstruction error on a 2D density, https://arxiv.org/abs/1905.10710
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">Example of photometric redshifts</h3>
+					<img data-src="assets/Pasquet2018.png" />
+					<ul>
+						<li>The real challenge is not to get precise and accurate predictions on spectroscopic training sample, but to get well calibrated results on the target sample.</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- The main points we want to convey here:
+			   - It needs to be model-based.
+				 		- In all likelihood, we are not asking the DL model to discover the
+						model (we only have one Universe).
+						- So we want to either to do parameter inference or model comparison.
+
+				 - Ok... but hold on that's already what we do everyday, why do we need
+				 ML?
+
+				 - Ah, well, because what we do currently has plenty of limitations,
+				 simulations are superior to analytic predictions.
+
+				 - In this talk, I will focus on different ways Deep Learning can change
+				 the game by allowing for new ways to use simulations.
+			  -->
+			<section>
+				<section>
+					<h3 class="slide-title">What are the right questions for Cosmology?</h3>
+					<div class="block ">
+						<div class="block-title">
+							What are the right questions for Cosmology?
+						</div>
+						<div class="block-content">
+							<ul>
+								<li class="fragment">As physicists, we want to remain <b>model-based</b>.<br>
+									$\Longrightarrow$ We want to compare an interpretable/physical model to data.</li>
+								<br>
+
+								<li class="fragment">In all likelihood, <b>we cosmologists</b> come up with the model.
+									<br> $\Longrightarrow$ We are not trying to infer it from the data.
+								</li>
+								<br>
+								$\Longrightarrow$ Isn't what we already do everyday? why do we need Deep Learning for?
+							</ul>
+						</div>
+					</div>
+				</section>
+
+
+				<section>
+					<h3 class='slide-title'>A different road: forward modeling</h3>
+
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li> Instead of trying to analytically evaluate the likelihood,
+									let us build a forward model of the observables.</li>
+								<br>
+								<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+									cost of a <b>large number of latent variables</b>.
+								</li>
+							</ul>
+
+							<br>
+							<div class="fragment">
+								$\Longrightarrow$ How to peform efficient inference in this large number of dimensions?
+							</div>
+							<br>
+							<br>
+							<ul class="fragment"> A non-exhaustive list of methods:
+								<li> Hamiltonian Monte-Carlo
+								</li>
+								<li> Variational Inference
+								</li>
+								<li> MAP+Laplace
+								</li>
+								<li> Gold Mining
+								</li>
+								<li> Dimensionality reduction by Fisher-Information Maximization
+								</li>
+							</ul>
+							<br>
+							<br>
+							<div class="fragment">
+								What do they all have in common?<br>
+								-> They require fast, accurate, <b class="alert">differentiable</b> forward simulations
+							</div>
+						</div>
+
+						<div class='col'>
+
+							<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+								<img class="fragment plain" data-src="assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+								<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+			</section>
+
+			<section>
+				<h3 class="slide-title">Focus of this talk</h3>
+				<div class=container>
+					<div class="col">
+						<div class="fig-container" data-file="venn.html" data-style="height: 600px;"></div>
+					</div>
+
+					<div class="col">
+						<ul>
+							<li class="fragment">Deep Learning for astronomical data reduction</li>
+							<br>
+							<li class="fragment">Bayesian Neural Networks</li>
+							<br>
+							<li class="fragment">Physical Bayesian inference</li>
+						</ul>
+						<br>
+						<br>
+						<div class="block fragment">
+							<div class="block-title">
+								This talk
+							</div>
+							<div class="block-content">
+								Generic approach to <b>uncertainty quantification</b> and <b>interpretability</b>:
+								<br>
+								<ul>
+									<li>Physical Forward Models</li>
+									<li>Deep Generative Models</li>
+									<li>Bayesian Inference</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+
+			<!-- Outline of the talk:
+			- How can deep learning change the way we use simulations?
+
+				- Primer on important Deep Learning notions
+					- Automatic Differentiation
+					- (Convolutional) Neural Networks
+					- Generative modeling
+
+				- Likelihood-Free Inference:
+					- No likelihood? No problem! You can use Neural Density Estimation to
+					build a posterior
+					- No likelihood? Cool you no longer need to restrict yourself to 2pt functions
+
+				- Automatically Differentiable Physical Simulations:
+					- Use HMC to perform inference over the entire model
+					- Write your simulation in TensorFlow and interface it with ML elements
+					- PGD, LDL, CosmicRIM, bias model
+
+				- Solving inverse problems with simulation-driven priors
+					- Example of mass-mapping
 				-->
-			</canvas>
+
+
+			<section>
+				<h2>Likelihood-Free Inference</h2>
+			</section>
+
+			<!-- - What is this notion of Likelihood-Free Inference?
+				- What is the difference between a simulation and CAMB? latent variables.
+				- There is a likelihood but the marginal likelihood becomes untractable, hence LFI
+
+				- So, if we don't assume the likelihood how do we infer?
+					- Density Estimation \o/ That's the first place where deep learning comes in
+					- First deep dive into generative models
+					- Learn the likelihood a la DELFI
+
+				- Ok, so now that we are free of analytic theory, we can build other statistics
+					- Neural compression by Maximizing mutual information, or IMNN.
+			-->
+
+			<section>
+				<h2>Simulation-based priors for inverse problems</h2>
 			</section>
 
 			<section>
+				<h2>Differentiable Physics</h2>
 			</section>
 
+
+
+
+
+			<section data-background-iframe="https://www.thispersondoesnotexist.com/">
+				<h3 class="slide-title" style="background: rgba(0, 0, 0, 0.3);"> Do you know this person?</h3>
+
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+				<br><br><br>
+
+				<div class="fragment fade-up" style="background: rgba(0, 0, 0, 0.3);">
+					<p>Probably not, this is a randomly generated person: <a href="https://www.thispersondoesnotexist.com/" target="_blank">thispersondoesntexist.com</a></p>
+				</div>
 			</section>
 
+			<section>
 
+				<section>
+					<h3 class="slide-title"> What is generative modeling?</h3>
+					<br>
+					<br>
+					<ul>
+						<li>The goal of generative modeling is to <b>learn the distribution $\mathbb{P}$</b>
+							from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+						</li>
+						<br>
+						<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+							that tries to be close to $\mathbb{P}$.
+						</li>
+					</ul>
 
+					<br>
+					<br>
 
+					<div class="container">
 
+						<div class="col fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							True $\mathbb{P}$
+						</div>
+
+						<div class="col  fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							Samples $x_i \sim \mathbb{P}$
+						</div>
+
+						<div class="col  fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+							<br>
+							Model $\mathbb{P}_\theta$
+						</div>
+					</div>
+
+				</section>
+
+				<section>
+					<h3 class="slide-title">Why isn't it easy?</h3>
+					<br>
+					<ul>
+						<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+						</li>
+					</ul>
+					<div class="container">
+						<div class="col fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+							<br>Distance between pairs of points drawn from a Gaussian distribution.
+						</div>
+					</div>
+
+					<br>
+					<ul>
+						<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+						</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> The evolution of generative models </h3>
+
+				<br> <br> <br>
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+							<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+							<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+							<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+						</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+							<br>
+							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+						</ul>
+					</div>
+				</div>
+				<br> <br> <br>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> A visual Turing test </h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+					</div>
+					<div class="col">
+						<img data-src="assets/sdss5.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
+					</div>
+				</div>
+			</section>
+
+			<section data-vertical-align-top>
+				<h3 class="slide-title">Not all generative models are created equal</h3>
+				<img data-src="assets/generative_models_table.png" class="plain"></img>
+				<div style="float:right; font-size: 20px">Grathwohl et al. 2018</div>
+				<br>
+				<br>
+				<ul>
+					<li> GANs and VAEs are very common and successfull but do not fit our purposes.</li>
+					<br>
+					<li> We want a model which can <b class="alert">provide an explicit $\log p(x)$.</b></li>
+					<br>
+				</ul>
+			</section>
 
 		</div>
 	</div>
