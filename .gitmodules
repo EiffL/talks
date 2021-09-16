@@ -85,3 +85,6 @@
 [submodule "CMU2021/reveal.js"]
 	path = QtC2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Gif2021/reveal.js"]
+	path = Gif2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
