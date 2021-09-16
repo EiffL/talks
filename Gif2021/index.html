@@ -379,6 +379,9 @@
 					</div>
 				</section>
 
+				<!--
+
+
 				<section>
 					<h3 class="slide-title">Probabilistic Understanding of Deep Learning</h3>
 
@@ -403,10 +406,48 @@
 									<br>
 									<br>
 									<div class="fragment">
-										$\Longrightarrow$ When you train a Neural Network, you are doing Bayesian inference, and your training set defines your prior.
+										$\Longrightarrow$ Your training set defines your prior.
 									</div>
 								</div>
 							</div>
+						</li>
+					</ul>
+				</section> -->
+
+
+				<section>
+					<h3 class="slide-title" style="position:absolute;top:0;">An example of bad idea: Naive Image Deconvolution with a CNN</h3>
+					<br>
+					<br>
+
+					$ y = P \ast x + n $
+
+					<div class="container">
+
+						<div class="col">
+							<p> <b class="alert"> Observed $y$</b></p>
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<br>Ground-Based Telescope
+						</div>
+
+						<div class="col fragment fade-up" data-fragment-index='0'>
+							<p> <b class="alert">$f_\theta$</b> </p>
+							<img class="plain " data-src="assets/generic_network_inv.png" style="height: 250px; width:500px" />
+							<br>some deep Convolutional Neural Network
+						</div>
+
+						<div class="col">
+							<p><b class="alert"> Unknown $x$</b> </p>
+							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<br>Hubble Space Telescope
+						</div>
+					</div>
+					<br>
+					<br>
+					<ul>
+						<li class="fragment fade-up" data-fragment-index='0'> A standard approach would be to train a neural network $f_\theta$ to <b class="alert">estimate $x$ given $y$</b> on a dataset $\mathcal{D}=\{(x_i, yi)\}$.
+						</li>
+						<li class="fragment"> Is this a good idea?
 						</li>
 					</ul>
 				</section>
@@ -1970,16 +2011,25 @@
 						Where do I think Deep Learning can be useful for Cosmology?
 					</div>
 					<div class="block-content">
-						$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models! This provides <b>robustness, interpretability, and uncertainty quantification</b>.
+						$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models!
 						<br>
 						<br>
 						<ul>
+
+							<li class="fragment"> Enables inference in high dimension from numerical simulators.
+								<ul>
+									<li>Automagically construct summary statistics.</li>
+									<li>Provides the density estimation tools needed.</li>
+								</ul>
+								</il>
+								<br>
+
+
 							<li class="fragment"> Complement known physical models with data-driven components
 								<ul>
 									<li>Use data-driven generative model as prior for solving inverse problems.</il>
 								</ul>
 								</il>
-								<br>
 								<br>
 
 							<li class="fragment"> Differentiable physical models for fast inference
