@@ -1265,7 +1265,7 @@
 								access to <b class="alert">samples from the prior p(x)</b> with a high dimensional $x$.
 							</li>
 							<br>
-							<li class="fragment"> We retain a physical <b class="alert">explicit likelihood<b> (can directly account for changes in masks, noise, etc. without retraining)
+							<li class="fragment"> We retain a physical <b class="alert">explicit likelihood</b> (can directly account for changes in masks, noise, etc. without retraining)
 							</li>
 						</ul>
 					</div>
@@ -1422,11 +1422,16 @@
 																				</section> -->
 			</section>
 
-
 			<section>
 				<section>
 					<h3 class="slide-title">LSST DESC 3x2pt Tomography Challenge</h3>
-
+					<div class="container">
+						<div class="col">
+							<div style="float:right; font-size: 20px"> Zuntz, <b>Lanusse</b>, et al. (2021)
+								<a href="https://arxiv.org/abs/2108.13418"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2008.13418-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+							</div>
+						</div>
+					</div>
 					<div class="block">
 						<div class="block-title">
 							Description of the challenge
@@ -1437,11 +1442,7 @@
 								method that optimizes a 3x2pt analysis.&rdquo;
 							</blockquote>
 							<ul>
-								<li> Metrics:
-									<ul>
-										<li> Total Signal-to-Noise: $m_{SNR} = \sqrt{\mu^t \mathbf{C}^{-1} \mu}$ ; DETF Figure of Merit: $m_{FOM} = \frac{1}{\sqrt{ \det(\mathbf{F}^{-1})}}$
-										</li>
-									</ul>
+								<li> Metrics: Total Signal-to-Noise: $m_{SNR} = \sqrt{\mu^t \mathbf{C}^{-1} \mu}$ ; <b class="alert">DETF Figure of Merit</b>: $m_{FOM} = \frac{1}{\sqrt{ \det(\mathbf{F}^{-1})}}$
 								</li>
 								<li> Idealized setting: assumes perfect training set. More info at: <a href="https://github.com/LSSTDESC/tomo_challenge">https://github.com/LSSTDESC/tomo_challenge</a>
 								</li>
@@ -1571,7 +1572,6 @@
 			<section class="inverted" data-background="#000">
 				<h2>How do we make cosmological simulations <b>fast</b> and <b>differentiable</b>?</h2>
 			</section>
-
 
 			<section>
 				<h3 class='slide-title'>You can try to learn the simulation...</h3>
@@ -1959,8 +1959,45 @@
 			</section>
 
 
+			<section>
+				<h2> Conclusion </h2>
+			</section>
 
+			<section>
+				<h3 class="slide-title"> Conclusion </h3>
+				<div class="block ">
+					<div class="block-title">
+						Where do I think Deep Learning can be useful for Cosmology?
+					</div>
+					<div class="block-content">
+						$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models! This provides <b>robustness, interpretability, and uncertainty quantification</b>.
+						<br>
+						<br>
+						<ul>
+							<li class="fragment"> Complement known physical models with data-driven components
+								<ul>
+									<li>Use data-driven generative model as prior for solving inverse problems.</il>
+								</ul>
+								</il>
+								<br>
+								<br>
 
+							<li class="fragment"> Differentiable physical models for fast inference
+								<ul>
+									<li> Differentiability enables Bayesian inference over large scale simulations.</li>
+									<li> Even analytic computations can benefit from differentiability.<br> <a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo">https://github.com/DifferentiableUniverseInitiative/jax_cosmo</a> </li>
+								</ul>
+							</li>
+							<br>
+						</ul>
+					</div>
+				</div>
+				<br>
+
+				<br>
+				<p class="fragment">Thank you ! </p>
+				<br> <br> <br>
+			</section>
 
 		</div>
 	</div>
