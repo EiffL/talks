@@ -100,9 +100,9 @@
 				</section>
 			</section>
 
-			<!-- <section class="inverted" data-background="#000">
+			<section class="inverted" data-background="#000">
 				<h2> Can AI solve all of our problems?</h2>
-			</section> -->
+			</section>
 <!--
 			<section>
         <section data-background="assets/gal_hsc.png">
@@ -1097,6 +1097,35 @@
       					</div>
       				</section>
 
+							<section>
+								<h3>Our method</h3>
+								<div class="block fragment">
+									<div class="block-title">
+										A two-steps approach to inference
+									</div>
+									<div class="block-content">
+										<ul>
+											<li> Automatically learn an <b>optimal low-dimensional summary statistic</b>
+												$$y = f_\varphi(\kappa_{KS}) $$
+											</li>
+
+											<br>
+
+											<li class="fragment"> Use Neural Density Estimation to build an <b>estimate $p_\phi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+											</li>
+
+											<br>
+
+											<li class="fragment"> Run a conventional Markov Chain Monte Carlo sampling
+											</li>
+
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</section>
+
       				<section>
       					<h3 class="slide-title">Learning summary statistics by Variational Mutual Information Maximization</h3>
       					<br>
@@ -1138,7 +1167,7 @@
       						</div>
       						<div class="col">
       							<ul>
-      								<li> Deep Residual Network $y = f_\phi(x)$ followed by mixture density network $q_\phi(\theta | y)$
+      								<li> Deep Residual Network $y = f_\phi(x)$ followed by neural density estimator $q_\phi(\theta | y)$
       								</li>
       								<br>
       								<li class="fragment">Training on weak lensing maps simulated for different cosmologies</li>
@@ -1154,7 +1183,7 @@
       										<img class="plain" data-src="assets/google-cloud-platform-logo.png" />
       									</div>
       								</div>
-      								<li class="fragment">Optimization of the variational lower bound:
+      								<li class="fragment">Training by Variational Mutual Information Maximization:
       									$$\mathbb{E}_{(x, \theta) \in \mathcal{D}} [ \log q_\phi(\theta | f_\phi(y) ) ]$$
       								</li>
       							</ul>
@@ -1409,52 +1438,54 @@
       					</section>
 
       					<section>
-      						<section>
-      						<h3 class="slide-title">LSST DESC 3x2pt Tomography Challenge</h3>
+									<section>
+										<h3 class="slide-title">LSST DESC 3x2pt Tomography Challenge</h3>
+										<div class="container">
+											<div class="col">
+												<div style="float:right; font-size: 20px"> Zuntz, <b>Lanusse</b>, et al. (2021)
+													<a href="https://arxiv.org/abs/2108.13418"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2008.13418-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+												</div>
+											</div>
+										</div>
+										<div class="block">
+											<div class="block-title">
+												Description of the challenge
+											</div>
+											<div class="block-content">
+												<blockquote>
+													&ldquo;Given (g)riz photometry, find a tomographic bin assignment
+													method that optimizes a 3x2pt analysis.&rdquo;
+												</blockquote>
+												<ul>
+													<li> Metrics: Total Signal-to-Noise: $m_{SNR} = \sqrt{\mu^t \mathbf{C}^{-1} \mu}$ ; <b class="alert">DETF Figure of Merit</b>: $m_{FOM} = \frac{1}{\sqrt{ \det(\mathbf{F}^{-1})}}$
+													</li>
+													<li> Idealized setting: assumes perfect training set. More info at: <a href="https://github.com/LSSTDESC/tomo_challenge">https://github.com/LSSTDESC/tomo_challenge</a>
+													</li>
+												</ul>
+											</div>
+										</div>
 
-      						<div class="block">
-      							<div class="block-title">
-      								Description of the challenge
-      							</div>
-      							<div class="block-content">
-      								<blockquote>
-      									&ldquo;Given (g)riz photometry, find a tomographic bin assignment
-      										method that optimizes a 3x2pt analysis.&rdquo;
-      								</blockquote>
-      								<ul>
-      									<li> Metrics:
-      										<ul>
-      											<li> Total Signal-to-Noise: $m_{SNR} = \sqrt{\mu^t \mathbf{C}^{-1} \mu}$ ;    DETF Figure of Merit: $m_{FOM} = \frac{1}{\sqrt{ \det(\mathbf{F}^{-1})_{\Omega_m \sigma_8}}}$
-      											</li>
-      										</ul>
-      									</li>
-      									<li> Idealized setting: assumes perfect training set.
-      									</li>
-      								</ul>
-      							</div>
-      						</div>
+										<div class="container">
+											<div class="col">
+												<img class="plain fragment" data-src="assets/nnexample.png" data-fragment-index="1" />
+											</div>
 
-      						<div class="container">
-      							<div class="col">
-      								<img class="plain fragment" data-src="assets/nnexample.png" data-fragment-index="1"/>
-      							</div>
+											<div class="col">
+												<ul>
+													<li class="fragment" data-fragment-index="0"> <b>Conventional strategy</b>: Use a photoz code to estimate redshifts,
+														then bin galaxies based on their photoz.
+													</li>
+													<br>
+													<li class="fragment" data-fragment-index="1"> <b class="alert">Strategy with Differentiable Physics</b>:
+														<ul>
+															<li> Introduce a parametric bin assignement function $f_\theta(x_{phot})$</li>
+															<li> Optimize $\theta$ by back-propagating through the challenge metrics. </li>
+													</li>
 
-      							<div class="col">
-      								<ul>
-      									<li class="fragment" data-fragment-index="0"> <b>Conventional strategy</b>: Use a photoz code to estimate redshifts,
-      										then bin galaxies based on their photoz.
-      									</li>
-      									<br>
-      									<li class="fragment" data-fragment-index="1"> <b class="alert">Strategy with Differentiable Physics</b>:
-      										<ul>
-      											<li> Introduce a parametric bin assignement function $f_\theta(x_{phot})$</li>
-      											<li> Optimize $\theta$ by back-propagating	through the challenge metrics. </li>
-      									</li>
-
-      								</ul>
-      							</div>
-      						</div>
-      						</section>
+												</ul>
+											</div>
+										</div>
+									</section>
 
       						<section>
       						<iframe width="100%" height="849" frameborder="0"
@@ -1462,6 +1493,7 @@
       						</section>
       					</section>
 
+									<section>
       					<section>
       							<h3 class='slide-title'>introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
       							<div class="container">
@@ -1521,6 +1553,44 @@
       							</div>
       						</section>
 
+									<section>
+										<h3 class='slide-title'>Mesh FlowPM: distributed, GPU-accelerated, and automatically differentiable simulations</h3>
+										<!--
+							<img data-src="assets/mesh_flopwm.png" class="plain" style="height:450px;" /> -->
+
+										<div class="container">
+											<div class="col">
+												<img data-src="assets/mfpm_demo_1024.png" />
+											</div>
+
+											<div class="col">
+												<ul>
+													<li> We developed a <b class="alert">Mesh TensorFlow</b> implementation that can scale on GPU clusters (horovod+NCCL).
+													</li>
+													<br>
+													<br>
+													<li> For a $2048^3$ simulation:
+														<ul>
+															<li>Distributed on <b>256</b> NVIDIA V100 GPUs</li>
+															<li>Runtime: 3 mins</li>
+														</ul>
+													</li>
+													<br>
+													<br>
+													<li> Don't hesitate to reach out if you have a use case for model parallelism!<br>
+														<img data-src="assets/github.png" class="plain" style="height:70px" /><br>
+
+														<div> <a href="https://github.com/DifferentiableUniverseInitiative/mesh">https://github.com/DifferentiableUniverseInitiative/mesh</a>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</section>
+
+									</section>
+
+
 
       						<section>
       							<section>
@@ -1578,550 +1648,104 @@
       							</section>
       						</section>
 
-
-
-			<section>
-				<h3 class='slide-title'>A different road: forward modeling</h3>
-
-				<div class='container'>
-					<div class='col'>
-						<ul>
-							<li> Instead of trying to analytically evaluate the likelihood,
-								let us build a forward model of the observables.</li>
-							<br>
-							<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
-								cost of a <b>large number of latent variables</b>.
-							</li>
-						</ul>
-
-						<br>
-						<div class="fragment">
-							$\Longrightarrow$ How to peform efficient inference in this large number of dimensions?
-						</div>
-						<br>
-						<br>
-						<ul class="fragment"> A non-exhaustive list of methods:
-							<li> Hamiltonian Monte-Carlo
-							</li>
-							<li> Variational Inference
-							</li>
-							<li> MAP+Laplace
-							</li>
-							<li> Gold Mining
-							</li>
-							<li> Dimensionality reduction by Fisher-Information Maximization
-							</li>
-						</ul>
-						<br>
-						<br>
-						<div class="fragment">
-							What do they all have in common?<br>
-							-> They require fast, accurate, <b class="alert">differentiable</b> forward simulations
-						</div>
-					</div>
-
-					<div class='col'>
-
-						<div style="position:relative; width:600px; height:600px; margin:0 auto;">
-							<img class="fragment current-visible plain" data-src="assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
-							<img class="fragment plain" data-src="assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
-							<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<section>
-				<h3 class='slide-title'>Forward Models in Cosmology</h3>
-				<div class="container">
-					<div class='col'>
-						<img data-src="assets/fieldinit.png" class="plain" style="height:300px;" />
-						<b class="alert"> Linear Field </b>
-					</div>
-					<div class='col fragment' data-fragment-index='2'>
-						<img data-src="assets/fieldfin.png" class="plain " style="height:300px;" />
-						<b class="alert"> Final Dark Matter </b>
-					</div>
-					<hr style="width: 1px; height: 400px; background: white; border: none;" />
-					<div class='col fragment' data-fragment-index='3'>
-						<img data-src="assets/fieldhalo.png" class="plain " style="height:300px;" />
-						<b class="alert"> Dark Matter Halos </b>
-					</div>
-					<div class='col fragment' data-fragment-index='4'>
-						<img data-src="assets/fieldgal.png" class="plain " style="height:300px;" />
-						<b class="alert"> Galaxies </b>
-					</div>
-				</div>
-				<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
-					<div class='col fragment' data-fragment-index='2'>
-						<font size="10"> $\longrightarrow$ </font> <br>
-						<div class="fragment grow" data-fragment-index='5'>N-body simulations </div>
-					</div>
-					<div class='col fragment' data-fragment-index='3'>
-						<font size="10"> $\longrightarrow$ </font> <br> Group Finding <br> algorithms
-					</div>
-					<div class='col fragment' data-fragment-index='4'>
-						<font size="10"> $\longrightarrow$ </font> <br> Semi-analytic &amp <br> distribution models
-					</div>
-					<!-- 		<div class='fragment' data-fragment-index='2'> N-body simulations <div> -->
-					<!-- <div class='fragment' data-fragment-index='3'> Group Finding algorithms <div> -->
-					<!-- <div class='fragment' data-fragment-index='4'> Semi-analytic models <div> -->
-				</div>
-			</section>
-
-
-			<section data-autoplay data-background-iframe="https://www.youtube.com/embed/YjUICiYlCYE?controls=0&autoplay=1&fs=0&loop=1" data-background-interactive=false data-preload>
-			</section>
-
-
-			<section class="inverted" data-background="#000">
-				<h2>How do we make cosmological simulations <b>fast</b> and <b>differentiable</b>?</h2>
-			</section>
-
-
-
-			<section>
-				<h3 class='slide-title'>You can try to learn the simulation...</h3>
-				<div style="float:right; font-size: 25px">Learning particle displacement with a UNet. S. He, et al. (2019)</div><br><br>
-
-				<img data-src="assets/Model-Comparison.jpg" style="height:400px;" />
-
-				<div class="block fragment">
-					<div class="block-title">
-						The issue with using deep learning as a <i>black-box</i>
-					</div>
-					<div class="block-content">
-						<ul>
-							<li> No guarantees to work outside of training regime.
-							</li>
-							<li> No guarantees to capture dependence on cosmology accurately.
-							</li>
-						</ul>
-					</div>
-				</div>
-			</section>
-
-
-			<section>
-				<h3 class="slide-title">the hammer behind the Deep Learning revolution</h3>
-				<br>
-				<ul>
-					<li class="fragment"> <b>Automatic differentiation</b> allows you to compute analytic derivatives of arbitraty expressions:<br>
-						If I form the expression $y = a * x + b$, it is separated in fundamental ops:
-						$$ y = u + b \qquad u = a * x $$
-						then gradients can be obtained by the chain rule:
-						$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
-					</li>
-					<br>
-					<li class="fragment"> This is a fundamental tool in Machine Learning, and autodiff frameworks include <b>TensorFlow</b>, <b>JAX</b> or PyTorch.
-						<div class="container">
-							<div class="col">
-								<img data-src="assets/TF_FullColor_Horizontal.png" />
-							</div>
-
-							<div class="col">
-								<img data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png" class="plain" />
-							</div>
-						</div>
-						$\Longrightarrow$ In addition to autodiff, they all provide <b>GPU/TPU acceleration</b>.
-					</li>
-				</ul>
-				<br>
-				<br>
-			</section>
-
-			<section>
-				<h3 class='slide-title'>the Fast Particle-Mesh scheme</h3>
-
-				<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
-
-				<div class='container'>
-					<div class='col'>
-						<ul>
-							<li>The numerical scheme:
-								<br>
-								<br>
-								<ul>
-									<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
-										=> compute gravitational forces by FFT
-									</li>
-
-									<br>
-
-									<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
-									</li>
-
-									<br>
-
-									<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
-									</li>
-								</ul>
-							</li>
-							<br>
-
-							<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
-							</li>
-
-						</ul>
-					</div>
-
-					<div class='col'>
-
-						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
-							<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
-							<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
-							<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
-							<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
-
-						</div>
-
-					</div>
-				</div>
-
-				<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
-			</section>
-
-			<section>
-				<h3 class='slide-title'>Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
-				<div class="container">
-					<div class="col">
-						<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak (2020)
-							<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
-						</div>
-					</div>
-				</div>
-				<div class='container'>
-					<div class='col'>
-						<img data-src="assets/github.png" class="plain" style="height:70px" />
-						<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
-
-						<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
-						</div>
-						<pre class="python"><code data-trim data-noescape>
-import tensorflow as tf
-import flowpm
-# Defines integration steps
-stages = np.linspace(0.1, 1.0, 10, endpoint=True)
-
-initial_conds = flowpm.linear_field(32,       # size of the cube
-                                    100,      # Physical size
-                                    ipklin,   # Initial powerspectrum
-                                    batch_size=16)
-
-# Sample particles and displace them by LPT
-state = flowpm.lpt_init(initial_conds, a0=0.1)
-
-# Evolve particles down to z=0
-final_state = flowpm.nbody(state, stages, 32)
-
-# Retrieve final density field
-final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
-                               final_state[0])
-													</code></pre>
-						<ul>
-							<li> Seamless interfacing with deep learning components
-							</li>
-							<li> Gradients readily available
-							</li>
-						</ul>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-					</div>
-
-					<div class='col'>
-						<div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
-						<br>
-						<br>
-						<br>
-						<br>
-					</div>
-				</div>
-			</section>
-
-			<section>
-				<section>
-					<h3 class='slide-title'>Bayesian Reconstruction of Cosmological Fields</h3>
-					<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
-					<div class="fragment">Going back to simpler times...</div>
-
-					<div class="fragment">
-						$$\arg\max_s \ \log p(x | f(s)) \ + \ p(s) $$
-						where:<br>
-						<ul>
-							<li> $f$ is the <b>forward model</b>
-							</li>
-							<li> $p(x | f(s))$ is a tractable data likelihood
-							</li>
-							<li> $s$ are the <b>initial conditions</b> (early universe)
-							</li>
-							<li> $x$ is the data (e.g. galaxies, lensing, etc.)
-							</li>
-						</ul>
-					</div>
-				</section>
-
-				<section>
-					<h3 class="slide-title"> MAP optimization in action</h3>
-					$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
-					<div style="float:right; font-size: 16px">credit: <a href="https://github.com/modichirag">C. Modi</a></div>
-					<br>
-					<div class="container">
-						<div class="col fragment fade-up">
-							<img data-src="assets/init_field.png" style='height:250px;' />
-							<br> True initial conditions <br> $s_0$
-						</div>
-
-						<div class="col">
-							<img data-src="assets/reconim_init.gif" style='height:250px;' />
-							<br> Reconstructed initial conditions $s$
-						</div>
-
-						<div class="col">
-							<img data-src="assets/reconim_fin.gif" style='height:250px;' />
-							<br> Reconstructed dark matter distribution $x_{dm} = f(s)$
-						</div>
-
-						<div class="col">
-							<img data-src="assets/fin_field.png" style='height:250px;' />
-							<br> Data <br> $x_{dm} = f(s_0)$
-						</div>
-					</div>
-					<br>
-					<br>
-
-					<div class="fragment">
-						Check out this blogpost for more details <br> <a href=https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html>
-							https://blog.tensorflow.org/2020/03/simulating-universe-in-tensorflow.html</a>
-					</div>
-				</section>
-			</section>
-
-			<section>
-				<h3 class="slide-title">If only MAP optimization was easy...</h3>
-
-				$$\arg\max_s \ \log p(x_{dm} | f(s)) \ + \ p(s) $$
-
-				<div class="container">
-					<div class="col">
-						Direct optimization
-						<div style="position:relative; width:600px; height:410px; margin:0 auto;">
-							<img style="position:absolute;top:0;left:0px;" data-src="assets/recon_illustration0.png" height="350" />
-							<img class="fragment " data-fragment-index="1" style="position:absolute;top:0;left:0px;" data-src="assets/recon_illustration1.png" height="350" />
-						</div>
-
-					</div>
-					<div class="col fragment" data-fragment-index="2">
-						ad-hoc annealing
-						<div style="position:relative; width:600px; height:410px; margin:0 auto;">
-							<img class="fragment " data-fragment-index="2" style="position:absolute;top:0;left:5px;" data-src="assets/recon_illustration2.png" height="350" />
-							<img class="fragment " data-fragment-index="3" style="position:absolute;top:0;left:5px;" data-src="assets/recon_illustration3.png" height="350" />
-							<img class="fragment " data-fragment-index="4" style="position:absolute;top:0;left:5px;" data-src="assets/recon_illustration4.png" height="350" />
-							<img class="fragment " data-fragment-index="5" style="position:absolute;top:0;left:5px;" data-src="assets/recon_illustration5.png" height="350" />
-						</div>
-					</div>
-				</div>
-
-				<div>
-					<ul>
-						<li> Direct optimization of MAP leads to poor solutions on large scales.
-						</li>
-						<li class="fragment">Annealing recovers unbiased large scales, but at the cost of ad-hoc tempering procedure.
-						</li>
-					</ul>
-				</div>
-			</section>
-
-			<section class="inverted" data-background="#000">
-				<h2>Instead of guessing an optimization scheme, could we <b>learn to optimize</b>?</h2>
-			</section>
-
-			<section>
-				<h3 class="slide-title">A closer look at the optimization algorithm</h3>
-
-				<br>
-
-				$$\arg\max_x \ \log p(y | f(x)) \ + \ p(x) $$
-
-				<div class="container">
-					<div class="col">
-						<ul>
-							<li> Standard Gradient Descent Algorithm:
-								$$x_{i+1} = x_i - \epsilon \left[ \nabla_x{\log p(y | f(x_i))} + \nabla_x \log p(x_i) \right]$$
-								<br>
-								<div class="fragment" data-fragment-index="2">$$x_{i+1} = x_i - \Gamma \left(\nabla_x{\log p(y | f(x_i))}, \nabla_x \log p(x_i) \right]$$
-									with <b class="alert">update function</b> $\Gamma: (u,v) \rightarrow \epsilon(u + v)$ </div>
-							</li>
-							<br>
-							<br>
-							<li class="fragment"> Many algorithms (e.g. ADAM, LBFGS) can expressed in this form with a different choice of $\Gamma$.
-							</li>
-						</ul>
-
-					</div>
-					<div class="col fragment" data-fragment-index="1">
-						<img data-src="assets/map.png" />
-					</div>
-				</div>
-
-				<br>
-				<div class="fragment">
-					$\Longrightarrow$ What if we could learn this update function?
-				</div>
-			</section>
-
-			<section>
-				<section>
-					<h3 class="slide-title">Recurrent Inference Machines for Solving Inverse Problems<br> <a href="https://arxiv.org/abs/1706.04008">Putzky & Welling, 2017</a></h3>
-
-					<img data-src="assets/illustration_RIM.png" />
-
-					<div class="container">
-						<div class="col">
-							<ul>
-								<li> Introduce a Recurrent Neural Network (RNN) $h_\phi$, and state variable $s$, so that:
-									$$ s_{i+1} = h^*_\phi( \nabla \log p(y|x_{i}), x_i, s_{i})$$
-									$$ x_{i+1} = x_i + h_\phi(\nabla \log p(y|x_{i}), x_i, s_{i+1})$$
-								</li>
-
-							</ul>
-						</div>
-						<div class="col fragment">
-							<ul>
-								<li> Train according to:
-									$$\mathcal{L} = \sum_{i}^T w_i\mathcal{L}(x_i, x)$$
-								</li>
-							</ul>
-						</div>
-					</div>
-				</section>
-
-				<section>
-					<h3 class="slide-title">Inside an RNN Cell</h3>
-					<img data-src="assets/LSTM_GRU.png" height="600px" />
-					(<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21">source</a>)
-				</section>
-
-				<section>
-					<h3 class="slide-title">Illustration on inverse problems</h3>
-					<br>
-					<br>
-					<br>
-					<br>
-					<div>
-						<img data-src="assets/IllustrationRIM.png" /><br>
-						From left to right: input masked image, increasing number of steps of solutions, ground truth.
-					</div>
-					<br>
-					<br>
-					<br>
-					<br>
-				</section>
-			</section>
-
-			<section>
-				<section>
-					<h3 class="slide-title">CosmicRIM: Recurrence Inference Machines for Initial Condition Reconstruction</h3>
-					<div class="container">
-						<div class="col">
-							<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak, Spergel, Perreault-Levasseur (2021)
-								<a href="https://arxiv.org/abs/2104.12864"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2104.12864-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
-							</div>
-						</div>
-					</div>
-					<br>
-
-					<div class="container">
-
-						<div class="col">
-							Recurrent Neural Network Architecture
-							<img data-src="assets/cosmic_rim.png" width="450" />
-						</div>
-
-						<div class="col">
-
-							<ul>
-								<li>A few notable differences to a vanilla RIM:
-									<ul>
-										<li>We provide gradients of both prior and likelihood to the model.</li>
-
-										<br>
-										<li>Because our forward model couples scales, we use a multiscale U-Net architecture.</li>
-										<br>
-										<li> Input gradients are pre-scaled with the ADAM formula.</li>
-									</ul>
-								</li>
-
-							</ul>
-
-						</div>
-					</div>
-					<br>
-				</section>
-
-				<section>
-					<h3 class="slide-title">Experiments</h3>
-					<div class="block ">
-						<div class="block-title">
-							Settings
-						</div>
-						<div class="block-content">
-							<ul>
-								<li>Forward model: $64^3$ particles, 400 Mpc/h box, 2LPT dynamics with 2nd order bias model
-								</li>
-								<li> RIM: 10 steps, trained under l2 loss
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="container">
-
-						<div class="col">
-							Initial conditions cross-correlation
-							<img data-src="assets/cosmic_rim_rc.png" width="500" />
-
-						</div>
-						<div class="col">
-							Transfer function<br>
-							<img data-src="assets/rim_transfer.png" width="500" />
-						</div>
-
-					</div>
-					<ul>
-						<li>CosmicRIM: Learn to optimize by embedding a Neural Network in the optimization algorithm.<br>
-							$\Longrightarrow$ converges 40x faster than LBFGS.</li>
-					</ul>
-
-				</section>
-			</section>
-
-
-
+									<section>
+										<section>
+											<h3 class="slide-title">CosmicRIM: Recurrent Inference Machines for Initial Condition Reconstruction</h3>
+											<div class="container">
+												<div class="col">
+													<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak, Spergel, Perreault-Levasseur (2021)
+														<a href="https://arxiv.org/abs/2104.12864"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2104.12864-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+													</div>
+												</div>
+											</div>
+											<div class="container">
+
+												<div class="col">
+													Recurrent Neural Network Architecture
+													<img data-src="assets/cosmic_rim.png" width="450" />
+												</div>
+
+												<div class="col fragment">
+														Initial conditions cross-correlation
+														<img data-src="assets/cosmic_rim_rc.png" width="500" />
+												</div>
+											</div>
+											<ul>
+												<li class="fragment">CosmicRIM: Learn to optimize by embedding a Neural Network in the optimization algorithm.<br>
+													$\Longrightarrow$ converges 40x faster than LBFGS.</li>
+											</ul>
+										</section>
+
+										<section>
+											<h3 class="slide-title">Experiments</h3>
+											<div class="block ">
+												<div class="block-title">
+													Settings
+												</div>
+												<div class="block-content">
+													<ul>
+														<li>Forward model: $64^3$ particles, 400 Mpc/h box, 2LPT dynamics with 2nd order bias model
+														</li>
+														<li> RIM: 10 steps, trained under l2 loss
+														</li>
+													</ul>
+												</div>
+											</div>
+
+											<div class="container">
+
+												<div class="col">
+													Initial conditions cross-correlation
+													<img data-src="assets/cosmic_rim_rc.png" width="500" />
+
+												</div>
+												<div class="col">
+													Transfer function<br>
+													<img data-src="assets/rim_transfer.png" width="500" />
+												</div>
+
+											</div>
+											<ul>
+												<li>CosmicRIM: Learn to optimize by embedding a Neural Network in the optimization algorithm.<br>
+													$\Longrightarrow$ converges 40x faster than LBFGS.</li>
+											</ul>
+
+										</section>
+									</section>
 
 									<section>
-										<h1> Conclusion </h1>
+										<h2> Conclusion </h2>
 									</section>
+
 									<section>
 										<h3 class="slide-title"> Conclusion </h3>
 										<div class="block ">
 											<div class="block-title">
-												What can be gained by merging Deep Learning and Physical Models?
+												Where do I think Deep Learning can be useful for Cosmology?
 											</div>
 											<div class="block-content">
-												$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models! This provides <b>robustness, interpretability, and uncertainty quantification</b>.
+												$\Longrightarrow$ Makes Bayesian inference possible at scale and with non-trivial models!
 												<br>
 												<br>
 												<ul>
-													<li class="fragment"> Complement known physical models with data-driven components
+
+
+												<li class="fragment"> Complement known physical models with data-driven components
+													<ul>
+														<li>Use data-driven generative model as prior for solving inverse problems.</il>
+													</ul>
+													</il>
+													<br>
+
+													<li class="fragment"> Enables inference in high dimension from numerical simulators.
 														<ul>
-															<li>Use data-driven generative model as prior for solving inverse problems.</il>
+															<li>Automagically construct summary statistics.</li>
+															<li>Provides the density estimation tools needed.</li>
 														</ul>
 														</il>
 														<br>
-														<br>
+
+
 
 													<li class="fragment"> Differentiable physical models for fast inference
 														<ul>
@@ -2145,12 +1769,12 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}
+		} */
 
 		.reveal .block {
 			background-color: #191919;
