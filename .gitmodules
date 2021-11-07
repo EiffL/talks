@@ -94,3 +94,6 @@
 [submodule "LPC2021/reveal.js"]
 	path = LPC2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "IMA2021/reveal.js"]
+	path = IMA2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
