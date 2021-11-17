@@ -97,3 +97,6 @@
 [submodule "IMA2021/reveal.js"]
 	path = IMA2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Geneva2021/reveal.js"]
+	path = Geneva2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
