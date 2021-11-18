@@ -7,7 +7,7 @@
 
 	<title>Merging deep learning with physical models for the analysis of modern cosmological surveys</title>
 
-	<meta name="description" content="ECU Meeting, November 17th 2021">
+	<meta name="description" content="ECU Meeting, Geneva, November 18th 2021">
 	<link rel="stylesheet" href="reveal.js/dist/reset.css">
 	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
 	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
@@ -103,7 +103,7 @@
 			<section class="inverted" data-background="#000">
 				<h2> Can AI solve all of our problems?</h2>
 			</section>
-<!--
+
 			<section>
         <section data-background="assets/gal_hsc.png">
 					<div class="fragment">
@@ -138,11 +138,8 @@
 				<section>
 					<img class="plain" data-src="assets/Reiman2018_3.png" />
 				</section>
-			</section> -->
+			</section>
 <!--
-      			<section class="inverted" data-background="#000">
-      				<h2>Can we understand how a Neural Network solves an Inverse Problem?</h2>
-      			</section> -->
 
       			<section>
       				<section>
@@ -319,13 +316,13 @@
 							<h3 class="slide-title">welcome to...</h3>
 									<img data-src="assets/danger_zone.png" style="height: 600px;" />
 						</section>
-					</section>
+					</section> -->
 
             <section>
               <h3 class="slide-title">Focus of this talk</h3>
               <div class=container>
                 <div class="col">
-                  <div class="fig-container" data-file="venn.html" data-style="height: 500px;"></div>
+                  <div class="fig-container" data-file="venn.html" data-style="height: 600px;"></div>
                 </div>
 
                 <div class="col">
@@ -356,8 +353,169 @@
               </div>
             </section>
 
+						<section>
+              <h1>Generative Modeling</h1>
+							<h2>The Key to Manipulating Implicit Distributions</h2>
+						</section>
+
+
+
+						      			<section>
+						      				<section>
+						      					<h3 class="slide-title"> What is generative modeling?</h3>
+						      					<br>
+						      					<ul>
+						      						<li>The goal of generative modeling is to <b>learn an <b class="alert">implicit</b> distribution $\mathbb{P}$</b>
+						      							from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+						      						</li>
+						      						<br>
+						      						<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+						      							that tries to be close to $\mathbb{P}$.
+						      						</li>
+						      					</ul>
+
+						      					<br>
+						      					<div class="container">
+						      						<div class="col fragment fade-up">
+						      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+						      							<br>
+						      							True $\mathbb{P}$
+						      						</div>
+
+						      						<div class="col  fragment fade-up">
+						      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+						      							<br>
+						      							Samples $x_i \sim \mathbb{P}$
+						      						</div>
+
+						      						<div class="col  fragment fade-up">
+						      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+						      							<br>
+						      							Model $\mathbb{P}_\theta$
+						      						</div>
+						      					</div>
+						      					<br>
+						      					<br>
+						      					<ul>
+						      						<li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b> and/or <b class="alert">evaluate the likelihood $p_\theta(x)$</b>.
+						      						</li>
+						      					</ul>
+
+						      				</section>
+
+						      				<section>
+						      					<h3 class="slide-title">Why isn't it easy?</h3>
+						      					<br>
+						      					<ul>
+						      						<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+						      						</li>
+						      					</ul>
+						      					<div class="container">
+						      						<div class="col fragment fade-up">
+						      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+						      						</div>
+
+						      						<div class="col fragment fade-up">
+						      							<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+						      							<br>Distance between pairs of points drawn from a Gaussian distribution.
+						      						</div>
+						      					</div>
+
+						      					<br>
+						      					<ul>
+						      						<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+						      						</li>
+						      					</ul>
+						      				</section>
+						      			</section>
+
+						      			<section>
+						      				<h3 class="slide-title"> The evolution of generative models </h3>
+
+						      				<br> <br> <br>
+						      				<div class='container'>
+						      					<div class='col'>
+						      						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+						      							<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+						      							<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+						      							<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+						      							<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+						      						</div>
+						      					</div>
+
+						      					<div class='col'>
+						      						<ul>
+						      							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+						      							<br>
+						      							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+						      							<br>
+						      							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+						      							<br>
+						      							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+						      						</ul>
+						      					</div>
+						      				</div>
+						      				<br> <br> <br>
+						      			</section>
+
+						      			<section>
+						      				<h3 class="slide-title"> A visual Turing test </h3>
+						      				<div class="container">
+						      					<div class="col">
+						      						<img data-src="assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
+						      						<br>
+						      						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+						      					</div>
+						      					<div class="col">
+						      						<img data-src="assets/sdss5.png" class="plain" style="height: 500px;"></img>
+						      						<br>
+						      						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
+						      					</div>
+						      				</div>
+						      			</section>
+
+												<!-- <section data-vertical-align-top>
+													<h3 class="slide-title" >Not all generative models are created equal</h3>
+																<img data-src="assets/generative_models_table.png" class="plain"></img>
+											 						<div style="float:right; font-size: 20px">Grathwohl et al. 2018</div>
+														<br>
+														<br>
+													<ul>
+														<li> Of particular interest are models with an <b class="alert">explicit $\log p(x)$</b> (not the case of VAEs and GANs).</li>
+														<br>
+													</ul>
+												</section> -->
+
+		    <section>
+		       <h3 class="slide-title">Why are these generative models useful?</h3>
+
+					<b class="alert">Implicit distributions are everywhere!</b>
+					<br>
+					<br>
+					 <div class="container">
+						 <div class="col fragment">
+							 	<b>Case I</b>: Examples from data, no accurate physical model<br>
+							 	<img data-src="assets/real_gal-inv-small.png" style="height:400px;"/><br>
+									<div style="float:right; font-size: 20px">Mandelbaum et al. 2014</div>
+									<br>
+						 </div>
+
+						 <div class="col fragment">
+							 <b>Case II</b>: Physical model only available as a simulator<br>
+							 <img data-src='assets/convergence.png' style="height:400px;"/><br>
+								 <div style="float:right; font-size: 20px">Osato et al. 2020</div>
+								 <br>
+						 </div>
+					 </div>
+					 <br>
+					 <div class="fragment">$\Longrightarrow$ Generative models <b class="alert">will enable Bayesian inference</b> in cases where
+						 implicit distributions are involved.
+					 </div>
+	      </section>
+
             <section>
               <h1>Solving Inverse Problems</h1>
+							<h2>With hybrid physical/ml models</h2>
             </section>
 
             <section>
@@ -443,125 +601,11 @@
           					<h2>But what about this?</h2>
           				</section>
             </section>
-
+<!--
 			<section class="inverted" data-background="#000">
 				<h2> Can we learn a complex, high-dimensional prior distribution from examples?</h2>
 			</section>
-
-      			<section>
-      				<section>
-      					<h3 class="slide-title"> What is generative modeling?</h3>
-      					<br>
-      					<ul>
-      						<li>The goal of generative modeling is to <b>learn an <b class="alert">implicit</b> distribution $\mathbb{P}$</b>
-      							from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
-      						</li>
-      						<br>
-      						<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
-      							that tries to be close to $\mathbb{P}$.
-      						</li>
-      					</ul>
-
-      					<br>
-      					<div class="container">
-      						<div class="col fragment fade-up">
-      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
-      							<br>
-      							True $\mathbb{P}$
-      						</div>
-
-      						<div class="col  fragment fade-up">
-      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
-      							<br>
-      							Samples $x_i \sim \mathbb{P}$
-      						</div>
-
-      						<div class="col  fragment fade-up">
-      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
-      							<br>
-      							Model $\mathbb{P}_\theta$
-      						</div>
-      					</div>
-      					<br>
-      					<br>
-      					<ul>
-      						<li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b> and/or <b class="alert">evaluate the likelihood $p_\theta(x)$</b>.
-      						</li>
-      					</ul>
-
-      				</section>
-
-      				<section>
-      					<h3 class="slide-title">Why isn't it easy?</h3>
-      					<br>
-      					<ul>
-      						<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
-      						</li>
-      					</ul>
-      					<div class="container">
-      						<div class="col fragment fade-up">
-      							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
-      						</div>
-
-      						<div class="col fragment fade-up">
-      							<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
-      							<br>Distance between pairs of points drawn from a Gaussian distribution.
-      						</div>
-      					</div>
-
-      					<br>
-      					<ul>
-      						<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
-      						</li>
-      					</ul>
-      				</section>
-      			</section>
-
-      			<section>
-      				<h3 class="slide-title"> The evolution of generative models </h3>
-
-      				<br> <br> <br>
-      				<div class='container'>
-      					<div class='col'>
-      						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
-      							<img class="fragment current-visible plain" data-src="assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
-      							<img class="fragment current-visible plain" data-src="assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
-      							<img class="fragment current-visible plain" data-src="assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
-      							<img class="fragment plain" data-src="assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
-      						</div>
-      					</div>
-
-      					<div class='col'>
-      						<ul>
-      							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
-      							<br>
-      							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
-      							<br>
-      							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
-      							<br>
-      							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
-      						</ul>
-      					</div>
-      				</div>
-      				<br> <br> <br>
-      			</section>
-
-      			<section>
-      				<h3 class="slide-title"> A visual Turing test </h3>
-      				<div class="container">
-      					<div class="col">
-      						<img data-src="assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
-      						<br>
-      						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
-      					</div>
-      					<div class="col">
-      						<img data-src="assets/sdss5.png" class="plain" style="height: 500px;"></img>
-      						<br>
-      						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
-      					</div>
-      				</div>
-      			</section>
-
+ -->
   			<section>
   				<h3 class="slide-title">Getting started with Deep Priors: deep denoising example</h3>
   				$$ \boxed{{\color{Orchid} y}  = {\color{SkyBlue} x} + n} $$
@@ -597,7 +641,7 @@
   										</div>
   										</section>
 
-			<section>
+			<!-- <section>
 				<h2>Probabilistic Mapping of Dark Matter by<br> Neural Score Matching</h2>
 				<a href="https://arxiv.org/abs/2011.08271"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2011.08271-B31B1B.svg" class="plain" style="height:25px;" /></a>
 				<a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
@@ -621,9 +665,9 @@
 					</div>
 				</div>
 				<br>
-			</section>
+			</section> -->
 			<section>
-				<section data-background-image="assets/gravitational-lensing-diagram.jpg">
+				<!-- <section data-background-image="assets/gravitational-lensing-diagram.jpg">
 					<h3 class="slide-title"> Gravitational lensing</h3>
 					<div class="fragment fade-up">
 						<img class="plain" data-src="assets/great.jpg" />
@@ -642,10 +686,10 @@
 							</div>
 						</div>
 					</div>
-				</section>
+				</section> -->
 
 				<section>
-					<h3 class="slide-title">The Weak Lensing Mass-Mapping as an Inverse Problem</h3>
+					<h3 class="slide-title">Weak Lensing Mass-Mapping as an Inverse Problem</h3>
 					<div class="container">
 						<div class="col">
 							Shear <b class="alert">$\gamma$</b><br>
@@ -698,7 +742,7 @@
 					<div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior from simulation</b>,
 						and then <b class="alert">sample the full posterior</b>.</div>
           </section>
-
+<!--
 			<section>
 				<h3 class="slide-title">The score is all you need!</h3>
 				<br>
@@ -836,7 +880,7 @@
 
 			</section>
 
-			<section>
+			<section> -->
 				<!-- <section>
 					<h3 class="slide-title">Illustration on MassiveNuS simulations</h3>
 					<img data-src='assets/score_sims_results.png' />
@@ -882,12 +926,16 @@
 						</div>
 					</div>
 
-
 				</section>
 			</section>
 
 			<section>
 				<h3 class="slide-title">Probabilistic Mass-Mapping of the HST COSMOS field</h3>
+				<div class="container">
+					<div class="col">
+							<div style="float:right; font-size: 20px"> Remy, Lanusse, et al. (2020) <a href="https://arxiv.org/abs/2011.08271"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2011.08271-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+					</div>
+				</div>
 				<img data-src="assets/cosmos_massmap.png"></img>
 				<br>
 				<ul>
@@ -979,21 +1027,22 @@
 					</div>
 				</div>
 
-				<ul>
+				<!-- <ul>
 					<br>
 					<li class="fragment"> Neural Score Estimation is a <b class="alert">scalable approach</b> to learn a prior score.
 					</li>
 					<br>
 					<li class="fragment">We implemented the "ultimate mass-mapping method" <br>
 						$\Longrightarrow$ Recovered the best convergence map of the COSMOS field to date.</li>
-				</ul>
+				</ul> -->
 				<br>
 				<br>
 				<br>
 			</section>
 
       			<section>
-      				<h2>Likelihood-Free Inference</h2>
+      				<h1>Simulation-Based Inference</h1>
+							<h2>Leveraging Physical Simulators for Inference with Generative Modeling</h2>
       			</section>
 
       			<section>
@@ -1253,6 +1302,7 @@
 
 			<section>
 				<h1> Automatically Differentiable Physics </h1>
+				<h2> Or why you should care about autodiff</h2>
 			</section>
 
 
@@ -1598,6 +1648,56 @@
 									</section>
 
 
+												<section>
+													<h3 class='slide-title'>Back to forward modeling: the Hierarchical Bayesian Inference perspective</h3>
+
+													<div class='container'>
+														<div class='col'>
+															<ul>
+																<li> Instead of trying to analytically evaluate the likelihood,
+																	let us build a forward model of the observables.</li>
+																<br>
+																<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+																	cost of a <b>large number of latent variables</b>.
+																</li>
+															</ul>
+
+															<br>
+															<div class="fragment">
+																$\Longrightarrow$ How to peform efficient inference in this large number of dimensions?
+															</div>
+															<br>
+															<br>
+															<ul class="fragment"> A non-exhaustive list of methods:
+																<li> Hamiltonian Monte-Carlo
+																</li>
+																<li> Variational Inference
+																</li>
+																<li> MAP+Laplace
+																</li>
+																<li> Gold Mining
+																</li>
+																<li> Dimensionality reduction by Fisher-Information Maximization
+																</li>
+															</ul>
+															<br>
+															<br>
+															<div class="fragment">
+																What do they all have in common?<br>
+																-> They require fast, accurate, <b class="alert">differentiable</b> forward simulations
+															</div>
+														</div>
+
+														<div class='col'>
+
+															<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+																<img class="fragment current-visible plain" data-src="assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+																<img class="fragment plain" data-src="assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+																<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
+															</div>
+														</div>
+													</div>
+												</section>
 
       						<section>
       							<section>
@@ -1683,7 +1783,7 @@
 											</ul>
 										</section>
 
-										<section>
+										<!-- <section>
 											<h3 class="slide-title">Experiments</h3>
 											<div class="block ">
 												<div class="block-title">
@@ -1717,11 +1817,11 @@
 													$\Longrightarrow$ converges 40x faster than LBFGS.</li>
 											</ul>
 
-										</section>
+										</section> -->
 									</section>
 
 									<section>
-										<h2> Conclusion </h2>
+										<h1> Conclusion </h1>
 									</section>
 
 									<section>
