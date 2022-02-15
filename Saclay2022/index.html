@@ -1,0 +1,579 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Causeries du DAp sur l'IA</title>
+
+	<meta name="description" content="Causeries DAp">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Artificial Intelligence for Astrophysics</h1>
+						<h3>February 15th, 2022</h3>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://eiffl.github.io/talks/Saclay2022">eiffl.github.io/talks/Saclay2022</a> </div>
+				</div>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2> Why are we here today talking about AI?</h2>
+			</section>
+
+			<section>
+				<section data-background="assets/fig1w.png">
+				</section>
+
+				<section data-background="assets/fig1.png">
+				</section>
+
+				<section data-background="assets/hsc_illustration_tract.png">
+					<h3>WWAD: <span class="fragment">What Would an Astrophysicist Do ?</span></h3>
+					<div class="fragment fade-up">
+						<img data-src="assets/fig2.png" style="height: 525px;">
+						<div class="container">
+							<div class="col"> gri composite </div>
+							<div class="col"> g - $\alpha$ i </div>
+							<div class="col"> detected areas </div>
+							<div class="col"> HST images </div>
+						</div>
+						<div style="float:right; font-size: 20px;"> RingFinder (Gavazzi et al. 2014) </div>
+					</div>
+					<br>
+				</section>
+
+				<section>
+					<canvas data-chart="bar">
+						<!--
+											{
+											 "data": {
+											  "labels": ["CFHTLS"," DES", "LSST"],
+											  "datasets": [
+											   {
+											    "data":[220, 2400, 120000],
+											    "label":"Number of strong lenses","backgroundColor":"#374A67"
+											   },
+											   {
+											    "data":[75, 2500, 10000],
+											    "label":"Person-hour required for visual inspection [RingFinder]","backgroundColor":"#A63446"
+											   }
+											  ]
+											 },
+											 "options": { "responsive": "true",
+						        "scales": {
+						            "yAxes": [{
+						                "type": "logarithmic"
+						            }]
+						        }
+						 					}
+											}
+											-->
+					</canvas>
+					<div style="float:right; font-size: 20px">Gavazzi et al. (2014), Collett (2015)</div>
+					<br>
+					<div class="fragment fade-up">$\Longrightarrow$ Plainly intractable at the scale of LSST</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> The Deep Learning approach: Convolutional Neural Networks</h3>
+					<img data-src="assets/single_layer.png" class="plain"></img>
+				</section>
+
+				<section>
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; height:600px; margin:0 auto;">
+								<img height="600px" data-src="assets/deeplens.png" class="plain" style="position:absolute;top:0;left:200px;" />
+								<img height="600px" data-src="assets/candidates.png" class="plain fragment" style="position:absolute;top:200px;left:0;height:300px;" data-fragment-index="1" />
+							</div>
+
+							<br>
+							CMUDeepLens Architecture<br> (Lanusse et al. 2017)
+						</div>
+						<div class="col">
+							The Deep Learning approach in three steps:
+							<br>
+							<br>
+							<ul>
+								<li> <b>Step I</b>: Introduce a <b class="alert">parameteric function $f_\theta$</b>, this is your neural network. For images, choose a CNN.
+								</li>
+								<br>
+								<br>
+								<li class="fragment" data-fragment-index="1"> <b>Step II</b>: Create a <b class="alert">dataset $\mathcal{D}$</b> of examples $x_i$ and associated labels $y_i$:
+									$$\mathcal{D} = \{ (x_i, y_i) \}_{i \in [0, N]}$$
+								</li>
+								<br>
+								<li class="fragment"> <b>Step III</b>: <b class="alert">Optimize the parameters $\theta$</b> as to minimize an
+									appropriate loss function.<br> For classification, the binary cross
+									entropy:
+									$$\arg\min_\theta \sum_{i=1}^N y_i \log f_\theta(x_i) + (1 - y_i) \log f_{\theta}(x_i)$$
+								</li>
+							</ul>
+						</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">The Euclid strong-lens finding challenge</h3>
+					<div style="float:right; font-size: 20px">Metcalf, . . ., <b>Lanusse</b>, et al. (2018)</div>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img height=500 data-src="assets/ground_lenses.png"></img>
+						</div>
+						<div class="col">
+							<img height=500 data-src="assets/space_based.jpg"></img>
+						</div>
+					</div>
+
+				</section>
+				<section>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/roc_ground_small.png" class="plain" style="height: 250px;"></img>
+
+							<br>
+							<div class="fragment fade-up"> <b class="alert">Better accuracy than human visual inspection!</b></div>
+						</div>
+
+						<div class="col fragment">
+							<iframe src="https://giphy.com/embed/Ztzt8zhmmpVPUiSNMX" width="480" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+							<p><a href="https://giphy.com/gifs/theoffice-episode-13-the-office-tv-Ztzt8zhmmpVPUiSNMX">via GIPHY</a></p>
+						</div>
+					</div>
+
+					<div class="block fragment">
+						<div class="block-title">
+							A true paradigm shift
+						</div>
+						<div class="block-content">
+							<ul>
+								<li class="fragment"> <b>Before</b>: <b class="alert">Experts</b> would carefully craft image statistics they would expect a priori to be useful for their problem.</li>
+								<br>
+								<li class="fragment"> <b>After</b>: <b class="alert">Reframe the task as an optimization problem</b>, and let the optimization figure out how to solve the task </li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">The AI bubble</h3>
+
+					<div class="container">
+						<canvas data-chart="bar">
+							<!--
+								{
+								 "data": {
+									"labels": ["2012", "2013", "2014","2015", "2016" ,"2017", "2018", "2019", "2020", "2021"],
+									"datasets": [
+									 {
+										"data":[ 21, 15, 17, 22, 31, 71, 113, 231, 322, 476],
+										"label":"Deep Learning || CNN || Neural Network ","backgroundColor":"#A63446"
+									}
+									]
+								 },
+								 "options": { "responsive": "true",
+							"scales": {
+									"yAxes": [{
+											"type": "linear"
+									}]
+							}
+								}
+								}
+								-->
+						</canvas><br>
+					</div>
+					<div><b>astro-ph</b> abstracts mentioning <b>Deep Learning</b>, <b>CNN</b>, or <b>Neural Networks</b></div>
+				</section>
+
+				<!--
+
+
+				<section>
+					<h3 class="slide-title">Probabilistic Understanding of Deep Learning</h3>
+
+					Let's consider our Strong Lensing binary classification example:<br>
+					<br>
+					<ul>
+						<li class="fragment">You can think of our Neural Networks as <b class="alert">parameteric Conditional Density Distributions $q_\theta(y | x)$</b>:
+							$$ q_\theta(y=1 | x) = \mathrm{Bernoulli}(f_\theta(x))$$
+						</li>
+						<li class="fragment"> You can think of the training set as samples from the following model:
+							$$ (x, y) \sim p(x|y) p(y)$$
+						</li>
+
+						<li class="fragment">When we train under the binary cross-entropy loss, we are implicitly minimizing the Kullback–Leibler divergence between
+							$q_\theta(y | x)$ and $p(y | x)$
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/kl_divergence.gif" style="height:300px" />
+								</div>
+								<div class="col">
+									$\Longrightarrow$ In other words, <b class="alert">you are infering a Bayesian Posterior</b>.
+									<br>
+									<br>
+									<div class="fragment">
+										$\Longrightarrow$ Your training set defines your prior.
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</section> -->
+
+
+				<!-- <section>
+					<h3 class="slide-title" style="position:absolute;top:0;">An example of bad idea: Naive Image Deconvolution with a CNN</h3>
+					<br>
+					<br>
+
+					$ y = P \ast x + n $
+
+					<div class="container">
+
+						<div class="col">
+							<p> <b class="alert"> Observed $y$</b></p>
+							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<br>Ground-Based Telescope
+						</div>
+
+						<div class="col fragment fade-up" data-fragment-index='0'>
+							<p> <b class="alert">$f_\theta$</b> </p>
+							<img class="plain " data-src="assets/generic_network_inv.png" style="height: 250px; width:500px" />
+							<br>some deep Convolutional Neural Network
+						</div>
+
+						<div class="col">
+							<p><b class="alert"> Unknown $x$</b> </p>
+							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<br>Hubble Space Telescope
+						</div>
+					</div>
+					<br>
+					<br>
+					<ul>
+						<li class="fragment fade-up" data-fragment-index='0'> A standard approach would be to train a neural network $f_\theta$ to <b class="alert">estimate $x$ given $y$</b> on a dataset $\mathcal{D}=\{(x_i, yi)\}$.
+						</li>
+						<li class="fragment"> Is this a good idea?
+						</li>
+					</ul>
+				</section> -->
+
+				<!-- <section>
+					<h3 class="slide-title">Let's be critical for a minute</h3>
+					Is Strong Lens Finding a good application of Deep Learning?
+					<br>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/candidates.png" style="height:300px" />
+							<br> Training examples
+						</div>
+
+						<div class="col">
+							<img data-src="assets/ground_lenses.png" style="height:300px" />
+							<br> Example of real data
+						</div>
+					</div>
+				</section> -->
+			</section>
+
+			<section>
+				<section>
+					<h3 class='slide-title'>Selected examples of Deep Learning in Astrophysics</h3>
+
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li class="fragment" data-fragment-index="0"> <b>Classifying objects</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/1905.07424">Galaxy Zoo: Probabilistic Morphology through Bayesian CNNs and Active Learning,Walmsley et al. 2019</a>
+									</div>
+								</li>
+
+								<li class="fragment" data-fragment-index="1"> <b>Inferring object properties</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/1806.06607">Photometric redshifts from SDSS images using a Convolutional
+Neural Network, Pasquet et al. 2018</a>
+									</div>
+						   	</li>
+
+
+								<li class="fragment" data-fragment-index="2"> <b>Self-supervised Representation Learning</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/2110.13151">Self-supervised similarity search for large scientific datasets, Stein et al. 2021</a>
+									</div>
+								</li>
+
+
+								<li class="fragment" data-fragment-index="3"> <b>Solve inverse problems</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/2201.05561">Probabilistic Mass Mapping with Neural Score Estimation, Remy et al. 2022</a> </div>
+								</li>
+
+
+								<li class="fragment" data-fragment-index="4"> <b>Emulate costly physical models</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/1911.11778">SPECULATOR: Emulating stellar population synthesis for fast and accurate galaxy spectra and photometry, Alsing et al. 2020</a>  </div>
+								</li>
+
+
+								<li class="fragment" data-fragment-index="5"> <b>Accelerating numerical simulations</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/2010.06608"> AI-assisted super-resolution cosmological simulations, Li et al. 2021</a>
+								</li>
+
+
+								<li class="fragment" data-fragment-index="6"> <b>Enabling Simulation-Based Inference</b> <br>
+									<div style="font-size: smaller;"><a href="https://arxiv.org/abs/2009.08459">Likelihood-free inference with neural compression of DES SV weak lensing map statistics, Jeffrey et. al 2021</a> </div>
+								</li>
+
+							</ul>
+						</div>
+
+						<div class='col'>
+							<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="assets/walmsley2019.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+								<img class="fragment current-visible plain" data-src="assets/Pasquet2018.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1" />
+								<img class="fragment current-visible plain" data-src="assets/Stein2021.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2" />
+								<img class="fragment current-visible plain" data-src="assets/cropped.gif" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="3" />
+								<img class="fragment current-visible plain" data-src="assets/Alsing2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="4" />
+								<img class="fragment current-visible plain" data-src="assets/li2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="5" />
+								<img class="fragment plain" data-src="assets/jeffrey_s8.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="6" />
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		<section>
+		<section class="inverted" data-background="#000">
+			<h2> Will Deep Learning solve all our problems? </h2>
+		</section>
+
+			<section>
+				<h3 class="slide-title">Be careful to ask the right questions!</h3>
+						The most common pitfall: <b>Covariate Shift</b><br>
+						<img data-src="assets/covariate_shift.png" />
+						<br>
+						<br>
+						$\Longrightarrow$ The training data plays an integral part in the answer
+			</section>
+		</section>
+
+			<section>
+				<h3 class="slide-title"> Francois' set of interesting questions to discuss</h3>
+
+				<ul>
+					<li class="fragment"> Exponential <b>inflation of ML papers</b>: Bubble or the future of Astrophysics?
+						<br>
+							<ul>
+								<li> What are the perspectives for scientific discovery? What are we learning?
+								</li>
+							</ul>
+					</li>
+
+					<br>
+
+					<li class="fragment"> Integration of <b>Deep Learning in instruments and pipelines</b>.
+						<ul>
+							<li> Pretty far behind the industry in terms of standardisation on DL workflows
+							</li>
+						</ul>
+					</li>
+
+					<br>
+
+					<li class="fragment"> <b>Explainable AI</b>: Can we understand what a neural network is doing?
+						 	<ul>
+								<li> Do we care?
+								</li>
+							</ul>
+					</li>
+
+					<br>
+
+					<li class="fragment"> What are the real <b>difficult tasks</b>?
+						<ul>
+							<li> Uncertainty Quantification
+							</li>
+
+							<li> Robustness to covariate shifts, anomaly detection
+							</li>
+						</ul>
+					</li>
+
+					<br>
+
+					<li class="fragment"> What do I find the most interesting? <br>
+						$\Longrightarrow$ Hybrid Physical/Deep Learning Bayesian Modeling.
+					</li>
+
+					<br>
+
+				</ul>
+			</section>
+
+
+		</div>
+	</div>
+
+	<style>
+		/* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		} */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'faded',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>

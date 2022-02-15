@@ -100,3 +100,6 @@
 [submodule "Geneva2021/reveal.js"]
 	path = Geneva2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Saclay2022/reveal.js"]
+	path = Saclay2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
