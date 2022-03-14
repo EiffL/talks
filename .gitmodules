@@ -4,18 +4,12 @@
 [submodule "template/reveal.js"]
 	path = template/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "DPhP2021/reveal.js"]
-	path = DPhP2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
 [submodule "CMU2021/reveal.js"]
 	path = QtC2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
 [submodule "NYU2021/reveal.js"]
 	path = NYU2021/reveal.js
         url = https://github.com/EiffL/reveal.js.git
-[submodule "Geneva2021/reveal.js"]
-	path = Geneva2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
 [submodule "Saclay2022/reveal.js"]
 	path = Saclay2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
