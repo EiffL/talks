@@ -37,3 +37,6 @@
 [submodule "Saclay2022/reveal.js"]
 	path = Saclay2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Vienna2022/reveal.js"]
+	path = Vienna2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
