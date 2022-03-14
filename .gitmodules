@@ -31,41 +31,20 @@
 [submodule "Saclay2020/reveal.js"]
 	path = Saclay2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "Oxford2020/reveal.js"]
-	path = Oxford2020/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
 [submodule "KMI2020/reveal.js"]
 	path = KMI2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
 [submodule "ITA2020/reveal.js"]
 	path = ITA2020/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "DSM2020/reveal.js"]
-	path = DSM2020/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
-[submodule "UdeM2021/reveal.js"]
-	path = UdeM2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
 [submodule "Fermilab2021/reveal.js"]
 	path = Fermilab2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
-[submodule "Duke2021/reveal.js"]
-	path = Duke2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
 [submodule "Princeton2021/reveal.js"]
 	path = Princeton2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "AAS2021/reveal.js"]
-	path = AAS2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
-[submodule "SF2A2021/reveal.js"]
-	path = SF2A2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
 [submodule "DPhP2021/reveal.js"]
 	path = DPhP2021/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
-[submodule "UCL2021/reveal.js"]
-	path = UCL2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
 [submodule "CMU2021/reveal.js"]
 	path = QtC2021/reveal.js
