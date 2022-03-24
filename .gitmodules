@@ -106,3 +106,6 @@
 [submodule "Vienna2022/reveal.js"]
 	path = Vienna2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "LAM2022/reveal.js"]
+	path = LAM2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
