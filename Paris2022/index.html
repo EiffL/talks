@@ -636,7 +636,7 @@
 					      				</section>
 
 												<section>
-													<h3>Our method</h3>
+													<h3>Our strategy</h3>
 													<div class="block fragment">
 														<div class="block-title">
 															A two-steps approach to inference
@@ -1303,89 +1303,198 @@
 
 
 			<section>
-				<h3 class="slide-title"> The issue with Density Estimation by</h3>
+				<h3 class="slide-title"> The issue with Density Estimation by Negative Log Likelihood </h3>
 
 				<div class="container">
 					<div class="col">
-						<ul>
-							<li>There is a lot more information in the score than in the samples.</li>
-						</ul>
+
+							<img data-src="assets/NF_NLL.png"/>
+							<br>
+							Training a NF on two-moons by NLL with 64 samples
 					</div>
 					<div class="col">
 						<ul>
-							<li>We might want to regularize the score  </li>
+							<li>It requires a <b>lot of samples</b> for the model to <b>discover regularity</b> in $\log p(x)$.</li>
+
+							<br>
+
+							<li class="fragment"> <b class="alert">Direct issue for Simulation Based-Inference</b>, where the cost of each sample is high.</li>
+
+							<br>
+
+							<li class="fragment"><b>Inspiration</b>: State of the art generative models are actually based on learning the <b class="alert">score function</b>:
+								$$ \frac{d \log p(x)}{d x} $$
+							</li>
+
 						</ul>
 
 					</div>
 				</div>
+				<br>
+				<img class="fragment" data-src="assets/nde_score.png"/>
 
 			</section>
 
 
+			<section>
+				<h3 class="slide-title"> Can you train any Normalizing Flow by Score Matching?</h3>
+				<ul>
+					<li> Let us assume an analytic distribution with known score, and train $p_\theta(x)$ by Score Matching:
+						$$ \mathcal{L} = \mathbb{E}_{x \sim p} \left[ \left| \nabla_x \log p(x) - \nabla_x \log p_\theta(x) \right|^2 \right] $$
+					</li>
+				</ul>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/true_score.png"/> <br>
+						True distribution and score
+					</div>
+					<div class="col">
+						<img data-src="assets/two_moons_affine_score.png"/> <br>
+						Trained RealNVP and model score
+					</div>
+				</div>
+
+				<div class="altert fragment"> <b class="alert">Why?</b> The score of a RealNVP with affine coupling are trivial.
+					$$
+					 \left\{
+					    \begin{array}{ll}
+					    x_{1:d} &= z_{1:d} \\
+					    x_{d+1:D} &= a(z_{1:d}) \times z_{d+1:D} + b(z_{1:d})
+					    \end{array}
+					\right.
+					$$
+				 </div>
+			</section>
 
 
+			<section>
+				<h3 class="slide-title">Smooth Normalizing Flows</h3>
+				Adapted from <a href="https://arxiv.org/abs/2110.00351">Kohler et al. 2021</a>
+				<br>
+				<br>
+				<ul>
+					<li class="fragment"> <b>Key idea I</b>: Use $\mathcal{C}^\infty$ coupling layers
 
-									<section>
-										<h1> Conclusion </h1>
-									</section>
+$$
+ \left\{
+    \begin{array}{ll}
+    x_{1:d} &= z_{1:d} \\
+    x_{d+1:D} &= \sigma_{(a,b,c)}(z_{d+1:D})
+    \end{array}
+\right.
+$$
 
-									<section>
-										<h3 class="slide-title"> Conclusion </h3>
-										<div class="block ">
-											<div class="block-title">
-												Merging Deep Learning with Physical Models for Bayesian Inference
-											</div>
-											<div class="block-content">
-												$\Longrightarrow$ Makes <b>Bayesian inference possible</b> at scale and with non-trivial models!
-												<br>
-												<br>
-												<ul>
+with $\sigma(x) := c\cdot x +  \frac{1-c}{1+\exp({-\rho(x)})}$, $\rho(x) := a \cdot \left(\log\left(\frac{x}{1-x}\right) + b\right)$
+ and $a$, $b$, $c$ learned using a neural network.
+ <br>
+ <br>
+ <b class="alert">$\Longrightarrow$ Retains non-trivial and expressive gradients.</b> but is generally non-analytically invertible.
+	</li>
+
+	<br>
+	<br>
+	<br>
+
+		<li class="fragment"> <b>Key Idea II</b>: Use a numerical inverse for $\sigma^{-1}(x)$ and <b class="alert">implicit function theorem</b> to compute its gradient.<br>
+			<br>
+			$\Longrightarrow$ Computes inverse function and its gradients by solving a root-finding problem.
+		</li>
+	</ul>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Illustration of results on two-moons</h3>
+
+		<div class="container">
+			<div class="col">
+
+				<img data-src="assets/NF_NLL.png"/>
+				<br>
+				Training a NF on two-moons by NLL <br> with <b>64 samples</b>
+			</div>
+
+			<div class="col fragment">
+
+				<img data-src="assets/NF_NLL_Score.png"/>
+				<br>
+				Training a NF on two-moons by combined NLL and <b class="alert">Score Matching</b> losses with <b>64 samples</b>
+			</div>
+		</div>
+
+<br>
+<br>
+		<ul>
+			<li class="fragment"> <b>Why is it interesting?</b> In my free time I love to recode cosmology codes in Jax, i.e. with accessible gradients<br>
+				<a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo">jax-cosmo: Differentiable Cosmology Library</a><br>
+				<a href="https://github.com/DifferentiableUniverseInitiative/jaxPM">JaxPM: Differentiable Particle-Mesh Library prototype</a>
+			</li>
+			<br>
+			<li class="alert fragment"> See Justine's talk tomorrow for application to Simulation Based-Inference!</li>
+		</ul>
 
 
-												<li class="fragment"> Complement known physical models with data-driven components
-													<ul>
-														<li>Use data-driven generative model as prior for solving inverse problems.</il>
-													</ul>
-													</il>
-													<br>
-
-													<li class="fragment"> Enables inference in high dimension from numerical simulators.
-														<ul>
-															<li>Automagically construct summary statistics.</li>
-															<li>Provides the density estimation tools needed.</li>
-														</ul>
-														</il>
-														<br>
+	</section>
 
 
+		<section>
+			<h1> Conclusion </h1>
+		</section>
 
-													<li class="fragment"> Differentiable physical models for fast inference
-														<ul>
-															<li> Differentiability enables Bayesian inference over large scale simulations.</li>
-															<li> Models can directly be embedded alongside deep learning components.</li>
-														</ul>
-													</li>
-													<br>
-												</ul>
-											</div>
-										</div>
-										<br>
+		<section>
+			<h3 class="slide-title"> Conclusion </h3>
+			<div class="block ">
+				<div class="block-title">
+					Deep Generative Models for Manipulating Implicit Distributions
+				</div>
+				<div class="block-content">
+					$\Longrightarrow$ Makes <b>Bayesian inference possible</b> without explicit likelihoods to <b>make the most of the data</b>.
+					<br>
+					<br>
+					<ul>
 
-										<br>
-										<p class="fragment">Thank you ! </p>
-										<br> <br> <br>
-									</section>
+
+						<li class="fragment"> Enables inference from numerical simulators.
+							<ul>
+								<li>Automagically construct summary statistics.</li>
+								<li>Provides the density estimation tools needed.</li>
+							</ul>
+							</il>
+							<br>
+
+
+						<li class="fragment"> Complement known physical models with data-driven components
+							<ul>
+								<li>Use data-driven generative model as prior for solving inverse problems.</il>
+							</ul>
+							</il>
+							<br>
+					</ul>
+				</div>
+			</div>
+			<br>
+
+			<div class="fragment">
+			<b>Free advertisement:</b><br><br>
+			<ul>
+				<li> Make sure to <b>check out Benjamin Remy and Justine Zhegal talks tomorrow</b>.</li>
+				<li class="fragment"> <a href="https://ml4astro.github.io/icml2022/">ICML 2022 Workshop on Machine Learning for Astrophysics</a>, extended abstract submission deadline May 23rd.</li>
+			</ul>
+		</div>
+			<br>
+			<p class="fragment">Thank you ! </p>
+			<br> <br> <br>
+		</section>
 
 		</div>
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}
+		} */
 
 		.reveal .block {
 			background-color: #191919;
