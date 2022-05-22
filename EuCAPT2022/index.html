@@ -1,64 +1,272 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Template presentation</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<meta name="description" content="A basic template to start a new talk">
-		<meta name="author" content="Francois Lanusse">
+	<title>Inference Techniques for Physical Forward Modeling</title>
 
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="description" content="EuCAPT Symposium 2022, May 23rd 2022">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
 
-		<link rel="stylesheet" href="reveal.js/css/reset.css">
-		<link rel="stylesheet" href="reveal.js/css/reveal.css">
-		<link rel="stylesheet" href="reveal.js/css/theme/darkenergy.css">
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="reveal.js/lib/css/monokai.css">
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-iframe="background.html">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Inference Techniques for Physical Forward Modeling</h1>
+						<h2>EuCAPT Symposium, May 23rd 2022</h2>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://eiffl.github.io/EuCAPT2022">eiffl.github.io/EuCAPT2022</a> </div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class='slide-title'> The limits of traditional cosmological inference </h3>
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+							<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
+							<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+						</div>
+						<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+							<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+								<img class="plain" data-src="assets/alonso_g1.png" />
+								<img class="plain" data-src="assets/alonso_g2.png" />
+							</div>
+							<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+							<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+						</div>
+						<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
+								$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+								$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="block fragment">
+					<div class="block-title">
+						Main limitation: the need for an explicit likelihood
+					</div>
+					<div class="block-content">
+						We can only compute the likelihood for <b class="alert">simple summary statistics</b> and on <b class="alert">large scales</b>
+						<br>
+						<br>
+						<div class="fragment"> $\Longrightarrow$ We are dismissing a large amount of information! </div>
+					</div>
+				</div>
+			</section>
+
+      <section>
+				<h3 class='slide-title'>A different road: forward modeling</h3>
+
+				<div class='container'>
+					<div class='col'>
+						<ul>
+							<li> Instead of trying to analytically evaluate the likelihood,
+								let us build a forward model of the observables.</li>
+							<br>
+						</ul>
+						<br>
+						<br>
+						<br>
+						<div class="fragment">
+							$\Longrightarrow$ How to peform efficient inference using a <b class="alert">simulator as our physical model</b>?
+						</div>
+						<br>
+						<br>
+						<br>
+						<br>
+
+						<ul class="fragment"> You have two approaches:
+							<li> Open-box simulator: Hierarchical Bayesian Inference
+							</li>
+							<br>
+							<li class="fragment grow"> Black-box simulator: Likelihood-Free Inference
+							</li>
+						</ul>
+					</div>
+
+					<div class='col'>
+
+						<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+							<img class="plain" data-src="assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+						</div>
+					</div>
+				</div>
+			</section>
+
+
 		</div>
+	</div>
 
-		<script src="reveal.js/js/reveal.js"></script>
+	<style>
+		.reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		}
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				center: true,
-				hash: true,
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
 
-				dependencies: [
-					{ src: 'reveal.js/plugin/markdown/marked.js' },
-					{ src: 'reveal.js/plugin/markdown/markdown.js' },
-					{ src: 'reveal.js/plugin/notes/notes.js', async: true },
-					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true }
-				]
-			});
-		</script>
-	</body>
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+			autoPlayMedia: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
 </html>
