@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Simple venn.js example</title>
+<style>
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 24px;
+}
+</style>
+</head>
+
+<body>
+    <div id="venn"></div>
+</body>
+
+<script src="reveal.js/js/d3.v3.min.js"></script>
+<script src="reveal.js/js/venn.js"></script>
+<script>
+// define sets and set set intersections
+var sets = [ {sets: ['Physics'], size: 12},
+             {sets: ['Deep Learning'], size: 12},
+             {sets: ['Uncertainty Quantification'], size: 12},
+             {sets: ['Physics','Deep Learning'], size: 2},
+             {sets: ['Physics','Uncertainty Quantification'], size: 2},
+             {sets: ['Deep Learning','Uncertainty Quantification'], size: 2},
+             {sets: ['Deep Learning','Uncertainty Quantification', 'Physics'], size: 1},
+            ];
+
+var chart = venn.VennDiagram()
+                 .width(550)
+                 .height(550);
+d3.select("#venn").datum(sets).call(chart);
+
+var div = d3.select("#venn");
+
+div.selectAll("path")
+    .style("stroke-opacity", 0)
+    .style("stroke", "#fff")
+    .style("stroke-width", 3)
+
+var tooltip = d3.select("body").append("div")
+    .attr("class", "venntooltip");
+
+div.selectAll("g")
+    .on("mouseover", function(d, i) {
+        // sort all the areas relative to the current item
+        venn.sortAreas(div, d);
+
+        // highlight the current path
+        var selection = d3.select(this).transition("tooltip").duration(400);
+        selection.select("path")
+            .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+            .style("stroke-opacity", 1);
+    })
+    .on("mousemove", function() {
+    tooltip.style("left", (d3.event.pageX) + "px")
+           .style("top", (d3.event.pageY - 28) + "px");
+    })
+    .on("mouseout", function(d, i) {
+        var selection = d3.select(this).transition("tooltip").duration(400);
+        selection.select("path")
+            .style("stroke-width", 3)
+            .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+            .style("stroke-opacity", 0);
+    });
+
+    var _transitions = [
+    {
+      transitionForward: function() {
+
+        var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification_Physics"]').transition("tooltip").duration(400);
+        selection.selectAll('path')
+            .style("stroke-opacity", 1)
+            .style("stroke-width", 3)
+            .style("fill-opacity", 0.4)
+      },
+      transitionBackward:  function() {
+        var selection = div.selectAll('g').transition("tooltip").duration(400);
+        selection.selectAll('path')
+            .style("stroke-width", 3)
+            .style("fill-opacity", .0)
+            .style("stroke-opacity", 0);
+      } ,
+    },
+
+
+
+
+  ]
+
+</script>
+</html>
