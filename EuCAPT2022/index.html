@@ -100,39 +100,6 @@
 			</section>
 
 			<section>
-					<h3 class="slide-title">We need to rethink all stages of data analysis</h3>
-
-					<div class="r-stack">
-						<div class="fragment current-visible" data-fragment-index="0">
-							<img data-src="assets/hsc_shredded.png" style="height:400px;"/><br>
-							<div class="fragment" data-fragment-index="0" style="float:right; font-size: 20px">Bosch et al. 2017</div>
-						</div>
-
-						<div class="fragment current-visible" data-fragment-index="1">
-							<img data-src="assets/deepmass_sims_clean.png" style="height:400px;"/><br>
-							<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">Jeffrey, <b>Lanusse</b>, et al. 2020</div>
-						</div>
-
-						<div class="fragment" data-fragment-index="2">
-							<img  data-src="assets/ScatteringTransform.png" style="height:400px;"/> <br>
-							<div class="fragment" data-fragment-index="2" style="float:right; font-size: 20px">Cheng et al. 2020</div>
-						</div>
-					</div>
-					<ul>
-						<li class="fragment" data-fragment-index="0">Galaxies are no longer blobs.</li>
-						<li class="fragment" data-fragment-index="1">Signals are no longer Gaussian.</li>
-						<li class="fragment" data-fragment-index="2">Cosmological likelihoods are no longer tractable.</li>
-					</ul>
-					<br>
-					<br>
-					<div class="fragment">$\Longrightarrow$ This is the <b class="alert">end of the analytic era</b>...</div>
-				</section>
-
-
-
-
-
-			<section>
 			<section>
 				<h3 class='slide-title'> The limits of traditional cosmological inference </h3>
 				<div class='container'>
@@ -178,17 +145,43 @@
 					</div>
 				</div>
 			</section>
+
+	<section>
+			<h3 class="slide-title">A visual illustration of the impact of analytic assumptions</h3>
+
+			<div class="r-stack">
+
+				<div>
+					<img data-src="assets/deepmass_sims_clean.png" style="height:400px;"/><br>
+					<div style="float:right; font-size: 20px">Jeffrey, <b>Lanusse</b>, et al. 2020</div>
+				</div>
+
+			</div>
+			<br>
+			<ul>
+				<li class="fragment">Cosmological signals exhibit significant departures from Gaussianity.</li>
+			</ul>
+			<br>
+			<br>
+			<div class="fragment">$\Longrightarrow$ This is the <b class="alert">end of the analytic era</b>...</div>
 		</section>
 
 
+
+		</section>
+
+
+		<section>
 		<section>
 			<h3 class='slide-title'>A different road: forward modeling</h3>
 
 			<div class='container'>
 				<div class='col'>
 					<ul>
-						<li> Instead of trying to analytically evaluate the likelihood,
-							let us build a forward model of the observables.</li>
+						<li> Instead of trying to analytically evaluate the likelihood $p(x | \theta)$,
+							let us build a forward model of the observables.<br>
+							$\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
+						</li>
 						<br>
 						<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
 							cost of a <b>large number of latent variables</b>.
@@ -198,18 +191,29 @@
 					<br>
 					<br>
 
-				<div class="block fragment">
-					<div class="block-title">
-						The Challenge of Simulation-Based Inference
+					<div class="block fragment">
+						<div class="block-title">
+							Benefits of a forwrard modeling approach
+						</div>
+						<div class="block-content">
+
+							<ul>
+								<li> No assumpmtion/approximation of Gaussianity of summary statistics, no need to compute covariances.
+								</li>
+
+
+								<li> Fully exploits the information content of the data
+									(aka "full field inference").
+								</li>
+
+								<li> Easy to incorporate systematic effects.
+								</li>
+
+								<li> Easy to combine mulitple probes by joint simulations.
+								</li>
+							</ul>
+						</div>
 					</div>
-					<div class="block-content">
-						$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
-						Where $z$ are the <b>latent variables</b> of the simulator.
-						<br>
-						<br>
-						$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>!
-					</div>
-				</div>
 				</div>
 
 				<div class='col'>
@@ -223,36 +227,135 @@
 			</div>
 		</section>
 
-		<section class="inverted" data-background="#000">
-			<h2>
-			How to perform efficient inference over forward simulation models?</h2>
+		<section>
+			<h3 class="slide-title">...so why is this not mainstream?</h3>
+				<img class="plain" data-src="assets/lfi_sim.png" style="width:1000px;"/>
+
+					<div class="r-stack">
+
+						<img class="plain fragment" data-src="assets/plot_massive_nu.png" style="width:1000px;"/>
+
+
+							<div class="block fragment">
+								<div class="block-title">
+									The Challenge of Simulation-Based Inference
+								</div>
+								<div class="block-content">
+									$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
+									Where $z$ are <b>stochastic latent variables</b> of the simulator.<br>
+									$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>! Hence the phrase <b>"Likelihood-Free Inference"</b>
+								</div>
+							</div>
+
+						</div>
+		</section>
 		</section>
 
 		<section>
 			<h3 class="slide-title"> Outline for this talk</h3>
-			<ul>
-				<li> Neural Density Estimation for Simulation-Based Inference
-				</li>
 
-				<li> Hierarchical Bayesian Inference
-				</li>
-			</ul>
+					<br>
+					<br>
+
+							<div class="block fragment">
+								<div class="block-title">
+									How to perform efficient inference over forward simulation models?
+								</div>
+								<div class="block-content">
+									<br>
+									<ul>
+										<li class="fragment grow"> <b>Likelihood-Free Inference</b>: Treat the simulator as a black-box
+											<ul>
+												<li> Neural Density Estimation
+												</li>
+												<li> Dimensionality Reduction
+												</li>
+											</ul>
+										</li>
+
+										<br>
+										<br>
+
+										<li class="fragment grow"> <b>Hierarchical Bayesian Inference</b>: Treat the simulator as a probabilistic model
+											<ul>
+												<li> Neural Density Estimation
+												</li>
+												<li> Dimensionality Reduction
+												</li>
+											</ul>
+										</li>
+										<br>
+									</ul>
+
+								</div>
+							</div>
 		</section>
 
 
 		<section>
-			<h2>Neural Density Estimation for <br> Simulation-Based Inference</h2>
+			<h2>Likelihood-Free approach to <br> Simulation-Based Inference</h2>
 		</section>
 
+
+		<section>
 	 	<section>
 			<h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
-			<img class="plain" data-src="assets/lfi_sim.png" style="width:1000px;"/>
+			<img class="plain" data-src="assets/lfi_sim.png" style="width:750px;"/>
 			<ul>
-				<li>Consider the simulator as a <b>black-box</b>, it defines $p(x | \theta)$ as an <b class="alert">implicit distribution</b><br>
-					$\Longrightarrow$ You can <b>sample from it</b> but you cannot evaluate it.
+				<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
 				</li>
-				<br>
+				<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_\varphi$ to approximate the implicit distribution $\mathbb{P}$</b>.
+				</li>
 			</ul>
+
+			<div class="container">
+				<div class="col fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					True $\mathbb{P}$
+				</div>
+
+				<div class="col  fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					Samples $x_i \sim \mathbb{P}$
+				</div>
+
+				<div class="col  fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					Model $\mathbb{P}_\varphi$
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Why isn't it easy?</h3>
+			<br>
+			<ul>
+				<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+				</li>
+			</ul>
+			<div class="container">
+				<div class="col fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+				</div>
+
+				<div class="col fragment fade-up">
+					<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+					<br>Distance between pairs of points drawn from a Gaussian distribution.
+				</div>
+			</div>
+
+			<br>
+			<ul>
+				<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Deep Learning Approaches to Likelihood-Free Inference</h3>
 
 			<div class="block fragment">
 				<div class="block-title">
@@ -280,6 +383,10 @@
 				</div>
 			</div>
 		</section>
+		</section>
+
+
+
 
 		<section>
 		<section>
@@ -345,12 +452,16 @@
 
 		<section>
 			<h3 class="slide-title">A variety of algorithms</h3>
+			<div style="float:right; font-size: 20px">Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021) <a href="https://arxiv.org/abs/2101.04653"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg" class="plain"
+						style="height:25px;vertical-align:middle;" /></a></div>
 			<img class="plain" data-src="assets/sbibm_comparison.png"/>
+
 			<br>
 			<br>
 				A few important points:
+				<br><br>
 				<ul>
-					<li> <b>Amortized</b> inference methods can greatly speed up posterior estimation once trained.
+					<li> <b>Amortized</b> inference methods, which estimate $p(\theta | x)$, can greatly speed up posterior estimation once trained.
 					</li>
 					<br>
 
@@ -364,10 +475,9 @@
 			<section>
 				<h3 class="slide-title">Automated Summary Statistics Extraction</h3>
 		      <img class="plain" data-src="assets/lfi_sim_sum.png" />
-
 					<ul>
 						<li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
-							data while preserving cosmological information</b>.
+							data while preserving information</b>.
 						</li>
 					</ul>
 					<div class="container">
@@ -376,9 +486,11 @@
 								<img class="plain fragment current-visible"  data-fragment-index="0"  data-src="assets/mutual_information.png" />
 								<img class="plain fragment" data-fragment-index="1"  data-src="assets/imnn.png" />
 							</div>
+							<div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+									style="height:20px;vertical-align:middle;" /></a></div>
+
 						</div>
 						<div class="col">
-
 										<div class="block fragment" data-fragment-index="0">
 											<div class="block-title">
 												Information-based loss functions
@@ -387,52 +499,22 @@
 												<ul>
 													<li class="fragment" data-fragment-index="0" > Variational Mutual Information Maximization
 									      			$$ \mathcal{L} \ = \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | f_\varphi(x)) ] \leq  I(Y; \Theta) $$
-													</li>
 
+															<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+																		style="height:20px;vertical-align:middle;" /></a></div>
+													</li>
+													<br><br>
 													<li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
-														$$\mathcal{L} \ = \ - | \det \mathbf{F} |$$
+														$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+														<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+																style="height:20px;vertical-align:middle;" /></a></div>
 													</li>
 												</ul>
-
 											</div>
 										</div>
-
 						</div>
 					</div>
 			</section>
-
-
-									<!-- <section>
-										<h3 class="slide-title">Learning summary statistics by Variational Mutual Information Maximization</h3>
-										<br>
-										<br>
-										<div class="container">
-
-											<div class="col">
-												<img class="plain" data-src="assets/mutual_information.png" />
-											</div>
-
-											<div class="col">
-												<ul>
-													<li> Mutual information between $X$ and $Y$:
-														<blockquote>
-															&ldquo;"amount of information" obtained about one random variable through observing the other random variable&rdquo;
-														</blockquote>
-													</li>
-													<br>
-													<li class="fragment">Given a parametric summarizing function $y = f_\phi(\kappa(\theta))$
-														<b class="alert">optimizing $f_\phi$ can be done by maximizing $I(y, \theta)$</b>.
-													</li>
-													<br>
-													<li class="fragment">In practice, $f_\phi$ is a CNN, trained to maximize a
-														variational lower bound on the mutual information:
-														$$ I(y ; \theta) \ \ge \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | y) ] + H(\Theta) $$
-													</li>
-												</ul>
-											</div>
-										</div>
-									</section> -->
-
 
 		</section>
 
@@ -545,6 +627,46 @@
 						</section>
 					</section>
 
+		<section>
+			<h3 class="slide-title"> Main takeaways</h3>
+
+			<br>
+			<br>
+
+			<ul>
+				<li> This approach <b>automatizes cosmological inference</b>
+						<ul>
+							<li> Turns the summary extraction and inference problems into an <b class="alert">optimization problems</b>
+							</li>
+							<br>
+						</ul>
+				</li>
+
+				<br>
+
+				<li class="fragment"> If neural networks fail, inference will be <b class="alert">sub-optimal but not necessarily biased</b>.
+				</li>
+
+				<br>
+				<br>
+				<br>
+
+
+				<li class="fragment"> Some resources and links:
+					<ul>
+						<li> Review on Simulation-Based Inference: <a href="https://arxiv.org/abs/1911.01429">Cranmer, Brehmer, Louppe (2020) </a>
+
+						<li> Recent full $w$CDM Likelihood-Free Inference constraints on DES Y3: <a href="https://arxiv.org/abs/2201.07771">Fluri, Kacprzak, Lucchi, Schneider, Refregier, Hofmann (2022)</a>
+
+						<li> Simulation Based Inference packages: <a href="https://www.mackelab.org/sbi/">sbi</a>, <a href="https://github.com/justinalsing/pydelfi">pydelfy</a>, <a href="https://github.com/tomcharnock/IMNN">Information Maximizing Neural Networks</a></li>
+					</ul>
+
+				</li>
+			</ul>
+
+
+		</section>
+
 
 	 <!-- Hierarchical Bayesian Inference
 	 		- This time we treat the entire simulator as one big bayesian model
@@ -555,7 +677,7 @@
   	-->
 
 		<section>
-			<h2>Hierarchical Bayesian Inference</h2>
+			<h2>Hierarchical Bayesian Inference<br> approach to Simulation-Based Inference</h2>
 		</section>
 
 			<section>
@@ -570,31 +692,21 @@
 
 					<br>
 
-					<li> We need to infer the joint posterior $p(\theta, z | x)$ before marginalization to
+					<li class="fragment"> We need to infer the joint posterior $p(\theta, z | x)$ before marginalization to
 						yield $p(\theta | x) = \int p(\theta, z | x) dz$.<br>
 						$\Longrightarrow$ Extremely difficult problem as <b>$z$ is typically very high-dimensional</b>.
 					</li>
 
 					<br>
 
-					<li> Necessitates inference strategies with access to gradients of the likelihood.
+					<li class="fragment"> Necessitates inference strategies with access to gradients of the likelihood.
 						$$\frac{d \log p(x | z, \theta)}{d \theta} \quad ; \quad \frac{d \log p(x | z, \theta)}{d z}  $$
-
+						For instance: Maximum A Posterior estimation, Hamiltonian Monte-Carlo, Variational Inference.
 					</li>
 					<br>
 				</ul>
 			</section>
-
-			<section>
-				<h3 class="slide-title"> A few techniques for high-dimensional inference</h3>
-
-				<ul>
-					<li> </li>
-
-					<li> </li>
-				</ul>
-			</section>
-		</section>
+</section>
 
 		<section>
 			<h3 class="slide-title">the hammer behind the Deep Learning revolution: Automatic Differentation</h3>
@@ -638,170 +750,60 @@
 					</div>
 		</section>
 
-
-												<section>
-													<h3 class='slide-title'>Back to forward modeling: the Hierarchical Bayesian Inference perspective</h3>
-
-													<div class='container'>
-														<div class='col'>
-															<ul>
-																<li> Another approach to using simulations is to consider them as large <b class="alert">Hierarchical Bayesian Models</b>.</li>
-																<br>
-																<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
-																	cost of a <b>large number of latent variables</b>.
-																</li>
-															</ul>
-
-															<br>
-															<div class="fragment">
-																$\Longrightarrow$ How to peform efficient inference in this large number of dimensions?
-															</div>
-															<br>
-															<br>
-															<ul class="fragment"> A non-exhaustive list of methods:
-																<li> Hamiltonian Monte-Carlo
-																</li>
-																<li> Variational Inference
-																</li>
-																<li> MAP+Laplace
-																</li>
-																<li> Gold Mining
-																</li>
-																<li> Dimensionality reduction by Fisher-Information Maximization
-																</li>
-															</ul>
-															<br>
-															<br>
-															<div class="fragment">
-																What do they all have in common?<br>
-																-> They require fast, accurate, <b class="alert">differentiable</b> forward simulations
-															</div>
-														</div>
-
-														<div class='col'>
-
-															<div style="position:relative; width:600px; height:600px; margin:0 auto;">
-																<img class="fragment current-visible plain" data-src="assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
-																<img class="fragment plain" data-src="assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
-																<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
-															</div>
-														</div>
-													</div>
-												</section>
+			<section class="inverted" data-background="#000">
+				<h2>Surely this won't scale to cosmological simulations!</h2>
+			</section>
 
 
-															<section class="inverted" data-background="#000">
-																<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
-															</section>
+				<section>
+					<h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
+					<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
 
-															<section>
-																<h3 class='slide-title'>Forward Models in Cosmology</h3>
-																<div class="container">
-																	<div class='col'>
-																		<img data-src="assets/fieldinit.png" class="plain" style="height:300px;" />
-																		<b class="alert"> Linear Field </b>
-																	</div>
-																	<div class='col fragment' data-fragment-index='2'>
-																		<img data-src="assets/fieldfin.png" class="plain " style="height:300px;" />
-																		<b class="alert"> Final Dark Matter </b>
-																	</div>
-																	<hr style="width: 1px; height: 400px; background: white; border: none;" />
-																	<div class='col fragment' data-fragment-index='3'>
-																		<img data-src="assets/fieldhalo.png" class="plain " style="height:300px;" />
-																		<b class="alert"> Dark Matter Halos </b>
-																	</div>
-																	<div class='col fragment' data-fragment-index='4'>
-																		<img data-src="assets/fieldgal.png" class="plain " style="height:300px;" />
-																		<b class="alert"> Galaxies </b>
-																	</div>
-																</div>
-																<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
-																	<div class='col fragment' data-fragment-index='2'>
-																		<font size="10"> $\longrightarrow$ </font> <br>
-																		<div class="fragment grow" data-fragment-index='5'>N-body simulations </div>
-																	</div>
-																	<div class='col fragment' data-fragment-index='3'>
-																		<font size="10"> $\longrightarrow$ </font> <br> Group Finding <br> algorithms
-																	</div>
-																	<div class='col fragment' data-fragment-index='4'>
-																		<font size="10"> $\longrightarrow$ </font> <br> Semi-analytic &amp <br> distribution models
-																	</div>
-																	<!-- 		<div class='fragment' data-fragment-index='2'> N-body simulations <div> -->
-																	<!-- <div class='fragment' data-fragment-index='3'> Group Finding algorithms <div> -->
-																	<!-- <div class='fragment' data-fragment-index='4'> Semi-analytic models <div> -->
-																</div>
-															</section>
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li>The numerical scheme:
+									<br>
+									<br>
+									<ul>
+										<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
+											=> compute gravitational forces by FFT
+										</li>
 
-															<section>
-																<h3 class='slide-title'>You can try to learn the simulation...</h3>
-																<div style="float:right; font-size: 25px">Learning particle displacement with a UNet. S. He, et al. (2019)</div><br><br>
+										<br>
 
-																<img data-src="assets/Model-Comparison.jpg" style="height:400px;" />
+										<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
+										</li>
 
-																<div class="block fragment">
-																	<div class="block-title">
-																		The issue with using deep learning as a <i>black-box</i>
-																	</div>
-																	<div class="block-content">
-																		<ul>
-																			<li> No guarantees to work outside of training regime.
-																			</li>
-																			<li> No guarantees to capture dependence on cosmology accurately.
-																			</li>
-																		</ul>
-																	</div>
-																</div>
-															</section>
+										<br>
 
-															<section>
-																<h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
-																<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+										<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
+										</li>
+									</ul>
+								</li>
+								<br>
 
-																<div class='container'>
-																	<div class='col'>
-																		<ul>
-																			<li>The numerical scheme:
-																				<br>
-																				<br>
-																				<ul>
-																					<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
-																						=> compute gravitational forces by FFT
-																					</li>
+								<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
+								</li>
 
-																					<br>
+							</ul>
+						</div>
 
-																					<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
-																					</li>
+						<div class='col'>
 
-																					<br>
+							<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+								<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+								<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+								<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
 
-																					<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
-																					</li>
-																				</ul>
-																			</li>
-																			<br>
+							</div>
 
-																			<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
-																			</li>
+						</div>
+					</div>
 
-																		</ul>
-																	</div>
-
-																	<div class='col'>
-
-																		<div style="position:relative; width:550px; height:550px; margin:0 auto;">
-																			<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
-																			<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
-																			<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
-																			<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
-
-																		</div>
-
-																	</div>
-																</div>
-
-																<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
-															</section>
+					<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
+				</section>
 
 
 													<section>
@@ -957,8 +959,6 @@
 				      								</div>
 				      							</section>
 
-
-
 																		<section>
 																			<h3 class='slide-title'>Example use-case: Baryon Acoustic Oscillations </h3>
 
@@ -999,36 +999,259 @@
 																				</div>
 																			</div>
 																			<br><br>
-
 																		</section>
-
-
 				      						</section>
 
-
-
 		<section>
-			<h3 class="slide-title">Fast and differentiable simulations of the Large-Scale Structure</h3>
+			<h3 class="slide-title"> Example of cosmological constraints on proof of concept: BORG-WL</h3>
+			<div class="container">
+				<div class="col">
+					<div style="float:right; font-size: 20px"> Porqueres, Heavens, Mortlock, Lavaux (2021)
+						<a href="https://arxiv.org/abs/2108.04825"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2108.04825-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+				</div>
+			</div>
 
-			<ul>
-				<li> FlowPM</li>
-				<li> MadLens </li>
-				<li> Borg </li>
-			</ul>
-		</section>
-
-
-		<section>
-			<h3 class="slide-title"> Example of application: BORG-WL</h3>
 				<div class="container">
 					<div class="col">
 						<img data-src="assets/porqueres_2.png"/>
 					</div>
 
 					<div class="col">
-						<img data-src="assets/porqueres_3.png"/>
+						<div class="r-stack">
+						<img data-src="assets/porqueres_1.png"/>
+						<img class="fragment" data-src="assets/porqueres_3.png"/>
+						</div>
 					</div>
 				</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title"> Main takeaways</h3>
+			<br>
+			<br>
+
+			<ul>
+				<li> This approach <b>extends traditional inference</b> to large scale problem
+						<ul>
+							<li> It requires a simulator implemented in a framework in which you have <b class="alert">access to gradients</b>, and <b class="alert">tracking of all latent variables</b>.
+							</li>
+							<br>
+						</ul>
+				</li>
+
+				<br>
+
+				<li class="fragment"> In <b>theory</b> optimal, but high-dimensional inference remains very hard.</b>
+				</li>
+
+				<br>
+				<br>
+				<br>
+
+				<li class="fragment"> Some resources and links:
+					<ul>
+						<li> Frameworks for differentiable simulations: <a href="https://github.com/VMBoehm/MADLens">MADLens</a>, <a href="https://www.aquila-consortium.org/method/borgpm.html">BORG</a>
+					</ul>
+
+				</li>
+			</ul>
+
+		</section>
+
+		<section>
+			<h2>Conclusion</h2>
+		</section>
+
+		<section>
+			<h3 class="slide-title"> Conclusion </h3>
+
+			<br>
+			<br>
+
+
+			<div class="block fragment">
+				<div class="block-title">
+					Methodology for inference over simulators
+				</div>
+				<div class="block-content">
+
+					<ul>
+						<li> A change of paradigm <b class="alert"> from analytic likelihoods to simulators as physical model</b>.
+							<ul>
+								<br>
+								<li> State of the art Machine Learning models enable Likelihood-Free Inference over black-box simulators.
+								</li>
+
+								<br>
+
+								<li> Progress in differentiable simulators and inference methodology paves the way to full inference over probabilistic model.
+								</li>
+							</ul>
+
+						</li>
+
+						<br>
+
+						<li> Ultimately, promises optimal exploitation of survey data, although the "information gap" agains analytic likelihoods in realistic settingns remains uncertain.
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<br>
+			<br>
+
+			<div class="fragment">
+				Thank you!
+			</div>
+		</section>
+
+		<section>
+			<h3> Extra slides </h3>
+		</section>
+
+		<section>
+			<section>
+				<h3 class="slide-title"> jax-cosmo: Finally a differentiable cosmology library, and it's in JAX!</h3>
+
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/github.png" class="plain" style="height:70px" />
+						<div> <a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo/">https://github.com/DifferentiableUniverseInitiative/jax_cosmo</a>
+						</div>
+
+						<pre class="python"><code data-trim data-noescape>
+							import jax.numpy as np
+							import jax_cosmo as jc
+
+							# Defining a Cosmology
+							cosmo = jc.Planck15()
+
+							# Define a redshift distribution with smail_nz(a, b, z0)
+							nz = jc.redshift.smail_nz(1., 2., 1.)
+
+							# Build a lensing tracer with a single redshift bin
+							probe = probes.WeakLensing([nz])
+
+							# Compute angular Cls for some ell
+							ell = np.logspace(0.1,3)
+							cls = angular_cl(cosmo_jax, ell, [probe])
+						</code></pre>
+
+						<div class="block">
+							<div class="block-title">
+								Current main features
+							</div>
+							<div class="block-content">
+								<ul>
+									<li>Weak Lensing and Number counts probes</li>
+									<li>Eisenstein & Hu (1998) power spectrum + halofit</li>
+									<li>Angular $C_\ell$ under Limber approximation </li>
+								</ul>
+								<div>$\Longrightarrow$ 3x2pt DES Y1 capable </div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="col">
+						<img class="plain" data-src="assets/jc_vs_ccl_lensing.png" />
+						<img class="plain" data-src="assets/jc_vs_ccl_clustering.png" />
+						<br>
+						Validating against the <a href="https://github.com/LSSTDESC/CCL">DESC Core Cosmology Library</a>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> let's compute a Fisher matrix</h3>
+
+				<br>
+
+				$$F = - \mathbb{E}_{p(x | \theta)}[ H_\theta(\log p(x| \theta)) ] $$
+
+				<br>
+
+				<div class="container">
+					<div class="col fragment">
+
+						<pre class="python"><code data-trim data-noescape>
+		import jax
+		import jax.numpy as np
+		import jax_cosmo as jc
+
+		# .... define probes, and load a data vector
+
+		def gaussian_likelihood( theta ):
+			# Build the cosmology for given parameters
+			cosmo = jc.Planck15(Omega_c=theta[0], sigma8=theta[1])
+
+			# Compute mean and covariance
+			mu, cov = jc.angular_cl.gaussian_cl_covariance_and_mean(cosmo,
+																												ell, probes)
+			# returns likelihood of data under model
+			return jc.likelihood.gaussian_likelihood(data, mu, cov)
+
+		# Fisher matrix in just one line:
+		F = - jax.hessian(gaussian_likelihood)(theta)
+		</code></pre>
+						<a href="https://colab.research.google.com/github/DifferentiableUniverseInitiative/jax_cosmo/blob/master/docs/notebooks/jax-cosmo-intro.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"
+								alt="Open In Colab" class="plain" style="height:25px;" /></a>
+					</div>
+
+					<div class="col fragment">
+						<img data-src="assets/Fisher_mat.png" class="plain"><br><br>
+					</div>
+				</div>
+
+				<ul>
+					<li class="fragment"> <b class="alert">No derivatives were harmed by finite differences in the computation of this Fisher!</b> </li>
+					<li class="fragment"> Only a small additional compute time compared to one forward evaluation of the model</li>
+				</ul>
+
+			</section>
+
+
+											<section>
+												<h3 class="slide-title"> Inference becomes fast and scalable</h3>
+
+												<div class="container">
+													<div class="col">
+
+														<ul>
+															<li>Current cosmological MCMC chains take <b>days</b>, and typically require access
+																to large computer clusters.</li>
+															<br>
+															<li class="fragment" data-fragment-index="1"><b class="alert">Gradients of the log posterior are required for modern efficient and scalable inference</b> techniques:
+																<ul>
+																	<li>Variational Inference</li>
+																	<li>Hamiltonian Monte-Carlo</li>
+																</ul>
+															</li>
+															<br>
+															<li class="fragment" data-fragment-index="2">In jax-cosmo, we can trivially obtain <b>exact</b> gradients:
+																<pre class="python"><code data-trim data-noescape>
+											def log_posterior( theta ):
+													return gaussian_likelihood( theta ) + log_prior(theta)
+
+											score = jax.grad(log_posterior)(theta)
+											</code></pre>
+															</li>
+
+															<br>
+															<li class="fragment" data-fragment-index="3">On a DES Y1 analysis, we find convergence in 70,000 samples with vanilla HMC, 140,000 with Metropolis-Hastings</li>
+														</ul>
+
+													</div>
+
+													<div class="col">
+														<div class="fragment" data-fragment-index="3">
+															<img data-src="assets/jc_3x2pt_hmc.png" class="plain" /><br>
+															DES Y1 posterior, jax-cosmo HMC vs Cobaya MH <br>(credit: Joe Zuntz)
+														</div>
+													</div>
+												</div>
+											</section>
 		</section>
 
 
@@ -1036,12 +1259,12 @@
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}
+		} */
 
 		.reveal .block {
 			background-color: #191919;
