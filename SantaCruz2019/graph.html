@@ -37,7 +37,7 @@ body{
     vertexColors: true,
     size: 5,
     color: 0xffffff,
-    map: THREE.ImageUtils.loadTexture('assets/med-stars.png'),
+    map: THREE.ImageUtils.loadTexture('/talks/assetsmed-stars.png'),
     transparent: true,
     side: THREE.DoubleSide,
     depthTest: false
@@ -66,7 +66,7 @@ body{
 
   function filter(filterSelect) {
 
-d3.csv("assets/mb2_0_nodes.csv", function(data) {
+d3.csv("/talks/assets/mb2_0_nodes.csv", function(data) {
 
   data.forEach(function(d,i) {
     d.index = i;
@@ -408,7 +408,7 @@ d3.csv("assets/mb2_0_nodes.csv", function(data) {
 function nodes() {
 
   var pushHistory =  '#3'
-    d3.csv("assets/mb2_0_edges.csv", function(data) {
+    d3.csv("/talks/assets/mb2_0_edges.csv", function(data) {
 
       edges = data;
 
