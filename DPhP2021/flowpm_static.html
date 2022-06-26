@@ -35,7 +35,7 @@
     vertexColors: true,
     size: 5,
     color: 0xffffff,
-    map: THREE.ImageUtils.loadTexture('/talks/assetsmed-stars.png'),
+    map: THREE.ImageUtils.loadTexture('/talks/assets/med-stars.png'),
     transparent: true,
     side: THREE.DoubleSide,
     depthTest: false,
@@ -80,11 +80,11 @@
 
     // Load particles from data
     let n1 = new npyjs();
-    n1.load('/talks/assetsstate_1_64.npy', (array) => {
+    n1.load('/talks/assets/state_1_64.npy', (array) => {
         window.X = array.data;
         // Loading array of densities
         let n = new npyjs();
-        n.load('/talks/assetsdensity_1_64.npy', (array) => {
+        n.load('/talks/assets/density_1_64.npy', (array) => {
           window.D = array.data;
           loadParticles(window.X, window.D);
         });

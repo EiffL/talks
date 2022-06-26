@@ -36,7 +36,7 @@
     vertexColors: true,
     size: 5,
     color: 0xffffff,
-    map: THREE.ImageUtils.loadTexture('/talks/assetsmed-stars.png'),
+    map: THREE.ImageUtils.loadTexture('/talks/assets/med-stars.png'),
     transparent: true,
     side: THREE.DoubleSide,
     depthTest: false
@@ -80,7 +80,7 @@
 
     // Load particles from data
     let n1 = new npyjs();
-    n1.load('/talks/assetsstate_01_16.npy', (array) => {
+    n1.load('/talks/assets/state_01_16.npy', (array) => {
         window.X = array.data.slice(0,3*pointCount)
         window.P = array.data.slice(3*pointCount,6*pointCount)
         window.F = array.data.slice(6*pointCount)
@@ -89,17 +89,17 @@
     });
 
     let n2 = new npyjs();
-    n2.load('/talks/assetskernels_real_16.npy', (array) => {
+    n2.load('/talks/assets/kernels_real_16.npy', (array) => {
         window.k_real = array.data
         console.log(`You loaded an array with ${array.length} elements and ${array.shape.length} dimensions.`);
     });
     let n3 = new npyjs();
-    n3.load('/talks/assetskernels_imag_16.npy', (array) => {
+    n3.load('/talks/assets/kernels_imag_16.npy', (array) => {
         window.k_imag = array.data
         console.log(`You loaded an array with ${array.length} elements and ${array.shape.length} dimensions.`);
     });
     let n4 = new npyjs();
-    n4.load('/talks/assetsfactors_16.npy', (array) => {
+    n4.load('/talks/assets/factors_16.npy', (array) => {
         window.factors = array.data
         console.log(`You loaded an array with ${array.length} elements and ${array.shape.length} dimensions.`);
     });
@@ -109,7 +109,7 @@
         window.ready_to_update = false;
         console.log('executing worker', window.counter);
         if (!window.model) {
-          window.model = await tf.loadGraphModel('/talks/assetsweb_model26_16/model.json');
+          window.model = await tf.loadGraphModel('/talks/assets/web_model26_16/model.json');
           window.step_nbody = (x, p, f, fact, kr, ki) =>{
       state = window.model.predict({'X':x, 'P':p, 'F':f,
                   'factors':fact, 'kernels_real':kr, 'kernels_imag':ki});
