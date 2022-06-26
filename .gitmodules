@@ -115,3 +115,6 @@
 [submodule "SciOps2022/reveal.js"]
 	path = SciOps2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "EuCAPT2022/reveal.js"]
+	path = EuCAPT2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
