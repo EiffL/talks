@@ -19,7 +19,7 @@
 <body>
 	<div class="reveal">
 		<div class="slides">
-			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+			<section data-background-image="/assets/lsst_stills_0009_crop.jpg">
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
 						<h1>Artificial Intelligence for Astrophysics</h1>
@@ -33,7 +33,7 @@
 							<div align="left" style="margin-left: 20px;">
 								<h2>François Lanusse</h2>
 								<br>
-								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<img src="/assets/CosmoStatDarkBK.png" class="plain"></img>
 								<br>
 							</div>
 						</div>
@@ -43,14 +43,14 @@
 							<br>
 							<br>
 							<br>
-							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+							<img src="/assets/logo_cnrs.png" class="plain" height="150"></img>
 						</div>
 
 						<div class="col">
 							<br>
 							<br>
 							<br>
-							<img src="assets/aim.png" class="plain" height="150"></img>
+							<img src="/assets/aim.png" class="plain" height="150"></img>
 						</div>
 					</div>
 					<div> slides at <a href="https://eiffl.github.io/talks/Saclay2022">eiffl.github.io/talks/Saclay2022</a> </div>
@@ -59,20 +59,20 @@
 
 			<section>
 				<h3 class="slide-title"> Why are we here today talking about AI? </h3>
-					<img data-src="assets/deep.png"/>
+					<img data-src="/assets/deep.png"/>
 			</section>
 
 			<section>
-				<section data-background="assets/fig1w.png">
+				<section data-background="/assets/fig1w.png">
 				</section>
 
-				<section data-background="assets/fig1.png">
+				<section data-background="/assets/fig1.png">
 				</section>
 
-				<section data-background="assets/hsc_illustration_tract.png">
+				<section data-background="/assets/hsc_illustration_tract.png">
 					<h3>WWAD: <span class="fragment">What Would an Astrophysicist Do ?</span></h3>
 					<div class="fragment fade-up">
-						<img data-src="assets/fig2.png" style="height: 525px;">
+						<img data-src="/assets/fig2.png" style="height: 525px;">
 						<div class="container">
 							<div class="col"> gri composite </div>
 							<div class="col"> g - $\alpha$ i </div>
@@ -118,15 +118,15 @@
 
 				<section>
 					<h3 class="slide-title"> The Deep Learning approach: Convolutional Neural Networks</h3>
-					<img data-src="assets/single_layer.png" class="plain"></img>
+					<img data-src="/assets/single_layer.png" class="plain"></img>
 				</section>
 
 				<section>
 					<div class="container">
 						<div class="col">
 							<div style="position:relative; height:600px; margin:0 auto;">
-								<img height="600px" data-src="assets/deeplens.png" class="plain" style="position:absolute;top:0;left:200px;" />
-								<img height="600px" data-src="assets/candidates.png" class="plain fragment" style="position:absolute;top:200px;left:0;height:300px;" data-fragment-index="1" />
+								<img height="600px" data-src="/assets/deeplens.png" class="plain" style="position:absolute;top:0;left:200px;" />
+								<img height="600px" data-src="/assets/candidates.png" class="plain fragment" style="position:absolute;top:200px;left:0;height:300px;" data-fragment-index="1" />
 							</div>
 
 							<br>
@@ -160,10 +160,10 @@
 					<br>
 					<div class="container">
 						<div class="col">
-							<img height=500 data-src="assets/ground_lenses.png"></img>
+							<img height=500 data-src="/assets/ground_lenses.png"></img>
 						</div>
 						<div class="col">
-							<img height=500 data-src="assets/space_based.jpg"></img>
+							<img height=500 data-src="/assets/space_based.jpg"></img>
 						</div>
 					</div>
 
@@ -171,7 +171,7 @@
 				<section>
 					<div class="container">
 						<div class="col">
-							<img data-src="assets/roc_ground_small.png" class="plain" style="height: 250px;"></img>
+							<img data-src="/assets/roc_ground_small.png" class="plain" style="height: 250px;"></img>
 
 							<br>
 							<div class="fragment fade-up"> <b class="alert">Better accuracy than human visual inspection!</b></div>
@@ -249,7 +249,7 @@
 							$q_\theta(y | x)$ and $p(y | x)$
 							<div class="container">
 								<div class="col">
-									<img data-src="assets/kl_divergence.gif" style="height:300px" />
+									<img data-src="/assets/kl_divergence.gif" style="height:300px" />
 								</div>
 								<div class="col">
 									$\Longrightarrow$ In other words, <b class="alert">you are infering a Bayesian Posterior</b>.
@@ -276,19 +276,19 @@
 
 						<div class="col">
 							<p> <b class="alert"> Observed $y$</b></p>
-							<img class="plain" data-src="assets/cosmos_gal_ground.png" style="width: 250px" />
+							<img class="plain" data-src="/assets/cosmos_gal_ground.png" style="width: 250px" />
 							<br>Ground-Based Telescope
 						</div>
 
 						<div class="col fragment fade-up" data-fragment-index='0'>
 							<p> <b class="alert">$f_\theta$</b> </p>
-							<img class="plain " data-src="assets/generic_network_inv.png" style="height: 250px; width:500px" />
+							<img class="plain " data-src="/assets/generic_network_inv.png" style="height: 250px; width:500px" />
 							<br>some deep Convolutional Neural Network
 						</div>
 
 						<div class="col">
 							<p><b class="alert"> Unknown $x$</b> </p>
-							<img class="plain" data-src="assets/cosmos_gal.png" style="width: 250px" />
+							<img class="plain" data-src="/assets/cosmos_gal.png" style="width: 250px" />
 							<br>Hubble Space Telescope
 						</div>
 					</div>
@@ -309,12 +309,12 @@
 					<br>
 					<div class="container">
 						<div class="col">
-							<img data-src="assets/candidates.png" style="height:300px" />
+							<img data-src="/assets/candidates.png" style="height:300px" />
 							<br> Training examples
 						</div>
 
 						<div class="col">
-							<img data-src="assets/ground_lenses.png" style="height:300px" />
+							<img data-src="/assets/ground_lenses.png" style="height:300px" />
 							<br> Example of real data
 						</div>
 					</div>
@@ -370,13 +370,13 @@ Neural Network, Pasquet et al. 2018</a>
 
 						<div class='col'>
 							<div style="position:relative; width:600px; height:600px; margin:0 auto;">
-								<img class="fragment current-visible plain" data-src="assets/walmsley2019.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
-								<img class="fragment current-visible plain" data-src="assets/Pasquet2018.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1" />
-								<img class="fragment current-visible plain" data-src="assets/Stein2021.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2" />
-								<img class="fragment current-visible plain" data-src="assets/cropped.gif" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="3" />
-								<img class="fragment current-visible plain" data-src="assets/Alsing2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="4" />
-								<img class="fragment current-visible plain" data-src="assets/li2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="5" />
-								<img class="fragment plain" data-src="assets/jeffrey_s8.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="6" />
+								<img class="fragment current-visible plain" data-src="/assets/walmsley2019.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+								<img class="fragment current-visible plain" data-src="/assets/Pasquet2018.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1" />
+								<img class="fragment current-visible plain" data-src="/assets/Stein2021.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2" />
+								<img class="fragment current-visible plain" data-src="/assets/cropped.gif" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="3" />
+								<img class="fragment current-visible plain" data-src="/assets/Alsing2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="4" />
+								<img class="fragment current-visible plain" data-src="/assets/li2020.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="5" />
+								<img class="fragment plain" data-src="/assets/jeffrey_s8.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="6" />
 							</div>
 						</div>
 					</div>
@@ -391,7 +391,7 @@ Neural Network, Pasquet et al. 2018</a>
 			<section>
 				<h3 class="slide-title">Be careful to ask the right questions!</h3>
 						The most common pitfall: <b>Covariate Shift</b><br>
-						<img data-src="assets/covariate_shift.png" />
+						<img data-src="/assets/covariate_shift.png" />
 						<br>
 						<br>
 						$\Longrightarrow$ The training data plays an integral part in the answer
