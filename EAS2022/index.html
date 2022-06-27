@@ -1,0 +1,668 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Promises and Challenges of Likelihood-Free Inference for Astronomical Surveys</title>
+
+	<meta name="description" content="Critical Challenges for Machine Learning in Astronomy, EAS 2022, Valencia">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-iframe="background.html">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Promises and Challenges of Likelihood-Free Inference for Astronomical Surveys</h1>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://eiffl.github.io/talks/EAS2022">eiffl.github.io/talks/EAS2022</a> </div>
+				</div>
+			</section>
+
+<!-- Motivation from physics -->
+<section>
+<section>
+	<h3 class='slide-title'> The limits of traditional cosmological inference </h3>
+	<div class='container'>
+		<div class='col'>
+			<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+				<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
+				<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+			</div>
+			<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+				<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+					<img class="plain" data-src="/talks/assets/alonso_g1.png" />
+					<img class="plain" data-src="/talks/assets/alonso_g2.png" />
+				</div>
+				<img class="fragment current-visible plain" data-src="/talks/assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+				<img class="fragment  plain" data-src="/talks/assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+			</div>
+			<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
+		</div>
+
+		<div class='col'>
+			<ul>
+				<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
+					$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
+				<br>
+				<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+				<br>
+				<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+					$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="block fragment">
+		<div class="block-title">
+			Main limitation: the need for an explicit likelihood
+		</div>
+		<div class="block-content">
+			We can only compute the likelihood for <b class="alert">simple summary statistics</b> and on <b class="alert">large scales</b>
+			<br>
+			<br>
+			<div class="fragment"> $\Longrightarrow$ We are dismissing a significant fraction of the information! </div>
+		</div>
+	</div>
+</section>
+
+
+<section>
+	<h3 class='slide-title'>A different road: forward modeling</h3>
+
+	<div class='container'>
+		<div class='col'>
+			<ul>
+				<li> Instead of trying to analytically evaluate the likelihood $p(x | \theta)$,
+					let us build a forward model of the observables.<br>
+					$\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
+				</li>
+				<br>
+				<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+					cost of a <b>large number of latent variables</b>.
+				</li>
+			</ul>
+
+			<br>
+			<br>
+
+			<div class="block fragment">
+				<div class="block-title">
+					Benefits of a forward modeling approach
+				</div>
+				<div class="block-content">
+
+					<ul>
+						<li> Fully exploits the information content of the data
+							(aka "full field inference").
+						</li>
+
+						<br>
+						<li> Easy to incorporate systematic effects.
+						</li>
+						<br>
+						<li> Easy to combine multiple cosmological probes by joint simulations.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class='col'>
+			<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+				<img class="fragment current-visible plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+				<img class="fragment plain" data-src="/talks/assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+				<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section>
+	<h3 class="slide-title">...so why is this not mainstream?</h3>
+		<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:1000px;"/>
+
+			<div class="r-stack">
+
+				<img class="plain fragment" data-src="/talks/assets/plot_massive_nu.png" style="width:1000px;"/>
+
+					<div class="block fragment">
+						<div class="block-title">
+							The Challenge of Simulation-Based Inference
+						</div>
+						<div class="block-content">
+							$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
+							Where $z$ are <b>stochastic latent variables</b> of the simulator.<br><br>
+							$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>! Hence the phrase <b>"Likelihood-Free Inference"</b>
+						</div>
+					</div>
+
+				</div>
+</section>
+</section>
+
+<section class="inverted" data-background="#000">
+	<h2> How to do inference without evaluating the likelihood of the model?</h2>
+</section>
+
+
+		<section>
+	 	<section>
+			<h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
+			<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:750px;"/>
+			<ul>
+				<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+				</li>
+				<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_\varphi$ to approximate the implicit distribution $\mathbb{P}$</b>.
+				</li>
+			</ul>
+
+			<div class="container">
+				<div class="col fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					True $\mathbb{P}$
+				</div>
+
+				<div class="col  fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					Samples $x_i \sim \mathbb{P}$
+				</div>
+
+				<div class="col  fragment fade-up">
+					<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+					<br>
+					Model $\mathbb{P}_\varphi$
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Conditional Density Estimation with Neural Networks</h3>
+			<ul>
+				<li class="fragment fade-up"> I assume a forward model of the observations:
+					\begin{equation}
+					p( x ) = p(x | \theta) \ p(\theta) \nonumber
+					\end{equation}
+					All I ask is the ability to sample from the model, to obtain $\mathcal{D} = \{x_i, \theta_i \}_{i\in \mathbb{N}}$
+				</li>
+				<br>
+				<li class="fragment fade-up"> I am going to assume $q_\phi(\theta | x)$ a <b>parametric conditional density</b>
+				</li>
+				<br>
+				<li class="fragment fade-up">Optimize the parameters $\phi$ of $q_{\phi}$ according to
+					\begin{equation}
+					\min\limits_{\phi} \sum\limits_{i} - \log q_{\phi}(\theta_i | x_i) \nonumber
+					\end{equation}
+					In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+					\begin{equation}
+					\boxed{q_{\phi^\ast}(\theta | x) \approx p(\theta | x)} \nonumber
+					\end{equation}
+				</li>
+			</ul>
+
+			<div style="position:relative; height:30px; margin-left: 4em;">
+				<div class="fragment current-visible" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+					optimizing a <b>parametric estimator</b> over<br> the <b>Bayesian joint distribution</b>
+				</div>
+				<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+					optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h3 class='slide-title'>Neural Density Estimation</h3>
+			<div class="container">
+				<div class="col r-stack">
+					<div class="fragment current-visible" data-fragment-index="0">
+					<img class="plain" data-src="/talks/assets/MDN.png" style="height:550px" />
+					<br>
+					<div style="float:left; font-size: 20px">Bishop (1994)</div>
+				</div>
+					<div class="fragment" data-fragment-index="1">
+						<img data-src="/talks/assets/flow_dinh_1.png" class="plain"></img>
+						<img data-src="/talks/assets/flow_dinh_2.png" class="plain"></img>
+						<br>
+						<div style="float:right; font-size: 20px">Dinh et al. 2016</div>
+					</div>
+
+				</div>
+				<div class="col">
+
+					<ul>
+						<li class="fragment" data-fragment-index="0"> Mixture Density Networks
+							\begin{equation}
+							p(\theta | x) = \prod_i \pi_i(x) \ \mathcal{N}\left(\mu_i(x), \ \sigma_i(x) \right) \nonumber
+							\end{equation}
+						</li>
+						<br>
+
+						<li class="fragment fade-up" data-fragment-index="1">Conditional Normalizing Flows
+							\begin{equation}
+							p(\theta| x) = p_z \left( z = f^{-1}(\theta, x) \right) \left| \frac{\partial f^{-1}(\theta, x)}{\partial x} \right|
+							\end{equation}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+		</section>
+
+		<section>
+			<h3 class="slide-title">A variety of algorithms</h3>
+			<div style="float:right; font-size: 20px">Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021) <a href="https://arxiv.org/abs/2101.04653"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg" class="plain"
+						style="height:25px;vertical-align:middle;" /></a></div>
+			<img class="plain" data-src="/talks/assets/sbibm_comparison.png"/>
+
+			<br>
+			<br>
+				A few important points:
+				<br><br>
+				<ul>
+					<li class="fragment"> <b>Amortized</b> inference methods, which estimate $p(\theta | x)$, can greatly speed up posterior estimation once trained.
+					</li>
+					<br>
+
+					<li class="fragment"> <b>Sequential</b> Neural Posterior/Likelihood Estimation methods can actively sample simulations needed to refine the inference.
+					</li>
+				</ul>
+		</section>
+
+
+		<section>
+			<h3 class="slide-title">Automated Summary Statistics Extraction</h3>
+	      <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+				<ul>
+					<li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
+						data while preserving information</b>.
+					</li>
+				</ul>
+				<div class="container">
+					<div class="col">
+						<div class="r-stack">
+							<img class="plain fragment current-visible"  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
+							<img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" />
+						</div>
+						<div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+								style="height:20px;vertical-align:middle;" /></a></div>
+
+					</div>
+					<div class="col">
+									<div class="block fragment" data-fragment-index="0">
+										<div class="block-title">
+											Information-based loss functions
+										</div>
+										<div class="block-content">
+											<ul>
+												<li class="fragment" data-fragment-index="0" > Variational Mutual Information Maximization
+								      			$$ \mathcal{L} \ = \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | f_\varphi(x)) ] \leq  I(Y; \Theta) $$
+
+														<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+																	style="height:20px;vertical-align:middle;" /></a></div>
+												</li>
+												<br><br>
+												<li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
+													$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+													<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+															style="height:20px;vertical-align:middle;" /></a></div>
+												</li>
+											</ul>
+										</div>
+									</div>
+					</div>
+				</div>
+		</section>
+
+		<section>
+			<section>
+				<h3 class="slide-title">Example of application: Constraining Dark Matter Substructures</h3>
+				<div class="container">
+					<div class="col">
+						<div style="float:right; font-size: 20px">
+							Brehmer, Mishra-Sharma, Hermans, Louppe, Cranmer (2019) <a href="https://arxiv.org/abs/1909.02005"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1909.02005-B31B1B.svg" class="plain"
+									style="height:25px;vertical-align:middle;" /></a></div>
+					</div>
+				</div>
+
+				<div class="r-stack">
+					<img data-src="/talks/assets/Brehmer2019a.png" style='height:500px;'/>
+					<img class="fragment" data-src="/talks/assets/Brehmer2019b.png" style='height:500px;'/>
+					<img class="fragment" data-src="/talks/assets/Brehmer2019.gif" style="height:500px;"/>
+				</div>
+
+			</section>
+
+			<section>
+				<h3 class="slide-title">Example of application: Infering Microlensing Event Parameters</h3>
+				<div class="container">
+					<div class="col">
+						<div style="float:right; font-size: 20px"> Zhang, Bloom, Gaudi, <b>Lanusse</b>, Lam, Lu (2021) <a href="https://arxiv.org/abs/2102.05673"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2102.05673-B31B1B.svg" class="plain"
+									style="height:25px;vertical-align:middle;" /></a></div>
+					</div>
+				</div>
+				<div class="r-stack">
+				<div class="fragment current-visible">
+					<img data-src="/talks/assets/Zhang2021a.png" style="height:500px"/>
+				</div>
+
+				<div class="fragment">
+					<img data-src="/talks/assets/Zhang2021b.png" style="height:500px"/>
+				</div>
+
+			</div>
+
+			</section>
+
+						<section>
+							<h3 class="slide-title">Example of application: Likelihood-Free parameter inference with DES SV</h3>
+							<div class="container">
+								<div class="col">
+									<div style="float:right; font-size: 20px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+												style="height:25px;vertical-align:middle;" /></a></div>
+								</div>
+							</div>
+
+							<div class="container">
+								<div class="col">
+									<img class="plain" data-src="/talks/assets/ks_sv.png" style="height:550px;"></img>
+								</div>
+
+								<div class="col r-stack">
+									<div class="fragment current-visible">
+									<img class="plain" data-src="/talks/assets/orthant.png" style="height:300px;" />
+									<img class="plain" data-src="/talks/assets/sim_params.png" style="height:300px;" /><br>
+									Suite of N-body + raytracing simulations: $\mathcal{D}$
+								</div>
+
+								<div class="fragment current-visible">
+									<img class="plain" data-src="/talks/assets/jeffrey_model.png" style="height:550px" /><br>
+								</div>
+
+								<div class="fragment">
+									<img class="plain" data-src="/talks/assets/jeffrey_s8.png" />
+								</div>
+
+								</div>
+							</div>
+						</section>
+					</section>
+
+
+					<section class="inverted" data-background="#000">
+						<h2>So... what are the challenges?</h2>
+					</section>
+
+					<section>
+					<section>
+						<h3 class="slide-title">Ensuring proper calibration is difficult</h3>
+						<div class="container">
+							<div class="col">
+								<div style="float:right; font-size: 20px">
+									Hermans, Delaunoy, Rozet, Wehenkel, Louppe (2021) <a href="https://arxiv.org/abs/2110.06581"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2110.06581-B31B1B.svg" class="plain"
+											style="height:25px;vertical-align:middle;" /></a></div>
+							</div>
+						</div>
+							<img data-src="/talks/assets/Hermans2021.png" style="height:600px;"/>
+					</section>
+
+					<section>
+						<h3 class="slide-title">Reaching stable results at low number of simulations is difficult</h3>
+
+						<div class="container">
+							<div class="col">
+							<div class="r-stack">
+								<img class="fragment fade-out" data-fragment-index="0" data-src="/talks/assets/tight_prior_lotkavolterra_c2st_1.png"/>
+								<img class="fragment fade-in" data-fragment-index="0" data-src="/talks/assets/tight_prior_lotkavolterra_c2st_2.png"/>
+							</div>
+							<br>
+							Quality of posterior estimation as a function of number of simulations on Lotka-Volterra (credit: Justine Zegal)
+						</div>
+
+							<div class="col">
+								<ul>
+										<li> Conditional density estimation remains <b>expensive in number of simulations</b>, even with sequential algorithms.
+										</li>
+
+										<br>
+
+										<li class="fragment" data-fragment-index="0"> Possible solution is to extract more information from simulators, i.e. using
+											their gradients. See <a href="https://arxiv.org/abs/1805.12244">Brehmer et al. 2020</a>.
+												<img data-src="/talks/assets/gradients_benef_5.png"/>
+												$\Longrightarrow$ Tied to the development of <b>automatically differentiable numerical simulations</b>.
+										</li>
+
+								</ul>
+
+							</div>
+
+						</div>
+
+					</section>
+					</section>
+
+
+		<section>
+			<h3 class="slide-title">Conclusions</h3>
+
+			<br>
+			<br>
+
+			<ul>
+				<li> Likelihood-Free Inference <b>automatizes inference</b> over numerical simulators.
+						<ul>
+							<li> Turns both summary extraction and inference problems into an <b class="alert">optimization problems</b>
+							</li>
+							<br>
+						</ul>
+				</li>
+
+
+				<li class="fragment"> In the context of upcoming surveys, this techniques provides <b class="alert">many advantages</b>:
+					<ul>
+						<li> <b>Amortized inference</b>: near instantaneous parameter inference, extremely useful for time-domain.
+						</li>
+						<li> <b>Optimal information extraction</b>: no longer need for restrictive modeling assumptions needed to obtain tractable likelihoods.
+						</li>
+					</ul>
+				</li>
+				<br>
+
+				<li class="fragment"> Ongoing methodology research aims to ensure that posteriors are in the worst case conservative, and to reduce the number of simulations.
+				</li>
+
+				<br>
+
+
+				<li class="fragment"> Some resources and links:
+					<ul>
+						<li> Review on Simulation-Based Inference: <a href="https://arxiv.org/abs/1911.01429">Cranmer, Brehmer, Louppe (2020) </a>
+
+						<li> Simulation Based Inference packages: <a href="https://www.mackelab.org/sbi/">sbi</a>, <a href="https://github.com/justinalsing/pydelfi">pydelfi</a>, <a href="https://github.com/tomcharnock/IMNN">Information Maximizing Neural Networks</a></li>
+					</ul>
+
+				</li>
+			</ul>
+
+				<br>
+
+				<br>
+
+				<br>
+
+
+			<div class="fragment">
+				Thank you!
+			</div>
+				<br>
+
+
+		</section>
+
+
+		</div>
+	</div>
+
+	<style>
+		/* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		} */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+			autoPlayMedia: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>
