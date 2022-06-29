@@ -1,0 +1,572 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Deep Generative Models for Galaxy Morphology</title>
+
+	<meta name="description" content="Bayesian Forward Modeling Seminar, July 29th 2022">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+						<!-- Any section element inside of this container is displayed as a slide -->
+						<div class="slides">
+							<section data-background-image="/talks/assets/cosmos.jpg" >
+									<div class="container">
+										<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+											<h1>Deep Generative Models for Galaxy Morphology</h1>
+											<a href="ttps://arxiv.org/abs/2008.03833)"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2008.03833-B31B1B.svg" class="plain" style="height:25px;"/></a> <a href="https://colab.research.google.com/github/McWilliamsCenter/galsim_hub/blob/master/notebooks/GalsimHubDemo.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain" style="height:25px;"/></a>
+
+									</div>
+								</div>
+
+								<hr>
+								<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+									<h3>François Lanusse, <b>Benjamin Remy</b>, Rachel Mandelbaum, Siamak Ravanbakhsh, Chun-Liang Li, Peter Freeman, Barnabas Poczos</h3>
+															<div class="container" >
+																<div class="col">
+																		<div align="left" style="margin-left: 20px;">
+																			<br>
+
+																		<img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+																		<br>
+																		</div>
+																	</div>
+
+																	<div class="col">
+																		<img src="/talks/assets/logo_cnrs.png" class="plain" height="150"></img>
+																	</div>
+																	<div class="col">
+																		<img src="/talks/assets/desc-logo-inv.png" class="plain" height="200"></img>
+																	</div>
+																</div>
+																<div> slides at <a href="https://eiffl.github.io/talks/DESC2022">eiffl.github.io/talks/DESC2022</a> </div>
+														</div>
+								</section>
+																				<section>
+																          <section>
+																            <h3 class="slide-title"> Impact of galaxy morphology on shape measurement</h3>
+																       				<div class='container'>
+																       					<div class='col'>
+																                  <img class="plain" data-src="/talks/assets/real_gal-inv.png" style="height: 350px;"/>
+																                  <br>
+																                  <div style="float:left; font-size: 20px">Mandelbaum, et al. (2013), Mandelbaum, et al. (2014)</div>
+																                </div>
+
+																                <div class='col'>
+																                  <img class="plain fragment fade-up" data-src="/talks/assets/great3_calib2-inv.png" style="height: 425px;"/>
+																                </div>
+																              </div>
+																              <br>
+<!--
+																              <div class="block fragment fade-up">
+																              <div class="block-title">
+																               The need for data-driven generative models
+																              </div>
+																              <div class="block-content">
+																                <ul>
+																                  <li> Lack or inadequacy of physical model
+																                  </li>
+																                  <li> Extremely computationally expensive simulations
+																                  </li>
+																                </ul>
+																            </div>
+																            </div> -->
+																          </section>
+
+																			<section>
+																				<h3 class="slide-title">Impact of morphology within a Bayesian Forward Model (Preliminary)</h3>
+
+																				$\Longrightarrow$ Simple Hierarchical Model infering constant shear accross multiple galaxy images (Credit: B. Remy).
+
+																				<div class="container">
+																					<div class="col">
+																						<div class="r-stack">
+																						<img class="fragment current-visible"  data-fragment-index="0" data-src="/talks/assets/galaxy_simu2.png" style="height:500px"/>
+																						<img class="fragment current-visible"  data-fragment-index="1" data-src="/talks/assets/galaxy_res2.png"  style="height:500px"/>
+																						<img class="fragment"  data-fragment-index="2" data-src="/talks/assets/posterior2.png" style="height:400px"/>
+																					</div>
+																							Using <b>Sersic-based forward model</b> on simulations using COSMOS Sersic fits
+																					</div>
+
+																					<div class="col">
+																						<div class="r-stack">
+																						<img class="fragment current-visible" data-src="/talks/assets/galaxy_simus.png"  style="height:500px"/>
+																						<img class="fragment current-visible" data-src="/talks/assets/galaxy_res1.png"  style="height:500px"/>
+																						<img class="fragment" data-src="/talks/assets/posterior1.png" style="height:400px"/>
+																					</div>
+																						<div class="fragment" data-fragment-index="3">Using <b>Sersic-based forward model</b> on simulations using <b class="alert">real COSMOS images</b>
+																						</div>
+																					</div>
+
+																				</div>
+
+
+																			</section>
+
+																      </section>
+
+																			<section class="inverted" data-background="#000">
+																				<h2>
+																				Can we learn a model for the signal from the data itself?</h2>
+																			</section>
+<!--
+																   			<section>
+																   				<h3 class="slide-title"> The evolution of generative models </h3>
+
+																   				<br> <br> <br>
+																   				<div class='container'>
+																   					<div class='col'>
+																   						<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+																   							<img class="fragment current-visible plain" data-src="/talks/assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+																   							<img class="fragment current-visible plain" data-src="/talks/assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+																   							<img class="fragment current-visible plain" data-src="/talks/assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+																   							<img class="fragment plain" data-src="/talks/assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+																   						</div>
+																   					</div>
+
+																   			<div class='col'>
+																   				<ul>
+																   					<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006) </li>
+																   					<br>
+																   					<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling 2014) </li>
+																   					<br>
+																   					<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br> (Goodfellow et al. 2014)</li>
+																   					<br>
+																   					<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017) </li>
+																   				</ul>
+																   				</div>
+																   			</div>
+																   				<br> <br> <br>
+																   			</section> -->
+
+																        <!-- <section>
+																  				<h3 class="slide-title"> A visual Turing test </h3>
+																  				<div class="container">
+																  						<div class="col">
+																  							<img data-src="/talks/assets/samples_pixel_cnn.png" class="plain" style="height: 500px;" ></img>
+																  							<br>
+																  							<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+																  						</div>
+																  						<div class="col">
+																  							<img data-src="/talks/assets/sdss5.png" class="plain"  style="height: 500px;" ></img>
+																  							<br>
+																  							<div class="fragment fade-up" data-fragment-index="0"> Real SDSS </div>
+																  						</div>
+																  				</div>
+																  			</section> -->
+
+																      <section>
+																        <h3 class="slide-title"> Complications specific to astronomical images: spot the differences!</h3>
+
+																        <div class="container">
+																            <div class="col">
+																              <img data-src="/talks/assets/celeba.png" class="plain" style="height: 450px;" ></img>
+																              <br>
+																              CelebA
+																            </div>
+																            <div class="col">
+																              <img data-src="/talks/assets/hsc_images.png" class="plain"  style="height: 450px;" ></img>
+																              <br>
+																              HSC PDR-2 wide
+																            </div>
+																        </div>
+																        <br>
+																        <div >
+																          <ul>
+																            <li class="fragment"> There is <b class="alert">noise</b></li>
+																            <li class="fragment"> We have a <b class="alert">Point Spread Function</b></li>
+																          </ul>
+																        </div>
+																      </section>
+
+																			<section>
+																			     <section>
+																			        <h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach: let's build a model</h3>
+																			        <br>
+																			        <br>
+																			        <div class="container">
+																			          <div class="col">
+																			              <img class="plain fragment" data-src="/talks/assets/rand_z_square.png" style="height: 150px" data-fragment-index="4"/>
+																			          </div>
+																			          <div class="col">
+																			              <img class="plain fragment" data-src="/talks/assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3"/>
+																			          </div>
+																			          <div class="col">
+																			            <img class="plain fragment" data-src="/talks/assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2"/>
+																			          </div>
+
+																			          <div class="col">
+																			            <img class="plain fragment" data-src="/talks/assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1"/>
+																			          </div>
+
+																			          <div class="col">
+																			            <img class="plain fragment" data-src="/talks/assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0"/>
+																			          </div>
+																			        </div>
+
+																			      <div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+																			        <div class='col fragment' data-fragment-index='4'> <font size="10"> $\longrightarrow$ </font> <br> $g_\theta$ </div>
+																			        <div class='col fragment' data-fragment-index='3'> <font size="10"> $\longrightarrow$ </font> <br> PSF </div>
+																			        <div class='col fragment' data-fragment-index='2'> <font size="10"> $\longrightarrow$ </font> <br> Pixelation</div>
+																			        <div class='col fragment' data-fragment-index='1'> <font size="10"> $\longrightarrow$ </font> <br> Noise </div>
+																			      </div>
+
+																			      <div class="container">
+																			          <div class="col">
+																			            <div style="position:relative; width:400px; height:300px; margin:0 auto;">
+																			            <img data-src="/talks/assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0"/>
+																			            <img data-src="/talks/assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1"/>
+																			            <img data-src="/talks/assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2"/>
+																			            <img data-src="/talks/assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3"/>
+																			            <img data-src="/talks/assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4"/>
+																			            </div>
+																			          </div>
+																			          <div class=" col">
+																			            <div class="block fragment" data-fragment-index="0">
+																			            <div class="block-title">
+																			             Probabilistic model
+																			            </div>
+																			            <div class="block-content">
+																			            <div style="position:relative; width:400px; height:100px; margin:0 auto;">
+																			              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+																			              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+																			              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised galaxy image</div>
+																			              <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved, super-resolved, and denoised galaxy image </div>
+																			              <div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$ is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+																			            </div>
+																			            <br>
+																			            <br>
+																			            <br>
+																			          </div>
+																			          </div>
+																			          </div>
+																			      </div>
+																			      <div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+																			     </section>
+
+																      <section>
+																        <h3 class="slide-title">How to train your <s>dragon</s> model</h3>
+																        <div class="container">
+																            <div class="col">
+																              <img data-src="/talks/assets/pgm.png" class="plain" style="height: 300px;" ></img>
+																            </div>
+																            <div class="col">
+																              <ul>
+																                <li> Training the generative amounts to finding $\theta_\star$ that
+																                  <b>maximizes the marginal likelihood</b> of the model:
+																                    $$p_\theta(x | \Sigma, \Pi) = \int \mathcal{N}( \Pi \ast g_\theta(z), \Sigma) \ p(z) \ dz$$
+																                    <div> $\Longrightarrow$ This is <b class="alert">generally intractable</b></div>
+																                </li>
+																                <br>
+																                <li class="fragment fade-up"> Efficient training of parameter $\theta$ is made possible by <b class="alert">Amortized Variational Inference</b>.
+																                </li>
+																              </ul>
+																            </div>
+																        </div>
+
+																        <div class="block fragment fade-up">
+																        <div class="block-title">
+																         Auto-Encoding Variational Bayes (Kingma & Welling, 2014)
+																        </div>
+																        <div class="block-content">
+																          <ul>
+																            <li class="fragment fade-up"> We introduce a <b>parametric distribution</b> $q_\phi(z | x, \Pi, \Sigma)$ which aims to model the
+																            posterior $p_{\theta}(z | x, \Pi, \Sigma)$.
+																            </li>
+																            <br>
+																            <li class="fragment fade-up"> Working out the KL divergence between these two distributions leads to:
+
+																              $$\log p_\theta(x | \Sigma, \Pi) \quad \geq \quad - \mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right) \quad + \quad \mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)  \right]$$
+
+																              $\Longrightarrow$ This is the <b>Evidence Lower-Bound</b>, which is differentiable with respect to $\theta$ and $\phi$.
+																            </li>
+																          </ul>
+																      </div>
+																      </div>
+
+																      </section>
+																      <section>
+																      <h3 class="slide-title">The famous Variational Auto-Encoder</h3>
+																      <img data-src="/talks/assets/vae.png" class="plain" style="height: 450px;"> </img>
+																      <br>
+																      <br>
+																      $$\log p_\theta(x| \Sigma, \Pi ) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)  \right]}_{\mbox{reconstruction error}} $$
+																      </section>
+																      </section>
+<!--
+																      <section>
+																  				<h3 class="slide-title"> Illustration on HST/ACS COSMOS images</h3>
+																            <div class="container">
+																            <div class="col">
+																              <img data-src="/talks/assets/Figure_autoencode.png" class="plain" ></img>
+																              <br>
+																              <b>Fitting observations</b> with VAE and Bulge+Disk parametric model.
+																            </div>
+																            <div class="col">
+																              <ul>
+																                <li>Training set: <b>GalSim COSMOS HST/ACS postage stamps</b>
+																                  <br>
+																                  <ul>
+																                    <li> 80,000 deblended galaxies from I < 25.2 sample
+																                    </li>
+																                    <li> Drawn on 128x128 stamps at 0.03 arcsec resolution
+																                    </li>
+																                    <li> Each stamp comes with:
+																                      <ul>
+																                        <li>PSF</li>
+																                        <li>Noise power spectrum</li>
+																                        <li>Bulge+Disk parametric fit</li>
+																                      </ul>
+																                    </li>
+																										<br>
+
+																										<li>Models are conditioned on:<br>
+																											 mag_auto, flux_radius, zphot</li>
+																                  </ul>
+																                </li>
+																                <br>
+																                <li> Auto-Encoder model:
+																                  <ul>
+																                    <li> Deep residual autoencoder:<br> 7 stages of 2 resnet blocs each
+																                    </li>
+																                    <li> Dense bottleneck of size 16.
+																                    </li>
+																                    <li> Outputs positive, noiseless, deconvolved, galaxy surface brightness.
+																                    </li>
+																                  </ul>
+																                </li>
+																              </ul>
+																            </div>
+																        </div>
+																      </section> -->
+
+																  <section>
+
+																  <section>
+																			<h3 class="slide-title"> Flow-VAE samples</h3>
+																      <br>
+																      <br>
+																      <img class="current-visible plain" data-src="/talks/assets/lanusse2020_figure1.png"/>
+																  </section>
+
+																  <section>
+																			<h3 class="slide-title"> Testing galaxy morphologies </h3>
+
+																      <br>
+																      <br>
+
+																    <img data-src="/talks/assets/gini_m20.png" class="plain"></img>
+
+																<br>
+																<br>
+																  </section>
+																</section>
+
+																<section>
+																	<h3 class="slide-title">Maximum A Posterior fit under the generative model</h3>
+
+																	<img data-src="/talks/assets/VAEfit.png"/>
+																	(credit: B. Remy)
+																</section>
+
+																													  <section>
+																																<h3 class="slide-title"> Takeaway message</h3>
+
+																													      <br>
+
+																													      <ul>
+																													        <li class="fragment"> We have <b class="alert">combined physical and deep learning components</b> to model
+																													          observed noisy and PSF-convoled galaxy images. <br>
+																													          $\Longrightarrow$ This framework can handle multi-band, multi-resolution, multi-instrument data.
+																													        </li>
+
+																													        <br>
+
+																													        <li class="fragment"> The hope is to <b class="alert">remove a source of model bias</b> in forward modeling for shear.
+																													        </li>
+
+																													        <br>
+
+																													        <li class="fragment"> We can <b>learn the morphology model from the data itself, potentially jointly with shear estimation!</b><br>
+																													        </li>
+
+																																	<br>
+																													      </ul>
+																													<br>
+																													<br>
+
+																													      <div class="block fragment fade-up">
+																													      <div class="block-title">
+																													        <b>GalSim Hub (based on TensorFlow 1)</b>
+																													      </div>
+																													      <div class="block-content">
+
+																													<br>
+
+																													      <div class="container">
+																													      <div class="col">
+																													        <img data-src="/talks/assets/TF_FullColor_Horizontal.png" class="plain"></img>
+																													      </div>
+
+																													      <div class="col">
+
+																													        <ul>
+
+																													          <li> Framework for sampling from deep generative models
+																													            directly from within GalSim.
+																													          </li>
+
+																													          <br>
+
+																													          <li>  Go check out the beta version: <a href="https://github.com/McWilliamsCenter/galsim_hub">https://github.com/McWilliamsCenter/galsim_hub</a>
+																													          </li>
+
+																													        </ul>
+
+																													      </div>
+																													      </div>
+
+																													    </div>
+																													    </div>
+
+																													  </section>
+
+
+
+		</div>
+	</div>
+
+	<style>
+		/* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		} */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+			autoPlayMedia: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>
