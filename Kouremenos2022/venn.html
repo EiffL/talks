@@ -21,11 +21,11 @@ body {
 // define sets and set set intersections
 var sets = [ {sets: ['Physics'], size: 12},
              {sets: ['Deep Learning'], size: 12},
-             {sets: ['Uncertainty Quantification'], size: 12},
+             {sets: ['Bayesian Inference'], size: 12},
              {sets: ['Physics','Deep Learning'], size: 2},
-             {sets: ['Physics','Uncertainty Quantification'], size: 2},
-             {sets: ['Deep Learning','Uncertainty Quantification'], size: 2},
-             {sets: ['Deep Learning','Uncertainty Quantification', 'Physics'], size: 1},
+             {sets: ['Physics','Bayesian Inference'], size: 2},
+             {sets: ['Deep Learning','Bayesian Inference'], size: 2},
+             {sets: ['Deep Learning','Bayesian Inference', 'Physics'], size: 1},
             ];
 
 var chart = venn.VennDiagram()
@@ -70,7 +70,7 @@ div.selectAll("g")
     {
       transitionForward: function() {
 
-        var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification_Physics"]').transition("tooltip").duration(400);
+        var selection = div.selectAll('[data-venn-sets="Deep Learning_Bayesian Inference_Physics"]').transition("tooltip").duration(400);
         selection.selectAll('path')
             .style("stroke-opacity", 1)
             .style("stroke-width", 3)
