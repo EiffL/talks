@@ -811,12 +811,104 @@
 
 
 			<section>
-				<h1>Understanding Uncertainies in Deep Learning</h1>
+				<h1>Part I: Understanding Uncertainties in Deep Learning</h1>
 				<h2>a.k.a Deep Probabilistic Learning</h2>
 			</section>
 
 			<section>
-				<h3 class="slide-title">The Various Sources of Uncertainties</h3>
+				<h3 class="slide-title"> Learning Objectives</h3>
+				<br>
+				<br>
+				<b>ML theory</b>:<br>
+				<ul>
+					<li>Epistemic and Aleatoric Uncertainties</li>
+
+					<li>Conditional Neural Density Estimation</li>
+
+					<li>Interpretation of Neural Networks as Bayesian Posterior estimators</li>
+
+				</ul>
+				<br>
+				<br>
+				<br>
+				<b>Practical skills</b>:<br>
+				<ul>
+					<li><b>Jax & Flax</b>: How to implement and train a Neural Network in JAX</li>
+
+					<li><b>TensorFlow Probability</b>: How to combine Neural Networks with Probability Distributions</li>
+
+				</ul>
+
+			</section>
+
+
+			<section>
+				<h3 class="slide-title">Our Case Study: Dynamical Mass Measurment of Galaxy Clusters</h3>
+				
+				<br>
+
+				<div class="container">
+					<div class="col">
+						<div class="r-stack">
+						<div class="sl-block" data-block-type="image" data-name="image-db0ea6" data-block-id="b5d39e0b1f8c9b2ae917385113a95dba" style="width: 417.577px; height: 312.8px; left: 800px; top: 288px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="546" data-natural-height="409" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653402/pasted-from-clipboard.png"></div>
+						</div>
+						<div class="sl-block" data-block-type="image" data-name="image-4b0ed3" data-block-id="2426725cddf0e0a79436d0e9f8490c2a" style="width: 417.577px; height: 312.8px; left: 800px; top: 288px; min-width: 1px; min-height: 1px;">
+							<div class="sl-block-content fragment" style="z-index: 14;" data-fragment-index="0"><img style="" data-natural-width="546" data-natural-height="409" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653404/pasted-from-clipboard.png"></div>
+						</div>
+						</div>
+						<p><span style="font-size:0.7em">Figures and data from <a href="https://arxiv.org/abs/1902.05950" target="_blank">Ho et al. 2019</a></span></p>
+							
+						<div class="sl-block" data-block-type="image" data-name="image-58216d" data-block-id="5e47c5737ce8cea65cd5698d711392e6" style="">
+							<div class="sl-block-content" style="z-index: 16;"><img style="" data-natural-width="281" data-natural-height="81" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653420/pasted-from-clipboard.png"></div>
+						</div>
+					</div>
+
+					<div class="col fragment">
+						Let's try to estimate a cluster mass with a Neural Network.
+						<br>
+						<br>
+						<p><strong>What we will feed the model</strong>:</p>
+
+						<ul>
+							<li>Richness</li>
+							<li>Velocity Dispersion</li>
+							<li>Information about member galaxies:
+								<ul>
+									<li>radial distribution</li>
+									<li>stellar mass distribution</li>
+									<li>LOS velocity distribution</li>
+								</ul>
+							</li>
+						</ul>
+
+						<br>
+						<br>
+
+						<p>Training data from MultiDark Planck 2 N-body simulation (Klypin et al. 2016) with 261287 clusters.</p>
+					</div>
+
+				</div>
+
+				<br>
+				<br>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Let's try it!</h3>
+				<br>
+				<br>
+				<br>
+				We will be using <a href="https://colab.research.google.com/drive/1A9wG9UVIRbWjxtM5XzDO3Sqc-aY5TzLJ?usp=sharing">this notebook</a>.
+				<br>
+				<br>
+				<br>
+				<p class="alert">Your goal:</p> Building a regression model with a Mean Squared Error loss in JAX/Flax
+			</section>
+
+
+			<section>
+				<h3 class="slide-title">Modeling the various sources of Uncertainties</h3>
 				<p>From this <a
 						href="https://medium.com/tensorflow/regression-with-probabilistic-layers-in-tensorflow-probability-e46ff5d37baf"
 						target="_blank">excellent tutorial</a>:&nbsp;</p>
@@ -828,7 +920,7 @@
 							data-block-id="b71ca86455fded0c4346dab524245bbf">
 							<div class="sl-block-content" style="z-index: 12;"><img data-natural-width="1600"
 									data-natural-height="378" style="" data-lazy-loaded=""
-									src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/6679077/pasted-from-clipboard.png">
+									src="talks/assets/pasted-from-clipboard.png">
 							</div>
 						</div>
 						<div class="sl-block" data-block-type="image"
@@ -836,7 +928,7 @@
 							data-block-id="56ceb39d29122abe8ac50fc231ca890a">
 							<div class="sl-block-content fragment" style="z-index: 13;" data-fragment-index="0"><img
 									data-natural-width="1600" data-natural-height="345" style="" data-lazy-loaded=""
-									src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/6679078/pasted-from-clipboard.png">
+									src="talks/assets/pasted-from-clipboard1.png">
 							</div>
 						</div>
 						<div class="sl-block" data-block-type="image"
@@ -844,7 +936,7 @@
 							data-block-id="4340801a83e5ef0fe35da77186b39c5a">
 							<div class="sl-block-content fragment" style="z-index: 14;" data-fragment-index="1"><img
 									style="" data-natural-width="1600" data-natural-height="346" data-lazy-loaded=""
-									src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/6679081/pasted-from-clipboard.png">
+									src="talks/assets/pasted-from-clipboard2.png">
 							</div>
 						</div>
 						<div class="sl-block" data-block-type="image"
@@ -852,7 +944,7 @@
 							data-block-id="238440e5882b1fca2c72ca2af786082a">
 							<div class="sl-block-content fragment" style="z-index: 15;" data-fragment-index="2"><img
 									data-natural-width="1600" data-natural-height="287" style="" data-lazy-loaded=""
-									src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/6679083/pasted-from-clipboard.png">
+									src="talks/assets/pasted-from-clipboard3.png">
 							</div>
 						</div>
 
@@ -877,10 +969,17 @@
 								$$\hat{y} \sim \mathcal{N}(w x, \sigma^2) \\ w, \sigma \sim p(w,
 								\sigma | \{x_i, y_i\})$$
 							</li>
-						</ul>
+					</ul>
 
 					</div>
 				</div>
+
+			</section>
+
+
+			<section>
+				<h1>Part II: Deep Generative Modeling</h1>
+
 
 			</section>
 
