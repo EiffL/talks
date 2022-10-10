@@ -130,3 +130,6 @@
 [submodule "NorthEastern2022/reveal.js"]
 	path = NorthEastern2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Liverpool2022/reveal.js"]
+	path = Liverpool2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
