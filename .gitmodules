@@ -136,3 +136,6 @@
 [submodule "Chicago2022/reveal.js"]
 	path = Chicago2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "MSU2022/reveal.js"]
+	path = MSU2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
