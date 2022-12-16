@@ -142,3 +142,6 @@
 [submodule "Montreal2022/reveal.js"]
 	path = Montreal2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "ASNUM2022/reveal.js"]
+	path = ASNUM2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
