@@ -145,3 +145,6 @@
 [submodule "ASNUM2022/reveal.js"]
 	path = ASNUM2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "CoPhy2022/reveal.js"]
+	path = CoPhy2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
