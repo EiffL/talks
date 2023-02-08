@@ -148,3 +148,6 @@
 [submodule "CoPhy2022/reveal.js"]
 	path = CoPhy2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "BASP2023/reveal.js"]
+	path = BASP2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
