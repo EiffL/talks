@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        body {
+				    text-align: center;
+        }
+
+    #mynetwork {
+      height: 500px;
+    }
+    </style>
+    <script src="reveal.js/js/three.min.js"></script>
+    <script src="reveal.js/js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="reveal.js/plugin/vis.js/vis.min.js"></script>
+    <link href="reveal.js/plugin/vis.js/vis.min.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div id="mynetwork"></div>
+<script type="text/javascript">
+
+    var color = 'gray';
+    var len = undefined;
+
+    var nodes = [{id: 0,  },
+        {id: 1,  },
+        {id: 2,  },
+        {id: 3, },
+        {id: 4, },
+        {id: 5, },
+        {id: 6, },
+        {id: 7, },
+        {id: 8, },
+        {id: 9, },
+    ];
+    var edges = [{from: 1, to: 0},
+        {from: 2, to: 0},
+        {from: 3, to: 0},
+        {from: 4, to: 0},
+        {from: 5, to: 0},
+        {from: 6, to: 0},
+        {from: 7, to: 0},
+        {from: 8, to: 0},
+        {from: 9, to: 0},
+    ]
+		var nodesObj = new vis.DataSet( nodes );
+    var edgesObj = new vis.DataSet( edges );
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+        nodes: nodesObj,
+        edges: edgesObj
+    };
+    var options = {
+        autoResize: true,
+        height: '100%',
+        width: '100%',
+        nodes: {
+            shape: 'dot',
+            size: 30,
+            font: {
+                size: 32,
+                color: '#ffffff'
+            },
+            color:{
+            background: `#f8b005`,
+            border: `hsl(230, 100%, 100%)`,
+            highlight: {
+              background: `#f8b005`,
+              border: `hsl(230, 100%, 100%)`,
+              }
+            },
+            borderWidth: 2
+        },
+        edges: {
+            width: 2
+        }
+    };
+    var direction_index = 0;
+
+    network = new vis.Network(container, data, options);
+    network.once("beforeDrawing", function() {
+      // Jiggle nodes a bit
+      pos = network.getPositions();
+      for (id in pos){
+        var n = nodesObj.get(id);
+        network.moveNode(id, pos[id]['x']*0.7, pos[id]['y']*0.6);
+      }
+      network.focus(0, {
+       scale: 2
+      });
+    });
+    network.once("afterDrawing", function() {
+          network.fit({
+            animation: {
+              duration: 1000,
+              easingFunction: "easeOutQuint"
+            }
+          });
+    });
+    network.on('initRedraw', function(){
+      // Loop over nodes and update their colors based on orientation
+      pos = network.getPositions();
+      for (id in pos){
+        if (id >0){
+        p = pos[id];
+        u1x = 1.0; u1y = 0.0;
+        u2x = 0.0; u2y = 1.0;
+        u3x = -1.0; u3y = 0.0;
+        u4x = 0.0; u4y = -1.0;
+        // Normalization orientation vector
+        x = (p['x'] - pos[0]['x']); y = (p['y'] - pos[0]['y']);
+        d = Math.sqrt(x**2 + y**2); if (d < 0.01){d = 1;}
+        x = x/d; y = y/d;
+        u1 = x*u1x + y*u1y
+        u2 = x*u2x + y*u2y
+        u3 = x*u3x + y*u3y
+        u4 = x*u4x + y*u4y
+        u0 = 0;
+        u_l = [u0, u1, u2, u3, u4]
+        var n = nodesObj.get(id);
+        fac = Math.exp(u_l[direction_index])/(Math.exp(u1) + Math.exp(u2) + Math.exp(u3) + Math.exp(u4));
+        s = fac*100;
+        sb = fac*100;
+        hue = direction_index/4.*360;
+        if (direction_index === 0){
+          s = 50;
+          sb = 50;
+          hue = 181.5;
+        };
+        n.color=  {
+        background: `hsl(${hue}, 50%, ${s}%)`,
+        border: `hsl(230, 50%, 100%)`,
+        highlight: {
+          background: `hsl(${hue}, 50%, ${s}%)`,
+          border: `hsl(230, 50%, 100%)`,
+          }
+        }
+        nodesObj.update(n);
+
+        // Get the corresponding egde
+        eid  = network.getConnectedEdges(id);
+        var e = edgesObj.get(eid[0]);
+        if (direction_index === 0){
+            fac = 1;
+        }
+        e.value = fac;
+        edgesObj.update(e);
+      }
+      }
+    });
+
+   var recolor = function(ind){
+     direction_index = ind;
+     pos = network.getPositions();
+     for (id in pos){
+       var n = nodesObj.get(id);
+       network.moveNode(id, pos[id]['x']+0.9, pos[id]['y']*0.9);
+     }
+     network.redraw();
+   };
+      var _transitions = [
+      {
+        transitionForward: () => recolor(1),
+        transitionBackward: () => recolor(0),
+        index: 0
+      },
+      {
+        transitionForward: () => recolor(2),
+        transitionBackward: () => recolor(1),
+        index: 1
+      },
+      {
+        transitionForward: () => recolor(3),
+        transitionBackward: () => recolor(2),
+        index: 2
+      },
+      {
+        transitionForward: () => recolor(4),
+        transitionBackward: () => recolor(3),
+        index: 3
+      },
+    ]
+
+</script>
+</body>
+</html>
