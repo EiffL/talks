@@ -151,3 +151,6 @@
 [submodule "BASP2023/reveal.js"]
 	path = BASP2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Euclid2023/reveal.js"]
+	path = Euclid2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
