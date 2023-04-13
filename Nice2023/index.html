@@ -786,7 +786,7 @@ $\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of
 			</div>
 		</section>
 
-		<section>
+		<!-- <section>
 			<h3 class="slide-title">Why isn't it easy?</h3>
 			<br>
 			<ul>
@@ -809,7 +809,7 @@ $\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of
 				<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
 				</li>
 			</ul>
-		</section>
+		</section> -->
 
 		<section>
 			<h3 class="slide-title">Deep Learning Approaches to Likelihood-Free Inference</h3>
@@ -843,6 +843,52 @@ $\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of
 		</section>
 
 
+		<section>
+			<section>
+				<h3 class="slide-title">Automated Summary Statistics Extraction</h3>
+		      <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+					<ul>
+						<li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
+							data while preserving information</b>.
+						</li>
+					</ul>
+					<div class="container">
+						<div class="col">
+							<div class="r-stack">
+								<img class="plain fragment current-visible"  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
+								<img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" />
+							</div>
+							<div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+									style="height:20px;vertical-align:middle;" /></a></div>
+
+						</div>
+						<div class="col">
+										<div class="block fragment" data-fragment-index="0">
+											<div class="block-title">
+												Information-based loss functions
+											</div>
+											<div class="block-content">
+												<ul>
+													<li class="fragment" data-fragment-index="0" > Variational Mutual Information Maximization
+									      			$$ \mathcal{L} \ = \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | f_\varphi(x)) ] \leq  I(Y; \Theta) $$
+
+															<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+																		style="height:20px;vertical-align:middle;" /></a></div>
+													</li>
+													<br><br>
+													<li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
+														$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+														<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+																style="height:20px;vertical-align:middle;" /></a></div>
+													</li>
+												</ul>
+											</div>
+										</div>
+						</div>
+					</div>
+			</section>
+
+		</section>
 
 
 		<section>
@@ -926,53 +972,6 @@ $\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of
 					</li>
 				</ul>
 		</section>
-		</section>
-
-		<section>
-			<section>
-				<h3 class="slide-title">Automated Summary Statistics Extraction</h3>
-		      <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
-					<ul>
-						<li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
-							data while preserving information</b>.
-						</li>
-					</ul>
-					<div class="container">
-						<div class="col">
-							<div class="r-stack">
-								<img class="plain fragment current-visible"  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
-								<img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" />
-							</div>
-							<div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
-									style="height:20px;vertical-align:middle;" /></a></div>
-
-						</div>
-						<div class="col">
-										<div class="block fragment" data-fragment-index="0">
-											<div class="block-title">
-												Information-based loss functions
-											</div>
-											<div class="block-content">
-												<ul>
-													<li class="fragment" data-fragment-index="0" > Variational Mutual Information Maximization
-									      			$$ \mathcal{L} \ = \ \mathbb{E}_{y, \theta} [ \log q_\phi(\theta | f_\varphi(x)) ] \leq  I(Y; \Theta) $$
-
-															<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
-																		style="height:20px;vertical-align:middle;" /></a></div>
-													</li>
-													<br><br>
-													<li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
-														$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
-														<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
-																style="height:20px;vertical-align:middle;" /></a></div>
-													</li>
-												</ul>
-											</div>
-										</div>
-						</div>
-					</div>
-			</section>
-
 		</section>
 
 					<section>
