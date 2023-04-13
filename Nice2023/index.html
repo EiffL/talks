@@ -58,6 +58,459 @@
 			</section>
 
 
+			<section>
+				<section>
+					<h3 class="slide-title"> Illustration on the Dark Energy Survey (DES) Y3</h3>
+					<div style="float:right; font-size: 20px">Jeffrey, et al. (2021)
+					</div><br>
+					<img data-src="/talks/assets/DESY3map.png" style="height:600px;"></img>
+				</section>
+
+				<section>
+					<h3 class="slide-title">Weak Lensing Mass-Mapping as an Inverse Problem</h3>
+					<div class="container">
+						<div class="col">
+							Shear <b class="alert">$\gamma$</b><br>
+							<img data-src="/talks/assets/shear_cat1.png" style="width:450px;"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							Convergence <b class="alert">$\kappa$</b><br>
+							<img data-src="/talks/assets/kappa.png" style="width:450px;"></img>
+						</div>
+					</div>
+
+					<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+						</div>
+						<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+							$$\boxed{\gamma = \mathbf{P} \kappa}$$
+						</div>
+					</div>
+				</section>
+
+				<section data-vertical-align-top>
+					<h3 class="slide-title">What Would a Bayesian Do?</h3>
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					The Bayesian view of the problem:
+					<br>
+					$$ p(x | y) \propto p(y | x) \ p(x) $$
+					<ul>
+						<li class="fragment fade-up">$p(y | x)$ is the data <b>likelihood</b>, which <b class="alert">contains the physics</b><br>
+						</li>
+						<br>
+						<li class="fragment fade-up">$p(x)$ is the <b>prior</b> knowledge on the solution.</li>
+					</ul>
+					<br>
+					<br>
+					<div class="fragment fade-up">
+						<ul>With these concepts in hand we can:
+							<br>
+							<li class="fragment">Estimate for instance the <b>Maximum A Posteriori</b> solution:
+								<br>
+								$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+							</li>
+							<li class="fragment">Estimate from the <b>full posterior p(x|y)</b> with MCMC or Variational Inference methods.
+							</li>
+						</ul>
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						<h3>How do you choose the prior ?</h3>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Classical examples of signal priors </h3>
+					<div class="container">
+						<div class="col">
+							Sparse
+							<img data-src="/talks/assets/wavelet.png" height="400" class="plain"></img><br>
+							$$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+						</div>
+						<div class="col">
+							Gaussian
+							<img data-src="/talks/assets/zknj8.jpg" height="400" class="plain"></img>
+							$$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+						</div>
+						<div class="col">
+							Total Variation
+							<img data-src="/talks/assets/shepp-Logan.ppm" class="plain"></img>
+							$$ \log p(x) = \parallel \nabla x \parallel_1 $$
+
+						</div>
+					</div>
+				</section>
+
+				<section data-background-image="/talks/assets/convergence.png">
+					<h2>But what about this?</h2>
+					<br>
+					<br>
+					<br>
+					<div class="fragment"> $\Longrightarrow$ <b>Implicit prior</b> $p(x)$ in the form of <b>cosmological simulations</b>.</div>
+
+					<!-- <div class="container">
+									<div class="col">
+										<img data-src="/talks/assets/gal_hsc.png" style="object-fit: cover; width:500px;height:500px;">
+										<div class="fragment"> $\Longrightarrow$ Prior in the form of existing data.</div>
+									</div>
+									<div class="col fragment fade-up">
+										<img data-src="/talks/assets/convergence.png" style="object-fit: cover; width:500px;height:500px;">
+										<div class="fragment"> $\Longrightarrow$ Prior in the form of numerical simulations.</div>
+									</div>
+								</div> -->
+				</section>
+			</section>
+
+			<!-- <section class="inverted" data-background="#000">
+				<h2> Can we use Deep Learning to embed simulation-driven priors within a <b>physical Bayesian model</b>?</h2>
+			</section> -->
+<!--
+<section>
+
+	<section data-vertical-align-top>
+		<h3 class="slide-title">What Would a Bayesian Do?</h3>
+		$\boxed{y = \mathbf{A}x + n}$
+		<br>
+		<br>
+		The Bayesian view of the problem:
+		<br>
+		$$ p(x | y) \propto p(y | x) \ p(x) $$
+		<ul>
+			<li class="fragment fade-up">$p(y | x)$ is the data <b>likelihood</b>, which <b class="alert">contains the physics</b><br>
+			</li>
+			<br>
+			<li class="fragment fade-up">$p(x)$ is the <b>prior</b> knowledge on the solution.</li>
+		</ul>
+		<br>
+		<br>
+		<div class="fragment fade-up">
+			<ul>With these concepts in hand we can:
+				<br>
+				<li class="fragment">Estimate for instance the <b>Maximum A Posteriori</b> solution:
+					<br>
+					$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+				</li>
+				<li class="fragment">Estimate from the <b>full posterior p(x|y)</b> with MCMC or Variational Inference methods.
+				</li>
+			</ul>
+		</div>
+		<br>
+		<div class="fragment fade-up">
+			<h3>How do you choose the prior ?</h3>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slide-title"> Classical examples of signal priors </h3>
+		<div class="container">
+			<div class="col">
+				Sparse
+				<img data-src="/talks/assets/wavelet.png" height="400" class="plain"></img><br>
+				$$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+			</div>
+			<div class="col">
+				Gaussian
+				<img data-src="/talks/assets/zknj8.jpg" height="400" class="plain"></img>
+				$$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+			</div>
+			<div class="col">
+				Total Variation
+				<img data-src="/talks/assets/shepp-Logan.ppm" class="plain"></img>
+				$$ \log p(x) = \parallel \nabla x \parallel_1 $$
+			</div>
+		</div>
+	</section>
+
+  <section data-background="/talks/assets/hsc_screen.png">
+	  <h2>But what about this?</h2>
+  </section>
+</section> -->
+
+<!-- <section class="inverted" data-background="#000">
+<h2> Let's use <b>deep generative models</b> to build a tractable model of this high-dimensional prior distribution.</h2>
+</section> -->
+
+<!-- <section>
+<h2>Probabilistic Mapping of Dark Matter by<br> Neural Score Matching</h2>
+<a href="https://arxiv.org/abs/2011.08271"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2011.08271-B31B1B.svg" class="plain" style="height:25px;" /></a>
+<a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+<hr>
+<div class="container">
+<div class="col">
+<div align="left" style="margin-left: 20px;">
+	<h3>Work in collaboration with: <br>
+		Benjamin Remy, Zaccharie Ramzi
+	</h3>
+	<img data-src="http://www.cosmostat.org/wp-content/uploads/2020/11/benjamin.png" style='width:200px; height:200px;'></img>
+	<img data-src="http://www.cosmostat.org/wp-content/uploads/2019/03/Portrait-2-1600x2000.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
+
+	<br>
+
+	$\Longrightarrow$ <b class="alert">Learn complex priors</b> by Neural Score Estimation and <b class="alert">sample from posterior</b> with gradient-based MCMC.
+</div>
+</div>
+<div class="col">
+<img class="plain" data-src="/talks/assets/knee.gif" style="width:450px;" />
+</div>
+</div>
+<br>
+</section> -->
+
+<section>
+<h3 class="slide-title">Writing down the convergence map log posterior</h3>
+
+$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+
+<ul>
+<li> The likelihood term is <b class="alert">known analytically</b>.
+</li>
+
+<li class="fragment fade-up"> There is <b class="alert">no close form expression for the full non-Gaussian prior</b> of the convergence.
+	<br> However:
+	<ul>
+		<li class='fragment'> <b>We do have access to samples of full  <b class="alert">implicit</b> prior</b> through simulations: $X = \{x_0, x_1, \ldots, x_n \}$ with $x_i \sim \mathbb{P}$
+			<img data-src='/talks/assets/plot_massive_nu.png' />
+		</li>
+	</ul>
+</li>
+</ul>
+<div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior from simulation</b>,
+and then <b class="alert">sample the full posterior</b>.</div>
+</section>
+
+
+<section>
+<section>
+<h3 class="slide-title">The score is all you need!</h3>
+<br>
+
+<div class="container">
+<div class="col">
+<ul>
+	<li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+		<b class="alert">only need access to the score</b> of the posterior:
+		$$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+		d
+		\color{orange}x}$$
+		<ul>
+			<li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+			<li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+		</ul>
+	</li>
+	<br>
+</ul>
+</div>
+<div class="col">
+<img data-src="/talks/assets/score_two_moons.png"></img>
+</div>
+</div>
+<br>
+<br>
+<!-- <ul>
+<li > The score of the full posterior is simply:
+$$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{can be learned}}$$
+$\Longrightarrow$ all we have to do is <b class="alert">model/learn the score of the prior</b>.
+</li>
+</ul> -->
+</section>
+
+<section>
+<h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+
+<ul>
+<li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+	<ul>
+		<li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+			$$x^\prime = x + u$$
+		</li>
+		<li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+			$$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+		</li>
+		<li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+			$$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+		</li>
+	</ul>
+</li>
+</ul>
+
+<div class="fragment fade-up">
+<div class="container">
+	<div class="col">$\boldsymbol{x}'$
+	</div>
+	<div class="col">$\boldsymbol{x}$
+	</div>
+	<div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+	</div>
+	<div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+	</div>
+</div>
+<img data-src="/talks/assets/denoised_mnist.png" style='width:1200px;'></img>
+</div>
+</section>
+
+<section>
+<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
+
+<div class="container">
+<div class="col">
+	<br>
+	<img data-src="/talks/assets/unet.png" data-fragment-index="1" /><br>
+	<br> A standard UNet
+</div>
+
+<div class="col">
+	<ul>
+		<li> We use a very standard residual UNet, and we adopt a residual
+			score matching loss:
+			$$ \mathcal{L}_{DSM} = \underset{\boldsymbol{x} \sim P}{\mathbb{E}} \underset{\begin{subarray}{c}
+			\boldsymbol{u} \sim \mathcal{N}(0, I) \\
+			\sigma_s \sim \mathcal{N}(0, s^2)
+			\end{subarray}}{\mathbb{E}} \parallel \boldsymbol{u} + \sigma_s \boldsymbol{r}_{\theta}(\boldsymbol{x} + \sigma_s \boldsymbol{u}, \sigma_s) \parallel_2^2$$
+			$\Longrightarrow$ direct estimator of the score $\nabla \log p_\sigma(x)$
+		</li>
+		<br>
+		<li class="fragment fade-up"> Lipschitz regularization to improve robustness:
+			<br><br>
+			<div class="container">
+				<div class="col">
+					Without regularization
+				</div>
+
+				<div class="col">
+					With regularization
+				</div>
+			</div>
+			<img data-src='/talks/assets/reg_score.png' />
+		</li>
+	</ul>
+</div>
+</div>
+</section>
+
+<section>
+		<h3 class="slide-title">Efficient sampling by Annealed HMC</h3>
+
+		<ul>
+			<li> Even with gradients, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+				$\Longrightarrow$ Use a parallel annealing strategy to effectively sample from full distribution.
+			</li>
+			<br>
+			<li class="fragment fade-up"> We use the fact that our score network $\mathbf{r}_\theta(x, \sigma)$ is learning a noise-convolved distribution $\nabla \log p_\sigma$
+
+				<div>
+					$$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+					<img data-src="/talks/assets/annealing.png" />
+				</div>
+
+			</li>
+
+			<li class="fragment fade-up"> Run many HMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+			</li>
+		</ul>
+	</section>
+
+	<section>
+			<h3 class="slide-title">Example of one chain during annealing</h3>
+			<img data-src="/talks/assets/hmc-annealing.gif"/>
+	</section>
+
+</section>
+
+<section>
+<section>
+<h3 class="slide-title">Illustration on $\kappa$-TNG simulations</h3>
+<div class="container">
+<div class="col">
+		<div style="float:right; font-size: 20px"> Remy, Lanusse, et al. (2022) <a href="https://arxiv.org/abs/2201.05561"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2201.05561-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+</div>
+</div>
+<div class="container">
+<div class="col">
+	<img data-src='/talks/assets/ref_ktng.png' style="width:350px; height:350px;" />
+	<br>
+	True convergence map
+</div>
+<div class="col">
+	<div class="block-content">
+		<div style="position:relative; width:350px; height:350px; top:10px; left:40px;">
+			<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="0">
+				<img data-src='/talks/assets/ks_ktng.png' style="width:350px; height:350px;" />
+			</div>
+			<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="1">
+				<img data-src='/talks/assets/wiener_ktng.png' style="width:350px; height:350px;" />
+			</div>
+			<div class="plain fragment" style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="2">
+				<img data-src='/talks/assets/mean_post_ktng.png' style="width:350px; height:350px;" />
+			</div>
+		</div>
+		<div class="block-content">
+			<div style="position:relative; width:350px; height:20px; top:50px; left:10px;">
+				<div class="fragment current-visible " data-fragment-index="0" style="position:absolute;top:0;left:0;width:350px;">Traditional Kaiser-Squires</div>
+				<div class="fragment current-visible " data-fragment-index="1" style="position:absolute;top:0;left:0;width:350px;">Wiener Filter</div>
+				<div class="fragment" data-fragment-index="2" style="position:absolute;top:0;left:0;width:350px;">Posterior Mean (ours)</div>
+			</div>
+		</div>
+		<br>
+		<br>
+	</div>
+
+</div>
+<div class="col fragment">
+	<img data-src='/talks/assets/cropped.gif' style="width:350px; height:350px;" />
+	<br>
+	Posterior samples
+</div>
+</div>
+
+</section>
+
+
+<section>
+<h3 class="slide-title">Reconstruction of the <b class="alert">HST/ACS COSMOS field</b></h3>
+
+<ul>
+<li> COSMOS shear data from <a href=https://ui.adsabs.harvard.edu/abs/2010A%26A...516A..63S/abstract>Schrabback et al. 2010</a>
+</li>
+<li> Prior learned from $\kappa$-TNG simulation from <a href=https://arxiv.org/abs/2010.09731>Osato et al. 2021</a>.
+</li>
+</ul>
+<br>
+<div class="container">
+<div class="col">
+	<div class="block-content">
+		<div style="position:relative; height:570px; top:0px; left:0px;">
+			Massey et al. (2007)
+			<img data-src="/talks/assets/massey.png" style="height:500px;"></img>
+		</div>
+	</div>
+</div>
+
+<div class="col">
+	<div class="block-content">
+		<div style="position:relative; height:570px; top:0px; left:0px;">
+			<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+				Remy et al. (2022) <b class="alert">Posterior mean</b>
+				<img data-src='/talks/assets/remy.png' style="height:500px;" />
+			</div>
+
+			<div class="plain fragment" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+				Remy et al. (2022) <b class="alert">Posterior samples</b>
+				<img data-src='/talks/assets/cosmos_samples.gif' style="height:500px;" />
+			</div>
+
+		</div>
+	</div>
+</div>
+
+</div>
+</section>
+</section>
+
+
 			<!-- <section>
 				<section data-background-video="/talks/assets/animation-day-to-night.mov" data-background-video-muted>
 					<h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time</h3>
@@ -98,6 +551,11 @@
 					<div style="float:right; font-size: 20px">Image credit: Peter Melchior</div>
 				</section>
 			</section> -->
+
+
+			<section class="inverted" data-background="#000">
+				<h2> Ok, we have solved mass-mapping. But what we really care about is Cosmological inference</h2>
+			</section>
 
 			<section>
 			<section>
