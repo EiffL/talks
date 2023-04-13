@@ -165,6 +165,41 @@
 				</section>
 			</section>
 
+			<section>
+				<h3 class="slide-title">Getting started with Deep Priors: deep denoising example</h3>
+				$$ \boxed{{\color{Orchid} y}  = {\color{SkyBlue} x} + n} $$
+													<div class="container">
+														<div class="col">
+															<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+																		<img class="fragment current-visible plain" data-src="/talks/assets/points.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+																		<div class="fig-container fragment" data-file="dgm_prior_denoising.html" data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;" data-fragment-index="1"></div>
+															</div>
+															<!-- <img data-src="/talks/assets/points.png"/>
+															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
+
+														</div>
+
+														<div class="col">
+															<ul>
+																<li class="fragment" data-fragment-index="0" > Let us assume we have access to examples of $ {\color{SkyBlue} x}$ without noise.</li>
+																<br>
+																<li class="fragment"  data-fragment-index="1">We learn the <b class="alert">distribution of noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.</li>
+																<br>
+																<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+																<br> -->
+																<li class="fragment">The solution should lie on the <b class="alert">realistic data manifold</b>, symbolized by the two-moons distribution.
+																	<div class="fragment">
+																	<p> We want to solve for the Maximum A Posterior solution: </p>
+																	$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x} \parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+
+																	This can be done by <b>gradient descent</b> as long as one has access to the <b class="alert">score function</b> $\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d \color{orange}x}$.
+																</div>
+																</li>
+															</ul>
+													</div>
+										</div>
+			</section>
+
 			<!-- <section class="inverted" data-background="#000">
 				<h2> Can we use Deep Learning to embed simulation-driven priors within a <b>physical Bayesian model</b>?</h2>
 			</section> -->
