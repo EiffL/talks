@@ -157,3 +157,6 @@
 [submodule "Nice2023/reveal.js"]
 	path = Nice2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "IPMU2023/reveal.js"]
+	path = IPMU2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
