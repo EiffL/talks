@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>
+		Score-Based Generative Modeling on SO(3) and Application to Emulating Cosmological Simulations
+	</title>
+
+    <meta
+      name="description"
+      content="Seminaire Palaisien, May 2023"
+    />
+    <link rel="stylesheet" href="reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="reveal.js/dist/theme/darkenergy.css"
+      id="theme"
+    />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="reveal.js/plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Any section element inside of this container is displayed as a slide -->
+
+        <section data-background-iframe="background.html">
+          <div class="container">
+            <div
+              class="title"
+              style="border-radius: 20px; background-color: rgba(0, 0, 0, 0.4)"
+            >
+              <h1>
+                Score-Based Generative Modeling on SO(3)
+              </h1>
+			  <h2>Application to Emulating Cosmological Simulations</h2>
+            </div>
+          </div>
+
+          <hr />
+          <div style="border-radius: 20px; background-color: rgba(0, 0, 0, 0)">
+            <div class="container">
+              <div class="col">
+                <div align="left" style="margin-left: 20px">
+                  <h2>François Lanusse</h2>
+                  <h4>in collaboration with <b class="alert">Yesukhei Jagvaral</b>, Rachel Mandelbaum <br> <b>Carnegie Mellon University</b></h4>
+    
+                  <img src="/talks/assets/CosmoStatDarkBK.png" class="plain" />
+                  <br />
+                </div>
+              </div>
+
+              <div class="col">
+                <!-- <a href="https://arxiv.org/abs/2204.07077"
+                  ><img
+                    src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A2204.07077-B31B1B.svg"
+                    class="plain"
+                    style="height: 25px"
+                /></a> -->
+                <br />
+				<br />
+				<br />
+				<br />
+                <img
+                  src="/talks/assets/logo_cnrs.png"
+                  class="plain"
+                  height="150"
+                />
+              </div>
+
+              <div class="col">
+                <a href="https://arxiv.org/abs/2212.05592"
+                ><img
+                  src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A2212.05592-B31B1B.svg"
+                  class="plain"
+                  style="height: 25px"
+              /></a>
+			  <a href="https://openreview.net/pdf?id=fKRdWEUHAO">https://openreview.net/pdf?id=fKRdWEUHAO</a>
+                <br />
+                <img src="/talks/assets/aim.png" class="plain" height="150" />
+              </div>
+            </div>
+            <div>
+              slides at
+              <a href="https://eiffl.github.io/talks/Palaisien2023"
+                >eiffl.github.io/talks/Palaisien2023</a
+              >
+            </div>
+          </div>
+        </section>
+
+		<section>
+		<section  data-background-image="/talks/assets/hsc_screen.png">
+			<h3 class="slide-title">A few words about my science</h3>
+			<br>
+			<br>
+			<br>
+			<br>
+			<div class="fragment fade-up">
+				<img class="plain" data-src="/talks/assets/great.jpg"/>
+			  </div>
+			  <br>
+			  <br>
+			  <br>
+			  <br>
+		</section>
+
+				<section>
+					<h3 class="slide-title">If only things were that easy...</h3>
+					<div class="container">
+					  <div class="col">
+						<img class="plain" data-src="/talks/assets/IA.png" />
+						<div style="float: left; font-size: 20px">
+						  Kiessling et al. (2015)
+						</div>
+					  </div>
+		
+					  <div class="col">
+						<div class="fragment fade-up" data-fragment-index="1">
+						  <img
+							class="plain"
+							data-src="/talks/assets/ed.png"
+							style="height: 410px"
+						  /><br>
+						  <div style="float: right; font-size: 20px">
+							Tenneti et al. (2015)
+						  </div>
+						</div>
+					  </div>
+					</div>
+					<br>
+					<ul>
+					  <li>
+						Tidal interactions with local gravitational potential can lead to <b class="alert">coherent intrinsic galaxy alignments which mimics gravitational lensing</b>.
+						<br />
+					  </li>
+					  <br>
+					  <li class="fragment fade-up" data-fragment-index="1">
+						Very complicated effect in details, no single analytic model for all galaxy
+						types <br />
+						$\Longrightarrow$ study requires
+						<b>expensive hydrodynamical simulations</b>
+					  </li>
+					</ul>
+				  </section>
+		
+				  <section
+					data-background-video="/talks/assets/illustris_movie_cube_sub_frame.mp4"
+				  >
+					<div class="fragment fade-up">
+					  <img
+						data-src="/talks/assets/IAhydro.png"
+						style="height: 500px"
+					  /><br />
+					  <div style="float: right; font-size: 20px">
+						Kiessling et al. (2015)
+					  </div>
+					</div>
+				  </section>
+
+			<section>
+				<h3 class="slide-title">
+				  Our goal: inpainting galaxy orientations in affordable large scale simulations
+				</h3>
+				<br>
+				<div class="container">
+	  
+				<!-- <div class="col" style="float: right; font-size: 20px">
+				  Jagvaral, <b>Lanusse</b>, Singh, Mandelbaum, Ravanbakhsh, Campbell (2022)
+				  <a href="https://arxiv.org/abs/2204.07077"
+					><img
+					  src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A2204.07077-B31B1B.svg"
+					  class="plain"
+					  style="height: 25px; vertical-align: middle"
+				  /></a>
+				</div> -->
+				</div>
+	  
+				<div class="container">
+				  <div class="col">
+					<img
+					  class="plain"
+					  data-src="/talks/assets/mb2_z0_0204a.png"
+					/><br />
+					Expensive hydrodynamical simulation
+				  </div>
+	  
+				  <div class="col">
+					<div class="fragment fade-up" data-fragment-index="1">
+					  <img
+						class="plain"
+						data-src="/talks/assets/dmo_z0_0204a.png"
+					  /><br />
+					 Affordable Dark Matter Only simulation
+					</div>
+				  </div>
+				</div>
+				<br />
+				<span class="fragment" data-fragment-index="1">$gal \sim$</span> $ p(
+				\mathbf{R} \ | \ x_{DM}, M_{DM}, \mathbf{T}_{DM}, \ldots ) \mbox{ with } \mathbf{R} \in \mathrm{SO}(3) \mathbf{} $
+				<br />
+				<br />
+				<br>
+			  </section>
+		</section>
+
+
+		<section>
+			<section>
+				<h3 class="slide-title">Let's take a step back: The 3D pose estimation problem</h3>
+	
+				<img data-src="https://implicit-pdf.github.io/ipdf_files/sphereX.gif" style="width: 700px;"/>
+				<img class="fragment fade-up" data-src="https://implicit-pdf.github.io/ipdf_files/cone.gif" style="width: 700px;"/>
+				<br>
+				<div >(credit: <a href="https://implicit-pdf.github.io/">Murphi et al. 2021</a>)</div>
+					<br>
+				<div class="fragment">$\Longrightarrow$ We want to <b class="alert">model a distribution</b> $p(\mathbf{R} | y)$ where $\mathbf{R} \in \mathrm{SO}(3)$, the Lie group of 3D rotations.</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Why is not completely trivial?</h3>
+				
+				<div class="container">
+					<div class="col">
+					<ul>
+						<li class="fragment" data-fragment-index="0">In 2023, we are very good at learning conditional distributions!</li>
+						<br>
+						<li class="fragment" data-fragment-index="1">However, 3D rotations are constrained to a non-Euclidean manifold.
+							<br>
+							<ul>
+								<li>You can associate 3D rotations with the <b>unit sphere in 4 dimensions</b>.</li>
+
+								<br>
+
+								<li class="fragment">Another way to look at rotations, the <b>axis-angle representation</b> $\mathbf{\omega} = \omega \mathbf{e} \in \mathbf{R}^3$ with $\mathbf{e}$ a unit 3d vector, and $\omega \in ( -\pi, \pi]$
+									<br>
+									<img data-src="https://upload.wikimedia.org/wikipedia/commons/5/51/Euler_AxisAngle.png" style="height: 300px;"/>
+
+								</li> 
+							</ul>
+						</li>
+						<br>
+					</ul>
+					</div>
+					<div class="col">
+						<div class="r-stack">
+							<div class="fragment current-visible" data-fragment-index="0">
+							<img data-src="https://preview.redd.it/de6cf3omoqpa1.jpg?width=960&format=pjpg&auto=webp&v=enabled&s=0f4641ba72ad4c7ef106efafc539804cf7247410" style="height: 550px;"/>
+							<br>
+							Guided Latent Diffusion from Midjourney v5 <br>(source: <a href="https://www.reddit.com/r/midjourney/comments/120vhdc/the_pope_drip/"">r/midjourney</a>)
+							</div>
+							<img data-src="https://i.stack.imgur.com/rLeiA.png" class="fragment" data-fragment-index="1"/>
+						</div>
+					</div>
+				</div>
+				
+			</section>
+
+			<section>
+				<h3 class="slide-title">the traditional approach to directional statistics</h3>
+				<br>
+				<br>
+				<div class="container">
+				  <div class="col">
+					<ul> 
+					  <li> Use distributions naturally supported on the unit hypersphere (e.g. von Mises-Fisher distribution or Bingham distribution)</li>
+					  <br><ul class="fragment">
+						  <li> Lack of expressivity </li>
+						  <li> Typically very hard to compute their normalization constants</li>
+						</ul>
+					  </li>
+					</ul>
+				  </div>
+	  
+				  <div class="col">
+					<img data-src="https://journals.sagepub.com/cms/10.1177/0278364918778353/asset/images/large/10.1177_0278364918778353-fig1.jpeg"/>
+					<br>
+					3D Bingham distribution (image credit: Srivatsan et al. 2018)
+				  </div>
+	  
+				</div>
+			  </section>
+		</section>
+
+		<section class="inverted" data-background="#000">
+			<h2>How to do density estimation on SO(3) with modern tools?</h2>
+		</section>
+
+		<section>
+			<section>
+				<h3 class="slide-title"> What you need to know about diffusion models in $\mathbb{R}^n$</h3>
+				<img data-src="https://yang-song.net/assets/img/score/sde_schematic.jpg"/>
+				<br>
+				<a href="https://arxiv.org/abs/2011.13456"> Song et al. (2021)</a>
+			</section>
+
+			<section>
+				<img data-src="/talks/assets/diffusion.png"/>
+				<br>
+				<ul>
+					<li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+						$$p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$$
+					</li>
+					<li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+					<li class="fragment"> You can sample by solving the associated ODE (aka probability flow ODE): $\mathrm{d} \mathbf{x} = [\mathbf{f}(\mathbf{x}, t) - g(t)^2  \nabla \log p_t(\mathbf{x})] \mathrm{d} t $</li>
+				</ul>
+			</section>
+
+				<section>
+					<h3 class="slide-title">How to learn the score? Denoising Score Matching</h3>
+					
+					<ul>
+					<li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+						<ul>
+							<li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+								$$x^\prime = x + u \quad \sim \quad p_{\sigma^2} (x)$$
+							</li>
+							<li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+								$$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+							</li>
+							<li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+								$$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+							</li>
+						</ul>
+					</li>
+					</ul>
+					
+					<div class="fragment fade-up">
+					<div class="container">
+						<div class="col">$\boldsymbol{x}'$
+						</div>
+						<div class="col">$\boldsymbol{x}$
+						</div>
+						<div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+						</div>
+						<div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+						</div>
+					</div>
+					<img data-src="/talks/assets/denoised_mnist.png" style='width:1200px;'></img>
+					</div>
+				</section>
+
+			<section>
+				<h3 class="slide-title">Example of reverse SDE sampling</h3>
+				<img data-src="/talks/assets/knee_sampling.gif" />
+			</section>
+
+
+		</section>
+
+		<!-- Things to say
+			- Where is the framework going to break
+				- We need to define an SDE/ODE on the manifold
+				- We need to define a noise kernel on the manifold 
+		-->
+		<section>
+			<h3 class="slide-title">Extending this framework to the $\mathrm{SO}$(3) manifold</h3>
+			
+			<img data-src="https://i.stack.imgur.com/rLeiA.png"/>
+			<br>
+			Things we need to figure out:
+			<br>
+			<ul>
+				<li class="fragment grow">How do we define this <b>noise process</b> as to remain on the manifold</li>
+				<li class="fragment grow">How do we solve <b>differential equations on the manifold</b></li>
+			</ul>
+		</section>
+
+		<section>
+
+		<!-- 
+			- Definition of the distribution
+			- Properties of closure under convolution
+			- Closed form formula for the evaluation of the log probability 
+		-->
+		<section>
+			<h3 class="slide-title">Going back to the heat equation</h3>
+			<video data-autoplay loop="true" src="/talks/assets/diffusion.mp4" style="height: 400px"></video>
+			<br>
+			The <b>heat kernel</b> is the solution of the heat diffusion equation and corresponds to the <br> 
+				<b>transition density of Brownian motion</b> $p_{t | s}(\cdot | x_s)$ for $t>s$.
+			<br>
+			<br>
+			<ul>
+				<li class="fragment">On $\mathbb{R}^n$ the heat kernel is a Gaussian distribution $\mathcal N(0, t \mathbf{I})$
+				</li>
+				<li class="fragment">Knowing the solution of the heat equation allows us to <b class="alert">easily sample the marginal distribution</b> $p_t(x) = \int p_s( x_s ) p_{t|s}(x | x_s) d x_s $ </li>
+			</ul>
+			<br>
+			<br>
+			<div class="fragment">
+			$\Longrightarrow$ On a closed manifold like $\mathrm{SO}(3)$, the heat kernel is not a Gaussian distribution anymore! 
+			</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Solution of the heat equation on SO(3)</h3>
+
+			<li>On $\mathrm{SO}(3)$ the heat kernel can be expressed as (Nikolayev & Savyolov, 1970): 
+				$$ f_\epsilon(\omega) = \sum_{\ell=0}^{\infty} (2 \ell +1) \exp(- l (l+1) \epsilon^2) \frac{\sin((\ell + 1/2) \omega)}{\sin(\omega/2)}$$	
+				 where $\omega \in \left( -\pi, \pi \right]$ is the rotation angle of an axis-angle representation of $\mathrm{SO}(3)$, $\epsilon$ is a concentration parameter.		
+
+				<div class="fragment">$\Longrightarrow$	<b class="alert">Can be robustly approximated</b> by truncation or closed form expressions (Matthies et al. 1988).</div>
+			</li>
+			<br>
+			<div class="block fragment">
+				<div class="block-title">
+					Isotropic Gaussian Distribution on SO(3)
+				</div>
+				<div class="block-content">
+					<ul>
+						<li> The isotropic Gaussian distribution on SO(3) is defined as:
+						   $$\mathcal{IG}_{\mathrm{SO(3)}}(\mathbf{x}; \mathbf{\mu}, \epsilon) = f_\epsilon(\arccos( 2^{-1} \mathrm{tr}(\mathbf{\mu}^T \mathbf{x}) - 1  )  ) $$
+						  where $\mathbf{x}$ and $\mathbf{\mu}$ are rotation matrices and $f_\epsilon$ is the density function with variance $\epsilon$.
+						</li>
+						<li class="fragment"> Like the Gaussian distribution, it is <b class="alert">closed under convolution</b>, corresponds to the <b class="alert">solution of the heat diffusion</b> process on SO(3).
+						</li>
+						<li class="fragment"> In the limit of small $\epsilon$, it is close to the Gaussian distribution. For large $\epsilon$ it tends to the uniform distribution on $\mathrm{SO}(3)$.
+						  </li>
+					  </ul>
+				</div>
+			</div>
+			
+			<div class="fragment">$\Longrightarrow$ Sampling from the marginal distribution at time $t$ becomes very easy: $$x \sim p(x), \mathbf{u} \sim \mathcal{IG}_{\mathrm{SO(3)}}(\mathbf{Id}, \epsilon(t)), \mathbf{x}^\prime = \mathbf{u} \mathbf{x}$$
+			</div>
+		</section>
+		</section>
+
+		<!-- 
+			- Defining the noise process with this kernel
+			- Defining the score of this process, and introducing the denoising neural network 
+		 -->
+		 <section>
+			<h3 class="slide-title">Denoising Score Matching on SO(3)</h3>
+
+			<ul>
+				<li class="log">We introduce a neural score estimator $s_\theta(\mathbf{x}, \epsilon) : \text{SO(3)}\times\mathbb{R}^{+ \star} \rightarrow T_{\mathbf{x}}$SO(3). In practice a simple MLP.
+					<center>
+						<img data-src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Tangentialvektor.svg"/>
+					</center>
+				</li>
+
+
+				<br>
+
+				<li class="fragment">Similarly to the Euclidean case, we ca define a Denoising Score Matching loss
+
+					$$ \mathcal{L}_{DSM} = \mathbb{E}_{p_\text{data}(\mathbf{x})} \mathbb{E}_{\epsilon \sim \mathcal{N}(0, \sigma_\epsilon^2)} \mathbb{E}_{p_{|\epsilon|}(\tilde{\mathbf{x}} | \mathbf{x} )} \left[ |\epsilon| \ \parallel   s_\theta(\tilde{\mathbf{x}}, \epsilon) - \nabla_{X} \log p_{|\epsilon|}( \tilde{\mathbf{x}} | \mathbf{x}) \parallel_2^2 \right] $$
+
+				</li>
+			</ul>
+
+		</section>
+		
+		<section>
+			<h3 class="slide-title">Sampling by Solving a Differential Equations on the Manifold</h3>
+			<br>
+			<ul>
+
+				<li class="fragment">For speed and simplicity, we propose to <b>sample from the trained model</b> using the probability flow ODE:
+					$$     \mathbf{x}_T \sim \mathcal{U}_\text{SO(3)}  \qquad ; \qquad \mathrm{d} \mathbf{x}_t = -\frac{1}{2} \frac{\mathrm{d} \epsilon(t)}{\mathrm{d} t} s_\theta(\mathbf{x}_t, \epsilon(t)) \mathrm{d} t $$
+				  </li>
+
+				  <br>
+
+				<li class="fragment"> As the ODE evolves, the solution needs to remain on the manifold (which is not a worry on $\mathbb{R}^3$)
+				  </li>
+				  
+				
+				<br>
+				<li class="fragment"> We adopt a Geometric ODE strategy that remains on the manifold by construction.<br><br> Consider $d\mathbf{x} = f(\mathbf{x},t) dt$, we use a geometric Heun's method:
+				  <!-- Add a latex block with 3 lines and a bracket on the left -->
+				  $$\mathbf{y_1} = h f(\mathbf{x_n}, t_n)$$
+				  $$\mathbf{y_2} = h f(\exp(\frac{1}{2} \mathbf{y_1}) \mathbf{x_n} , t_n + \frac{1}{2} h)$$
+				  $$\mathbf{x_{n+1}} = \exp(\mathbf{y_2)} \mathbf{x_n} $$ 
+				</li>
+				</ul>
+		</section>
+
+		
+        <section>
+        <section>
+          <h3 class="slide-title">Illustration of Reverse ODE On Analytic problem </h3>
+          <video loop="true">
+            <source data-src="https://i.imgur.com/r1qFW8S.mp4" type="video/mp4" />
+          </video>
+        </section>
+
+        <section>
+          <h3 class="slide-title">Results on toy distributions</h3>
+          <div style="text-align:right;">Jagvaral, <b>Lanusse</b>, Mandelbaum, submitted to ICML 2023</div>
+          <ul>
+            <li>Unconditional distribution modeling.
+          <div class="container">
+            <div class="col">
+              <img data-src="/talks/assets/illustration_so3_1.png"/>
+            </div>
+
+            <div class="col">
+              <img data-src="/talks/assets/illustration_so3_2.png"/>
+            </div>
+          </div>
+        </li>
+        <li class="fragment"> Conditional distribution modeling $p(\mathbf{R} | y)$ simply by making the score network conditional $s_\theta( \mathbf{R}, \epsilon, y)$<br>
+          <!-- <div class="container"> -->
+			<center>
+          		<img  data-src="/talks/assets/illustration_so3_3.png"/>
+		  	</center>
+          <!-- </div> -->
+          </li>
+        </section>
+        </section>
+
+        <section>
+          <h3 class="slide-title">Back to our initial problem of modeling galaxy orientations</h3>
+          <div class="container">
+            <div class="col" style="float: right; font-size: 20px">
+              Jagvaral, Mandelbaum, <b>Lanusse</b> (2022)
+              <a href="https://arxiv.org/abs/2212.05592"
+                ><img
+                  src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A2212.05592-B31B1B.svg"
+                  class="plain"
+                  style="height: 25px; vertical-align: middle"
+              /></a>
+            </div>
+            </div>
+
+            <img data-src="/talks/assets/so3_alignments.png" style="height: 400px;"/>
+
+			<br>
+			<br>
+            <ul>
+              <li> Modeling <b class="alert">orientation of individual galaxies</b> <b>conditioned on the local tidal field</b>.
+              </li>
+            </ul>
+        </section>
+
+		<section>
+			<h2>Going one step futher, adding graphs!</h3>
+			<hr>
+			<a href="https://arxiv.org/abs/2204.07077"
+			><img
+			  src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A2204.07077-B31B1B.svg"
+			  class="plain"
+			  style="height: 25px"
+		  /></a>
+		</section>
+
+
+
+        <section class="fig-container" data-file="graph.html">
+			<!--data-background-iframe="graph.html" data-background-interactive data-transition="none"> -->
+			<h3
+			  class="slide-title"
+			  style="
+				background-color: rgba(0, 0, 0, 0.5);
+				position: fixed;
+				top: 0 !important;
+			  "
+			>
+			  Modelling the cosmic web as a graph
+			</h3>
+  
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<div
+			  style="float: right; font-size: 20px; position: fixed; bottom: 0"
+			>
+			  Adapted from
+			  <a href="http://cosmicweb.kimalbrecht.com/"
+				>the network behind the cosmic web</a
+			  >
+			  (credit: Kim Albrecht)
+			</div>
+		  </section>
+  
+		  <section>
+			<!-- <section>
+			  <h3 class="slide-title">A few words about spectral graph theory</h3>
+			  Consider a weighted undirected graph $\mathcal{G} = (\mathcal{V},
+			  \mathcal{E})$
+			  <br />with N nodes $v_i \in \mathcal{V}$ and edges $(v_i, v_j) \in
+			  \mathcal{E}$.
+  
+			  <br /><br />
+			  <div class="container">
+				<div class="col">
+				  <img
+					class="plain"
+					data-src="/talks/assets/small_graph.png"
+					style="width: 75%"
+				  />
+				</div>
+  
+				<div class="col">
+				  <ul>
+					<li class="fragment fade-in">
+					  Adjacency matrix: $A = \{ w_{ij} \}_{i,j\in [1, N]}$
+					</li>
+					<br />
+					<li class="fragment fade-in">
+					  Degree matrix: $D_{ii} = \sum_j A_{ij} $
+					</li>
+					<br />
+					<li class="fragment fade-in">
+					  <b>Normalized graph Laplacian</b>: $$\mathbf{L} =
+					  \mathbf{I}_N - D^{- \frac{1}{2}} A D^{- \frac{1}{2}}$$
+					</li>
+				  </ul>
+				</div>
+			  </div>
+			  <br />
+  
+			  <span class="fragment fade-in"
+				>$\mathbf{L}$ is positive-semidefinite, admits the following
+				eigen-decomposition: $$L = U \ \Lambda \ U^T \quad \mbox{with
+				$\mathbf{\Lambda} = \mathrm{diag}(\lambda_0, \cdots,
+				\lambda_N)$}$$</span
+			  >
+			</section>
+  
+			<section>
+			  <h3 class="slide-title">
+				Graph Fourier Transform and Spectral Convolutions
+			  </h3>
+			  The graph Fourier transform of a signal $f: \mathcal{V} \mapsto
+			  \mathbb{R}$ is defined as: $$ \hat{f} = \mathbf{U}^T f \quad
+			  \mbox{with $\hat{f} = \mathrm{diag}(\hat{f}_0, \cdots,
+			  \hat{f}_n)$}$$
+			  <img class="plain" data-src="/talks/assets/eigenvectors.png" />
+			  <br />
+			  <span class="fragment fade-in"
+				>The convolution of a signals $f$ with a filter $g_\theta$ can be
+				defined as $$ g_\theta \star f = \mathbf{U} \ \hat{g}_\theta \
+				\mathbf{U}^T f $$</span
+			  >
+  
+			  <ul>
+				<li class="fragment fade-in">
+				  If we can compute convolutions of a signal with a parameterized
+				  filter, we can
+				  <b>extend convolutional neural networks to graphs</b>.
+				</li>
+				<br />
+				<li class="fragment fade-in">
+				  Spectral graph convolutions are too expensive,
+				  $\mathcal{O}(N^2)$ operations
+				</li>
+			  </ul>
+			</section>
+			<section>
+			  <h3 class="slide-title">Graph Convolutional Network</h3>
+			  Filters can be approximated by a truncated Chebyshev polynomials
+			  expansion $$ g_{\theta}(\Lambda) \approx g_{\theta^\prime}(\Lambda)
+			  = \sum_{k=0}^K \theta_k^{\prime} T_k ( \tilde{\Lambda}) \quad \mbox{
+			  with $\tilde{\Lambda} = \frac{2}{\lambda_\mathrm{max}} \ \Lambda -
+			  \mathbf{I}_N$}$$
+			  <div style="float: right; font-size: 20px">
+				Hammond et al. (2011)
+			  </div>
+  
+			  <ul>
+				<li>
+				  Convolutions with polynomial filters
+				  <b>by-pass the graph Fourier transform</b> thanks to $U
+				  \Lambda^k U^T = (U \Lambda U^T)^k$: $$ g_{\theta^\prime} \star f
+				  = U \ \sum_{k=0}^K \theta_k^{\prime} T_k ( \tilde{\Lambda}) \
+				  U^T f = \sum_{k=0}^K \theta_k^{\prime} T_k ( \tilde{L}) f$$
+				</li>
+				<br />
+				<li>
+				  Recurrence relation of Chebyshev polynomials allows for
+				  efficient computation (only requires $K$ Laplacian
+				  multiplications)
+				</li>
+			  </ul>
+			</section>
+   -->
+			<section>
+			  <ul>
+				<li>
+				  Defferrard et al. (2016); Kipf & Welling (2017) suggest
+				  approximating the convolution with a polynomial expansion to
+				  $K=1$: $$ g_{\theta^\prime} \star f = \theta_0^\prime f -
+				  \theta_1^\prime \ D^{- \frac{1}{2}} A D^{- \frac{1}{2}} \ f $$
+				</li>
+			  </ul>
+			  <br />
+			  <span class="fragment fade-up" data-fragment-index="0"
+				>$\Longrightarrow$ Tractable graph convolutions using an
+				approximation restricted to first neighbors</span
+			  >
+			  <br />
+			  <img
+				data-src="/talks/assets/gcn_web.png"
+				class="plain fragment fade-up"
+				data-fragment-index="1"
+			  />
+			  <br />
+			  <div
+				style="float: right; font-size: 20px"
+				class="plain fragment fade-up"
+				data-fragment-index="1"
+			  >
+				Kipf & Welling (2017)
+			  </div>
+			  <br />
+			</section>
+  
+			<section>
+			  $$\forall i, \quad y_i = b +
+			  \underbrace{\color{orange}{\mathbf{W}_0} h_{i}}_{\tiny
+			  \mbox{self-connection}} + \underbrace{\sum\limits_{j \in
+			  \mathcal{N}_i} w_{i,j} \color{teal}{\mathbf{W}_1} h_j}_{\tiny
+			  \mbox{average over neighbors}}$$
+			  <div class="container">
+				<div class="col">
+				  <div
+					class="fig-container fragment"
+					data-fragment-index="1"
+					data-file="graph_demo.html"
+					data-style="height: 550px;"
+				  ></div>
+				</div>
+				<div class="col">
+				  <img
+					class="fragment"
+					data-fragment-index="2"
+					data-src="/talks/assets/3x3_kernel.png"
+					style="width: 75%"
+				  /><br />
+				  <span class="fragment" data-fragment-index="2"
+					>Equivalent 3x3 kernel</span
+				  >
+				</div>
+			  </div>
+			</section>
+			
+			<section>
+			  <h3 class="slide-title">Directional Graph Convolution</h3>
+  
+			  Introduce additional kernels $\mathbf{W}_m$ and function $q_m(x_i,
+			  x_j)$ that decides which kernel an edge "sees", based on relative
+			  positions of both vertices.
+			  <br />
+			  <br />
+			  $$\forall i, \quad y_i = b + \color{orange}{\mathbf{W}_0} h_{i} +
+			  \sum\limits_{m = 1}^M \sum\limits_{j \in \mathcal{N}_i}
+			  q_{m}(\mathbf{x}_i, \mathbf{x}_j) \ w_{i,j} \ \mathbf{W}_m h_j$$
+			  <div style="float: right; font-size: 20px">
+				adapted from Verma et al. (2017)
+			  </div>
+			  <br />
+			  <br />
+			  <ul>
+				<li>
+				  $q_m(\mathbf{x}_i, \mathbf{x}_j) \propto \exp\left(
+				  \mathbf{u}_m^t (\mathbf{x}_i - \mathbf{x}_j)\right)$
+				</li>
+				<br />
+				<li>$\sum_m q_m(\mathbf{x}_i,\mathbf{x}_j) = 1$</li>
+			  </ul>
+			</section>
+  
+			<section>
+			  Let us consider an example with 4 directions $u_{m}$
+			  <div class="container">
+				<div class="col">
+				  <div
+					class="fig-container"
+					data-file="graph_demo2.html"
+					data-style="height: 550px;"
+				  ></div>
+				</div>
+  
+				<div class="col">
+				  Vector $u_{m}$ orientation: <br />
+				  <br />
+				  <div
+					style="
+					  position: relative;
+					  width: 200px;
+					  height: 200px;
+					  margin: 0 auto;
+					"
+				  >
+					<svg
+					  xmlns="http://www.w3.org/2000/svg"
+					  class="fragment current-visible"
+					  style="position: absolute; top: 0; left: 0"
+					  data-fragment-index="1"
+					  version="1.1"
+					  width="50%"
+					  height="50%"
+					  preserveAspectRatio="true"
+					  viewBox="2 4 28 24"
+					>
+					  <g class="shape-element" fill="rgb(255, 255, 255)">
+						<path
+						  d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+						></path>
+					  </g>
+					</svg>
+					<svg
+					  xmlns="http://www.w3.org/2000/svg"
+					  class="fragment current-visible"
+					  style="position: absolute; top: 0; left: 0"
+					  data-fragment-index="2"
+					  version="1.1"
+					  width="50%"
+					  height="50%"
+					  preserveAspectRatio="true"
+					  viewBox="4 2 24 28"
+					>
+					  <g class="shape-element" fill="rgb(255, 255, 255)">
+						<path
+						  d="M4.586 19.414l10 10c0.781 0.781 2.047 0.781 2.828 0l10-10c0.781-0.781 0.781-2.047 0-2.828s-2.047-0.781-2.828 0l-6.586 6.586v-19.172c0-1.105-0.895-2-2-2s-2 0.895-2 2v19.172l-6.586-6.586c-0.391-0.39-0.902-0.586-1.414-0.586s-1.024 0.195-1.414 0.586c-0.781 0.781-0.781 2.047 0 2.828z"
+						></path>
+					  </g>
+					</svg>
+					<svg
+					  xmlns="http://www.w3.org/2000/svg"
+					  class="fragment current-visible"
+					  style="position: absolute; top: 0; left: 0"
+					  data-fragment-index="3"
+					  version="1.1"
+					  width="50%"
+					  height="50%"
+					  preserveAspectRatio="true"
+					  viewBox="2 4 28 24"
+					>
+					  <g class="shape-element" fill="rgb(255, 255, 255)">
+						<path
+						  d="M12.586 4.586l-10 10c-0.781 0.781-0.781 2.047 0 2.828l10 10c0.781 0.781 2.047 0.781 2.828 0s0.781-2.047 0-2.828l-6.586-6.586h19.172c1.105 0 2-0.895 2-2s-0.895-2-2-2h-19.172l6.586-6.586c0.39-0.391 0.586-0.902 0.586-1.414s-0.195-1.024-0.586-1.414c-0.781-0.781-2.047-0.781-2.828 0z"
+						></path>
+					  </g>
+					</svg>
+					<svg
+					  xmlns="http://www.w3.org/2000/svg"
+					  class="fragment current-visible"
+					  style="position: absolute; top: 0; left: 0"
+					  data-fragment-index="4"
+					  version="1.1"
+					  width="50%"
+					  height="50%"
+					  preserveAspectRatio="true"
+					  viewBox="4 2 24 28"
+					>
+					  <g class="shape-element" fill="rgb(255, 255, 255)">
+						<path
+						  d="M27.414 12.586l-10-10c-0.781-0.781-2.047-0.781-2.828 0l-10 10c-0.781 0.781-0.781 2.047 0 2.828s2.047 0.781 2.828 0l6.586-6.586v19.172c0 1.105 0.895 2 2 2s2-0.895 2-2v-19.172l6.586 6.586c0.39 0.39 0.902 0.586 1.414 0.586s1.024-0.195 1.414-0.586c0.781-0.781 0.781-2.047 0-2.828z"
+						></path>
+					  </g>
+					</svg>
+				  </div>
+				</div>
+			  </div>
+			  $$\forall i, \quad y_i = b + \color{orange}{\mathbf{W}_0} h_{i} +
+			  \sum\limits_{m = 1}^M \sum\limits_{j \in \mathcal{N}_i}
+			  q_{m}(\mathbf{x}_i, \mathbf{x}_j) \ w_{i,j} \ \mathbf{W}_m h_j$$
+			</section>
+		  </section>
+  
+		  <section>
+			<h3 class="slide-title">
+			  Wasserstein Generative Adversarial Networks
+			</h3>
+			<img
+			  data-src="/talks/assets/gen_models_diag_2.svg"
+			  style="background: #bbb"
+			/>
+			<div style="float: right; font-size: 20px">
+			  Image credit:
+			  <a href="https://blog.openai.com/generative-models/">OpenAI</a>
+			</div>
+			<ul>
+			  <li class="fragment">
+				The WGAN (Arjovsky et al. 2017) is based on the Wasserstein
+				distance between real $\mathbb{P}_r$ and generated
+				$\mathbb{P}_\theta$ distributions:
+				<br />
+				<br />
+				$$W(\mathbb{P}_r, \mathbb{P}_\theta) = \sup\limits_{||f_{\phi}||_L
+				\leq 1} \mathbb{E}_{x \sim \mathbb{P}_r}[f_{\phi}(x)] -
+				\underbrace{\mathbb{E}_{x \sim
+				\mathbb{P}_\theta}[f_\phi(x)]}_{=\mathbb{E}_z[f_\phi(g_{\theta}(z))]}$$
+			  </li>
+			</ul>
+		  </section>
+  
+		  <section>
+			<h3 class="slide-title">Graph Convolutional WGAN-GP</h3>
+			<img class="plain" data-src="/talks/assets/gcn_gan.png" />
+			<br />
+			<ul>
+			  <li>
+				We use WGAN-Gradient Penalty (Gulrajani, 2017) to impose the
+				Lipschitzness of $f_\phi$
+			  </li>
+			  <br />
+			  <li>
+				Model can be made conditional by concatenating additional inputs
+				to both generator and critic
+			  </li>
+			</ul>
+		  </section>
+  
+		  <section>
+			<section>
+			  <h3 class="slide-title">Proof of concept on MNIST</h3>
+			  <div class="container">
+				<div class="col">
+				  <img class="plain" data-src="/talks/assets/mnist.png" />
+				  <br />
+				  MNIST sample
+				</div>
+  
+				<div class="col">
+				  <img class="plain" data-src="/talks/assets/mnist_example.png" />
+				  <br />
+				  MNIST on random sensor graphs
+				</div>
+			  </div>
+			</section>
+  <!-- 
+			<section>
+			  <h3 class="slide-title">Multiresolution approach</h3>
+			  <img data-src="/talks/assets/mnist_multi_resolution.png" />
+			  <br />
+			  <ul>
+				<li>
+				  Graph downsampling and upsampling operations based on Kron
+				  reduction and spectral sparsification (Shuman et al. 2013)
+				</li>
+			  </ul>
+  
+			  <img
+				class="plain"
+				data-src="/talks/assets/gspfrontpage.png"
+				width="30%"
+			  /><br />
+			  Checkout <a href="https://pygsp.readthedocs.io/">PyGSP</a>
+			</section> -->
+  
+			<section>
+			  <div class="container">
+				<div class="col">
+				  <img class="plain" data-src="/talks/assets/mnist_example.png" />
+				  <br />MNIST digits
+				</div>
+  
+				<div class="col">
+				  <img
+					class="plain"
+					data-src="/talks/assets/graph_gan_example.png"
+				  />
+				  <br />Graph WGAN-GP samples
+				</div>
+			  </div>
+			</section>
+  
+			<section>
+			  <div class="container">
+				<div class="col">
+				  <img class="plain" data-src="/talks/assets/mnist_graph.png" />
+				  <br />
+				  MNIST digits
+				</div>
+  
+				<div class="col">
+				  <img class="plain" data-src="/talks/assets/wgangp_graph.png" />
+				  <br />Graph WGAN-GP samples
+				</div>
+			  </div>
+			</section>
+		  </section> 
+  
+		  <!-- <section>
+			<section>
+			  <h3 class="slide-title">Application to Cosmological Simulations</h3>
+			  <img class="plain" data-src="/talks/assets/powerart.jpg" />
+			  <div style="float: right; font-size: 20px">
+				Khandai et al. (2014)
+			  </div>
+  
+			  <ul>
+				<li>Massive Black II hydrosimulation for training data</li>
+			  </ul>
+			</section>
+  
+			<section>
+			  <ul>
+				<li>We aim to predict <b>galaxy 3D major axis</b> given:</li>
+				<ul>
+				  <li>Dark Matter masses</li>
+				  <li>Tidal field orientation, smoothed on 1 Mpc/h</li>
+				</ul>
+				<br />
+				$\Longrightarrow$ Quantities readily available in large but low
+				resolution simulations
+				<br />
+				<br />
+				<li>Build k-nearest neighbors graphs within Dark Matter halos</li>
+			  </ul>
+			</section>
+  
+			<section>
+			  <h3 class="slide-title">Alignment Correlation functions</h3>
+			  <img class="plain" data-src="/talks/assets/wgangp-ed.png" />
+			  <img
+				class="plain fragment fade-up"
+				data-src="/talks/assets/wgangp-ee.png"
+			  />
+  
+			  <ul>
+				<li class="plain fragment fade-up">
+				  Recovers alignments deep into non-linear regime
+				</li>
+			  </ul>
+			</section>
+		  </section>
+  
+		  <section>
+			<h3 class="slide-title">takeaway message</h3>
+  
+			<br />
+			<br />
+  
+			<div class="block">
+			  <div class="block-title">
+				Deep Learning for Emulating Complex Simulations
+			  </div>
+			  <div class="block-content">
+				<ul>
+				  <li class="fragment">
+					New framework to empirically populate large volume simulations
+					with realistic galaxy populations.<br />
+					$\Longrightarrow$ Will
+					<b class="alert">add to the realism</b> of cosmological
+					simulations.
+				  </li>
+				  <br />
+  
+				  <li class="fragment">
+					Neural networks on graphs are powerful tools for working with
+					non euclidean data.
+				  </li>
+				</ul>
+			  </div>
+			</div>
+		  </section> -->
+  
+		  <section>
+			<h3 class="slide-title">Illustration of some results</h3>
+  
+			<div class="container">
+			  <div class="col">
+  
+			<img data-src="/talks/assets/yesukhei_gan.png" style="width:500px;">
+			</div>
+			<div class="col">
+			<img data-src="/talks/assets/yesukhei_gan_2.png" style="width:500px;">
+			  </div>
+			  </div>
+  <br>
+		  <div class="fragment">
+		  <b>Some limitations of that approach</b>:
+		  <br>
+		  <ul>
+			<li>We <b>do not have a model of the full 3D ellipsoid</b> representing a galaxy, only its major axis.
+			</li>
+  
+			<li> <b>GANs are the worst</b>. It is very difficult to get them to model jointly all properties of the galaxies. 
+			</li>
+			
+		  </ul>
+		  </div>
+		  
+		</section>
+  
+
+<!-- 
+        <section>
+          <h3 class="slide-title">What is next?</h3> 
+          <br>
+          <br>
+          <br>
+          <ul>
+            <li>With a state-of-the-art SO(3) model, we can <b class="alert">extend it to predict scalar quantities</b> (e.g. stellar mass, colour, etc), to generate jointly all IA-relevant quantities.</li>
+
+            <br>
+            <br>
+            <li class="fragment"><b class="alert">Combine our diffusion model with our graph approach</b> to build a full-fledged generative model of correlated galaxy properties (including orientations).</li>
+
+            <br>
+            <br>
+            <li class="fragment">Apply it to generating realistic galaxy properties for the next generation of LSST DESC large volume cosmological simulations.</li>
+          </ul>
+
+          <br>
+          <br>
+          <div class="fragment">
+            Thank you!
+          </div>
+
+        </section> -->
+
+      </div>
+    </div>
+
+    <style>
+    /* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+	}  */
+
+      .reveal .block {
+        background-color: #191919;
+        margin-left: 20px;
+        margin-right: 20px;
+        text-align: left;
+        padding-bottom: 0.1em;
+      }
+
+      .reveal .block-title {
+        background-color: #333333;
+        padding: 8px 35px 8px 14px;
+        color: #ffaa7f;
+        font-weight: bold;
+      }
+
+      .reveal .block-content {
+        padding: 8px 35px 8px 14px;
+      }
+
+      .reveal .slide-title {
+        border-left: 5px solid white;
+        text-align: left;
+        margin-left: 20px;
+        padding-left: 20px;
+      }
+
+      .reveal .alert {
+        color: #ffaa7f;
+        font-weight: bold;
+      }
+
+      .reveal .inverted {
+        filter: invert(100%);
+      }
+    </style>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        controls: true,
+
+        //center: false,
+        hash: true,
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: "hidden",
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: true,
+
+        transition: "slide", // none/fade/slide/convex/concave/zoom
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+        height: 720,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.2,
+        maxScale: 1.5,
+
+        autoPlayMedia: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+        dependencies: [
+          {
+            src: "reveal.js/plugin/markdown/marked.js",
+          },
+          {
+            src: "reveal.js/plugin/markdown/markdown.js",
+          },
+          {
+            src: "reveal.js/plugin/notes/notes.js",
+            async: true,
+          },
+          {
+            src: "reveal.js/plugin/math/math.js",
+            async: true,
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-d3/reveald3.js",
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js",
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js",
+          },
+          {
+            src: "reveal.js/plugin/highlight/highlight.js",
+            async: true,
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
