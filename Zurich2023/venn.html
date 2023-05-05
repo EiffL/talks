@@ -66,102 +66,98 @@ div.selectAll("g")
             .style("stroke-opacity", 0);
     });
 
-    var _transitions = [
-      {
-        transitionForward: function() {
-          var selection = div.selectAll('[data-venn-sets="Cosmology_Deep Learning"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 1)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.4);
-        },
-        transitionBackward: function() {
-          var selection = div.selectAll('g').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-width", 3)
-              .style("fill-opacity", .0)
-              .style("stroke-opacity", 0);
-        } ,
-        index: 0
-      },
-      {
-        transitionForward: function() {
-          var selection = div.selectAll('[data-venn-sets="Cosmology_Deep Learning"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 0)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.25);
+    // var _transitions = [
+    //   {
+    //     transitionForward: function() {
+    //       var selection = div.selectAll('[data-venn-sets="Cosmology_Deep Learning"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 1)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.4);
+    //     },
+    //     transitionBackward: function() {
+    //       var selection = div.selectAll('g').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", .0)
+    //           .style("stroke-opacity", 0);
+    //     } ,
+    //     index: 0
+    //   },
+    //   {
+    //     transitionForward: function() {
+    //       var selection = div.selectAll('[data-venn-sets="Cosmology_Deep Learning"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 0)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.25);
 
 
-          var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 1)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.4);
+    //       var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 1)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.4);
 
-        },
-        transitionBackward: function() {
-          var selection = div.selectAll('g').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-width", 3)
-              .style("fill-opacity", .0)
-              .style("stroke-opacity", 0);
-        } ,
-        index: 1
-      },
-      {
-        transitionForward: function() {
+    //     },
+    //     transitionBackward: function() {
+    //       var selection = div.selectAll('g').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", .0)
+    //           .style("stroke-opacity", 0);
+    //     } ,
+    //     index: 1
+    //   },
+    //   {
+    //     transitionForward: function() {
 
-          var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 0)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.25);
+    //       var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 0)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.25);
 
-          var selection = div.selectAll('[data-venn-sets="Cosmology_Uncertainty Quantification"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 1)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.4)
-        },
-        transitionBackward: function() {
-          var selection = div.selectAll('g').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-width", 3)
-              .style("fill-opacity", .0)
-              .style("stroke-opacity", 0);
-        } ,
-        index: 2
-      },
-    {
-      transitionForward: function() {
+    //       var selection = div.selectAll('[data-venn-sets="Cosmology_Uncertainty Quantification"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 1)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.4)
+    //     },
+    //     transitionBackward: function() {
+    //       var selection = div.selectAll('g').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", .0)
+    //           .style("stroke-opacity", 0);
+    //     } ,
+    //     index: 2
+    //   },
+    // {
+    //   transitionForward: function() {
 
-        var selection = div.selectAll('[data-venn-sets="Cosmology_Uncertainty Quantification"]').transition("tooltip").duration(400);
-          selection.selectAll('path')
-              .style("stroke-opacity", 0)
-              .style("stroke-width", 3)
-              .style("fill-opacity", 0.25)
+    //     var selection = div.selectAll('[data-venn-sets="Cosmology_Uncertainty Quantification"]').transition("tooltip").duration(400);
+    //       selection.selectAll('path')
+    //           .style("stroke-opacity", 0)
+    //           .style("stroke-width", 3)
+    //           .style("fill-opacity", 0.25)
 
-        var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification_Cosmology"]').transition("tooltip").duration(400);
-        selection.selectAll('path')
-            .style("stroke-opacity", 1)
-            .style("stroke-width", 3)
-            .style("fill-opacity", 0.4)
-      },
-      transitionBackward:  function() {
-        var selection = div.selectAll('g').transition("tooltip").duration(400);
-        selection.selectAll('path')
-            .style("stroke-width", 3)
-            .style("fill-opacity", .0)
-            .style("stroke-opacity", 0);
-      } ,
-      index: 3
-    },
-
-
-
-
-  ]
+    //     var selection = div.selectAll('[data-venn-sets="Deep Learning_Uncertainty Quantification_Cosmology"]').transition("tooltip").duration(400);
+    //     selection.selectAll('path')
+    //         .style("stroke-opacity", 1)
+    //         .style("stroke-width", 3)
+    //         .style("fill-opacity", 0.4)
+    //   },
+    //   transitionBackward:  function() {
+    //     var selection = div.selectAll('g').transition("tooltip").duration(400);
+    //     selection.selectAll('path')
+    //         .style("stroke-width", 3)
+    //         .style("fill-opacity", .0)
+    //         .style("stroke-opacity", 0);
+    //   } ,
+    //   index: 3
+    // },
+  // ]
 
 </script>
 </html>
