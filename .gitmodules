@@ -169,3 +169,6 @@
 [submodule "Paris2023/reveal.js"]
 	path = Paris2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "DIPC2023/reveal.js"]
+	path = DIPC2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
