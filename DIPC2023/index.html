@@ -63,14 +63,14 @@
 		<div class='container'>
 			<div class='col'>
 				<ul>
-					<li class="fragment" data-fragment-index="0" > Instead of trying to analytically evaluate the likelihood $p(x | \theta)$ of
+					<li data-fragment-index="0" > Instead of trying to analytically evaluate the likelihood $p(x | \theta)$ of
 						given summary statistics $x$, let us build a forward model of the full observables.<br>
 						$\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
 					</li>
 					<br>
-					<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+					<!-- <li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
 						cost of a <b>large number of latent variables</b>.
-					</li>
+					</li> -->
 				</ul>
 	
 				<br>
@@ -81,7 +81,6 @@
 						Benefits of a forward modeling approach
 					</div>
 					<div class="block-content">
-	
 						<ul>
 							<li> Fully exploits the information content of the data
 								(aka "full field inference").
@@ -100,12 +99,13 @@
 	
 			<div class='col'>
 				<div style="position:relative; width:600px; height:600px; margin:0 auto;">
-					<img class="fragment current-visible plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
-					<img class="fragment plain" data-src="/talks/assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
-					<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div>
+					<img class=" plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+					<!-- <img class="fragment plain" data-src="/talks/assets/pgm_lensing.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+					<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Schneider et al. 2015)</div> -->
 				</div>
 			</div>
 		</div>
+		<div class="fragment">For this talk, let's <b class="alert">ignore the elephant in the room</b>:<br> <b>Do we have reliable enough models for the full complexity of the data?</b></div>
 	</section>
 	
 	<section>
@@ -168,7 +168,7 @@
 						</div>
 						<br>
 						<br>
-						<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods should converge to the same posterior!</div>
+						<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods <b class="alert">should converge to the same posterior!</b></div>
 	</section>
 
 	<section>
@@ -476,7 +476,7 @@
 
 
 	<section>
-		<img data-src="talks/assets/find-the-difference.png" style="height: 700px;" />
+		<img data-src="/talks/assets/find-the-difference.png" style="height: 700px;" />
 	</section>
 
 	<section>
@@ -1102,10 +1102,10 @@
 				
 					<br>
 					<ul>
-						<li>Sampling from a random distribution is classically not a differentiable operation
+						<li>Sampling from a discrete random distribution is classically not a differentiable operation
 						</li>
 						
-						<li> <b class="alert">Relaxed and reparameterized HOD sampling</b>
+						<li class="fragment"> <b class="alert">Relaxed and reparameterized HOD sampling</b>
 							<ul>
 								<li>Relaxed Bernoulli distributions for centrals<br>
 									$$ N_{\rm cen} = \frac{1}{1 + \exp( - (\log(\frac{p}{1 - p}) + \epsilon)/\tau) } \mbox{ with } \epsilon \sim \mathrm{Logistic}(0,1) \;. $$
@@ -1164,7 +1164,7 @@
 
 					   <br>
 
-					   <li> Ultimately, promises optimal exploitation of survey data, although the "information gap" agains analytic likelihoods in realistic settingns remains uncertain.
+					   <li> Ultimately, promises optimal exploitation of survey data, although the <b class="alert">"information gap" against analytic likelihoods in realistic settingns remains uncertain.</b>
 					   </li>
 				   </ul>
 			   </div>
