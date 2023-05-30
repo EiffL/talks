@@ -171,4 +171,10 @@
 	url = https://github.com/EiffL/reveal.js.git
 [submodule "Orsay2023/reveal.js"]
 	path = Orsay2023/reveal.js
+  url = https://github.com/EiffL/reveal.js.git
+[submodule "DIPC2023/reveal.js"]
+	path = DIPC2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "NYC2023/reveal.js"]
+	path = NYC2023/reveal.js
+  url = https://github.com/EiffL/reveal.js.git
