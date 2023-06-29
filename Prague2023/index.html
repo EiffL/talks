@@ -182,12 +182,15 @@
 						<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods <b class="alert">should converge to the same posterior!</b></div>
 	</section>
 
+
 	<section>
 		<h1>Implicit Inference</h1>
 		<hr>
-		<h3>The land of Deep Generative Models</h3>
+		<h3>The land of Neural Density Estimation</h3>
 	</section>
 
+
+	<section>
 		<section>
 		   <h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
 		   <img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:750px;"/>
@@ -224,7 +227,64 @@
 	   </section>
 
 	   <section>
-		<h3 class="slide-title">Deep Learning Approaches to Likelihood-Free Inference</h3>
+		<h3 class="slide-title">Conditional Density Estimation with Neural Networks</h3>
+		<ul>
+			<li class="fragment fade-up"> I assume a forward model of the observations:
+				\begin{equation}
+				p( x ) = p(x | \theta) \ p(\theta) \nonumber
+				\end{equation}
+				All I ask is the ability to sample from the model, to obtain $\mathcal{D} = \{x_i, \theta_i \}_{i\in \mathbb{N}}$
+			</li>
+			<br>
+			<li class="fragment fade-up"> I am going to assume $q_\phi(\theta | x)$ a <b>parametric conditional density</b>
+			</li>
+			<br>
+			<li class="fragment fade-up">Optimize the parameters $\phi$ of $q_{\phi}$ according to
+				\begin{equation}
+				\min\limits_{\phi} \sum\limits_{i} - \log q_{\phi}(\theta_i | x_i) \nonumber
+				\end{equation}
+				In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+				\begin{equation}
+				\boxed{q_{\phi^\ast}(\theta | x) \approx p(\theta | x)} \nonumber
+				\end{equation}
+			</li>
+		</ul>
+
+		<div style="position:relative; height:30px; margin-left: 4em;">
+			<div class="fragment current-visible" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+				optimizing a <b>parametric estimator</b> over<br> the <b>Bayesian joint distribution</b>
+			</div>
+			<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+				optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+			</div>
+		</div>
+	</section>
+
+
+	<section>
+			<h3 class="slide-title">A variety of algorithms</h3>
+			<div style="float:right; font-size: 20px">Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021) <a href="https://arxiv.org/abs/2101.04653"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg" class="plain"
+						style="height:25px;vertical-align:middle;" /></a></div>
+			<img class="plain" data-src="/talks/assets/sbibm_comparison.png"/>
+ 
+			<br>
+			<br>
+				A few important points:
+				<br><br>
+				<ul>
+					<li> <b>Amortized</b> inference methods, which estimate $p(\theta | x)$, can greatly speed up posterior estimation once trained.
+					</li>
+					<br>
+ 
+					<li> <b>Sequential</b> Neural Posterior/Likelihood Estimation methods can actively sample simulations needed to refine the inference.
+					</li>
+				</ul>
+	</section>
+	
+</section>
+
+	   <section>
+		<h3 class="slide-title">My Practical Recipe to Apply Neural Density Estimation</h3>
 
 		<div class="block fragment">
 			<div class="block-title">
@@ -232,11 +292,14 @@
 			</div>
 			<div class="block-content">
 				<ul>
-					<li> Automatically learn an <b>optimal low-dimensional summary statistic</b>
+					<li><b>Step I</b> Automatically learn a <b class="alert">optimal</b> <b>low-dimensional summary statistic</b>
 						$$y = f_\varphi(x) $$
+						typically $y$ will have the same dimensionality as $\theta$.
 					</li>
+					
+					<br>
 
-					<li class="fragment"> Use Neural Density Estimation to either:
+					<li class="fragment"><b>Step II</b>: Use Neural Density Estimation in low dimension to either:
 						<ul>
 							<li>build an <b>estimate $p_\phi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
 
@@ -252,34 +315,6 @@
 			</div>
 		</div>
 	</section> 
-
-	   <section>
-		<h2>Full-Field Implicit Inference <br> by Neural Summarisation and Density Estimation</h2>
-		<!-- <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain" style="height:25px;" /></a>
-		<a href="https://github.com/NiallJeffrey/Likelihood-free_DES_SV"><img src="https://badgen.net/badge/icon/Likelihood-free_DES_SV?icon=github&label" class="plain" style="height:25px;" /></a> -->
-		<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/sbi_lens?icon=github&label" class="plain" style="height:25px;" /></a>
-		<hr>
-		<div class="container">
-			<div class="col">
-				<div align="left" style="margin-left: 20px;">
-					<h3>Work led by Denise Lanzieri and Justine Zeghal
-					</h3>
-					<!-- <img data-src="/talks/assets/niall.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
-					<img data-src="/talks/assets/justin.jpeg" style='width:200px; height:200px;'></img> -->
-					<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:200px; height:200px;'></img>
-					<img data-src="/talks/assets/justine.jpeg" style='width:200px; height:200px;'></img>
-
-					<br>
-					<br>
-					$\Longrightarrow$ Automatically build summary statistics that exhaust the cosmological information content.
-				</div>
-			</div>
-			<div class="col">
-				<img class="plain" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png" style="width:350px;" />
-			</div>
-		</div>
-		<br>
-	</section>
 
 	<section>
 	<section>
@@ -307,7 +342,7 @@
 									</div>
 									<div class="block-content">
 										<ul>
-											<li> Summary statistics $y$ is sufficient for $\theta$ if
+											<li> Summary statistics $y$ is sufficient for $\theta$ if, and only if,
 												$$ I(Y; \Theta) = I(X; \Theta) \Leftrightarrow p(\theta | x ) = p(\theta | y) $$
 											</li>
 											<li class="fragment" > Variational Mutual Information Maximization
@@ -316,12 +351,6 @@
 													<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
 																style="height:20px;vertical-align:middle;" /></a></div>
 											</li>
-
-											<!-- <li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
-												$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
-												<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
-														style="height:20px;vertical-align:middle;" /></a></div>
-											</li> -->
 										</ul>
 									</div>
 								</div>
@@ -329,31 +358,68 @@
 			</div>
 	</section>
 
-	<section>
-		<h3 class="slide-title">Performing inference from the compressed statistic: a variety of algorithms</h3>
-		<div style="float:right; font-size: 20px">Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021) <a href="https://arxiv.org/abs/2101.04653"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg" class="plain"
-					style="height:25px;vertical-align:middle;" /></a></div>
-		<img class="plain" data-src="/talks/assets/sbibm_comparison.png"/>
+	 <section>
+		<h3 class="slide-title">Example of application: Likelihood-Free parameter inference with DES SV</h3>
+		<div class="container">
+			<div class="col">
+				<div style="float:right; font-size: 20px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+							style="height:25px;vertical-align:middle;" /></a></div>
+			</div>
+		</div>
 
-		<br>
-			<br><br>
-			<ul>
-				<li><b class="alert">Once the compressor is fixed</b>, the problem simplies to ~6 dimensional conditional density estimation.
+		<div class="container">
+			<div class="col">
+				<img class="plain" data-src="/talks/assets/ks_sv.png" style="height:550px;"></img>
+			</div>
 
-						<ul>
-							<li>The most critical part of implicit inference, <b class="alert">conditional density estimation, becomes much easier.</b></li>
-						</ul>
+			<div class="col r-stack">
+				<div class="fragment current-visible">
+				<img class="plain" data-src="/talks/assets/orthant.png" style="height:300px;" />
+				<img class="plain" data-src="/talks/assets/sim_params.png" style="height:300px;" /><br>
+				Suite of N-body + raytracing simulations: $\mathcal{D}$
+			</div>
 
-				</li>
-				<!-- <br>
-				<li class="fragment"> <b>Amortized</b> inference methods, which estimate $p(\theta | x)$, can greatly speed up posterior estimation once trained.
-				</li>
-				<br>
+			<div class="fragment current-visible">
+				<img class="plain" data-src="/talks/assets/jeffrey_model.png" style="height:550px" /><br>
+			</div>
 
-				<li class="fragment"> <b>Sequential</b> Neural Posterior/Likelihood Estimation methods can actively sample simulations needed to refine the inference.
-				</li> -->
-			</ul>
+			<div class="fragment">
+				<img class="plain" data-src="/talks/assets/jeffrey_s8.png" />
+			</div>
+
+			</div>
+		</div>
 	</section>
+</section>
+
+	   <section>
+		<h2>Towards Optimal Full-Field Implicit Inference <br> by Neural Summarisation and Density Estimation</h2>
+		<!-- <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain" style="height:25px;" /></a>
+		<a href="https://github.com/NiallJeffrey/Likelihood-free_DES_SV"><img src="https://badgen.net/badge/icon/Likelihood-free_DES_SV?icon=github&label" class="plain" style="height:25px;" /></a> -->
+		<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/sbi_lens?icon=github&label" class="plain" style="height:25px;" /></a>
+		<a href="https://colab.research.google.com/drive/1pSjhrOJbVi80RQlsVz2oXhVAtxwBhSbn?usp=sharing" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg"
+			alt="Open In Colab" class="plain" style="height:25px;" /></a>
+		<hr>
+		<div class="container">
+			<div class="col">
+				<div align="left" style="margin-left: 20px;">
+					<h3>Work led by Denise Lanzieri and Justine Zeghal
+					</h3>
+					<!-- <img data-src="/talks/assets/niall.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
+					<img data-src="/talks/assets/justin.jpeg" style='width:200px; height:200px;'></img> -->
+					<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:200px; height:200px;'></img>
+					<img data-src="/talks/assets/justine.jpeg" style='width:200px; height:200px;'></img>
+
+					<br>
+					<br>
+					<!-- $\Longrightarrow$ Automatically build summary statistics that exhaust the cosmological information content. -->
+				</div>
+			</div>
+			<div class="col">
+				<img class="plain" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png" style="width:350px;" />
+			</div>
+		</div>
+		<br>
 	</section>
 
 	<section>
@@ -388,7 +454,7 @@
 							<ul>
 								<li> <b>explicitly</b> using an Hamiltonian-Monte Carlo (NUTS) sampler 
 									</li>
-								<li> <b>implicitly</b> using a learned summary statistics and conditional density estimation.
+								<li class="fragment" data-fragment-index="1"> <b>implicitly</b> using a learned summary statistics and conditional density estimation.
 							</li>
 						</li>
 					</ul>
@@ -396,7 +462,7 @@
 				</div>
 				<div class="col r-stack">
 					<img class="fragment current-visible" data-fragment-index="0" data-src="/talks/assets/compare_ff_ps_contour_plot_multi_tomo_bins.png"/>
-					<img class="fragment" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png"/>
+					<img class="fragment"  data-fragment-index="1" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png"/>
 				</div>
 			</div>
 		</section>
@@ -416,14 +482,40 @@
 	
 				<div class="col">
 					<video loop="true" data-autoplay data-src="/talks/assets/recovered_field.mp4" style="width: 500px;" ></video>
-					<br> <br> <br> posterior samples of the converegence field $\kappa = f(z,\theta)$ with $z \sim p(z, \theta | x)$
+					<br> posterior samples $\kappa = f(z,\theta)$ with $z \sim p(z, \theta | x)$
 				</div>
 			</div>
 		</section>
 
 		<section>
-			<h3 class="slide-title">and not all compression techniques are equivalent</h3>
-			<img data-src="/talks/assets/contours_mse_vmim.png" style="height: 700px;" />
+			<h3 class="slide-title">and not all neural compression techniques are equivalent</h3>
+
+			<div class="container">
+				<div class="col"> 
+					<br>
+					<ul>
+						<li>Most papers applying neural techniques for inference have used sub-optimal compression techniques, e.g. Mean Square Error
+							$$ \mathcal{L} = || f_\varphi(x) - \theta ||_2^2 $$
+
+							$\Longrightarrow$ This is ok, contours will simply be larger than they could be.
+						</li>
+					
+						<br>
+						<br>
+						
+						<li class="fragment">A lot of papers are still relying on assuming a proxy Gaussian likelihoods, i.e. estimating a mean and covariance from 
+							simulations.
+							<br>
+							$\Longrightarrow$ This is dangerous, can lead to biased contours.
+						</li>
+
+					</ul>
+
+				</div>
+
+				<div class="col">
+					<img data-src="/talks/assets/contours_mse_vmim.png" style="height: 600px;"/>
+				</div>
 		</section>
 		</section>
 
@@ -724,45 +816,6 @@
 										</section>
 	</section> 
 
-
-	<section>
-		<h3 class='slide-title'>Forward Models in Cosmology</h3>
-		<div class="container">
-			<div class='col'>
-				<img data-src="/talks/assets/fieldinit.png" class="plain" style="height:300px;" />
-				<b class="alert"> Linear Field </b>
-			</div>
-			<div class='col fragment' data-fragment-index='2'>
-				<img data-src="/talks/assets/fieldfin.png" class="plain " style="height:300px;" />
-				<b class="alert"> Final Dark Matter </b>
-			</div>
-			<hr style="width: 1px; height: 400px; background: white; border: none;" />
-			<div class='col fragment' data-fragment-index='3'>
-				<img data-src="/talks/assets/fieldhalo.png" class="plain " style="height:300px;" />
-				<b class="alert"> Dark Matter Halos </b>
-			</div>
-			<div class='col fragment' data-fragment-index='4'>
-				<img data-src="/talks/assets/fieldgal.png" class="plain " style="height:300px;" />
-				<b class="alert"> Galaxies </b>
-			</div>
-		</div>
-		<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
-			<div class='col fragment' data-fragment-index='2'>
-				<font size="10"> $\longrightarrow$ </font> <br>
-				<div class="fragment grow" data-fragment-index='5'>N-body simulations </div>
-			</div>
-			<div class='col fragment' data-fragment-index='3'>
-				<font size="10"> $\longrightarrow$ </font> <br> Group Finding <br> algorithms
-			</div>
-			<div class='col fragment' data-fragment-index='4'>
-				<font size="10"> $\longrightarrow$ </font> <br> Semi-analytic &amp <br> distribution models
-			</div>
-			<!-- 		<div class='fragment' data-fragment-index='2'> N-body simulations <div> -->
-			<!-- <div class='fragment' data-fragment-index='3'> Group Finding algorithms <div> -->
-			<!-- <div class='fragment' data-fragment-index='4'> Semi-analytic models <div> -->
-		</div>
-	</section>
-
 			   <section>
 				   <h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
 				   <b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
@@ -814,7 +867,7 @@
 			   </section>
 
 
-												   <section>
+								<section>
 										 <section>
 												 <h3 class='slide-title'>introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
 												 <div class="container">
@@ -916,51 +969,6 @@
 													   </div>
 												   </section>
 												   </section>
-
-												   <section>
-													<h2>Hybrid Physical-Neural ODEs for Fast N-body Simulations</h2>
-													<a href="https://arxiv.org/abs/2207.05509"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2207.05509-B31B1B.svg" class="plain" style="height:25px;" /></a>
-													<a href="https://arxiv.org/abs/2305.07531"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2305.07531-B31B1B.svg" class="plain" style="height:25px;" /></a>
-													<hr>
-													<div class="container">
-														<div class="col">
-															<div align="left" style="margin-left: 20px;">
-																<h3>Work in collaboration with: <br>
-																	Denise Lanzieri
-																</h3>
-																<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:200px; height:200px;'></img>
-									
-																<br>
-									
-																$\Longrightarrow$ <b class="alert">Learn residuals to known physical equations</b> to improve accuracy of fast PM simulations.
-															</div>
-														</div>
-														<div class="col">
-															<img class="plain" data-src="/talks/assets/cluster_2D_PM_NN.png" style="width:450px;" />
-														</div>
-													</div>
-													<br>
-												</section> 
-			
-												<section>
-													<h3 class='slide-title'>Fill the gap in the accuracy-speed space of PM simulations</h3>
-														<div class='container'>
-															<div class='col'>
-																<div class="plain  current-visible "  data-fragment-index="0">
-																	<p>Camels simulations</p>
-																	<img  data-src="/talks/assets/cluster_2D_Camels.png" style="height:250px; "></img>
-																</div>
-																<div class="plain  current-visible "  data-fragment-index="0">
-																	<p >PM simulations</p>
-																	<img  data-src='/talks/assets/cluster_2D_PM.png' style="height:250px;" />
-															 </div>
-															</div>
-															<div  class='col'>
-																<img  data-fragment-index="1" data-src="/talks/assets/comparison_pk_intro.png" class='plain' style="height: 400px; width:700px;" />
-														  </div>
-													  </div>
-												</section>
-								
 												   <section>
 													<section>
 															<h3 class="slide-title"> Hybrid physical/neural differential equations</h3>
@@ -1118,7 +1126,121 @@
 													</section>
 												</section>	
 												
-							
+
+												<section>
+													<section>
+														<h3 class='slide-title'>Forward Models in Cosmology</h3>
+														<div class="container">
+															<div class='col'>
+																<img data-src="/talks/assets/fieldinit.png" class="plain" style="height:300px;" />
+																<b class="alert"> Linear Field </b>
+															</div>
+															<div class='col ' data-fragment-index='2'>
+																<img data-src="/talks/assets/fieldfin.png" class="plain " style="height:300px;" />
+																<b class="alert"> Final Dark Matter </b>
+															</div>
+															<hr style="width: 1px; height: 400px; background: white; border: none;" />
+															<div class='col ' data-fragment-index='3'>
+																<img data-src="/talks/assets/fieldhalo.png" class="plain " style="height:300px;" />
+																<b class="alert"> Dark Matter Halos </b>
+															</div>
+															<div class='col ' data-fragment-index='4'>
+																<img data-src="/talks/assets/fieldgal.png" class="plain " style="height:300px;" />
+																<b class="alert"> Galaxies </b>
+															</div>
+														</div>
+														<div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+															<div class='col ' data-fragment-index='2'>
+																<font size="10"> $\longrightarrow$ </font> <br>
+																<div class=" grow" data-fragment-index='5'>N-body simulations </div>
+															</div>
+															<div class='col ' data-fragment-index='3'>
+																<font size="10"> $\longrightarrow$ </font> <br> Group Finding <br> algorithms
+															</div>
+															<div class='col fragment grow' data-fragment-index='4'>
+																<font size="10"> $\longrightarrow$ </font> <br> HOD models
+															</div>
+															<!-- 		<div class='fragment' data-fragment-index='2'> N-body simulations <div> -->
+															<!-- <div class='fragment' data-fragment-index='3'> Group Finding algorithms <div> -->
+															<!-- <div class='fragment' data-fragment-index='4'> Semi-analytic models <div> -->
+														</div>
+													</section>
+		<section>
+			<h3 class="slide-title">Differentiable sampling from Halo Occupation Distributions</h3>
+			<div class="container">
+				<div class="col">
+					<div style="float:right; font-size: 20px"> Horowitz, Hahn, <b>Lanusse</b>, Modi, Ferraro (2022)
+						<a href="https://arxiv.org/abs/2211.03852"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2211.03852-B31B1B.svg" class="plain"  style="height:25px;vertical-align:middle;"/></a>										
+				</div>
+				</div>
+
+			</div>
+
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/github.png" class="plain" style="height:70px" />
+					<br>
+					<a href="https://github.com/DifferentiableUniverseInitiative/DHOD">https://github.com/DifferentiableUniverseInitiative/DHOD</a><br>
+				
+					<br>
+					<ul>
+						<li>Sampling from a discrete random distribution is classically not a differentiable operation
+						</li>
+						
+						<li class="fragment"> <b class="alert">Relaxed and reparameterized HOD sampling</b>
+							<ul>
+								<li>Relaxed Bernoulli distributions for centrals<br>
+									$$ N_{\rm cen} = \frac{1}{1 + \exp( - (\log(\frac{p}{1 - p}) + \epsilon)/\tau) } \mbox{ with } \epsilon \sim \mathrm{Logistic}(0,1) \;. $$
+									where $\tau$ is a temperature parameter
+								</li>
+								<li>Relaxed Binomial distribution for satelittes<br>
+									$$ N_{\rm sat} \sim \mathrm{Binomial}\left(N, p=\frac{ \left\langle N_{\rm sat}\right\rangle }{N} \right)$$
+								</li>
+								
+							</ul>
+						</li>
+					</ul>
+
+				</div>
+
+				<div class="col">
+					<img data-src="/talks/assets/relaxed_hod.png" style="height:600px;"/>
+				</div>
+			</div>
+
+		</section>
+	</section>
+
+	<section class="inverted" data-background="#000">
+		<h2>But where are your full-field constraints with Hierarchical Bayesian Inference?</h2>
+	</section>
+	
+	<section>
+		<h3 class="slide-title">towards reasonable resolution differentiable lensing simulations</h3>
+
+		<div class="container">
+			<div class="col">
+				<div style="float:right; font-size: 20px"> Lanzieri, <b>Lanusse</b>, et al. (2023)
+					<a href="https://arxiv.org/abs/2305.07531"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2305.07531-B31B1B.svg" class="plain"  style="height:25px;vertical-align:middle;"/></a>										
+			</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="col">
+				<img data-src="/talks/assets/lensmap_lanzieri.png" class="plain"/>
+				<br>
+				5x5 sq deg^2 convergence field, with sources at z=0.9
+			</div>
+			<div class="col">
+				<img data-src="/talks/assets/lanzieri_resolution.png" class="plain"/>
+				<br>
+				FlowPM simulation with 128^3 particles
+			</div>
+		</div>
+
+	</section>
+
 	   <section>
 		   <h2>Conclusion</h2>
 	   </section>
@@ -1153,7 +1275,7 @@
 
 					   <br>
 
-					   <li> Ultimately, promises optimal exploitation of survey data, although the <b class="alert">"information gap" against analytic likelihoods in realistic settingns remains uncertain.</b>
+					   <li> Ultimately, promises optimal exploitation of survey data, although the <b class="alert">"information gap" against analytic likelihoods in realistic settings remains uncertain.</b>
 					   </li>
 				   </ul>
 			   </div>
