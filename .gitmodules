@@ -181,3 +181,6 @@
 [submodule "Munich2023/reveal.js"]
 	path = Munich2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Prague2023/reveal.js"]
+	path = Prague2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
