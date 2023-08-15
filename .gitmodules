@@ -190,3 +190,6 @@
 [submodule "Chicago2023/reveal.js"]
 	path = Chicago2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "SSI2023/reveal.js"]
+	path = SSI2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
