@@ -1,0 +1,2716 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>ADA X: Introduction to Probabilistic Deep Learning</title>
+
+	<meta name="description" content="ADA X Summer School, Hersonissos, Sept. 2023">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<section data-background-iframe="background.html">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Introduction to Probabilistic Deep Learning</h1>
+						<h3>ADA X Summer School, Hersonissos, Sept. 2023</h3>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a
+							href="https://eiffl.github.io/SantaCruz2023">eiffl.github.io/talks/ADA2023</a>
+					</div>
+				</div>
+			</section>
+
+
+		<section>
+		<section>
+			<h3 class="slide-title">Learning Objectives & Program</h3>
+
+			<div class="container">
+				<div class="col fragment fade-up">
+					<img style="height: 150px;" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/8782821/pasted-from-clipboard.png">
+				</div>
+
+				<!-- <div class="col">
+					<img style="height: 200px;" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653364/pasted-from-clipboard.png">
+				</div> -->
+				<div class="col fragment fade-up" style="font-size: 2.5em;">
+					$+ p(x) =$
+				</div>
+				<div class="col fragment fade-up">
+					<img data-src="https://media3.giphy.com/media/90F8aUepslB84/giphy.gif">
+				</div>
+			</div>
+
+			<ul> 
+				<li class="fragment"><b class="alert">Morning</b>: <b>Introduction to Neural Networks and Understanding Uncertainties</b>
+					<ul>
+						<li>What are Neural Networks and how to code them</li>
+						<li>Combining Neural Networks and Probabilities to perform Bayesian Inference</li>
+					</ul>
+
+					<b>Hands-on tutorial</b>: Estimating Masses of Galaxy Clusters in JAX/Flax/Tensorflow Probability
+				</li>
+			
+				<br>
+
+				<li class="fragment"><b class="alert">Afternoon</b>: <b>Deep Generative Modeling and Application to Inverse Problems</b>
+					<ul>
+						<li>How to solve inverse problems from a Bayesian point of view</li>
+						<li>How to model high dimensional distributions with Deep Generative Models</li>
+					</ul>
+					<b>Hands-on tutorials</b>:
+						<ul>
+							<li>Building your own Normalizing Flow in JAX/Flax/Tensorflow Probability</li>
+							<li>Deconvolving Galaxy Images from the HSC survey with Deep Generative Priors</li>
+						</ul>
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Before we begin...</h3>
+
+			<br>
+			<br>
+			<br>
+			<br>
+
+			<p>My goal is to make it a <b>lively, fun, interactive, and informative session</b> </p>
+			
+			<br>
+			<p class="fragment grow"> <b>Questions</b> are welcome at any time!</p>
+
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+		</section>
+	</section>
+	
+			<section>
+				<h1>A (very) Brief Introduction to Neural Architectures</h1>
+				<hr>
+			</section>
+
+			<section>
+			<section>
+				<h3 class="slide-title">What is a neural network?</h3>
+			
+					<p>Simplest architecture: Multilayer Perceptron (MLP)</p>
+					
+					<div class="container">
+					<div class="col">
+					<img data-src="/talks/assets/fnn.png" style="height:300px;"/>
+					<img data-src="https://studymachinelearning.com/wp-content/uploads/2019/10/summary_activation_fn.png"</img>
+					</div>
+					<div class="col">
+				<ul>
+					<li> Series of <b>Dense</b> a.k.a <b>Fully connected</b> layers:
+						$$ h = \sigma(W x + b)$$ 
+						where:
+						<ul>
+							<li>$\sigma$ is the activation function (e.g. ReLU, Sigmoid, etc.)</li>
+							<li>$W$ is a multiplicative weight matrix</li>
+							<li>$b$ is an additive bias parameter</li>
+						</ul>
+					</li>
+					<br>
+					<li class="fragment"> This defines a <b class="alert">parametric non-linear function $f_\theta(x)$</b></li>
+					</li>
+					<br>
+					<li class="fragment"> MLPs are <b class="alert">universal function approximators</b> 
+						<br> <b>Nota bene</b>: only asymptotically true! 
+					</li>
+				</ul>
+			</div>
+		</section>
+
+			<section>
+				<h3 class="slide-title">How do you use it to approximate functions?</h3>
+
+				<div class="container">
+
+					<div class="col">
+						<img data-src="/talks/assets/gradient_descent.webp" style="height:300px;"/>
+					</div>
+
+					<div class="col">
+
+						<ul>
+							<li>Assume a <b>loss function</b> that should be small for good approximations on a training set of data points $(x_i, y_i)$
+
+								$$ \mathcal{L} = \sum_{i} ( y_i - f_\theta(x_i))^2 $$
+							</li>
+						
+							<br>
+
+							<li class="fragment">Optimize the parameters $\theta$ to minimize the loss function by <b>gradient descent</b>
+								$$ \theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L} $$
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section data-background-iframe="https://playground.tensorflow.org"></section>
+			</section>
+
+			<section>
+			<section>
+				<h3 class="slide-title">Different neural architectures for different types of data</h3>				
+			
+				<p>Performance can be improved for particular types of data by making use of <b class="alert">inductive biases</b></p>
+
+				<div class="container">
+					<div class="col r-stack">
+						<div class="fragment current-visible" data-fragment-index="0">
+							<img data-src="/talks/assets/cnn.png"/>
+							$$ h = \sigma(W \ast x + b)$$ 
+						</div>
+
+						<div class="fragment" data-fragment-index="1">
+							<img data-src="https://colah.github.io/posts/2015-08-Understanding-LSTMs/img/LSTM3-chain.png" />
+						</div>
+						<div class="fragment" data-fragment-index="2">
+							<img data-src="/talks/assets/gcn_web.png" />
+						</div>
+					</div>
+
+					<div class="col">
+						<ul> 
+							<li class="fragment"  data-fragment-index="0"><b>Image</b> -> Convolutional Networks
+								<ul>
+									<li>Convolutional layers are <b>translation invariant</b></li>
+									<li>Pixel topology is incorporated by construction</li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"><b>Time Series</b> -> Recurrent Networks
+								<ul>
+									<li>Temporal information and variable length is incorporated by construction</li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="2"><b>Graph-stuctured data</b> -> Graph Neural Networks
+								<ul>
+									<li>Graph topology is incorporated by construction</li>
+									<li>Can be seen as generalisation of convolutional networks</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<br>
+				<br>
+				<div class="fragment">$\Longrightarrow$Complete architectures can be compositions of these layers (and others). </div>
+			</section>
+<!-- 			
+			<section>
+				<h3 class="slide-title">Example of a basic full CNN</h3>
+
+				<img data-src="/talks/assets/single_layer.png" class="plain"></img>
+				
+			</section> -->
+			</section>
+
+			<section>
+				<h3 class="slide-title">takeways</h3>
+				<br>
+				<br>
+				<br>
+				<!-- below are the main takeaways regarding different neural architectures -->
+				<ul>
+					<li class="fragment">Depending on the data, different architectures will benefit from different
+						<b class="alert">inductive biases</b>.</li>
+					<br>
+					<li class="fragment">In 2023, you can assume that <b>there exists a 
+						neural architecture that can achieve near optimal performance</b> on your data.
+						<br>
+						<b>Pro tips</b>:
+						<ul>
+							<li>Don't try to reinvent your own architecture, use an existing state of the art one! (e.g. ResNet)</li>
+							<br>
+							<li>Most neural network libraries already have most common architectures implemented for you</li>
+						</ul>
+					</li>
+					<br>
+
+					<li class="fragment">The particular neural network you use becomes an <b class="alert">implementation detail</b>.
+						<br>$\Longrightarrow$ In the rest of this talk most neural networks will just be denoted by a <b>parametric function $f_\theta$</b>
+					</li>
+
+				</ul>
+				<br>
+				<br>
+				<br>
+				<div class="fragment">$\Longrightarrow$ In most scientific applications, the <b class="alert">interesting question is not how to build a neural network, but how to train it</b>!
+				</div>
+
+				<br>
+				<br>
+				<br>
+				<br>
+			</section>
+
+			<section class="inverted" data-background="#000">
+				<h2>Let's move on to the practice!</h2>
+			</section>
+
+			<section>
+			<section>
+				<h3 class="slide-title">Our case study: <b>Dynamical Mass Measurement for Galaxy Clusters</b></h3>
+
+
+				<div class="container">
+					<div class="col">
+						<!-- insert a video from youtube -->
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/cNT5yAqpBmI?enablejsapi=1"
+							frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+					<div class="col fragment">
+
+				<div style="text-align:right">
+					<p><span style="font-size:0.7em">Figures and data from <a href="https://arxiv.org/abs/1902.05950" target="_blank">Ho et al. 2019</a></span></p>
+			</div>
+					<div class="col r-stack">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653402/pasted-from-clipboard.png"/>
+						<img class="fragment" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653404/pasted-from-clipboard.png"/>
+
+					</div>
+					<img style="filter: invert();" data-natural-width="281" data-natural-height="81" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653420/pasted-from-clipboard.png">
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Our goal: train a neural network to estimate the cluster mass</h3>
+
+
+				<div class="container">
+					<div class="col">
+							<p><strong>What we will feed the model</strong>:</p>
+							
+							<ul>
+								<li>Richness</li>
+								<li>Velocity Dispersion</li>
+								<li>Information about member galaxies:
+								<ul>
+									<li>radial distribution</li>
+									<li>stellar mass distribution</li>
+									<li>LOS velocity distribution</li>
+								</ul>
+								</li>
+							</ul>
+
+							<p class="fragment">Training data from MultiDark Planck 2 N-body simulation (Klypin et al. 2016) with 261287 clusters.		
+							</p>		
+					</div>
+
+					<div class="col fragment">							
+							<img height="500px" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653424/pasted-from-clipboard.png">
+					</div>
+
+				</div>
+			</section>
+			</section>
+
+
+			<section>
+				<section>
+					<div class="container">
+
+					<div class="col">
+
+					<div class="sl-block" data-block-type="text" style="width: 520.535px; left: 26.3051px; top: 16.1171px; height: auto;" data-block-id="e21644855a61e26de33048fbc750daf2">
+						<div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
+							<h1>Why JAX?&nbsp;</h1>
+					
+							<p>and what is it?</p>
+						</div>
+					</div>
+
+					<img style="" data-natural-width="250" data-natural-height="145" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/8782821/pasted-from-clipboard.png">
+
+					<!-- Add logo of tensorflow, with black background -->
+					<img data-src="/talks/assets/TF_FullColor_Horizontal.png"/>
+					
+					<img data-src="https://pytorch.org/assets/images/logo-white.svg"/>
+					
+					
+					
+					</div>
+					<div class="col fragment">
+					<div class="sl-block" data-block-type="image" data-name="image-0edf51" style="width: 720px; height: 720px; left: 560px; top: 0px; min-width: 1px; min-height: 1px;" data-block-id="20e333f57e13831c4d4f7649dc08853c">
+						<div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="1350" data-natural-height="1350" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/8781437/pasted-from-clipboard.png"></div>
+					</div>
+					<div class="sl-block" data-block-type="text" data-name="text-372337" style="height: auto; width: 240px; left: 1040px; top: 681px;" data-block-id="8b225ba9374ff3fd802e1734c5676889">
+						<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+							<p><a href="https://towardsdatascience.com/getting-started-with-jax-mlps-cnns-rnns-d0bc389bd683" target="_blank">Credit</a></p>
+						</div>
+					</div>
+					</div>
+
+				</div>
+				</section>
+
+				<section>
+						<h1>JAX: NumPy + Autograd + XLA</h1>
+						<div class="container">
+							<div class="col">
+						<ul>
+							<li class="fragment visible" data-fragment-index="0"><b>JAX uses the NumPy API</b><br>
+							=&gt; You can copy/paste existing code, works pretty much out of the box<br>
+							<br>
+							&nbsp;</li>
+							<li class="fragment visible" data-fragment-index="1"><b>JAX is a successor of <a href="https://github.com/hips/autograd" target="_blank">autograd</a></b><br>
+							=&gt; You can <em>transform</em> any function to get forward or backward automatic derivatives (grad, jacobians, hessians, etc)<br>
+							<br>
+							
+							&nbsp;</li>
+							<li class="fragment visible" data-fragment-index="2"><b>JAX uses XLA as a backend</b><br>
+							=&gt; Same framework as used by TensorFlow (supports CPU, GPU, TPU execution)</li>
+						</ul>
+						<br>
+						<br>
+						<br>
+
+					
+					</div>
+
+					<div class="col">
+						
+						<div class="fragment" data-fragment-index="0"><pre class="python" style="font-size: 18px; line-height: 20px;"><code>import jax.numpy as np
+
+m = np.eye(10) # Some matrix
+
+def my_func(x):
+	return m.dot(x).sum() 
+
+x = np.linspace(0,1,10)
+y = my_func(x)</code>
+						</pre></div>
+						
+						<div class="fragment" data-fragment-index="1">
+						<pre class="python" style="font-size: 18px; line-height: 20px;"><code>from jax import grad
+
+df_dx = grad(my_func)
+y = df_dx(x)
+</code>
+</pre></div>
+
+							
+						
+					
+<img class="fragment" data-fragment-index="2" data-natural-width="750" data-natural-height="322" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/8782385/pasted-from-clipboard.png">
+
+
+						</div>
+						</div>
+				</section>
+			</section>
+
+
+			<section>
+				<h3 class="slide-title">Writing a Neural Network in JAX/Flax</h3>
+				
+				<div class="container">
+
+					<div class="col" >
+
+						<pre class="python stretch" style="font-size: 18px; line-height: 20px;">
+<code data-line-numbers="|4-10|11-15|16-18|19-22|23-27" data-fragment-index="0">import flax.linen as nn
+import optax
+
+class MLP(nn.Module):
+	@nn.compact
+	def __call__(self, x):
+	x = nn.relu(nn.Dense(128)(x))
+	x = nn.relu(nn.Dense(128)(x))
+	x = nn.Dense(1)(x)
+	return x
+# Instantiate the Neural Network  
+model = MLP()
+# Initialize the parameters
+params = model.init(jax.random.PRNGKey(0), x)
+prediction = model.apply(params, x)
+# Instantiate Optimizer
+tx = optax.adam(learning_rate=0.001)
+opt_state = tx.init(params)
+# Define loss function
+def loss_fn(params, x, y):
+	mse = model.apply(params, x) -y)**2
+	return jnp.mean(mse)
+# Compute gradients
+grads = jax.grad(loss_fn)(params, x, y)
+# Update parameters
+updates, opt_state = tx.update(grads, opt_state)
+params = optax.apply_updates(params, updates)</code></pre>
+					</div>
+				
+				<div class="col">
+
+					<img style="height: 150px;" data-natural-width="250" data-natural-height="145" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/8782821/pasted-from-clipboard.png">
+									
+					<img style="height: 150px;" data-natural-width="250" data-natural-height="145" data-lazy-loaded="" src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/9653364/pasted-from-clipboard.png">
+
+						<ul>
+							<li class="fragment" data-fragment-index="0">
+								<strong>Model Definition</strong>: Subclass the flax.linen.Module base class. Only need to define the __call__() method.</li>
+						</ul>
+				
+						<p>&nbsp;</p>
+				
+						<ul>
+							<li class="fragment" data-fragment-index="1">
+								<strong>Using the Model</strong>: the model instance provides 2 important methods:
+				
+								<ul>
+									<li>init(seed, x): Returns initial parameters of the NN</li>
+									<li>apply(params, x): <strong>Pure function</strong> to apply the NN<br>
+										&nbsp;</li>
+								</ul>
+							</li>
+							<li class="fragment" data-fragment-index="2">
+								<strong>Training the Model</strong>: Use jax.grad to compute gradients and Optax optimizers to update parameters</li>
+						</ul>
+		
+			</div>
+			</div>
+			</section>
+
+			<section>
+			<section>
+				<h1> Now you try it!</h1>
+
+				We will be using this notebook:
+
+				https://bit.ly/3LaLHq3
+	<br>
+	<br>
+				<br>
+				<b>Your goal:</b>  Building a regression model with a Mean Squared Error loss in JAX/Flax
+
+				<br>
+				<br>
+				<pre class="python" style="font-size: 20px; line-height: 20px;"><code>def loss_fn(params, x, y):
+  mse = (model.apply(params, x) - y)**2
+  return jnp.mean(mse)</code></pre>				
+
+
+				<br>
+				<br>
+
+				<p>Raise your hand if you manage to get a cluster mass prediction!</p>
+
+			</section>
+
+
+			<section>
+				<h3 class="slide-title">First attempt with an MSE loss </h3>
+
+				<div class="container">
+					<div class="col">
+						<pre class="python" style="font-size: 18px; line-height: 20px;"><code>class MLP(nn.Module):
+@nn.compact
+def __call__(self, x):
+	x = nn.relu(nn.Dense(128)(x))
+	x = nn.relu(nn.Dense(128)(x))
+	x = nn.tanh(nn.Dense(64)(x))
+	x = nn.Dense(1)(x)
+	return x
+
+def loss_fn(params, x, y):
+	prediction = model.apply(params, x)
+	return jnp.mean( (prediction - y)**2 )</code></pre>
+
+		<ul>
+		<li class="fragment" data-fragment-index="2"> The prediction appears to be biased... <b class="alert">What is going on?</b></li>
+		</ul>
+
+		<img data-src="https://media4.giphy.com/media/WRQBXSCnEFJIuxktnw/giphy.gif" class="fragment" data-fragment-index="3"/>
+					</div>
+
+					<div class="col fragment" data-fragment-index="1">
+						<img height="650px" style="filter: invert();" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/6745608/pasted-from-clipboard.png"/>
+
+					</div>
+				</div>
+			</section>
+		</section>
+
+
+			<section>
+				<section class="inverted" data-background="#000">
+					<figure>
+						<blockquote>
+							A neural network will <b class="alert">try</b> to answer <br>the <b class="alert">question
+								you
+								ask</b>.
+						</blockquote>
+						<figcaption style="align-items: right;">
+							@EiffL - Hersonissos, September 2023
+						</figcaption>
+					</figure>
+				</section>
+
+				<section>
+					<p>Let's try to understand the neural network output by looking at the <b class="alert">loss
+							function</b></p>
+					$$ \mathcal{L} = \sum_{(x_i, y_i) \in \mathcal{D}} \parallel x_i - f_\theta(y_i)\parallel^2 \quad
+					\simeq \quad \int \parallel x - f_\theta(y) \parallel^2 \ p(x,y) \ dx dy $$
+
+					<div class="fragment" data-fragment-index="1">$$\Longrightarrow \int \left[ \int \parallel x -
+						f_\theta(y) \parallel^2 \ p(x|y) \ dx \right] p(y) dy $$ </div>
+
+					<div class="block fragment" data-fragment-index="2">
+						<div class="block-content">
+							$\mathcal{L}$ minimized when $f_{\theta^\star}(y) = \int x \ p(x|y) \ dx $, i.e.
+							when <b class="alert">$f_{\theta^\star}(x)$ is predicting the mean of $p(x|y)$</b>.
+						</div>
+					</div>
+					<div class="container">
+						<div class="col">
+							<div style="position:relative; width:500px; height:500px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="/talks/assets/nn_l2.png"
+									style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+								<img class="fragment current-visible plain" data-src="/talks/assets/nn_l2_mean.png"
+									style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+								<img class="fragment current-visible plain" data-src="/talks/assets/nn_l1.png"
+									style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="5" />
+								<img class="fragment plain" data-src="/talks/assets/nn_l1_median.png"
+									style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="6" />
+							</div>
+						</div>
+						<div class="col">
+							<ul>
+								<li class="fragment" data-fragment-index="3"> Using an <b class="alert">$\ell_2$ loss
+										learns the mean</b> of the $p(x | y)$
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="5"> Using an <b class="alert">$\ell_1$ loss
+										learns the median</b> of $p(x|y)$
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="7"> <b>In general, training a neural network for
+									regression doesn't
+									achieve de mode of the distribution.</b><br>
+									<br>
+									<div style='vertical-align:middle; display:inline;'>Check this <a
+											href="https://medium.com/cosmostat/regression-in-the-presence-of-uncertainties-with-tensorflow-probability-1b7449f1083b"
+											target="blank_">blogpost</a> and this
+										notebook to learn how to do that: <a
+											href=" https://colab.research.google.com/drive/1yi_BY09LCS8qHCfJqvCIftKuW6jNe-t1"
+											target="_blank"><img
+												src="https://colab.research.google.com/assets/colab-badge.svg"
+												alt="Open In Colab" class="plain"
+												style="height:25px;vertical-align:middle; display:inline;" /></a></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">Let's take a step back and think as Bayesians</h3>
+					<br>
+					<div class="block fragment" data-fragment-index="1">
+						<div class="block-title">
+							Bayesian point of view
+						</div>
+						<div class="block-content">
+							There is <b>intrinsically</b> a distribution of solutions $p(x|y)$ which can be understood as a <b>Bayesian posterior distribution</b>:
+						$$ p(x | y) \propto \underbrace{p(y | x)}_{\mbox{likelihood}} \quad
+						\underbrace{p(x)}_{\mbox{prior}} $$		
+						</div>
+						<p>In our case here:</p>
+						<ul>
+							<li>The prior $p(x)$ would be an assumption on plausible cluster masses</li>
+
+							<li>The likelihood $p(y |x)$ is the probability of observing particular cluster poperties for clusters of a given mass</li>
+						</ul>
+
+						<br>
+						<br>
+						<div class="fragment" style="text-align: center;">
+							<b>This brings interesting questions</b>:<br>
+							<ul>
+								<li>Where do my priors and likelihoods come from in this case? </li>
+
+								<li><b class="alert">How do I ask a neural network to solve the full Bayesian inference problem</b>?</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+	
+				<section>
+					<div><b>Step I</b>: We need a <b>parametric conditional density</b> model $q_\phi(x | y)$</div>
+
+					<div class="container">
+						<div class="col">
+							<img class="plain" data-src="/talks/assets/MDN.png" style="height:550px" />
+							<br>
+							<div style="float:left; font-size: 20px">Bishop (1994)</div>
+						</div>
+						<div class="col">
+							<ul>
+								<li> Mixture Density Networks (MDN)
+									\begin{equation}
+									q_\phi(x | y) = \prod_i \pi^i_\phi(y) \ \mathcal{N}\left(\mu^i_\phi(y), \ \sigma^i_\phi(y) \right) \nonumber
+									\end{equation}
+								</li>
+								<br>
+	
+								<li class="fragment fade-up">Flourishing Machine Learning literature on density estimators for higher dimensions. (more on this this afternoon)
+									<img class="plain" data-src="/talks/assets/glow.png" />
+									<div style="float:right; font-size: 20px">GLOW, (Kingma & Dhariwal, 2018)</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<div><b>Step II</b>: We need a tool to compare distributions</div>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img class="plain" data-src="/talks/assets/kl_divergence.gif"/>
+							The Kullback-Leibler divergence:
+							$$ D_{KL}(p||q) = \mathbb{E}_{x \sim p(x)} \left[ \log \frac{p(x)}{q(x)} \right] $$
+						</div>
+					
+						<div class="col">
+							<div class="fragment">$$D_{KL}(p(x | y) ||q_\phi(x | y)) = \mathbb{E}_{x \sim p(x |y)} \left[ \log \frac{p(x | y)}{q_\phi(x | y)} \right] \geq 0 $$</div>	
+							<div class="fragment">$$ \leq \mathbb{E}_{y \sim p(y)} \mathbb{E}_{x \sim p(x |y)} \left[ \log \frac{p(x | y)}{q_\phi(x | y)} \right] $$</div>
+							<div class="fragment">$$ \leq \boxed{ \mathbb{E}_{(y,x) \sim p(y, x)} \left[ - \log q_\phi(x | y) \right] } + cst $$</div>
+							<br>
+							<br>
+							<div class="fragment">
+							$\Longrightarrow$ <b> Minimizing the <b class="alert">Negative Log Likelihood</b> (NLL) over the joint distribution $p(x, y)$</b>
+							leads to minimizing the KL divergence between the model posterior $q_{\phi}(x|y)$ and true posterior $p(x | y)$.
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<div><b>Step III</b>: Assembling the training set $\mathcal{D} = \left\{ (x_i, y_i) \sim p(x, y)  \right\} $</div>
+					<br>
+					<br>
+					
+							Sampling from the joint distribution can be expressed as:
+							$$ (x, y) \sim p(x, y) = \underbrace{p(y | x)}_{\mathrm{likelihood}} \  \underbrace{p(x)}_{\mathrm{prior}} $$
+							<br>
+							
+							<br>
+							<div class="fragment">
+							<b>A few comments</b>:<br>
+							<ul>
+								<li><b class="alert">Priors AND likelihoods are hardcoded</b> in the training set.</li>
+								<br>
+								<li>If your data is based on simulations you control both</li>
+								<br>
+								<li>If your data is observational, be very careful and cognizant of the fact 
+									that <b>selection effects in your dataset translate as implicit priors</b>.
+								</li>
+							</ul>
+							</div>
+							
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Summarizing the Probabilistic Deep Learning Recipe</h3>
+				<br>
+				<br>
+					<ul>
+						<li class="fragment "> Express the <b class="alert">output of the model as a distribution</b>, not a point estimate
+							$$ q_\phi(x | y) $$
+						</li>
+<br>
+						<li class="fragment "> Assemble a training set that <b class="alert">encodes your prior</b> on the problem
+							$$ \mathcal{D} = \left\{ (x_i, y_i) \sim p(x, y) = p(y|x) p(x) \right\} $$
+						</li>
+<br>
+						<li class="fragment "> Optimize for the <b class="alert">Negative Log Likelihood</b>
+							$$\mathcal{L} = - \log q_\phi(x|y) $$ 
+						</li>
+<br>
+						<li class="fragment "> Profit!
+							<ul>
+								<li>Interpretable network outputs (i.e. I know mathematically what my network is trying to approximate)</li>
+								<li>Uncertainty quantification (i.e. Bayesian Inference)</li>
+							</ul>
+						</li>
+
+					</ul>
+			<br>
+			<br>
+			<br>
+			<br>
+			</section>
+
+			<section>
+			<section>
+				<h3 class="slide-title">We will need a new tool to go probabilistic!</h3>
+				<br>
+				<br>
+				<h3><a href="https://www.tensorflow.org/probability">TensorFlow Probability</a></h3>
+				<br>
+				<br>
+				<div class="container">
+					<div class="col">
+
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/BrwKURU-wpk?enablejsapi=1"
+							frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>						
+					</div>
+
+					<div class="col">
+						<pre class="python" style="font-size: 16px; line-height: 20px;"><code>import jax
+import jax.numpy as jnp
+from tensorflow_probability.substrates import jax as tfp
+tfd = tfp.distributions
+
+### Create a mixture of two scalar Gaussians:
+gm = tfd.MixtureSameFamily(
+	mixture_distribution=tfd.Categorical(
+					probs=[0.3, 0.7]),
+	components_distribution=tfd.Normal(
+					loc=[-1., 1],      
+					scale=[0.1, 0.5]))
+
+# Evaluate probability
+gm.log_prob(1.0)</code></pre>							
+					</div>
+				</div>
+				<br>
+				<br>
+			</section>
+
+		<section>
+			<h3 class="slide-title">Let's build a Conditional Density Estimator in JAX/Flax/TFP</h3>
+
+			<div class="container">
+			<pre class="python stretch" style="font-size: 18px; line-height: 20px;"><code>class MDN(nn.Module):
+	num_components: int
+
+	@nn.compact
+	def __call__(self, x):
+		x = nn.relu(nn.Dense(128)(x))
+		x = nn.relu(nn.Dense(128)(x))
+		x = nn.tanh(nn.Dense(64)(x))
+
+		# Instead of regressing directly the value of the mass, the network
+		# will now try to estimate the parameters of a mass distribution.
+		categorical_logits = nn.Dense(self.num_components)(x)
+		loc = nn.Dense(self.num_components)(x)
+		scale = 1e-3 + nn.softplus(nn.Dense(self.num_components)(x))
+
+		dist =tfd.MixtureSameFamily(
+			mixture_distribution=tfd.Categorical(logits=categorical_logits),
+			components_distribution=tfd.Normal(loc=loc, scale=scale))
+		
+		# To make it understand the batch dimension
+		dist =  tfd.Independent(dist)
+		
+		# Returns a distribution !
+		return dist</code></pre>
+</div>
+
+		</section>
+
+		</section>
+
+			<section>
+				<h1> Now you try it!</h1>
+
+				Let's go back to our notebook
+	<br>
+	<br>
+				<br>
+				<b>Your next goal:</b> Implement a Mixture Density Network in JAX/Flax/TFP, and use it to get an unbiased
+				mass estimate.
+				<br>
+				<br>
+				<pre class="python" style="font-size: 20px; line-height: 20px;"><code>def loss_fn(params, x, y):
+	q = model.apply(params, x)
+	return jnp.mean( - q.log_prob(y[:,0]) )</code></pre>				
+
+
+				<br>
+				<br>
+
+				<p>Raise your hand if you manage to get a cluster mass prediction with this new model!</p>
+
+			</section>
+
+			<section>
+				<h3 class="slide-title">takeaways</h3>
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0">Unless the relationship between input and outputs of your problem is purely deterministic (e.g. power spectrum emulator), 
+								<b class="alert">you should think under a probabilistic model</b> to understand what the network is doing.
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">Conditional density estimation is superior to point estimates
+								<ul>
+									<li>Provides <b class="alert">uncertainty quantification</b></li>
+									<li>Even if a point estimate is desired, gives <b class="alert">access to the Maximum a Posteriori</b></li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment">We have learned <b class="alert">how to pose a Deep Learning question</b>:
+								<ul>
+									<li>A loss function $\mathcal{L}$ and training set $\mathcal{D}$<br>
+										$\Longrightarrow$ Mathematically defines the <b>solution you are trying to get</b>.
+									</li>
+									<li>An appropriate architecture $q_\phi$<br>
+										$\Longrightarrow$ This is the <b>tool</b> you are using to solve the problem.
+									</li>
+								</ul>
+								 
+							</li>
+							<br>
+							<br>
+
+						</ul>
+					</div>
+
+					<div class="col">
+						<div class="r-stack">
+							<div class="fragment" data-fragment-index="1">
+								<img data-src="/talks/assets/nn_p_mode.png" style="width: 450px;"/>
+								<img data-src="/talks/assets/nn_distribution.png" style="width: 450px;"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h1>Example of Application:<br> Simulation-Based Inference</h1>
+				<hr>
+			</section>
+			
+			<section>
+				<section>
+					<h3 class='slide-title'> The limits of traditional cosmological inference </h3>
+					<div class='container'>
+						<div class='col'>
+							<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+								<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
+								<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+							</div>
+							<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+								<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+									<img class="plain" data-src="/talks/assets/alonso_g1.png" />
+									<img class="plain" data-src="/talks/assets/alonso_g2.png" />
+								</div>
+								<img class="fragment current-visible plain" data-src="/talks/assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+								<img class="fragment  plain" data-src="/talks/assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+							</div>
+							<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
+						</div>
+				
+						<div class='col'>
+							<ul>
+								<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
+									$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
+								<br>
+								<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+								<br>
+								<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+									$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+								</li>
+							</ul>
+						</div>
+					</div>
+				
+					<div class="block fragment">
+						<div class="block-title">
+							Main limitation: the need for an explicit likelihood
+						</div>
+						<div class="block-content">
+							We can only compute <b>from theory</b> the likelihood for <b class="alert">simple summary statistics</b> and on <b class="alert">large scales</b>
+							<br>
+							<br>
+							<div class="fragment"> $\Longrightarrow$ We are dismissing a significant fraction of the information! </div>
+						</div>
+					</div>
+				</section>
+				
+				<section>
+					<h3 class='slide-title'>Full-Field Simulation-Based Inference</h3>
+				
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li data-fragment-index="0" > Instead of trying to analytically evaluate the likelihood of
+									sub-optimal summary statistics, let us build a forward model of the full observables.<br>
+									$\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+									cost of a <b>large number of latent variables</b>.
+								</li>
+							</ul>
+				
+							<br>
+							<br>
+				
+							<div class="block fragment">
+								<div class="block-title">
+									Benefits of a forward modeling approach
+								</div>
+								<div class="block-content">
+									<ul>
+										<li> Fully exploits the information content of the data
+											(aka "full field inference").
+										</li>
+				
+										<br>
+										<li> Easy to incorporate systematic effects.
+										</li>
+										<br>
+										<li> Easy to combine multiple cosmological probes by joint simulations.
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+				
+						<div class='col'>
+							<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+								<img class=" plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+								<!-- <img class="fragment plain" data-src="/talks/assets/porqueres_hbm.png" style="position:absolute;top:0;left:0;width:500px;background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);" data-fragment-index="1" /> -->
+								<!-- <div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Porqueres et al. 2021)</div> -->
+							</div>
+						</div>
+					</div>
+				</section>
+				
+				<section>
+					<h3 class="slide-title">...so why is this not mainstream?</h3>
+						<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:1000px;"/>
+				
+							<div class="r-stack">
+				
+								<img class="plain fragment" data-src="/talks/assets/plot_massive_nu.png" style="width:1000px;"/>
+				
+									<div class="block fragment">
+										<div class="block-title">
+											The Challenge of Simulation-Based Inference
+										</div>
+										<div class="block-content">
+											$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
+											Where $z$ are <b>stochastic latent variables</b> of the simulator.<br><br>
+											$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>!
+										</div>
+									</div>
+								</div>
+				</section>
+				</section>
+
+	
+			<section>
+			 <section>
+				<h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
+				<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:750px;"/>
+				<ul>
+					<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+					</li>
+					<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_\varphi$ to approximate the implicit distribution $\mathbb{P}$</b>.
+					</li>
+				</ul>
+	
+				<div class="container">
+					<div class="col fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+						<br>
+						True $\mathbb{P}$
+					</div>
+	
+					<div class="col  fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+						<br>
+						Samples $x_i \sim \mathbb{P}$
+					</div>
+	
+					<div class="col  fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+						<br>
+						Model $\mathbb{P}_\varphi$
+					</div>
+				</div>
+			</section>
+	
+			<!-- <section>
+				<h3 class="slide-title">Why isn't it easy?</h3>
+				<br>
+				<ul>
+					<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+					</li>
+				</ul>
+				<div class="container">
+					<div class="col fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+					</div>
+	
+					<div class="col fragment fade-up">
+						<img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+						<br>Distance between pairs of points drawn from a Gaussian distribution.
+					</div>
+				</div>
+	
+				<br>
+				<ul>
+					<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+					</li>
+				</ul>
+			</section>  -->
+	
+			<section>
+				<h3 class="slide-title">Deep Learning Approaches to Implicit Inference</h3>
+	
+				<div class="block fragment">
+					<div class="block-title">
+						A two-steps approach to Implicit Inference
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Automatically learn an <b>optimal low-dimensional summary statistic</b>
+								$$y = f_\varphi(x) $$
+							</li>
+	
+							<li class="fragment"> Use Neural Density Estimation to either:
+								<ul>
+									<li>build an <b>estimate $p_\phi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+	
+									</li>
+									<br>
+	
+									<li>build an <b>estimate $p_\phi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
+	
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			</section>
+	
+	
+			<section>
+				<section>
+					<h3 class="slide-title">Automated Summary Statistics Extraction</h3>
+				  <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+						<ul>
+							<li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
+								data while preserving information</b>.
+							</li>
+						</ul>
+						<div class="container">
+							<div class="col">
+								<div class="r-stack">
+									<img class="plain fragment"  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
+									<!-- <img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" /> -->
+								</div>
+								<!-- <div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+										style="height:20px;vertical-align:middle;" /></a></div> -->
+			
+							</div>
+							<div class="col">
+								<div class="block fragment" data-fragment-index="0">
+									<div class="block-title">
+										Information-based loss functions
+									</div>
+									<div class="block-content">
+										<ul>
+											<li> Summary statistics $y$ is sufficient for $\theta$ if
+												$$ I(Y; \Theta) = I(X; \Theta) \Leftrightarrow p(\theta | x ) = p(\theta | y) $$
+											</li>
+											<li class="fragment" > Variational Mutual Information Maximization
+												$$ \mathcal{L} \ = \ \mathbb{E}_{x, \theta} [ \log q_\phi(\theta | f_\varphi(x)) ] \leq  I(Y; \Theta) $$
+
+													<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+																style="height:20px;vertical-align:middle;" /></a></div>
+											</li>
+
+											<!-- <li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
+												$$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+												<div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+														style="height:20px;vertical-align:middle;" /></a></div>
+											</li> -->
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+				</section>
+			</section>
+	
+	
+			<section>
+			<section>
+				<h3 class="slide-title">Unrolling the Probabilistic Learning Recipe</h3>
+				<ul>
+					<li class="fragment fade-up"> I assume a forward model of the observations:
+						\begin{equation}
+						p( x ) = p(x | \theta) \ p(\theta) \nonumber
+						\end{equation}
+						All I ask is the ability to sample from the model, to obtain $\mathcal{D} = \{x_i, \theta_i \}_{i\in \mathbb{N}}$
+					</li>
+					<br>
+					<li class="fragment fade-up"> I am going to assume $q_\phi(\theta | x)$ a <b>parametric conditional density</b>
+					</li>
+					<br>
+					<li class="fragment fade-up">Optimize the parameters $\phi$ of $q_{\phi}$ according to
+						\begin{equation}
+						\min\limits_{\phi} \sum\limits_{i} - \log q_{\phi}(\theta_i | x_i) \nonumber
+						\end{equation}
+						In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+						\begin{equation}
+						\boxed{q_{\phi^\ast}(\theta | x) \approx p(\theta | x)} \nonumber
+						\end{equation}
+					</li>
+				</ul>
+	
+				<div style="position:relative; height:30px; margin-left: 4em;">
+					<div class="fragment current-visible" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+						optimizing a <b>parametric estimator</b> over<br> the <b>Bayesian joint distribution</b>
+					</div>
+					<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+						optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+					</div>
+				</div>
+			</section>
+
+
+			<section>
+				<h3 class="slide-title">Illustration on log-normal lensing simulations</h3>
+		
+				<div class="container">
+					<div class="col"> 
+						<!-- <div class="container"> -->
+							<!-- <div class="col">
+								<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:150px; height:150px;'></img>
+								<img data-src="/talks/assets/justine.jpeg" style='width:150px; height:150px;'></img>
+								<br>
+								<small>Denise Lanzieri (left) and Justine Zeghal (right) </small>
+							</div>
+		
+							<div class="col"> -->
+								<img data-src="/talks/assets/github.png" class="plain" style="height:70px" />
+								<br>
+								<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens">DifferentiableUniverseInitiative/sbi_lens</a><br>
+								JAX-based log-normal lensing simulation package 
+							<!-- </div> -->
+		
+						 <!-- </div> -->
+						<img data-src="/talks/assets/mass_map_tomo.png" />
+						<ul>
+							<li>10x10 deg$^2$ maps at LSST Y10 quality, conditioning the log-normal shift
+								parameter on $(\Omega_m, \sigma_8, w_0)$
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="0"> Infer full-field posterior on cosmology:
+								<ul>
+									<li> <b>explicitly</b> using an Hamiltonian-Monte Carlo (NUTS) sampler 
+										</li>
+									<li class="fragment"  data-fragment-index="1"> <b>implicitly</b> using a learned summary statistics and conditional density estimation.
+								</li>
+							</li>
+						</ul>
+						
+					</div>
+					<div class="col r-stack">
+						<img class="fragment current-visible" data-fragment-index="0" data-src="/talks/assets/compare_ff_ps_contour_plot_multi_tomo_bins.png"/>
+						<img class="fragment"  data-fragment-index="1" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png"/>
+					</div>
+				</div>
+			</section>
+
+			</section>
+
+			<section>
+				<h3 class="slide-title">A variety of algorithms</h3>
+				<div style="float:right; font-size: 20px">Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021) <a href="https://arxiv.org/abs/2101.04653"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg" class="plain"
+							style="height:25px;vertical-align:middle;" /></a></div>
+				<img class="plain" data-src="/talks/assets/sbibm_comparison.png"/>
+	
+				<br>
+				<br>
+					A few important points:
+					<br><br>
+					<ul>
+						<li> <b>Amortized</b> inference methods, which estimate $p(\theta | x)$, can greatly speed up posterior estimation once trained.
+						</li>
+						<br>
+	
+						<li> <b>Sequential</b> Neural Posterior/Likelihood Estimation methods can actively sample simulations needed to refine the inference.
+						</li>
+					</ul>
+			</section>
+
+						<section>
+							<section>
+								<h3 class="slide-title">Example of application: Constraining Dark Matter Substructures</h3>
+								<div class="container">
+									<div class="col">
+										<div style="float:right; font-size: 20px">
+											Brehmer, Mishra-Sharma, Hermans, Louppe, Cranmer (2019) <a href="https://arxiv.org/abs/1909.02005"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1909.02005-B31B1B.svg" class="plain"
+													style="height:25px;vertical-align:middle;" /></a></div>
+									</div>
+								</div>
+				
+								<div class="r-stack">
+									<img data-src="/talks/assets/Brehmer2019a.png" style='height:500px;'/>
+									<img class="fragment" data-src="/talks/assets/Brehmer2019b.png" style='height:500px;'/>
+									<img class="fragment" data-src="/talks/assets/Brehmer2019.gif" style="height:500px;"/>
+								</div>
+				
+							</section>
+				
+							<section>
+								<h3 class="slide-title">Example of application: Infering Microlensing Event Parameters</h3>
+								<div class="container">
+									<div class="col">
+										<div style="float:right; font-size: 20px"> Zhang, Bloom, Gaudi, <b>Lanusse</b>, Lam, Lu (2021) <a href="https://arxiv.org/abs/2102.05673"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2102.05673-B31B1B.svg" class="plain"
+													style="height:25px;vertical-align:middle;" /></a></div>
+									</div>
+								</div>
+								<div class="r-stack">
+								<div class="fragment current-visible">
+									<img data-src="/talks/assets/Zhang2021a.png" style="height:500px"/>
+								</div>
+				
+								<div class="fragment">
+									<img data-src="/talks/assets/Zhang2021b.png" style="height:500px"/>
+								</div>
+				
+							</div>
+				
+							</section>
+				
+										<section>
+											<h3 class="slide-title">Example of application: Likelihood-Free parameter inference with DES SV</h3>
+											<div class="container">
+												<div class="col">
+													<div style="float:right; font-size: 20px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+																style="height:25px;vertical-align:middle;" /></a></div>
+												</div>
+											</div>
+				
+											<div class="container">
+												<div class="col">
+													<img class="plain" data-src="/talks/assets/ks_sv.png" style="height:550px;"></img>
+												</div>
+				
+												<div class="col r-stack">
+													<div class="fragment current-visible">
+													<img class="plain" data-src="/talks/assets/orthant.png" style="height:300px;" />
+													<img class="plain" data-src="/talks/assets/sim_params.png" style="height:300px;" /><br>
+													Suite of N-body + raytracing simulations: $\mathcal{D}$
+												</div>
+				
+												<div class="fragment current-visible">
+													<img class="plain" data-src="/talks/assets/jeffrey_model.png" style="height:550px" /><br>
+												</div>
+				
+												<div class="fragment">
+													<img class="plain" data-src="/talks/assets/jeffrey_s8.png" />
+												</div>
+				
+												</div>
+											</div>
+										</section>
+									</section>
+				
+	
+			<section>
+				<h3 class="slide-title"> Main takeaways</h3>
+	
+				<br>
+				<br>
+	
+				<ul>
+					<li> This approach <b>automatizes cosmological inference</b>
+							<ul>
+								<li> Turns the summary extraction and inference problems into an <b class="alert">optimization problems</b>
+								</li>
+								<br>
+							</ul>
+					</li>
+	
+					<br>
+	
+					<li class="fragment"> If neural networks fail, inference will be <b class="alert">sub-optimal but not necessarily biased</b>.
+					</li>
+	
+					<br>
+					<br>
+					<br>
+	
+	
+					<li class="fragment"> Some resources and links:
+						<ul>
+							<li> Review on Simulation-Based Inference: <a href="https://arxiv.org/abs/1911.01429">Cranmer, Brehmer, Louppe (2020) </a>
+	
+							<li> Recent full $w$CDM Likelihood-Free Inference constraints on DES Y3: <a href="https://arxiv.org/abs/2201.07771">Fluri, Kacprzak, Lucchi, Schneider, Refregier, Hofmann (2022)</a>
+	
+							<li> Simulation Based Inference packages: <a href="https://www.mackelab.org/sbi/">sbi</a>, <a href="https://github.com/justinalsing/pydelfi">pydelfy</a>, <a href="https://github.com/tomcharnock/IMNN">Information Maximizing Neural Networks</a></li>
+						</ul>
+	
+					</li>
+				</ul>
+			</section>
+	
+
+			<section>
+				<h1>Solving Ill-Posed Inverse Problems with Deep Learning</h1>
+				<hr>
+			</section>
+
+
+			<section>
+				<section>
+				  <h3 class="slide-title" style="position:absolute;top:0;">A motivating example: Image Deconvolution</h3>
+				  <br>
+				  <br>
+				   <div class="container">
+					 <div class="col">
+						 <img class="plain" data-src="/talks/assets/cosmos_gal.png" style="width: 250px"/>
+						 <br><b class="alert">Hubble Space Telescope</b>
+					 </div>
+
+					 <div class="col fragment fade-up">
+						 <img class="plain " data-src="/talks/assets/generic_network.png" style="height: 250px; width:500px"/>
+						 <br>some deep neural network
+					 </div>
+
+					 <div class="col">
+					   <img class="plain" data-src="/talks/assets/cosmos_gal_ground.png" style="width: 250px"/>
+					   <br><b class="alert">Simulated Ground-Based Telescope</b>
+					 </div>
+				   </div>
+				   <div class="r-stack">
+				   <div class="block fragment" >
+				   <div class="block-title">
+					The issue with generic black box deep learning inference
+				   </div>
+				   <div class="block-content">
+					   <ul>
+						 <li class="fragment">No explicit control of noise, PSF, depth.
+						   <ul>
+							 <li>Unless covered by the training data, the result becomes unpredictable.
+							 </li>
+						   </ul>
+						 </li>
+						 <br>
+						 <li class="fragment">No guarantees some physical properties are preserved
+						   <br>$\Longrightarrow$ In this case, the flux of the deconvolved object
+						 </li>
+						 <br>
+						 <li class="fragment"><b>Robust</b> quantification of uncertainties is extremely difficult.
+						 </li>
+					   </ul>
+				   <br>
+				 </div>
+				 </div>
+				</div>
+
+				</section>
+
+				<section>
+					<h3 class="slide-title">Example: GalaxyGAN (Schawinski et al. 2017) </h3>
+					<div> <img class="plain" data-src="/talks/assets/galaxygan.png"></div> 
+				</section>
+			 </section>
+
+			<section>
+				<section>
+					<h3 class="slide-title">Linear inverse problems</h3>
+
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+					<br>
+					$\mathbf{A}$ is known and encodes our physical understanding of the problem.
+					<span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse
+						problem is ill-posed with no unique solution $x$</span>
+					<div class="container fragment fade-up">
+						<div class="col">
+							<img data-src="/talks/assets/pluto_smooth.png" class="plain"></img>
+							Deconvolution
+						</div>
+						<div class="col">
+							<img data-src="/talks/assets/pluto_missing.png" class="plain"></img>
+							Inpainting
+						</div>
+						<div class="col">
+							<img data-src="/talks/assets/plutoNoise.png" class="plain"></img>
+							Denoising
+						</div>
+					</div>
+				</section>
+
+				<section data-vertical-align-top>
+					<h3 class="slide-title">A Bayesian view of the problem</h3>
+					$\boxed{y = \mathbf{A}x + n}$
+					<br>
+
+					<br>
+					<div class="fragment">
+						$$ p(x | y) \propto p(y | x) \ p(x) $$
+					</div>
+					<br>
+
+					<ul>
+						<li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the
+								physics</b><br>
+						</li>
+						<br>
+						<li class="fragment fade-up">$p(x)$ is our prior knowledge on the solution.</li>
+					</ul>
+					<br>
+					<br>
+					<div class="fragment fade-up">
+						With these concepts in hand, we can for instance estimate the <b class="alert">Maximum A Posteriori solution</b>:
+						<br>
+						$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+						For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ - \frac{1}{2} \parallel y -
+						\mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						Or, we can aim to sample from the <b class="alert">full posterior distribution</b> by MCMC techniques.
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						<h3>How do you choose the prior ?</h3>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Classical examples of signal priors </h3>
+					<div class="container">
+						<div class="col">
+							Sparse
+							<img data-src="/talks/assets/wavelet.png" height="400" class="plain"></img><br>
+							$$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+						</div>
+						<div class="col">
+							Gaussian
+							<img data-src="/talks/assets/zknj8.jpg" height="400" class="plain"></img>
+							$$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+						</div>
+						<div class="col">
+							Total Variation
+							<img data-src="/talks/assets/shepp-Logan.ppm" class="plain"></img>
+							$$ \log p(x) = \parallel \nabla x \parallel_1 $$
+
+						</div>
+					</div>
+				</section>
+
+				<section data-background="/talks/assets/hsc_screen.png">
+					<h2>But what about this?</h2>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> Maybe we can learn priors from the data!</h3>
+				<br>
+				<ul>
+					<li>The goal of generative modeling is to <b>learn an <b class="alert">implicit</b> distribution
+							$\mathbb{P}$</b>
+						from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+					</li>
+					<br>
+					<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+						that tries to be close to $\mathbb{P}$.
+					</li>
+				</ul>
+
+				<br>
+				<div class="container">
+					<div class="col fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png"
+							class="plain"></img>
+						<br>
+						True $\mathbb{P}$
+					</div>
+
+					<div class="col  fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png"
+							class="plain"></img>
+						<br>
+						Samples $x_i \sim \mathbb{P}$
+					</div>
+
+					<div class="col  fragment fade-up">
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png"
+							class="plain"></img>
+						<br>
+						Model $\mathbb{P}_\theta$
+					</div>
+				</div>
+				<br>
+				<br>
+				<ul>
+					<li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
+						and/or <b class="alert">evaluate the likelihood $p_\theta(x)$</b>.
+					</li>
+				</ul>
+
+			</section>
+
+			<section>
+				<h3 class="slide-title">Why are these generative models useful?</h3>
+
+				<b class="alert">Implicit distributions are everywhere!</b>
+				<br>
+				<br>
+				<div class="container">
+					<div class="col fragment">
+						<b>Case I</b>: Examples from data, no accurate physical model<br>
+						<img data-src="/talks/assets/real_gal-inv-small.png" style="height:400px;" /><br>
+						<div style="float:right; font-size: 20px">Mandelbaum et al. 2014</div>
+						<br>
+					</div>
+
+					<div class="col fragment">
+						<b>Case II</b>: Physical model only available as a simulator<br>
+						<img data-src='/talks/assets/convergence.png' style="height:400px;" /><br>
+						<div style="float:right; font-size: 20px">Osato et al. 2020</div>
+						<br>
+					</div>
+				</div>
+				<br>
+				<div class="fragment">$\Longrightarrow$ Generative models <b class="alert">will enable Bayesian
+						inference</b> in cases where
+					implicit distributions are involved, by providing a tractable $p_\theta(x)$.
+				</div>
+			</section>
+
+			<section>
+				<h1>Deep Generative Modeling</h1>
+				<hr>
+			</section>
+
+			<section>
+
+
+				<section>
+					<h3 class="slide-title">Why isn't it easy?</h3>
+					<br>
+					<ul>
+						<li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+						</li>
+					</ul>
+					<div class="container">
+						<div class="col fragment fade-up">
+							<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png"
+								class="plain"></img>
+						</div>
+
+						<div class="col fragment fade-up">
+							<img style="height:350px;"
+								data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg"
+								class="plain"></img>
+							<br>Distance between pairs of points drawn from a Gaussian distribution.
+						</div>
+					</div>
+
+					<br>
+					<ul>
+						<li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel
+							Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+						</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> The evolution of generative models </h3>
+
+				<br> 
+				<div class='container'>
+					<div class='col'>
+						<div style="position:relative; width:500px; height:600px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="/talks/assets/DBN.png"
+								style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+							<img class="fragment current-visible plain" data-src="/talks/assets/vae_faces.jpg"
+								style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+							<img class="fragment current-visible plain" data-src="/talks/assets/gan-samples-1.png"
+								style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+							<img class="fragment plain" data-src="/talks/assets/karras2017.png"
+								style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+							<img class="fragment plain" data-src="https://preview.redd.it/de6cf3omoqpa1.jpg?width=960&format=pjpg&auto=webp&v=enabled&s=0f4641ba72ad4c7ef106efafc539804cf7247410"
+							style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+						</div>
+					</div>
+
+					<div class='col'>
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006)
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling
+								2014) </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br>
+								(Goodfellow et al. 2014)</li>
+							<br>
+							<li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017)
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="4"> Midjourney v5 Guided Diffusion (2023)
+							</li>
+						</ul>
+					</div>
+				</div>
+				<br> <br> <br>
+			</section>
+
+			<section>
+				<h3 class="slide-title"> A visual Turing test </h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="/talks/assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
+					</div>
+					<div class="col">
+						<img data-src="/talks/assets/sdss5.png" class="plain" style="height: 500px;"></img>
+						<br>
+						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
+					</div>
+				</div>
+			</section> 
+
+			<section>
+				<h3 class="slide-title">A brief survey of Generative Models Families </h3>
+
+				<div class="container">
+
+				<div class="col">
+					<div class="r-stack">
+						<!-- <img class="fragment current-visible" data-fragment-index="0" data-src="talks/assets/DiffusionModels.png" style="width: 600px;"/> -->
+
+						<img class="fragment current-visible" data-fragment-index="1" data-src="talks/assets/pixel_cnn_conv.png" style="width: 600px;"/>
+
+						<img class="fragment" data-fragment-index="2"  data-src="talks/assets/DiffusionModels.png" style="width: 600px;"/>
+
+
+					</div>
+					</div>
+
+				<div class="col">
+				<ul>
+					<li class="fragment" data-fragment-index="0"><b>Latent Variable Models</b>:<br>
+						Assume the following form for the model disribution:
+						$$ x = f_\theta(z) \qquad \mbox{with} \qquad z \sim p(z)$$
+						This is the case of <b>Generative Adversarial Networks</b>, <b>Variational Auto-Encoders</b>, <b>Normalizing Flows</b>.
+					</li>
+					<br>
+					<li class="fragment" data-fragment-index="1"><b>Auto-Regressive Models</b>:<br>
+					Assume an autoregressive decomposition of the signal into products of 1D conditional distributions:
+					$$ p_\theta(x) = p_\theta(x_0) p_\theta(x_1 | x_0) \ldots p_\theta(x_n | x_{n-1}, \ldots x_{0}) $$
+						This is the case of <b>PixelCNN</b>, <b>GPT-3</b>
+				</li>
+					<br>
+					<li class="fragment" data-fragment-index="2"><b>Diffusion Models</b>:<br>
+						Target distribution generated by a reverse noise diffusion process controled by a Stochastic Differential Equation (SDE).
+					</li>
+				</ul>
+			</div>
+				</div>
+			</section>
+
+			<section>
+			  <section>
+				<h3 class="slide-title">The Variational Auto-Encoder</h3>
+				<div class="container">
+					<div class="col">
+					  <ul>
+						<li>We assume a <b class="alert">prior distribution $p(z)$</b> for the latent variable, and a <b class="alert">likelihood $p_\theta(x |z)$</b> defined by a neural network. 
+							<br>Typically $p_\theta(x|z) = \mathcal{N}(x; f_\theta(x), \sigma^2)$
+						</li>
+						<br>
+
+						<li class="fragment fade-up"> Training the generative model amounts to finding $\theta_\star$ that
+						  <b>maximizes the marginal likelihood</b> of the model:
+							$$p_\theta(x) = \int \mathcal{N}(x; f_\theta(z), \sigma^2) \ p(z) \ dz$$
+							<div> $\Longrightarrow$ This is <b class="alert">generally intractable</b></div>
+						</li>
+						<br>
+						<li class="fragment fade-up"> In a VAE, efficient training of parameter $\theta$ is made possible by <b class="alert">Amortized Variational Inference</b>.
+						</li>
+					  </ul>
+					</div>
+				</div>
+
+				<div class="block fragment fade-up">
+				<div class="block-title">
+				 Auto-Encoding Variational Bayes (Kingma & Welling, 2014)
+				</div>
+				<div class="block-content">
+				  <ul>
+					<li class="fragment fade-up"> We introduce a <b>parametric distribution</b> $q_\phi(z | x)$ which aims to model the
+					posterior $p(z | x)$. We want to minimize $\mathbb{D}_{KL}\left( q_\phi(z | x) \parallel p(z | x) \right)$
+					</li>
+					<br>
+					<li class="fragment fade-up"> Working out the KL divergence between these two distributions leads to:
+
+					  $$\log p_\theta(x) \quad \geq \quad - \mathbb{D}_{KL}\left( q_\phi(z | x) \parallel p(z) \right) \quad + \quad \mathbb{E}_{z \sim q_{\phi}(. | x)} \left[ \log p_\theta(x | z)  \right]$$
+
+					  $\Longrightarrow$ This is the <b>Evidence Lower-Bound</b>, which is differentiable with respect to $\theta$ and $\phi$.
+					</li>
+				  </ul>
+			  </div>
+			  </div>
+
+			  </section>
+
+			  <section>
+				<h3 class="slide-title">The famous Variational Auto-Encoder</h3>
+				<img data-src="/talks/assets/vae.png" class="plain" style="height: 450px;"> </img>
+				<br>
+				<br>
+				$$\log p_\theta(x) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x)} \left[ \log p_\theta(x | z)  \right]}_{\mbox{reconstruction error}} $$
+				</section>
+<!-- 
+					<section>
+							  <h3 class="slide-title"> Sampling from the model</h3>
+						<div class="container">
+						<div class="col fragment fade-up">
+						  <img data-src="/talks/assets/vae_samples_bad.png" class="plain" ></img>
+						  Woups... what's going on?
+						</div>
+						<div class="col">
+						  <img data-src="/talks/assets/latent_space.png" class="plain fragment fade-up" ></img>
+						</div>
+					  </div>
+				</section>
+
+
+
+					<section>
+						<h3 class="slide-title"> Tradeoff between code regularization and image quality</h3>
+
+				  <br>
+				  $$\log p_\theta(x| \Sigma, \Pi ) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x, \Sigma, \Pi) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x, \Sigma, \Pi)} \left[ \log p_\theta(x | z, \Sigma, \Pi)  \right]}_{\mbox{reconstruction error}} $$
+
+				  <img data-src="/talks/assets/sdss_ae_kl.png" class="plain" ></img>
+
+				</section>
+
+				<section data-background-image=https://media.giphy.com/media/3o85xIO33l7RlmLR4I/source.gif>
+				</section>
+
+					<section>
+						<h3 class="slide-title"> Conditional sampling in VAE latent space</h3>
+
+					<div class="container">
+					<div class="col">
+						<img data-src="/talks/assets/conditional_flow.png" class="plain" ></img>
+						<p>(Lanusse et al. 2020)</p>
+					</div>
+						<div class="col">
+
+							<a href="https://arxiv.org/abs/2008.03833"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2008.03833-B31B1B.svg" class="plain" style="height:25px;"/></a>
+
+							<ul>
+								<li> We build a latent space model $p_\varphi(z)$ using a Masked Autoregressive Flow (MAF) (Papamakarios, et al. 2017)
+								</li>
+								<br>
+								<li class="fragment"> While we are learning to sample from the latent space, we can also <b class="alert"> learn to sample conditionaly</b>:
+											$$  p_\varphi(z | y) $$
+								</li>
+								<br>
+
+								<li class="fragment"> Here we learn to sample images conditioned on:
+									<ul>
+										<li> Size: half-light radius $r$
+										</li>
+										<li> Brightness: I band magnitude $mag\_auto$
+										</li>
+										<li> Redshift: COSMOS photometric redshift $zphot$
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title"> Flow-VAE samples</h3>
+			  <br>
+			  <br>
+			  <img class="current-visible plain" data-src="/talks/assets/lanusse2020_figure1.png"/>
+		  </section> -->
+			  </section>
+
+			  <section>
+			<section>
+				<h3 class="slide-title"> Normalizing Flows</h3>
+
+				<p> Still a latent variable model, except the mapping $f_\theta$ is made to be <b class="alert">bijective</b>.</p>
+		<div class="container">
+		<div class="col">
+		  <img data-src="/talks/assets/flow_dinh_1.png" class="plain fragment fade-up" data-fragment-index="1"></img>
+		  <img data-src="/talks/assets/flow_dinh_2.png" class="plain fragment fade-up" data-fragment-index="3"></img>
+
+		  <br>
+				 <div class="fragment fade-up" style="float:right; font-size: 20px" data-fragment-index="1">Dinh et al. 2016</div>
+		</div>
+		<div class="col">
+				  <div class="block fragment fade-up" data-fragment-index="1">
+				  <div class="block-title">
+				   Normalizing Flows
+				  </div>
+				  <div class="block-content">
+					<ul>
+					  <li> Assumes a <b class="alert">bijective</b> mapping between
+						data space $x$ and latent space $z$ with prior $p(z)$:
+						$$ z = f_{\theta} ( x ) \qquad \mbox{and} \qquad x = f^{-1}_{\theta}(z)$$
+					  </li>
+					  <li class="fragment" data-fragment-index="2"> Admits an explicit marginal likelihood:
+						$$ \log p_\theta(x) = \log p(z) + \log \left| \frac{\partial f_\theta}{\partial x}  \right|(x)    $$
+					  </li>
+					</ul>
+				</div>
+				</div>
+				<br>
+				  <br>
+				  <div class="fragment">
+				  $\Longrightarrow$ The challenge is in designing mappings $f_\theta$ that are both: 
+				  <b>easy to invert, easy to compute the jacobian of</b>.</div>
+				  <br>
+				  <br>
+		</div>
+	</div>
+
+		</section>
+
+		<section>
+			<h3 class="slide-title">One example of NF: RealNVP</h3>
+			<br>
+			<br>
+
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/realNVP_jacobian.png" style="height: 300px;"/>
+					<br> Jacobian of an affine coupling layer
+				</div>
+				<div class="col">
+					In a standard affine RealNVP, one Flow layer is defined as:
+
+					$$ \begin{matrix} y_{1\ldots d} &=& x_{1 \ldots d} \\
+					y_{d+1\ldots N} &=& x_{d+1 \ldots N} ⊙ \sigma_\theta(x_{1 \ldots d}) + \mu_\theta(x_{1 \ldots d})
+					\end{matrix} $$
+					where $\sigma_\theta$ and $\mu_\theta$ are unconstrained neural networks.
+					<br>
+					<br>
+					We will call this layer an <b class="alert">affine coupling</b>.
+
+				</div>
+
+
+			</div>
+
+			<br>
+			<br>
+			$\Longrightarrow$ This structure has the advantage that the Jacobian of this layer will be lower triangular which makes computing its determinant easy.
+			
+
+		</section>
+	</section>
+
+			<!-- <section>
+				<h3 class="slide-title">Diffusion Models</h3>
+
+			</section> -->
+
+			<section data-vertical-align-top>
+				<h3 class="slide-title" >Not all generative models are created equal</h3>
+							<img data-src="/talks/assets/generative_models_table.png" class="plain"></img>
+								<div style="float:right; font-size: 20px">Grathwohl et al. 2018</div>
+					<br>
+					<br>
+				<ul>
+					<li> Of particular interest are models with an <b class="alert">explicit $\log p(x)$</b> (not the case of VAEs, GANs, Denoising Diffusion Models).</li>
+					<br>
+				</ul>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Your Turn!</h3>
+
+				<br>
+				<br>
+
+				We will be using <a href="https://colab.research.google.com/github/EiffL/Tutorials/blob/master/NormalizingFlowsInJAX.ipynb">this notebook</a> to implement a Normalizing Flow in JAX+Flax+TensorFlow Probability
+
+				<img data-src="/talks/assets/points.png"/>
+				<br>
+				<br>
+
+				<br>
+				<br>
+			</section>
+
+			<section>
+				<h1>Application to<br>
+				Solving Inverse Problems</h1>
+				<hr>
+			</section>
+
+			<section>
+				<h3 class="slide-title">Getting started with Deep Priors: deep denoising example</h3>
+				$$ \boxed{{\color{Orchid} y} = {\color{SkyBlue} x} + n} $$
+				<div class="container">
+					<div class="col">
+						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="/talks/assets/points.png"
+								style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+							<div class="fig-container fragment" data-file="dgm_prior_denoising.html"
+								data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;"
+								data-fragment-index="1"></div>
+						</div>
+						<!-- <img data-src="/talks/assets/points.png"/>
+																														  															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
+					</div>
+
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Let us assume we have access to examples of $
+								{\color{SkyBlue} x}$ without noise.</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">We learn the <b class="alert">distribution of
+									noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.
+							</li>
+							<br>
+							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+																														  																<br> -->
+							<li class="fragment">The solution should lie on the <b class="alert">realistic data
+									manifold</b>, symbolized by the two-moons distribution.
+								<div class="fragment">
+									<p> We want to solve for the Maximum A Posterior solution: </p>
+									$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x}
+									\parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+
+									This can be done by <b>gradient descent</b> as long as one has access to the <b
+										class="alert">score function</b> $\frac{\color{orange} d \color{orange}\log
+									\color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d
+									\color{orange}x}$.
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+
+			<section>
+				<section>
+				   <h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach to the deconvolution problem: let's build a model</h3>
+				   <br>
+				   <br>
+				   <div class="container">
+					 <div class="col">
+						 <img class="plain fragment" data-src="/talks/assets/rand_z_square.png" style="height: 150px" data-fragment-index="4"/>
+					 </div>
+					 <div class="col">
+						 <img class="plain fragment" data-src="/talks/assets/cosmos_gal.png" style="width: 200px" data-fragment-index="3"/>
+					 </div>
+					 <div class="col">
+					   <img class="plain fragment" data-src="/talks/assets/cosmos_gal_psf.png" style="width: 200px" data-fragment-index="2"/>
+					 </div>
+		
+					 <div class="col">
+					   <img class="plain fragment" data-src="/talks/assets/cosmos_gal_pix.png" style="width: 200px" data-fragment-index="1"/>
+					 </div>
+		
+					 <div class="col">
+					   <img class="plain fragment" data-src="/talks/assets/cosmos_gal_ground.png" style="width: 200px" data-fragment-index="0"/>
+					 </div>
+				   </div>
+		
+				 <div class="container" style="position:relative; width:1000px; height:50px; margin:0 auto;">
+				   <div class='col fragment' data-fragment-index='4'> <font size="10"> $\longrightarrow$ </font> <br> $g_\theta$ </div>
+				   <div class='col fragment' data-fragment-index='3'> <font size="10"> $\longrightarrow$ </font> <br> PSF </div>
+				   <div class='col fragment' data-fragment-index='2'> <font size="10"> $\longrightarrow$ </font> <br> Pixelation</div>
+				   <div class='col fragment' data-fragment-index='1'> <font size="10"> $\longrightarrow$ </font> <br> Noise </div>
+				 </div>
+		
+				 <div class="container">
+					 <div class="col">
+					   <div style="position:relative; width:400px; height:300px; margin:0 auto;">
+					   <img data-src="/talks/assets/pgm_0.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="0"/>
+					   <img data-src="/talks/assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="1"/>
+					   <img data-src="/talks/assets/pgm_1.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="2"/>
+					   <img data-src="/talks/assets/pgm_2.png" class="plain fragment current-visible " style="position:absolute;top:0;left:0;height:350px;" data-fragment-index="3"/>
+					   <img data-src="/talks/assets/pgm_3.png" class="plain fragment " style="position:absolute;top:0;left:0;height:300px;" data-fragment-index="4"/>
+					   </div>
+					 </div>
+					 <div class=" col">
+					   <div class="block fragment" data-fragment-index="0">
+					   <div class="block-title">
+						Probabilistic model
+					   </div>
+					   <div class="block-content">
+					   <div style="position:relative; width:400px; height:100px; margin:0 auto;">
+						 <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="0"> $$ x \sim ? $$ </div>
+						 <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="1"> $$ x \sim \mathcal{N}(z, \Sigma) \quad z \sim ? $$<br>latent $z$ is a denoised galaxy image</div>
+						 <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="2"> $$ x \sim \mathcal{N}( \mathbf{P} z, \Sigma) \quad z \sim ?$$<br>latent $z$ is a super-resolved and denoised galaxy image</div>
+						 <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="3"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast z), \Sigma) \quad z \sim ? $$<br>latent $z$ is a deconvolved, super-resolved, and denoised galaxy image </div>
+						 <div class="plain fragment " style="position:absolute;top:0;left:0;width:400px;" data-fragment-index="4"> $$ x \sim \mathcal{N}( \mathbf{P} (\Pi \ast g_\theta(z)), \Sigma) \quad z \sim \mathcal{N}(0, \mathbf{I}) $$ <br>latent $z$ is a Gaussian sample<br> <b class="alert"> $\theta$ are parameters of the model</b> </div>
+					   </div>
+					   <br>
+					   <br>
+					   <br>
+					 </div>
+					 </div>
+					 </div>
+				 </div>
+				 <div class="fragment"> $\Longrightarrow$ <b class="alert"> Decouples the morphology model from the observing conditions</b>.</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">Bayesian Inference a.k.a. Uncertainty Quantification</h3>
+					<div class="container">
+						<div class="col">
+						  <img data-src="/talks/assets/pgm.png" class="plain" style="height: 250px;" ></img>
+						</div>
+						<div class="col">
+						  The Bayesian view of the problem:
+							   $$ p(z | x ) \propto p_\theta(x | z, \Sigma, \mathbf{\Pi}) p(z)$$
+						   where:
+						   <br>
+							 <ul>
+							   <li>$p( z | x )$ is the <b class="alert">posterior</b></li>
+							   <li>$p( x | z )$ is the data likelihood, <b class="alert">contains the physics</b></li>
+							   <li>$p( z )$ is the <b>prior</b> </li>
+							 </ul>
+						</div>
+					</div>
+   
+					<div class="container">
+						<div class="col">
+						  <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<img class="plain fragment current-visible" data-src="/talks/assets/cosmos_gal_ground.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0" />
+							<img class="plain fragment" data-src="/talks/assets/cosmos_gal.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+						  </div>
+						  <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data<br> $x_n$</div>
+							<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Truth<br> $x_0$ </div>
+						  </div>
+						  <br>
+						</div>
+   
+						<div class="col fragment" data-fragment-index='0' >
+						  <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<div><video data-autoplay data-loop data-src="/talks/assets/rec_samples.mp4" type="video/mp4" style="height: 200px;"/>
+							</div>
+						  </div>
+						  <div>Posterior samples<br> $g_\theta(z)$</div>
+						</div>
+   
+						<div class="col">
+						  <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<div><video class="fragment current-visible" data-autoplay data-loop data-src="/talks/assets/rec_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0"/></div>
+							<img class="plain fragment " data-src="/talks/assets/rec_median.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+						  </div>
+   
+						  <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;">  <br> $\mathbf{P} (\Pi \ast g_\theta(z))$</div>
+							<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Median </div>
+						  </div>
+						</div>
+   
+						<div class="col">
+						  <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+							<div><video class="fragment current-visible" data-autoplay data-loop data-src="/talks/assets/res_lsst.mp4" type="video/mp4" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="0"/></div>
+							<img class="plain fragment " data-src="/talks/assets/rec_std.png" style="position:absolute;top:0;left:0;width:200px;" data-fragment-index="1"/>
+						  </div>
+   
+						  <div class="container" style="position:relative; width:200px; height:50px; margin:0 auto;">
+							<div class='col fragment current-visible' data-fragment-index='0' style="position:absolute;top:0;left:0;width:200px;"> Data residuals <br> $x_n - \mathbf{P} (\Pi \ast g_\theta(z))$</div>
+							<div class='col fragment' data-fragment-index='1' style="position:absolute;top:0;left:0;width:200px;"> Standard Deviation </div>
+						  </div>
+						</div>
+					</div>
+					<div class="fragment"> $\Longrightarrow$ <b class="alert">Uncertainties are fully captured by the posterior</b>.</div>
+				  </section>
+		
+				  </section>
+		
+	
+		<section>
+			<h1> Now you try it!</h1>
+
+			We will be using this notebook: <a href="https://tinyurl.com/inverse-problem"> https://tinyurl.com/inverse-problem</a>
+			
+<br>
+<br>
+			<br>
+			<b>Your goal:</b> Solve an image deconvolution problem using a deep generative model as a prior.
+
+			<br>
+			<br>
+
+			<p>Raise your hand when you reach the Maximum Likelihood Solution i.e. end of Step III.</p>
+		</section>
+		
+		
+		<section>
+			<h3 class="slide-title">How to solve the posterior inference problem by Variational Inference?</h3>
+
+
+			<ul>
+				<li> </li>
+
+
+			</ul>
+
+			$$ \log p_\theta(x) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x)} \left[ \log p_\theta(x | z)  \right]}_{\mbox{reconstruction error}} $$
+
+		</section>
+		
+		
+
+
+		<section>
+			<section data-background-image="/talks/assets/gravitational-lensing-diagram.jpg">
+				<h3 class="slide-title">Let's set the stage: Gravitational lensing</h3>
+				<div class="fade-up">
+					<img class="plain" data-src="/talks/assets/great.jpg" />
+
+					<div class="block ">
+						<div class="block-title">
+							Galaxy shapes as estimators for gravitational shear
+						</div>
+						<div class="block-content">
+							$$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
+							<ul>
+								<li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
+									galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section> 
+
+			<section>
+				<h3 class="slide-title">Gravitational Lensing as an Inverse Problem</h3>
+				<div class="container">
+					<div class="col">
+						Shear <b class="alert">$\gamma$</b><br>
+						<img data-src="/talks/assets/shear_cat1.png" style="width:450px;"></img>
+					</div>
+
+					<div class="col fragment fade-up">
+						Convergence <b class="alert">$\kappa$</b><br>
+						<img data-src="/talks/assets/kappa.png" style="width:450px;"></img>
+					</div>
+				</div>
+
+				<div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+					<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+						$$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+					</div>
+					<div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+						$$\boxed{\gamma = \mathbf{P} \kappa}$$
+					</div>
+				</div>
+			</section>
+
+		</section> 
+		
+		<section>
+			<h3 class="slide-title">Writing down the convergence map log posterior</h3>
+
+				$$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+
+				<ul>
+					<li> The likelihood term is <b class="alert">known analytically</b>, given to us by the physics of gravitational lensing.
+					</li>
+
+					<li class="fragment fade-up"> There is <b class="alert">no close form expression for the prior</b> on dark matter maps $\kappa$.
+						<br> However:
+						<ul>
+							<li class='fragment'> <b>We do have access to samples of full  <b class="alert">implicit</b> prior</b> through simulations: $X = \{x_0, x_1, \ldots, x_n \}$ with $x_i \sim \mathbb{P}$
+								<img data-src='/talks/assets/plot_massive_nu.png' />
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior from simulation</b>,
+					and then <b class="alert">sample the full posterior</b>.</div>
+	  </section>
+
+		<section class="inverted" data-background="#000">
+			<h2> How do you do this in practice in very high dimensional problems?</h2>
+		</section>
+
+
+
+		<section>
+			<section>
+			  <h3 class="slide-title">First realization: The score is all you need!</h3>
+			  <br>
+			  <div class="container">
+				  <div class="col">
+					  <ul>
+						  <li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+							  <b class="alert">only need access to the score</b> of the posterior:
+							  $$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+							  d
+							  \color{orange}x}$$
+							  <ul>
+								  <li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+								  <li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+							  </ul>
+						  </li>
+						  <br>
+					  </ul>
+				  </div>
+				  <div class="col">
+					  <img data-src="/talks/assets/score_two_moons.png"></img>
+				  </div>
+			  </div>
+			  <br>
+			  <br>
+			  <ul>
+				  <li > The score of the full posterior is simply:
+					  $$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known explicitly}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{known implicitly}}$$
+					  $\Longrightarrow$ "all" we have to do is <b class="alert">model/learn the score of the prior</b>.
+				  </li>
+			  </ul> 
+		  </section>
+  
+		  <section>
+			  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching (Vincent 2011)</h3>
+			  <ul>
+				  <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+					  <ul>
+						  <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+							  $$x^\prime = x + u$$
+						  </li>
+						  <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+							  $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+						  </li>
+						  <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+							  $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+						  </li>
+					  </ul>
+				  </li>
+			  </ul>
+  
+			  <div class="fragment fade-up">
+				  <div class="container">
+					  <div class="col">$\boldsymbol{x}'$
+					  </div>
+					  <div class="col">$\boldsymbol{x}$
+					  </div>
+					  <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+					  </div>
+					  <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+					  </div>
+				  </div>
+				  <img data-src="/talks/assets/denoised_mnist.png" style='width:1200px;'></img>
+			  </div>
+		  </section>
+		  </section>
+  
+		  <section>
+			  <h3 class="slide-title">Second Realization: Annealing is everything!</h3>
+  
+			  <ul>
+				  <li> Even with knowledge of the score, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+				  </li>
+				  <br>
+				  <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+					  <div>
+						  $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+						  <img data-src="/talks/assets/annealing.png" />
+					  </div>
+				  </li>
+  
+				  <li class="fragment fade-up"> Hints to running many MCMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+				  </li>
+			  </ul>
+		  </section>
+  
+		  <section>
+			  <h3 class="slide-title">Score-Based Generative Modeling <a href="https://arxiv.org/abs/2011.13456"> Song et al. (2021)</a></h3>
+			  <img data-src="/talks/assets/diffusion.png" style="height:350px;"/><br>
+			  <br>
+			  <ul>
+				  <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+					  $$p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$$
+				  </li>
+				  <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+			  </ul>
+		  </section>
+  
+  
+		  <section>  
+  
+			  <section>
+				  <h3 class="slide-title">Example of one chain during annealing</h3>
+				  <img data-src="/talks/assets/hmc-annealing.gif"/>
+		  </section>
+  
+		  <section>
+			  <h3 class="slide-title">Validating Posterior Sampling under a Gaussian prior</h3>
+  
+			  <img  style="height:600px;" data-src="/talks/assets/Remy2022Wiener.png"/>
+  
+		  </section>
+  
+		  <section>
+			<h3 class="slide-title">Some details: We don't actually know the marginal posterior score!</h3>
+			<ul>
+				<li>We know the following quantities: 
+					<ul>
+						<li>Annealed likelihood (analytically): $p_\sigma(y | x) = \mathcal{N}(y; \mathbf{A} x, \mathbf{\Sigma} + \sigma^2 \mathbf{I})$</li>
+						<li>Annealed prior score (by score matching): $\nabla_x \log p_\sigma(x)$ </li>
+					</ul>
+				</li>
+				<li class="fragment" data-fragment-index="1">But, unfortunately: $\boxed{p_\sigma(x|y) \neq p_\sigma(y|x) \  p_\sigma(x)}$
+					$\Longrightarrow$ <b class="alert">We don't know the marginal posterior score!</b>
+				</li>
+			</ul>
+			<div class="r-stack">
+				<!-- <img data-src="/talks/assets/post_prod.png" style="height: 500px;"/> -->
+				<div class="fragment highlight-red">
+					<video data-fragment-index="1" data-src="/talks/assets/post_prod.mp4" style="height: 500px;"></video>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<ul>
+				<li>We cannot use the reverse SDE/ODE of diffusion models to sample from the posterior.
+					$$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_t(x|y)}_{\mbox{unknown}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
+				</li>
+			</ul> 
+			<div class="r-stack">
+			<div class="block fragment fade-up current-visible" >
+				<div class="block-title">
+				 Proposed sampling strategy
+				</div>
+				<div class="block-content">
+				  <ul>
+					<li> Even if not equivalent to the marginal posterior score, $\nabla_x \log p_{\sigma^2}(y | x) + \nabla_x \log p_{\sigma^2}(x)$ still 
+						has good properties:
+						<ul>
+							<li>Tends to an isotropic Gaussian distribution for large $\sigma$ </li>
+							<li>Corresponds to the target posterior for $\sigma=0$ </li>
+						</ul> 
+					</li>
+					<br>
+					<li> If we simulate this SDE sufficiently slowly (i.e. timescale of change of $\sigma$ is much larger than the timescale of the SDE)
+						we can expect to sample from the target posterior. 
+					</li>
+				  </ul>
+
+			  </div>
+			  </div>
+
+				<img class="fragment current-visible" data-src="/talks/assets/sampling_1.png" style="height: 500px;"/>
+				<img class="fragment "  data-src="/talks/assets/sampling_2.png" style="height: 500px;"/>
+			</div>
+			<div class="fragment">
+				$\Longrightarrow$ In practice, we sample the annealed distribution using an Hamiltonian Monte-Carlo,
+				with discrete annealing steps.
+			</div>
+		</section>
+
+		  </section>
+  
+			  <section>
+				  <section>
+					  <h3 class="slide-title">Illustration on $\kappa$-TNG simulations</h3>
+					  <div class="container">
+						  <div class="col">
+								  <div style="float:right; font-size: 20px"> Remy, Lanusse, et al. (2022) <a href="https://arxiv.org/abs/2201.05561"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2201.05561-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+						  </div>
+					  </div>
+					  <div class="container">
+						  <div class="col">
+							  <img data-src='/talks/assets/ref_ktng.png' style="width:350px; height:350px;" />
+							  <br>
+							  True convergence map
+						  </div>
+						  <div class="col">
+							  <div class="block-content">
+								  <div style="position:relative; width:350px; height:350px; top:10px; left:40px;">
+									  <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="0">
+										  <img data-src='/talks/assets/ks_ktng.png' style="width:350px; height:350px;" />
+									  </div>
+									  <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="1">
+										  <img data-src='/talks/assets/wiener_ktng.png' style="width:350px; height:350px;" />
+									  </div>
+									  <div class="plain fragment" style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="2">
+										  <img data-src='/talks/assets/mean_post_ktng.png' style="width:350px; height:350px;" />
+									  </div>
+								  </div>
+								  <div class="block-content">
+									  <div style="position:relative; width:350px; height:20px; top:50px; left:10px;">
+										  <div class="fragment current-visible " data-fragment-index="0" style="position:absolute;top:0;left:0;width:350px;">Traditional Kaiser-Squires</div>
+										  <div class="fragment current-visible " data-fragment-index="1" style="position:absolute;top:0;left:0;width:350px;">Wiener Filter</div>
+										  <div class="fragment" data-fragment-index="2" style="position:absolute;top:0;left:0;width:350px;">Posterior Mean (ours)</div>
+									  </div>
+								  </div>
+								  <br>
+								  <br>
+							  </div>
+  
+						  </div>
+						  <div class="col fragment">
+							  <img data-src='/talks/assets/cropped.gif' style="width:350px; height:350px;" />
+							  <br>
+							  Posterior samples
+						  </div>
+					  </div>
+  
+				  </section>
+  
+  
+				  <section>
+					  <h3 class="slide-title">Reconstruction of the <b class="alert">HST/ACS COSMOS field</b></h3>
+  
+					  <ul>
+					  <li> COSMOS shear data from <a href=https://ui.adsabs.harvard.edu/abs/2010A%26A...516A..63S/abstract>Schrabback et al. 2010</a>
+					  </li>
+					  <li> Prior learned from $\kappa$-TNG simulation from <a href=https://arxiv.org/abs/2010.09731>Osato et al. 2021</a>.
+					  </li>
+				  </ul>
+					  <br>
+					  <div class="container">
+						  <div class="col">
+							  <div class="block-content">
+								  <div style="position:relative; height:570px; top:0px; left:0px;">
+									  Massey et al. (2007)
+									  <img data-src="/talks/assets/massey.png" style="height:500px;"></img>
+								  </div>
+							  </div>
+						  </div>
+  
+						  <div class="col">
+							  <div class="block-content">
+								  <div style="position:relative; height:570px; top:0px; left:0px;">
+									  <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+										  Remy et al. (2022) <b class="alert">Posterior mean</b>
+										  <img data-src='/talks/assets/remy.png' style="height:500px;" />
+									  </div>
+  
+									  <div class="plain fragment" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+										  Remy et al. (2022) <b class="alert">Posterior samples</b>
+										  <img data-src='/talks/assets/cosmos_samples.gif' style="height:500px;" />
+									  </div>
+  
+								  </div>
+							  </div>
+						  </div>
+  
+					  </div>
+				  </section>
+				  </section>
+
+		</div>
+	</div>
+
+	<style>
+		.reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		}  
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+
+		/*
+	/* .reveal .alert {
+	padding:8px 35px 8px 14px; margin-bottom:18px;
+	text-shadow:0 1px 0 rgba(255,255,255,1);
+	border:5px solid #FFAA7F;
+	-webkit-border-radius: 14px; -moz-border-radius: 14px;
+	border-radius:14px
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-size: 38px;
+	padding-left: 30px; /* 55px; if icon
+	}
+	.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	/*.reveal .alert li {margin-top: 1em}
+	.reveal .alert-block p+p {margin-top:5px} */
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+			autoPlayMedia: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+				src: 'reveal.js/plugin/markdown/marked.js'
+			},
+			{
+				src: 'reveal.js/plugin/markdown/markdown.js'
+			},
+			{
+				src: 'reveal.js/plugin/notes/notes.js',
+				async: true
+			},
+			{
+				src: 'reveal.js/plugin/math/math.js',
+				async: true
+			},
+			{
+				src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+			},
+			{
+				src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+			},
+			{
+				src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+			},
+			{
+				src: 'reveal.js/plugin/highlight/highlight.js',
+				async: true
+			},
+			]
+
+		});
+	</script>
+</body>
+
+</html>
