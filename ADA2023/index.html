@@ -107,25 +107,7 @@
 			</ul>
 		</section>
 
-		<section>
-			<h3 class="slide-title">Before we begin...</h3>
-
-			<br>
-			<br>
-			<br>
-			<br>
-
-			<p>My goal is to make it a <b>lively, fun, interactive, and informative session</b> </p>
-			
-			<br>
-			<p class="fragment grow"> <b>Questions</b> are welcome at any time!</p>
-
-			<br>
-			<br>
-			<br>
-			<br>
-			<br>
-		</section>
+		
 	</section>
 	
 			<section>
@@ -305,7 +287,7 @@
 				<div class="container">
 					<div class="col">
 						<!-- insert a video from youtube -->
-						<iframe width="560" height="315" src="https://www.youtube.com/embed/cNT5yAqpBmI?enablejsapi=1"
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/cNT5yAqpBmI?enablejsapi=1&mute=1"
 							frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 							allowfullscreen></iframe>
 					</div>
@@ -526,7 +508,7 @@ params = optax.apply_updates(params, updates)</code></pre>
 
 				We will be using this notebook:
 
-				https://bit.ly/3LaLHq3
+				<a href="https://bit.ly/3LaLHq3">https://bit.ly/3LaLHq3</a>
 	<br>
 	<br>
 				<br>
@@ -805,7 +787,7 @@ def loss_fn(params, x, y):
 				<div class="container">
 					<div class="col">
 
-						<iframe width="560" height="315" src="https://www.youtube.com/embed/BrwKURU-wpk?enablejsapi=1"
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/BrwKURU-wpk?enablejsapi=1&mute=1"
 							frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 							allowfullscreen></iframe>						
 					</div>
@@ -867,6 +849,7 @@ gm.log_prob(1.0)</code></pre>
 		</section>
 
 			<section>
+			<section>
 				<h1> Now you try it!</h1>
 
 				Let's go back to our notebook
@@ -888,6 +871,14 @@ gm.log_prob(1.0)</code></pre>
 				<p>Raise your hand if you manage to get a cluster mass prediction with this new model!</p>
 
 			</section>
+
+			<section>
+
+				Solution notebook: <a href="https://tinyurl.com/cluster-solution">https://tinyurl.com/cluster-solution</a>
+
+			</section>
+
+		</section>
 
 			<section>
 				<h3 class="slide-title">takeaways</h3>
@@ -2194,7 +2185,7 @@ gm.log_prob(1.0)</code></pre>
 		
 				  </section>
 		
-	
+		<section>
 		<section>
 			<h1> Now you try it!</h1>
 
@@ -2217,16 +2208,36 @@ gm.log_prob(1.0)</code></pre>
 
 
 			<ul>
-				<li> </li>
+				<li>The core idea of Variational Inference is to <b class="alert">assume a model distribution $q_\phi$</b> and we <b>fit it to the unknown posterior</b>.
+				
+				</li>
 
 
+				<li>How do we fit a distribution to another distribution? <div class="fragment">We minize the KL divergence
+
+					$$ \mathbb{D}_{KL}\left( q_\phi(z) \parallel p(z | x) \right) = \mathbb{E}_{z \sim q_{\phi}} \left[ \log \frac{q_\phi(z)}{p(z | x)} \right] $$
+
+					<div class="fragment">$$ = \mathbb{E}_{z \sim q_{\phi}} \left[ \log q(z) \right]  - \mathbb{E}_{z \sim q_{\phi}} \left[ \log p(z | x) \right] $$</div>
+					<div class="fragment">$$ = \mathbb{E}_{z \sim q_{\phi}} \left[ \log q(z) \right]  - \mathbb{E}_{z \sim q_{\phi}} \left[ \log p(x | z) + \log p(z) - \log p(x)\right] $$</div>
+					<div class="fragment">$$ = \underbrace{\mathbb{D}_{KL}\left( q_\phi(z) \parallel p(z) \right) - \mathbb{E}_{z \sim q_{\phi}} \left[ \log p(x | z) \right]}_{\mbox{Evidence Lower Bound}} + \log p(x) $$</div>
+					</div>
+</li>
+
+				<li class="fragment">Finally, we need a flexible enough model distribution, why not a Normalizing Flow :-) ? </li>
 			</ul>
-
-			$$ \log p_\theta(x) \geq - \underbrace{\mathbb{D}_{KL}\left( q_\phi(z | x) \parallel p(z) \right)}_{\mbox{code regularization}} + \underbrace{\mathbb{E}_{z \sim q_{\phi}(. | x)} \left[ \log p_\theta(x | z)  \right]}_{\mbox{reconstruction error}} $$
 
 		</section>
 		
+		<section>
+			Solution notebook: <a href="https://tinyurl.com/inverse-problem-solution"> https://tinyurl.com/inverse-problem-solution</a> 
+		</section>
+
+	</section>
 		
+		<section>
+			<h1>Example of Application at Scale</h1>
+			<hr>
+		</section>
 
 
 		<section>
@@ -2302,7 +2313,6 @@ gm.log_prob(1.0)</code></pre>
 		<section class="inverted" data-background="#000">
 			<h2> How do you do this in practice in very high dimensional problems?</h2>
 		</section>
-
 
 
 		<section>
@@ -2570,16 +2580,54 @@ gm.log_prob(1.0)</code></pre>
 				  </section>
 				  </section>
 
+				  <section>
+					<h3 class="slide-title">Other examples of Deep Priors</h3>
+					<br>
+					<div class="container">
+					  <div class="col">
+						<ul>
+						  <li><em>Hybrid Physical-Deep Learning Model for Astronomical Inverse Problems</em><br> <b> F. Lanusse</b>, P. Melchior, F. Moolekamp<br>
+							<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+							<a href="https://www.youtube.com/watch?v=oWOU3qNHoL0"><img src="https://img.shields.io/badge/-youtube-red?logo=youtube&labelColor=grey" class="plain" style="height:25px;" /></a>
+						  </li>
+						</ul>
+						<br> <br>
+						$\mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i)$
+						<br> <br>
+						<img class=" plain" data-src="/talks/assets/scarlet_hsc.png" />
+						<br> <br>
+			
+					  </div>
+					  <div class="col fragment">
+						<ul>
+						  <li><em>Denoising Score-Matching for Uncertainty Quantification in Inverse Problems</em><br> Z. Ramzi, B. Remy, <b>F. Lanusse</b>, P. Ciuciu, J.L. Starck<br>
+							<a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+						  </li>
+						</ul>
+						<img class="plain" data-src="/talks/assets/knee.gif" style="height:410px;"/>
+			
+					  </div>
+					</div>
+				  </section>
+
+				<section>
+					<iframe src="https://giphy.com/embed/xUPOqo6E1XvWXwlCyQ" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/spacejam-space-jam-movie-xUPOqo6E1XvWXwlCyQ">via GIPHY</a></p>
+
+
+					<h3>Let's open up to unstructured questions</h3>
+
+				</section>
+
 		</div>
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}  
+		}   */
 
 		.reveal .block {
 			background-color: #191919;
