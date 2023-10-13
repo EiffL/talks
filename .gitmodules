@@ -196,3 +196,6 @@
 [submodule "ADA2023/reveal.js"]
 	path = ADA2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "IAIFI2023/reveal.js"]
+	path = IAIFI2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
