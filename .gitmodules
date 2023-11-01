@@ -199,3 +199,6 @@
 [submodule "IAIFI2023/reveal.js"]
 	path = IAIFI2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Ascona2023/reveal.js"]
+	path = Ascona2023/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
