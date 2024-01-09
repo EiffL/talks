@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>
+      Review and Perspective on Deep Learning for the Analysis of Cosmological
+      Galaxy Surveys
+    </title>
+
+    <meta name="description" content="ML at HEP workshop, KEK, Jan. 2024" />
+    <link rel="stylesheet" href="reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="reveal.js/dist/theme/darkenergy.css"
+      id="theme"
+    />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="reveal.js/plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section data-background-iframe="background.html">
+          <div class="container">
+            <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+              <h1>Review and Perspective on <br> Deep Learning for the Analysis of Cosmological
+      Galaxy Surveys</h1>
+            </div>
+          </div>
+          <hr>
+          <div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+            <div class="container">
+              <div class="col">
+                <div align="left" style="margin-left: 20px;">
+                  <h2>François Lanusse</h2>
+                  <h4>in collaboration with Marc Huertas-Company</h4>
+                  <img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+                  <br>
+                  <br>
+                </div>
+              </div>
+  
+              <div class="col">
+                <br>
+                <br>
+                <br>
+                <br>
+                <img src="/talks/assets/logo_cnrs.png" class="plain" height="150"></img>
+              </div>
+  
+              <div class="col">
+                <a href="https://arxiv.org/abs/2210.01813"
+                ><img
+                  src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2210.01813-B31B1B.svg"
+                  class="plain"
+                  style="height: 25px"
+              /></a>
+                <br>
+                <br>
+                <br>
+                <img src="/talks/assets/simons_logo.png" class="plain" height="150"></img>
+              </div>
+            </div>
+            <div> slides at <a href="https://eiffl.github.io/talks/KEK2024">eiffl.github.io/talks/KEK2024</a> </div>
+          </div>
+        </section>
+  
+        <section>
+          <h3 class="slide-title">The Deep Learning Boom in Astrophysics</h3>
+
+          <div class="container">
+            <canvas data-chart="bar">
+              <!--
+						{
+						 "data": {
+							"labels": ["2012", "2013", "2014","2015", "2016" ,"2017", "2018", "2019", "2020", "2021", "2022", "2023"],
+							"datasets": [
+							 {
+								"data":[ 21, 15, 17, 22, 31, 71, 113, 231, 322, 422, 537, 646 ],
+								"label":"Deep Learning || CNN || Neural Network ","backgroundColor":"#A63446"
+							}
+							]
+						 },
+						 "options": { "responsive": "true",
+					"scales": {
+							"yAxes": [{
+									"type": "linear"
+							}]
+					}
+						}
+						}
+						--> </canvas
+            ><br />
+          </div>
+          <div>
+            <b>astro-ph</b> abstracts mentioning <b>Deep Learning</b>,
+            <b>CNN</b>, or <b>Neural Networks</b>
+          </div>
+        </section>
+
+        <section class="inverted" data-background="#000">
+          <h2>
+            Will AI Revolutionize the Scientific Analysis <br> of Cosmological
+            Surveys?
+          </h2>
+          <!-- <img class="fragment" data-src="/talks/assets/AI_on_AI_inv.png" /> -->
+        </section>
+
+        <section>
+          <h3 class="slide-title">
+            Review of the impact of Deep Learning in Galaxy Survey Science
+          </h3>
+          <img data-src="/talks/assets/dawes.png" />
+          <a href="https://arxiv.org/abs/2210.01813"
+            ><img
+              src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2210.01813-B31B1B.svg"
+              class="plain"
+              style="height: 25px" /></a
+          ><br />
+          <a href="https://ml4astro.github.io/dawes-review"
+            >https://ml4astro.github.io/dawes-review</a
+          >
+        </section>
+
+        <section>
+          <h3 class="slide-title">outline of this talk</h3>
+
+          <br />
+          <br />
+          <br />
+          <br />
+
+          <b>My goal for today</b>: tour of Deep Learning applications relevant
+          to cosmological physical inference.
+
+          <br />
+          <br />
+          <br />
+          <br />
+          <ul>
+            <li class="fragment grow">
+              Interpreting Increasingly Complex Images
+            </li>
+            <br />
+            <li class="fragment grow">Accelerating Numerical Simulations</li>
+            <br />
+            <li class="fragment grow">
+              Simulation-Based Cosmological Inference
+            </li>
+          </ul>
+          <br />
+          <br />
+          <br />
+          <h3 class="fragment fade up">
+            What has changed, what are the limitations, where is ML going next?
+          </h3>
+          <br />
+          <br />
+          <br />
+        </section>
+
+        <section>
+          <h2>Interpreting Increasingly Complex Data</h2>
+          <hr />
+
+          <small
+            >Dieleman+15, Huertas-Company+15, Aniyan+17, Charnock+17,
+            Gieseke+17, Jacobs+17, Petrillo+17, Schawinski+17, Alhassan+18,
+            Dominguez-Sanchez+18, George+18, Hinners+18, Lukic+18, Moss+18,
+            Razzano+18, Schaefer+18, Allen+19, Burke+19, Carrasco-Davis+19,
+            Chatterjee+19, Davies+19, Dominguez-Sanchez+19, Fusse+19, Glaser+19,
+            Ishida+19, Jacobs+19, Katebi+19, Lanusse+19Liu+19, Lukic+19,
+            Metcalf+19, Muthukrishna+19, Petrillo+19, Reiman+19, Boucaud+20,
+            Chiani+20, Ghosh+20, Gomez+20, Hausen+20, Hlozek+20,
+            Hosseinzadeh+20. Huang+20, Li+20, Moller+20, Paillassa+20,
+            Tadaki+20, Vargas dos Santos+20, Walmsley+20, Wei+20, Allam+21,
+            Arcelin+21, Becker+21, Bretonniere+21, Burhanudin+21, Davison+21,
+            Donoso-Oliva+21, Jia+21, Lauritsen+21, Ono+21, Ruan+21, Sadegho+21,
+            Tang+21, Tanoglidis+21, Vojtekova+21, Dhar+22Hausen+22, Orwat+22,
+            Pimentel+22, Rezaei+22, Samudre+22, Shen+22, Walmsley+22</small
+          >
+        </section>
+
+        <section>
+          <section data-background="/talks/assets/fig1w.png">
+            <div style="float: right; font-size: 20px">Credit: NAOJ</div>
+            <h3
+              class="slide-title"
+              style="background-color: rgba(0, 0, 0, 0.4)"
+            >
+              Detection and Classification of Astronomical Objects
+            </h3>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </section>
+
+          <section data-background="/talks/assets/fig1.png">
+            <div style="float: right; font-size: 20px">Credit: NAOJ</div>
+            <!-- <img class="fragment fade-up" data-src="/talks/assets/eye_of_horus.jpg" style="height:600px"/> -->
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </section>
+
+          <section>
+            <h3 class="slide-title">A perfect task for Deep Learning!</h3>
+            <div class="container">
+              <div class="col">
+                <img
+                  height="550px"
+                  data-src="/talks/assets/deeplens.png"
+                  class="plain"
+                />
+                <br />
+                <div style="float: right; font-size: 20px">
+                  <b>Lanusse</b>, Ma, Li, Collett, Li, Ravanbakhsh, Mandelbaum,
+                  Poczos (2017)
+                  <a href="https://arxiv.org/abs/1703.02642"
+                    ><img
+                      src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1703.02642-B31B1B.svg"
+                      class="plain"
+                      style="height: 25px; vertical-align: middle"
+                  /></a>
+                </div>
+                <br />
+              </div>
+
+              <div class="col">
+                <div
+                  class="container"
+                  style="
+                    position: relative;
+                    width: 600px;
+                    height: 500px;
+                    margin: 0 auto;
+                  "
+                >
+                  <div
+                    class="fragment current-visible"
+                    style="position: absolute; top: 0; left: 0; height: 500px"
+                    data-fragment-index="0"
+                  >
+                    <img
+                      height="200"
+                      data-src="/talks/assets/candidates.png"
+                      class="plain"
+                    />
+                    <br />Simulated gravitational lenses used for training
+                    <div>
+                      <img
+                        data-src="/talks/assets/roc_ground_small.png"
+                        class="plain"
+                        style="height: 200px"
+                      />
+
+                      <div>
+                        <b class="alert"
+                          >Better accuracy than human visual inspection!</b
+                        >
+                        <div style="float: right; font-size: 20px">
+                          Metcalf, et al. (2018)
+                          <a href="https://arxiv.org/abs/1802.03609"
+                            ><img
+                              src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1802.03609-B31B1B.svg"
+                              class="plain"
+                              style="height: 25px; vertical-align: middle"
+                          /></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fragment"
+                    style="position: absolute; top: 0; left: 0; height: 500px"
+                    data-fragment-index="1"
+                  >
+                    <img
+                      height="450"
+                      data-src="/talks/assets/huang2019.png"
+                      data-fragment-index="1"
+                    />
+                    <div>
+                      Strong lens candidates in the DESI DECam Legacy Survey
+                    </div>
+                    <div style="float: right; font-size: 20px">
+                      Huang et al. (2019)
+                      <a href="https://arxiv.org/abs/1906.00970"
+                        ><img
+                          src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1906.00970-B31B1B.svg"
+                          class="plain"
+                          style="height: 25px; vertical-align: middle"
+                      /></a>
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <!-- <ul>
+                <li class="fragment">This works great, as long as you do not care too much about <b class="alert">which</b> lenses are identified and <b class="alert">why</b>
+                </li> -->
+                <!-- </ul> -->
+              </div>
+            </div>
+          </section>
+          <section>
+            <h3 class="slide-title"> But this is not completely the end of the story...</h3>
+
+            <figure>
+              <blockquote>
+                In total we have examined ∼ 50, 000 objects. On average one in 150 of the objects with [high] probability from the
+ResNet model is deemed a lens candidate through human inspection</b>.
+              </blockquote>
+              <figcaption style="align-items: right;">
+                <p>Huang et al. (2019)</p>
+              </figcaption>
+            </figure>
+
+            <img data-src="/talks/assets/grade_c.png" class="plain" />
+
+            <div class="fragment fade-up">$\Longrightarrow$ At the rate of LSST, this would mean needing <b class="alert">human inspection for 20 million candidates</b>.</div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3 class="slide-title">Inference at the Image Level</h3>
+            <div class="r-stack">
+              <div>
+                <div class="container">
+                  <div class="col">
+                    <li>
+                      <b>Inferring photometric redshifts from images</b> <br />
+                      <div style="float: right; font-size: 20px">
+                        Pasquet, Bertin, Treyer, Arnouts, Fouchez (2019)
+                        <a href="https://arxiv.org/abs/1806.06607"
+                          ><img
+                            src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1806.06607-B31B1B.svg"
+                            class="plain"
+                            style="height: 25px; vertical-align: middle"
+                        /></a>
+                      </div>
+                    </li>
+                  </div>
+
+                  <div class="col">
+                    <img
+                      class="current-visible plain"
+                      data-src="/talks/assets/Pasquet2018.png"
+                      style="width: 600px"
+                    />
+                  </div>
+                </div>
+
+                <div class="container fragment">
+                  <div class="col">
+                    <li>
+                      <b>Inferring surface brightness profile parameters</b>
+                      <br />
+                      <div style="float: right; font-size: 20px">
+                        Tucillo, Huertas-Company, et al. (2017)
+                        <a href="https://arxiv.org/abs/1711.03108"
+                          ><img
+                            src="https://img.shields.io/badge/astro--ph.GA-arXiv%3A1711.03108-B31B1B.svg"
+                            class="plain"
+                            style="height: 25px; vertical-align: middle"
+                        /></a>
+                      </div>
+                    </li>
+                  </div>
+
+                  <div class="col">
+                    <img
+                      class="current-visible plain"
+                      data-src="/talks/assets/tucillo18.png"
+                      style="width: 600px"
+                      data-fragment-index="2"
+                    />
+                    <span
+                      >Estimated Sersic index by CNN before adaptation (left),
+                      after adaptation (right)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <img
+                  class="fragment"
+                  data-src="/talks/assets/covariate_shift.png"
+                  style="background-color: black"
+                />
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section data-background="/talks/assets/gal_hsc.png">
+            <h3 class="slide-title">Inference at the Image Level</h3>
+            <div class="fragment">
+              <div class="container">
+                <div style="float: right; font-size: 20px">
+                  Reiman & Göhre (2018)
+                  <a href="https://arxiv.org/abs/1810.10098"
+                    ><img
+                      src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1810.10098-B31B1B.svg"
+                      class="plain"
+                      style="height: 25px; vertical-align: middle"
+                  /></a>
+                </div>
+              </div>
+              <div>
+                <div class="r-stack">
+                  <img
+                    class="plain"
+                    data-src="/talks/assets/Reiman2018_1.png"
+                  />
+
+                  <img
+                    class="plain fragment"
+                    data-src="/talks/assets/Reiman2018_3.png"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="block fragment">
+              <div class="block-title">
+                The issue with using deep learning as a <i>black-box</i>
+              </div>
+              <div class="block-content">
+                <ul>
+                  <li>
+                    No explicit control of noise, PSF, number of sources.
+                    <ul>
+                      <li>
+                        Model would have to be retrained for all observing
+                        configurations
+                      </li>
+                    </ul>
+                  </li>
+                  <br />
+                  <li class="fragment">
+                    No guarantees on the network output (e.g. flux preservation,
+                    artifacts)
+                  </li>
+                  <br />
+                  <li class="fragment">
+                    No proper uncertainty quantification.
+                  </li>
+                </ul>
+              </div>
+            </div> -->
+          </section>
+        <section>
+          <h3 class="slide-title">High Dimensional Bayesian Inverse Problems</h3>
+
+          <div class="container">
+            <div class="col">
+              <div style="float: right; font-size: 20px">
+                Adam et al. (2022)
+                <a href="https://arxiv.org/abs/2211.03812"
+                  ><img
+                    src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A2211.03812-B31B1B.svg"
+                    class="plain"
+                    style="height: 25px; vertical-align: middle"
+                /></a>
+              </div>
+            </div>
+          </div>
+          <img data-src="/talks/assets/alex_lens.png" style="width: 1000px" />
+          <div>$\Longrightarrow$ generates samples from the full bayesian posterior 
+            $$p(x | y) = \underbrace{p(y|x)}_{\mbox{known likelihood}} \qquad  \underbrace{p(x)}_{\mbox{learned prior}}$$
+            </div>
+
+        </section>
+       </section>
+
+        <section>
+          <h3 class="slide-title">takeways</h3>
+          <br />
+          <br />
+          <div class="block fragment">
+            <div class="block-title">
+              Is Deep Learning Really Changing the Game in Interpreting Survey
+              Data?
+            </div>
+            <div class="block-content">
+              <br />
+              <ul>
+                <li class="fragment">
+                  For Detection, Classification, Cleaning tasks:
+                  <b class="alert">Yes, within limits</b><br />
+                  $\Longrightarrow$ As long as we don't need to understand
+                  precisely the model response/selection function.
+                </li>
+                <br />
+                <li class="fragment">
+                  For infering physical properties needed in downstream
+                  analysis: <b>Not really...</b><br />
+                  <ul>
+                    <li>
+                      In general the exact response is not known, and very
+                      non-linear.
+                    </li>
+                    <li>
+                      Not addressing the core question of representativeness of
+                      training data.
+                    </li>
+                  </ul>
+                </li>
+                <br>
+                <li class="fragment">For solving challenging data restoration problems: <a class="alert">getting there!</a>
+                  <ul> 
+                    <li>Still need to be careful about the representativeness of training data.</li>
+                    <li>But the problem is well defined, likelihood is physically motivated, and the response is well understood.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Accelerating Cosmological Simulations with Deep Learning</h2>
+          <hr />
+          <small
+            >Rodriguez+19, Modi+18, Berger+18, He+18, Zhang+19, Troster+19,
+            Zamudio- Fernandez+19, Perraudin+19, Charnock+19, List+19,
+            Giusarma+19, Bernardini+19, Chardin+19, Mustafa+19, Ramanah+20,
+            Tamosiunas+20, Feder+20, Moster+20, Thiele+20, Wadekar+20, Dai+20,
+            Li+20, Lucie-Smith+20, Kasmanoff+20, Ni+21, Rouhiainen+21,
+            Harrington+21, Horowitz+21, Horowitz+21, Bernardini+21,
+            Schaurecker+21, Etezad-Razavi+21, Curtis+21</small
+          >
+        </section>
+
+        <section>
+          <section>
+            <h3 class="slide-title">
+              AI-assisted superresolution cosmological simulations
+            </h3>
+            <div class="container">
+              <div class="col">
+                <div style="float: right; font-size: 20px">
+                  Li, Ni, Croft, Di Matteo, Bird, Feng (2021)
+                  <a href="https://arxiv.org/abs/2010.06608"
+                    ><img
+                      src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.06608-B31B1B.svg"
+                      class="plain"
+                      style="height: 25px; vertical-align: middle"
+                  /></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="container">
+              <div class="col">
+                <img
+                  class="plain"
+                  data-src="/talks/assets/yin_sr.png"
+                  style="width: 1000px"
+                />
+                <br />
+                x8 super-resolution
+              </div>
+              <div class="col fragment" data-fragment-index="1">
+                <img
+                  class="plain"
+                  data-src="/talks/assets/yin_nn.png"
+                  style="width: 500px"
+                /><br />
+              </div>
+            </div>
+            <ul class="fragment" data-fragment-index="1">
+              <li>
+                Inputs low resolution
+                <b class="alert">particle displacement field</b>, outputs
+                samples from a
+                <b class="alert">distribution $p_\theta(x_{SR} | x_{LR})$</b>
+              </li>
+            </ul>
+          </section>
+
+          <section
+            data-background="/talks/assets/yin_large_sr.jpg"
+            data-background-size="contain"
+          >
+            <div class="r-stack">
+              <img
+                class="plain fragment"
+                data-src="/talks/assets/yin_ps.png"
+                style="width: 1800px; background-color: #111"
+              /><br />
+              <img
+                class="plain fragment"
+                data-src="/talks/assets/yin_hmf.png"
+                style="width: 1800px; background-color: #111"
+              />
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3 class="slide-title">
+              Fast, high-fidelity Lyman α forests with CNNs
+            </h3>
+            <div style="float: right; font-size: 20px">
+              Harrington, Mustafa, Dornfest, Horowitz, Lukić (2021)
+              <a href="https://arxiv.org/abs/2106.12662"
+                ><img
+                  src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2106.12662-B31B1B.svg"
+                  class="plain"
+                  style="height: 25px; vertical-align: middle"
+              /></a>
+            </div>
+
+            <img data-src="/talks/assets/harrington_fig1.png" />
+          </section>
+          <section>
+            <img
+              data-src="/talks/assets/harrington_fig2.png"
+              style="height: 700px"
+            />
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3 class="slide-title">
+              are these Deep Learning models a real game-changer?
+            </h3>
+
+            <div class="r-stack">
+              <div>
+                <div class="block fragment" data-fragment-index="1">
+                  <div class="block-title">
+                    The Limitations of Black-Box Large Deep Learning Approaches
+                  </div>
+                  <div class="block-content">
+                    <ul>
+                      <li class="fragment" data-fragment-index="1">
+                        There is a risk that a large Deep Learning model can
+                        silently fail. <br />
+                        $\Rightarrow$
+                        <b class="alert"
+                          >How can we build confidence in the output of the
+                          neural network?</b
+                        >
+                      </li>
+
+                      <br />
+
+                      <li class="fragment">
+                        Training these models can require a very large number of
+                        simulations. <br />$\Rightarrow$
+                        <b class="alert">
+                          Do they bring a net computational benefit?</b
+                        >
+                        <ul>
+                          <li class="fragment">
+                            In case of the super-resolution model of
+                            <b>Li et al. (2021), only 16 full-resolution</b>
+                            $512^3$ N-body were necessary.
+                          </li>
+                        </ul>
+                      </li>
+                      <br />
+
+                      <li class="fragment">
+                        In many cases, the accuracy (not the quantity) of
+                        simulations will be the main bottleneck. <br />
+                        $\Rightarrow$
+                        <b class="alert"
+                          >What new science are these deep learning models
+                          enabling?</b
+                        >
+                        <ul>
+                          <li>
+                            In the case of cosmological SBI, they do not help us
+                            resolve the uncertainty on the simulation model.
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div class="fragment current-visible" data-fragment-index="2">
+                <img
+                  data-src="/talks/assets/harrington_fig3.png"
+                  style="height: 550px"
+                /><br />
+                <div style="float: right; font-size: 20px">
+                  (Harrington et al. 2021)
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="block">
+              <div class="block-title" style="color: aquamarine">
+                What Would be Desirable Properties of robust ML-based Emulation
+                Methods?
+              </div>
+              <div class="block-content">
+                <ul>
+                  <li class="fragment">
+                    Make use of <b>known symmetries</b> and physical
+                    constraints.
+                  </li>
+                  <br />
+                  <li class="fragment">
+                    <b>Modeling residuals</b> to an approximate physical model
+                  </li>
+                  <br />
+                  <li class="fragment">
+                    <b>Minimally parametric</b>
+                    <ul>
+                      <li>
+                        Can be trained with a very small number of simulations
+                      </li>
+                      <li>
+                        Could potentially be
+                        <b style="color: aquamarine">inferred from data!</b>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3 class="slide-title">
+              Learning effective physical laws for generating cosmological
+              hydrodynamics with Lagrangian Deep Learning
+            </h3>
+            <div class="container">
+              <div class="col">
+                <div style="float: right; font-size: 20px">
+                  Dai & Seljak (2021)
+                  <a href="https://arxiv.org/abs/2010.02926"
+                    ><img
+                      src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.02926-B31B1B.svg"
+                      class="plain"
+                      style="height: 25px; vertical-align: middle"
+                  /></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="container">
+              <div class="col">
+                <ul>
+                  <li>
+                    The Lagrangian Deep Learning approach:
+                    <ul>
+                      <li class="fragment">
+                        Run an approximate Particle-Mesh DM simulation (about 10
+                        steps)
+                      </li>
+
+                      <li class="fragment">
+                        Introduce a displacement $\mathbf{S}$ of particles:
+                        \begin{equation} \mathbf{S}=-\alpha\nabla \hat{O}_{G}
+                        f(\delta) \end{equation} where $\hat{O}_{g}$ is a
+                        parametric Fourier-space filter, $f$ is a parametric
+                        function of $\delta$. <br />$\Rightarrow$ Respects
+                        translational and rotational symmetries.
+                      </li>
+
+                      <li class="fragment">
+                        Apply a non-linear function on the resulting density
+                        field $\delta^\prime$: $$F(x) = \mathrm{ReLu}(b_1
+                        f(\delta^\prime) - b_0)$$
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col">
+                <img
+                  data-src="/talks/assets/pot_pgd.png"
+                  class="plain"
+                  style="height: 450px; width: 800px"
+                />
+                <div style="float: right; font-size: 20px">
+                  <a
+                    href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:"
+                    >(Dai et al. 2018)</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="fragment">
+              $\Longrightarrow$ Only need to fit <b>~10 parameters</b> to
+              reproduce a desired field from an hydrodynamical field.
+            </div>
+          </section>
+
+          <section>
+            <div class="r-stack">
+              <img data-src="/talks/assets/LDL_dm.png" />
+              <img class="fragment" data-src="/talks/assets/LDL_stars.png" />
+              <img class="fragment" data-src="/talks/assets/LDL_tsz.png" />
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <h3 class="slide-title">takeaways</h3>
+          <ul>
+            <li>
+              Deep Learning may allow us to
+              <b>scale up existing simulation suites</b> (with caveats), but it
+              is not replacing simulation codes.
+            </li>
+
+            <br />
+            <li>
+              One exciting prospect rarely explored so far in astrophysics is
+              using Deep Learning to <b>accelerate the N-body/hydro solver</b>.
+            </li>
+          </ul>
+
+          <iframe
+            src="https://drive.google.com/file/d/1zFETkr3VbRZb3EYzMvypR1AtRUu-O3UZ/preview"
+            width="640"
+            height="480"
+            allow="autoplay"
+          ></iframe
+          ><br />
+          <div style="float: right; font-size: 20px">
+            <a href="https://sites.google.com/view/meshgraphnets"
+              >https://sites.google.com/view/meshgraphnets</a
+            >
+            (Pfaff et al. 2021)
+          </div>
+          <br />
+          <br />
+          <br />
+        </section>
+
+        <section>
+          <h2>Simulation-Based Cosmological Inference</h2>
+          <hr />
+          <small
+            >Ravanbakhsh+17, Brehmer+19, Ribli+19, Pan+19, Ntampaka+19,
+            Alexander+20, Arjona+20, Coogan+20, Escamilla- Rivera+20, Hortua+20,
+            Vama+20, Vernardos+20, Wang+20, Mao+20, Arico+20,
+            Villaescusa_navarro+20, Singh+20, Park+21, Modi+21,
+            Villaescusa-Navarro+21ab, Moriwaki+21, DeRose+21, Makinen+21,
+            Villaescusa-Navaroo+22
+          </small>
+        </section>
+
+        <section>
+          <!-- <section>
+            <h3 class="slide-title">
+              the limits of traditional cosmological inference
+            </h3>
+            <div class="container">
+              <div class="col">
+                <div
+                  style="
+                    position: relative;
+                    width: 480px;
+                    height: 30px;
+                    margin: 0 auto;
+                  "
+                >
+                  <div
+                    class="fragment current-visible"
+                    style="position: absolute; top: 0"
+                    data-fragment-index="1"
+                  >
+                    HSC cosmic shear power spectrum
+                  </div>
+                  <div
+                    class="fragment"
+                    style="position: absolute; top: 0"
+                    data-fragment-index="2"
+                  >
+                    HSC Y1 constraints on $(S_8, \Omega_m)$
+                  </div>
+                </div>
+                <div
+                  style="
+                    position: relative;
+                    width: 480px;
+                    height: 300px;
+                    margin: 0 auto;
+                  "
+                >
+                  <div
+                    class="fragment current-visible"
+                    style="position: absolute; top: 0; left: 0"
+                    data-fragment-index="0"
+                  >
+                    <img class="plain" data-src="/talks/assets/alonso_g1.png" />
+                    <img class="plain" data-src="/talks/assets/alonso_g2.png" />
+                  </div>
+                  <img
+                    class="fragment current-visible plain"
+                    data-src="/talks/assets/hsc_correlation_function.png"
+                    style="position: absolute; top: 0; left: 0"
+                    data-fragment-index="1"
+                  />
+                  <img
+                    class="fragment plain"
+                    data-src="/talks/assets/hsc_constraints.png"
+                    style="position: absolute; top: 0; left: 0"
+                    data-fragment-index="2"
+                  />
+                </div>
+                <div
+                  class="fragment"
+                  data-fragment-index="1"
+                  style="float: right; font-size: 20px"
+                >
+                  (Hikage et al. 2018)
+                </div>
+              </div>
+
+              <div class="col">
+                <ul>
+                  <li class="fragment" data-fragment-index="0">
+                    Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of
+                    all galaxies<br />
+                    $\Longrightarrow$ Noisy tracer of the weak lensing shear
+                    $\gamma$
+                  </li>
+                  <br />
+                  <li class="fragment" data-fragment-index="1">
+                    Compute <b class="alert">summary statistics</b> based on 2pt
+                    functions, <br />e.g. the <b>power spectrum</b>
+                  </li>
+                  <br />
+                  <li class="fragment" data-fragment-index="2">
+                    Run an MCMC to recover a posterior on model parameters,
+                    using an <b class="alert">analytic likelihood</b>
+                    $$ p(\theta | x ) \propto \underbrace{p(x |
+                    \theta)}_{\mathrm{likelihood}} \
+                    \underbrace{p(\theta)}_{\mathrm{prior}}$$
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="block fragment">
+              <div class="block-title">
+                Main limitation: the need for an explicit likelihood
+              </div>
+              <div class="block-content">
+                We can only compute the likelihood for
+                <b class="alert">simple summary statistics</b> and on
+                <b class="alert">large scales</b>
+                <br />
+                <br />
+                <div class="fragment">
+                  $\Longrightarrow$ We are dismissing a significant fraction of
+                  the information!
+                </div>
+              </div>
+            </div>
+          </section> -->
+
+          <section>
+            <h3 class='slide-title'>Full-Field Simulation-Based Inference</h3>
+          
+            <div class='container'>
+              <div class='col'>
+                <ul>
+                  <li data-fragment-index="0" > Instead of trying to analytically evaluate the likelihood of
+                    sub-optimal summary statistics, let us build a forward model of the full observables.<br>
+                    $\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
+                  </li>
+                  <br>
+                  <li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+                    cost of a <b>large number of latent variables</b>.
+                  </li>
+                </ul>
+          
+                <br>
+                <br>
+          
+                <div class="block fragment">
+                  <div class="block-title">
+                    Benefits of a forward modeling approach
+                  </div>
+                  <div class="block-content">
+                    <ul>
+                      <li> Fully exploits the information content of the data
+                        (aka "full field inference").
+                      </li>
+          
+                      <br>
+                      <li> Easy to incorporate systematic effects.
+                      </li>
+                      <br>
+                      <li> Easy to combine multiple cosmological probes by joint simulations.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+          
+              <div class='col'>
+                <div style="position:relative; width:600px; height:600px; margin:0 auto;">
+                  <img class=" plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+                  <img class="fragment plain" data-src="/talks/assets/porqueres_hbm.png" style="position:absolute;top:0;left:0;width:500px;background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);" data-fragment-index="1" />
+                  <div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Porqueres et al. 2021)</div>
+                </div>
+              </div>
+            </div>
+            <div class="fragment">For now, let's <b class="alert">ignore the elephant in the room</b>:<br> <b>Do we have reliable enough models for the full complexity of the data?</b></div>
+          </section>
+
+          <section>
+            <h3 class="slide-title">...so why is this not mainstream?</h3>
+            <img
+              class="plain"
+              data-src="/talks/assets/lfi_sim.png"
+              style="width: 1000px"
+            />
+
+            <div class="r-stack">
+              <img
+                class="plain fragment"
+                data-src="/talks/assets/plot_massive_nu.png"
+                style="width: 1000px"
+              />
+
+              <div class="block fragment">
+                <div class="block-title">
+                  The Challenge of Simulation-Based Inference
+                </div>
+                <div class="block-content">
+                  $$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z,
+                  \theta) p(z | \theta) dz $$ Where $z$ are
+                  <b>stochastic latent variables</b> of the simulator.<br /><br />
+                  $\Longrightarrow$ This
+                  <b class="alert">marginal likelihood is intractable</b>! Hence
+                  the phrase <b>"Likelihood-Free Inference"</b>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section>
+        <section>
+          <h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
+          <img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:750px;"/>
+          <ul>
+            <li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+            </li>
+   
+            <li>This gives us a procedure to sample from the <b>Bayesian joint distribution</b> $p(x, \theta)$: 
+             $$(x, \theta)  \sim p(x | \theta) \  p(\theta)$$
+            </li>
+   
+            <li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_\varphi$ to approximate an implicit distribution</b>.
+   
+           <ul>
+             <li><b>Neural Likelihood Estimation</b>:
+               $\mathcal{L}  = - \mathbb{E}_{(x,\theta)}\left[ \log p_\varphi( x | \theta ) \right] $
+             </li>
+             <br>
+             <li class="fragment"><b>Neural Posterior Estimation</b>:
+               $\mathcal{L}  = - \mathbb{E}_{(x,\theta)}\left[ \log p_\varphi( \theta | x ) \right] $
+             </li>
+             <br>
+             <li class="fragment"><b>Neural Ratio Estimation</b>:
+               $\mathcal{L} = - \mathbb{E}_{\begin{matrix} (x,\theta)~p(x,\theta) \\
+                                  \ \theta^\prime \sim p(\theta) \end{matrix}} \left[  \log r_\varphi(x,\theta) + \log(1 - r_\varphi(x, \theta^\prime))   \right] $
+             </li>
+           </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 class="slide-title">A variety of algorithms</h3>
+          <div style="float: right; font-size: 20px">
+            Lueckmann, Boelts, Greenberg, Gonçalves, Macke (2021)
+            <a href="https://arxiv.org/abs/2101.04653"
+              ><img
+                src="https://img.shields.io/badge/stat.ML-arXiv%3A2101.04653-B31B1B.svg"
+                class="plain"
+                style="height: 25px; vertical-align: middle"
+            /></a>
+          </div>
+          <img class="plain" data-src="/talks/assets/sbibm_comparison.png" />
+
+          <br />
+          <br />
+          A few important points:
+          <br /><br />
+          <ul>
+            <li class="fragment">
+              <b>Amortized</b> inference methods, which estimate $p(\theta |
+              x)$, can greatly speed up posterior estimation once trained.
+            </li>
+            <br />
+
+            <li class="fragment">
+              <b>Sequential</b> Neural Posterior/Likelihood Estimation methods
+              can actively sample simulations needed to refine the inference.
+            </li>
+          </ul>
+        </section>
+      </section>
+
+        <section>
+          <h3 class="slide-title">A Practical Recipe for Careful Simulation-Based Inference</h3>
+          <figure>
+            <blockquote>
+              Estimating conditional densities<br> in high dimensions is hard...
+            </blockquote>
+            <figcaption style="align-items: right;">
+              <em>@EiffL - every 2 or 3 days</em>
+            </figcaption>
+          </figure>
+          <br><br>
+          <div class="fragment">
+          To be more robust, you can decompose the problem into two tasks:<br><br>
+          <ul>
+            <li class="fragment"><b>Step I - <b class="alert">Dimensionality Reduction</b></b>: Compress your observables $x$ to a low dimensional <b>summary statistic $y$</b>
+            
+              <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />        
+            </li>
+    
+            <br>
+    
+            <li class="fragment"><b>Step II - <b class="alert">Conditional Density Estimation</b></b>: Estimate the posterior $p(\theta | y)$ using SBI from the low dimensional summary statistic $y$.
+            </li>
+          </ul> 
+          </div>
+        </section>
+    
+        <section>
+        <section>
+          <h3 class="slide-title">Automated Neural Summarization</h3>
+          <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+            <ul>
+              <li> Introduce a parametric function $f_\varphi$ to <b class="alert">reduce the dimensionality of the
+                data while preserving information</b>.
+              </li>
+            </ul>
+            <div class="container">
+              <div class="col">
+                <div class="r-stack">
+                  <img class="plain fragment"  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
+                  <!-- <img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" /> -->
+                </div>
+                <!-- <div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+                    style="height:20px;vertical-align:middle;" /></a></div> -->
+      
+              </div>
+              <div class="col">
+                      <div class="block fragment" data-fragment-index="0">
+                        <div class="block-title">
+                          Information point of view
+                        </div>
+                        <div class="block-content">
+                          <ul>
+                            <li class="fragment"> Summary statistics <b>$y$ is sufficient for $\theta$</b> if
+                              $$ I(Y; \Theta) = I(X; \Theta) \Leftrightarrow p(\theta | x ) = p(\theta | y) $$
+                            </li>
+                            <li class="fragment" > Variational <b>Mutual Information Maximization</b>
+                              $$ \mathcal{L} \ = \ \mathbb{E}_{x, \theta} [ \log q_\phi(\theta | y=f_\varphi(x)) ] \leq  I(Y; \Theta) $$
+                              (Barber & Agakov variational lower bound)
+                                <div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+                                      style="height:20px;vertical-align:middle;" /></a></div>
+                            </li>
+      
+                            <!-- <li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
+                              $$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+                              <div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+                                  style="height:20px;vertical-align:middle;" /></a></div>
+                            </li> -->
+                          </ul>
+                        </div>
+                      </div>
+              </div>
+            </div>
+        </section>
+        <section>
+          <h3 class="slide-title">Another Approach: maximizing the Fisher information</h3>
+            
+          <img class="plain " data-fragment-index="1"  data-src="/talks/assets/imnn.png" />
+    
+          Information Maximization Neural Network (IMNN)
+                              $$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+                              <div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+                                  style="height:20px;vertical-align:middle;" /></a></div>
+    
+    
+        </section>
+        </section>
+    
+        <section class="inverted" data-background="#000">
+          <h2>Can we just retire all conventional likelihood-based analyses?</h2>
+        </section>
+
+        <section>
+          <section data-background-video="/talks/assets/simbig.mp4" 
+          data-background-video-loop data-background-video-muted data-background-size="contain">
+          <h3 class="slide-title" style="background-color: rgba(0, 0, 0, 0.7);">SIMBIG: Field-level SBI of Large Scale Structure (Lemos et al. 2023)</h3>
+          <br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>	<br>
+          <br>
+          BOSS CMASS galaxy sample: Data vs Simulations<br>
+          <ul>
+            <li>20,000 simulated galaxy samples at 2,000 cosmologies </li>
+          </ul>
+          <div class="container">
+            <div class="col">
+              <div style="float:right; font-size: 20px"> Hahn et al. (2022)
+                <a href="https://arxiv.org/abs/2211.00723"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2211.00723-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+            </div>
+          </div>
+          </section>
+      
+          <section>
+            <div class="container">
+      
+              <div class="col">
+                
+                <div style="float:right; font-size: 25px"> <a href="https://ml4astro.github.io/icml2023/assets/48.pdf">Lemos et al. (2023)</a>
+                </div>
+              </div>
+            </div>
+            <img class="plain" data-src="/talks/assets/simbig_method.png" style="width:1000px;"/>
+      
+      
+            <img class="plain fragment" data-src="/talks/assets/simbig_contours.png" style="width:800px;"/>
+          </section>
+          </section>  
+    
+        <section>
+        <section>
+          <h3 class="slide-title"> $w$CDM analysis of KiDS-1000 Weak Lensing (Fluri et al. 2022)</h3>
+          <div class="container">
+            <div class="col">
+              <div style="float:right; font-size: 20px"> Kacprzak, Fluri, Schneider, Refregier, Stadel (2022)
+                <a href="https://arxiv.org/abs/2209.04662"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2209.04662-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <div class="col">
+              <img class="plain" data-src="/talks/assets/cosmogrid.png" style="height:550px" /><br>
+            </div>
+    
+            <div class="col">
+              <img class="plain" data-src="/talks/assets/cosmogrid_field.png" /><br>
+    
+              <b>CosmoGridV1 simulations</b>, available at <a href="http://www.cosmogrid.ai">http://www.cosmogrid.ai</a>
+    
+              <br>
+              <br>
+              <ul>
+                <li>17,500 simulations at 2,500 cosmologies </li>
+                <li>Lensing, Intrinsic Alignment, and Galaxy Density <br>maps at nside=512</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+        <section>
+          <div class="container">
+            <div class="col">
+              <div style="float:right; font-size: 20px"> Fluri, Kacprzak, Lucchi, Schneider, Refregier, Hofmann (2022)
+                <a href="https://arxiv.org/abs/2201.07771"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2201.07771-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+        <div class="container">
+          <div class="col">
+            KiDS-1000 footprint and simulated data
+            <img class="plain" data-src="/talks/assets/fluri_sky.png"  /><br>
+    
+            <ul>
+              <li><b>Neural Compressor</b>: Graph Convolutional Neural Network on the Sphere <br> Trained by Fisher information maximization.
+              </li>
+            </ul>
+          </div>
+        
+          <div class="col fragment">
+            <img class="plain" data-src="/talks/assets/fluri_contours.png" /><br>
+          </div>
+        </div>
+        </section>
+
+
+        <section>
+          <h3 class="slide-title"> Cosmological constraints from HSC survey first-year data using deep learning</h3>
+          <div class="container">
+            <div class="col">
+              <div style="float:right; font-size: 20px"> Lu, Haiman, Li (2023)
+                <a href="https://arxiv.org/abs/2301.01354"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2301.01354-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="container">
+            <div class="col">
+              <img class="plain" data-src="/talks/assets/hsc_y1_cnn.png" />
+            </div>
+
+            <div class="col">
+              <img class="plain" data-src="/talks/assets/hsc_y1_baryons.png" />
+            </div>
+          </div>
+
+        </section>
+    
+        </section>
+    
+        <section data-background-image="https://media1.giphy.com/media/MCZ39lz83o5lC/giphy.gif?cid=ecf05e47itrwtb66ts0bcauq0659d605b2qhhn8r9q58eo75&ep=v1_gifs_related&rid=giphy.gif&ct=g">
+        </section>
+    
+        <section>
+          <h3 class="slide-title">How much <b>usable</b> information is there beyond the power spectrum?</h3>
+    
+          <div class="container">
+            <div class="col">
+              <div style="float:left; font-size: 20px"> Chisari et al. (2018)
+                <a href="https://arxiv.org/abs/1801.08559"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1801.08559-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+              <img class="plain" data-src="/talks/assets/chisari_feedback.png" style="height: 375px;"/>
+              <br> Ratio of power spectrum in hydrodynamical simulations vs. N-body simulations
+            </div>
+            <div class="col fragment">
+              <div style="float:right; font-size: 20px"> Secco et al. (2021)
+                <a href="https://arxiv.org/abs/2105.13544"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2105.13544-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+              <img class="plain" data-src="/talks/assets/des_y3_cosmic_shear.png" style="height: 400px;"/>
+              <br>DES Y3 Cosmic Shear data vector
+            </div>
+          </div>
+          <br>
+          <div class="fragment">$\Longrightarrow$ Can we find non-Gaussian information that is not affected by baryons?</div>
+        </section>
+
+        <section>
+          <h3 class="slide-title">Example of unforeseen impact of shortcuts in simulations</h3>
+          <div class="container">
+            <div class="col">
+              <div style="float:right; font-size: 20px"> Gatti, Jeffrey, Whiteway et al. (2023)
+                <a href="https://arxiv.org/abs/2307.13860"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2307.13860-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
+              </div>
+            </div>
+          </div>
+    
+          <div class="container">
+            <div class="col">
+              <img class="plain" data-src="/talks/assets/lensing_3d.png" style="height: 450px;"/>
+    
+              <br>Is it ok to <b>distribute lensing source galaxies randomly</b> in simulations, or should they be clustered?
+            </div>
+    
+            <div class="col fragment ">
+              <img class="plain" data-src="/talks/assets/gatti_clustering.png" style="height: 500px;"/>
+            </div>
+    
+          </div>
+          <br>
+          <div class="fragment">$\Longrightarrow$ An <b class="alert">SBI analysis could be biased</b> by this effect and <b>you would never know it!</b> 
+          </div>
+        </section>
+
+        <section>
+          <h3 class="slide-title">takeways</h3>
+
+          <ul>
+            <li>
+              Likelihood-Free Inference <b>automatizes inference</b> over
+              numerical simulators.
+              <ul>
+                <li>
+                  Turns both summary extraction and inference problems into an
+                  <b class="alert">optimization problems</b>
+                </li>
+                <li><b>Deep learning allows us to solve that problem!</b></li>
+              </ul>
+            </li>
+
+            <br />
+            <li class="fragment">
+              In the context of upcoming surveys, this techniques provides
+              <b class="alert">many advantages</b>:
+              <ul>
+                <li>
+                  <b>Amortized inference</b>: near instantaneous parameter
+                  inference, extremely useful for time-domain.
+                </li>
+                <li>
+                  <b>Optimal information extraction</b>: no longer need for
+                  restrictive modeling assumptions needed to obtain tractable
+                  likelihoods.
+                </li>
+              </ul>
+            </li>
+            <br />
+          </ul>
+
+          <br />
+          <br />
+          <div class="block fragment">
+            <div class="block-title">
+              Will we be able to exploit all of the information content of LSST, 
+              Euclid, DESI?
+            </div>
+            <div class="block-content">
+              $\Longrightarrow$ Not rightaway, but it is not the fault of Deep
+              Learning!
+              <br />
+              <br />
+              <ul>
+                <li class="fragment">
+                  Deep Learning has redefined the limits of our statistical
+                  tools, creating
+                  <b>additional demand on the accuracy of simulations</b> far
+                  beyond the power spectrum.
+                </li>
+                <br />
+                <li class="fragment">
+                  Neural compression methods have the downside of being opaque.
+                  It is <b>much harder to detect unknown systematics</b>.
+                </li>
+                <br />
+                <li class="fragment">
+                  We will need a significant number of
+                  <b>large volume, high resolution</b> simulations.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <br />
+
+          <br />
+
+          <br />
+          <br />
+        </section>
+        
+        <section>
+          <h2>Conclusion</h2>
+          <hr />
+        </section>
+
+        <section>
+          <h3 class="slide-title">
+            Deep Learning 8 years later: Revolution or Incremental Science?
+          </h3>
+          <ul>
+            <li> The most impactful applications so far are low level
+              “out-of-the-box” data reduction applications (incremental science).
+            </li>
+
+            <li> In some ways, the <b class="alert">statistical tools are now beyond our physical
+              modeling capabilities</b>, they are no longer a limiting factor.
+            </li>
+            <div class="container fragment" >
+              <div class="col">
+                <b>Where are we going next?</b>
+                <br>
+                <br>
+                  <ul>
+                    <li> <b class="alert">Foundation Models</b> for feature extraction:
+                      <br>
+                      <br>
+                      <ul>
+                        <li> More information can be extracted from data by <b>self-supervised learning</b> across surveys and data modalities</li>
+                      </ul>
+                    </li>
+
+                    <br>
+
+                    <li class="fragment"> <b class="alert">Generative Models</b> for Data-Driven modeling:
+                      <br>
+                      <br>
+                      <ul>
+                        <li> <b>Generative models</b> can be used to <b>learn part of the physical processes</b> that generate the data.</li>
+                      </ul>
+                    </li>
+
+                  </ul>
+                </div>
+
+                <div class="col">
+                  <img data-src="https://blogs.nvidia.com/wp-content/uploads/2023/03/Transformer-apps-768x525.jpg"/>
+                  <div style="text-align: center;">Will Foundation Models make their way to astrophysics?</div>
+                </div>
+              </div>
+          <div style="text-align: center;"><p class="fragment alert">Thank you !</p></div> 
+        </section> 
+
+
+
+      </div>
+    </div>
+
+    <style>
+      /* .reveal .slides {
+        border: 5px solid red;
+        min-height: 100%;
+        width: 128mm;
+        height: 96mm;
+      } */
+
+      .reveal .block {
+        background-color: #191919;
+        margin-left: 20px;
+        margin-right: 20px;
+        text-align: left;
+        padding-bottom: 0.1em;
+      }
+
+      .reveal .block-title {
+        background-color: #333333;
+        padding: 8px 35px 8px 14px;
+        color: #ffaa7f;
+        font-weight: bold;
+      }
+
+      .reveal .block-content {
+        padding: 8px 35px 8px 14px;
+      }
+
+      .reveal .slide-title {
+        border-left: 5px solid white;
+        text-align: left;
+        margin-left: 20px;
+        padding-left: 20px;
+      }
+
+      .reveal .alert {
+        color: #ffaa7f;
+        font-weight: bold;
+      }
+
+      .reveal .inverted {
+        filter: invert(100%);
+      }
+    </style>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        controls: true,
+
+        //center: false,
+        hash: true,
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: "hidden",
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: true,
+
+        transition: "slide", // none/fade/slide/convex/concave/zoom
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+        height: 720,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.2,
+        maxScale: 1.5,
+
+        autoPlayMedia: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+        dependencies: [
+          {
+            src: "reveal.js/plugin/markdown/marked.js",
+          },
+          {
+            src: "reveal.js/plugin/markdown/markdown.js",
+          },
+          {
+            src: "reveal.js/plugin/notes/notes.js",
+            async: true,
+          },
+          {
+            src: "reveal.js/plugin/math/math.js",
+            async: true,
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-d3/reveald3.js",
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js",
+          },
+          {
+            src: "reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js",
+          },
+          {
+            src: "reveal.js/plugin/highlight/highlight.js",
+            async: true,
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
