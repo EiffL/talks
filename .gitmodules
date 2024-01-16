@@ -205,3 +205,6 @@
 [submodule "KEK2024/reveal.js"]
 	path = KEK2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "CCA2024/reveal.js"]
+	path = FI2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
