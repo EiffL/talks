@@ -208,3 +208,6 @@
 [submodule "CCA2024/reveal.js"]
 	path = FI2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Rutgers2024/reveal.js"]
+	path = Rutgers2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
