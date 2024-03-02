@@ -22,7 +22,7 @@
 			<section data-background-iframe="background.html">
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
-						<h2>Towards End-to-End Automatically Differentiable Cosmological Galaxy Survey Simulations</h2>
+						<h1>Automatically Differentiable Cosmological Simulations</h1>
 						<h4>Workshop on Differentiable Parallel Programming, PPoPP 2024, March. 2nd 2024
 						</h4>
 					</div>
@@ -1318,6 +1318,7 @@
 	</section>
 
 	<section>
+	<section>
 		<h3 class="slide-title">Towards a new generation of JAX-based distributed tools</h3>
 		<div class="container">
 
@@ -1353,7 +1354,9 @@
 			<br>
 				<ul>
 					<li>JAX bindings to the high-performance <a href="https://github.com/NVIDIA/cuDecomp">cuDecomp</a> (Romero et al. 2022) adaptive domain decomposition library.</li>
+					<br>
 					<li>Provides parallel FFTs and halo-exchange operations.</li>
+					<br>
 					<li>Supports variety of backends: CUDA-aware MPI, NVIDIA NCCL, NVIDIA NVSHMEM.</li>
 				</ul>
 			</li>
@@ -1362,9 +1365,118 @@
 		</div>
 		<br>
 
-		<div class="fragment fade-up">
-			<b class="alert" > Call to action:</b> <b>If you are interested in contributing to building JAX-based HPC tools</b>, please get in touch :-) ! 
+	</section>
+
+	<section>
+		<h3 class="slide-title">Defining Custom Distributed Ops in JAX</h3>
+
+		<div class="container">
+
+			<div class="col">
+
+				<div class="r-stack" >
+				<div class="fragment current-visible" data-fragment-index="0">
+				<pre class="python"  style="width: 600px;"> <code data-trim data-noescape>
+from jax.experimental import mesh_utils
+from jax.sharding import PositionalSharding
+
+# Create a Sharding object to distribute a value across devices:
+sharding = PositionalSharding(mesh_utils.create_device_mesh((8,)))
+
+# Create an array of random values:
+x = jax.random.normal(jax.random.PRNGKey(0), (8192, 8192))
+# and use jax.device_put to distribute it across devices:
+y = jax.device_put(x, sharding.reshape(4, 2))
+jax.debug.visualize_array_sharding(y)
+
+---
+
+┌──────────┬──────────┐
+│  TPU 0   │  TPU 1   │
+├──────────┼──────────┤
+│  TPU 2   │  TPU 3   │
+├──────────┼──────────┤
+│  TPU 6   │  TPU 7   │
+├──────────┼──────────┤
+│  TPU 4   │  TPU 5   │
+└──────────┴──────────┘
+					</code></pre>
+					<div><a href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">Distributed arrays and automatic parallelization</a></div>
+				</div>
+
+				<div class="fragment current-visible" data-fragment-index="1">
+				<pre class="python" style="width: 600px;"> <code data-trim data-noescape>
+from jaxlib.hlo_helpers import custom_call
+
+def _rms_norm_fwd_cuda_lowering(ctx, x, weight, eps):
+    [...]
+    opaque = gpu_ops.create_rms_norm_descriptor([...])
+
+    out = custom_call(
+        b"rms_forward_affine_mixed_dtype",
+        result_types=[
+            ir.RankedTensorType.get(x_shape, w_type.element_type),
+            ir.RankedTensorType.get((n1,), iv_element_type),
+        ],
+        operands=[x, weight],
+        backend_config=opaque,
+        operand_layouts=default_layouts(x_shape, w_shape),
+        result_layouts=default_layouts(x_shape, (n1,)),
+    ).results
+    return out
+
+_rms_norm_fwd_p = core.Primitive("rms_norm_fwd")
+mlir.register_lowering(
+    _rms_norm_fwd_p,
+    _rms_norm_fwd_cuda_lowering,
+    platform="gpu",
+)
+				</code></pre>
+				<div><a href="https://jax.readthedocs.io/en/latest/Custom_Operation_for_GPUs.html">Custom operations for GPUs with C++ and CUDA</a></div>
+				</div>
+
+				<div class="fragment" data-fragment-index="2">
+				<pre class="python" style="width: 600px;"><code data-trim data-noescape>
+					def partition(mesh, arg_shapes, result_shape):
+						result_shardings = jax.tree.map(lambda x: x.sharding, result_shape)
+						arg_shardings = jax.tree.map(lambda x: x.sharding, arg_shapes)
+						return mesh, fft, \
+							supported_sharding(arg_shardings[0], arg_shapes[0]), \
+							(supported_sharding(arg_shardings[0], arg_shapes[0]),)
+			  
+					def infer_sharding_from_operands(mesh, arg_shapes, result_shape):
+						arg_shardings = jax.tree.map(lambda x: x.sharding, arg_shapes)
+						return supported_sharding(arg_shardings[0], arg_shapes[0])
+			  
+					@custom_partitioning
+					def my_fft(x):
+						return fft(x)
+			  
+					my_fft.def_partition(
+						infer_sharding_from_operands=infer_sharding_from_operands,
+						partition=partition)			  
+				</code></pre>
+				<div><a href="https://github.com/google/jax/blob/8569b893b1c124cad6b28931919ed99e69423920/jax/experimental/custom_partitioning.py#L258">jax.experimental.custom_partitioning</a></div>				
+				</div>
+			</div>
+			</div>
+
+			<div class="col">
+				<div>
+					<img data-src="https://avatars.githubusercontent.com/u/83787080?v=4" style='width:200px; height:200px;'></img>
+				<br>JAX cuDecomp interface led by <b>Wassim Kabalan (IN2P3/APC)</b>
+				</div>
+
+				<ul>
+					<li class="fragment"  data-fragment-index="0">JAX>=v0.4.1 defines sharded tensors and a "<b>computation follows data</b>" philosophy.</li>
+					<br>
+					<li class="fragment"  data-fragment-index="1">jaxlib provides a helper to define <b>custom CUDA lowering</b></li>
+					<br>
+					<li class="fragment"  data-fragment-index="2">Recent API allows us to define <b>custom partitioning schemes</b> compatible with a primitive</li>	
+				</ul>
+			</div>
 		</div>
+	</section>
 	</section>
 				
 	   <section>
@@ -1413,6 +1525,10 @@
 			   </div>
 		   </div>
 
+		   <br>
+		   <div class="fragment fade-up">
+			   <b class="alert" > Call to action:</b> <b>If you are interested in contributing to building JAX-based HPC tools</b>, please get in touch :-) ! 
+		   </div>
 		   <br>
 		   <br>
 
