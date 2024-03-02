@@ -211,3 +211,6 @@
 [submodule "Rutgers2024/reveal.js"]
 	path = Rutgers2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Edinburgh2024/reveal.js"]
+	path = Edinburgh2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
