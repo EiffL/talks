@@ -214,3 +214,6 @@
 [submodule "Edinburgh2024/reveal.js"]
 	path = Edinburgh2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "SLC2024/reveal.js"]
+	path = SLC2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
