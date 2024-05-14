@@ -220,3 +220,6 @@
 [submodule "ITC2024/reveal.js"]
 	path = ITC2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "ISC2024/reveal.js"]
+	path = ISC24/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
