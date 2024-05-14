@@ -96,5 +96,9 @@
       "no-eq-null": 2,
       "no-unused-expressions": 0
     }
+  },
+  "dependencies": {
+    "bin": "^0.0.0",
+    "decktape": "^3.12.0"
   }
 }
