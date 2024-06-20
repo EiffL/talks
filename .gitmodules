@@ -223,3 +223,6 @@
 [submodule "ISC2024/reveal.js"]
 	path = ISC24/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "IASIS2024/reveal.js"]
+	path = IASIS2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
