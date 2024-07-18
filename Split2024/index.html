@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<title>Full-Field Inference: Should I be Implicit or Explicit?</title>
+	<title>Full-Field Inference: Implicit vs Explicit approaches</title>
 
 	<meta name="description" content="Cosmology in the Adriatic -- From PT to AI, July 2024">
 	<link rel="stylesheet" href="reveal.js/dist/reset.css">
@@ -22,7 +22,7 @@
 			<section data-background-iframe="background.html">
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
-						<h1>Full-Field Inference: Should I be Implicit or Explicit?</h1>
+						<h1>Full-Field Inference: Implicit vs Explicit approaches</h1>
 						<h4>Cosmology in the Adriatic -- From PT to AI, July 2024
 						</h4>
 					</div>
@@ -425,7 +425,6 @@
 			
 			</section>
 
-
 		<section class="inverted" data-background="#000">
 			<h3><b>Implicit Inference is easier, cheaper</b>, and yields the same results as Explicit Inference...</h3>
 			<br>
@@ -443,18 +442,17 @@
 			<div class="fragment">
 				 More seriously, Explicit Inference has some advantages:<br>
 				<ul>
-					<li>More introspectable results to identify systematics</li>
-					<li>Allows for fitting parametric corrections/nuisances from data</li>
-					<li>Provides validation of statistical inference with a different method</li>
+					<li>More introspectable results to <b>identify systematics</b></li>
+					<li>Allows for <b>fitting parametric corrections/nuisances</b> from data</li>
+					<li>Provides <b>validation of statistical inference</b> with a different method</li>
 				</ul>
 			</div>
-
 		</section>
 
 		<section>
 			<h2>Automatically Differentiable High Performance Computing</h2>
-			<a href="https://arxiv.org/abs/2407.10877"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2407.10877-B31B1B.svg" class="plain" style="height:25px;" /></a>
-			<a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp"><img src="https://badgen.net/badge/icon/sbi_lens?icon=github&label" class="plain" style="height:25px;" /></a>
+			<!-- <a href="https://arxiv.org/abs/2407.10877"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2407.10877-B31B1B.svg" class="plain" style="height:25px;" /></a> -->
+			<a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp"><img src="https://badgen.net/badge/icon/jaxDecomp?icon=github&label" class="plain" style="height:25px;" /></a>
 			<hr>
 			<div class="container">
 				<div class="col">
@@ -468,55 +466,49 @@
 						<!-- <img data-src="/talks/assets/justine.jpeg" style='width:200px; height:200px;'></img> -->
 						<br>
 						<br>
-						$\Longrightarrow$ Build near compute-optimal distributed simulators in JAX
+						$\Longrightarrow$ Build near compute-optimal distributed simulators in JAX on GPU-based supercomputers
 					</div>
 				</div>
 				<div class="col">
-					<img class="plain" data-src="https://nvidia.github.io/cuDecomp/_images/decomposition.png" style="width:425px;" />
+					<img class="plain" data-src="https://nvidia.github.io/cuDecomp/_images/decomposition.png" style="width:500px;" />
 				</div>
 			</div>
 			<br>
 		</section>
 
 		<section>
-			<h3 class="slide-title">the road ahead for Explicit Inference</h3>
-	
-			<br>
-			<br>
-	
-			<div class="block fragment">
-				<div class="block-title">
-					The Open Challenges for Cosmological Explicit Inference
-				</div>
-				<div class="block-content">
+			<h3 class="slide-title">State of the art of differentiable lensing model <a href="https://arxiv.org/abs/2304.04785">(Porqueres et al. 2023)</a></h3>
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/porqueres_model.png" />
+					<b>Settings</b>: <br>
 					<ul>
-						<li class="fragment"><b>Modeling Challenges</b>: Full-field inference is very sensitive to model mispecification, models need to be 
-							accurate and realistic. But even at infinite computational budget <b>we don't know all physics involved</b>.<br>
-							<br>
-							$\Longrightarrow$ Requires <b class="alert">more realistic and data-driven forward models</b> while remaining fast and differentiable.
-						</li>
-						<br>
-						<br>
-						<li class="fragment"><b>Technical Challenges</b>: Probabilistic forward models need to be 
-							scaled up to cosmological volumes.<br>
-							<br>
-							$\Longrightarrow$ Requires frameworks allowing for <b class="alert">model distribution on large-scale GPU supercomputers</b>
-						</li>
-	
-						<br>
-						<br>
-	
-						<li class="fragment"><b>Methodological Challenges</b>: A realistic cosmological probabilistic model involves at least $O(10^9)$ latent variables,
-							and require very accurate posterior infence on these variables.<br>
-							<br>
-							$\Longrightarrow$ Requires <b class="alert">scalable inference methods</b> for high-dimensional and potentially multimodal posteriors.
-						</li>
+						<li>1LPT lightcone</li>
+						<li>(1 x 1 x 4.5) $h^{-1}$Gpc</li>
+						<li><b>64 x 64 x 128</b> voxels</li>
+						<li>16 x 16 degrees lensing field</li>
+						<li><b>~2 hours to sample</b> with NUTS on one A100 <br>
+							(our implementation)</li>
 					</ul>
 				</div>
+
+				<div class="col fragment">
+					<img data-src="/talks/assets/porqueres_accuracy.png" style="width: 500px;" />
+					<br> Comparison to linear lensing power spectra <br> 
+					<a href="https://colab.research.google.com/github/EiffL/LPTLensingComparison/blob/main/notebooks/AccuracyTest_Porqueres2023.ipynb"
+											target="_blank"><img
+												src="https://colab.research.google.com/assets/colab-badge.svg"
+												alt="Open In Colab" class="plain"
+												style="height:25px;vertical-align:middle; display:inline;" /></a>				
+				</div>
+
 			</div>
+
+			<div class="fragment">$\Longrightarrow$ We need to go bigger!</div>
+
 		</section>
 	
-		<section>
+		<!-- <section>
 			<h3 class="slide-title">The need for distributed differentiable programming frameworks</h3>
 	
 			<ul>
@@ -531,7 +523,7 @@
 				<img class="fragment" data-fragment-index="3" data-src="/talks/assets/mesh_tensorflow.png" /><br>
 				<div class="fragment" data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div>
 		</section>
-	
+	 -->
 		<section>
 			<h3 class='slide-title'>Mesh FlowPM: Distributed and Automatically Differentiable simulations</h3>
 			<!--
@@ -601,8 +593,8 @@
 				<div class="col">
 	
 					<ul>
-						<li><b>JAX v0.4</b> has made a strong push for bringing <b>automated parallelization</b>
-							and support multi-host GPU clusters!</li>
+						<li><b>JAX v0.4.1</b> (Dec. 2022) has made a strong push for bringing <b>automated parallelization</b>
+							and <b>support multi-host GPU clusters!</b></li>
 						<br>
 						<li>Scientific HPC still most likely requires dedicated high-performance ops
 						</li>
@@ -621,7 +613,7 @@
 					<ul>
 						<li>JAX bindings to the high-performance <a href="https://github.com/NVIDIA/cuDecomp">cuDecomp</a> (Romero et al. 2022) adaptive domain decomposition library.</li>
 						<br>
-						<li>Provides parallel FFTs and halo-exchange operations.</li>
+						<li>Provides <b class="alert">parallel FFTs</b> and <b class="alert">halo-exchange</b> operations.</li>
 						<br>
 						<li>Supports variety of backends: CUDA-aware MPI, NVIDIA NCCL, NVIDIA NVSHMEM.</li>
 					</ul>
@@ -743,6 +735,55 @@
 				</div>
 			</div>
 		</section>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Building PM components from these distributed operations</h3>
+			<div class="container">
+				<div class="col">
+					<div style="float:right; font-size: 20px"> Kabalan, <b>Lanusse</b>, Boucaud (in prep.)
+					</div>
+				</div>
+			</div>
+
+			<div class="r-stack">
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/wassim_fft.png" style="height: 350px;" />
+					<br> Distributed 3D FFT for force computation
+				</div>
+
+				<div class="col fragment">
+					<img data-src="/talks/assets/wassim_halo_exchange.png" style="height: 350px;"  />
+					<br> Halo Exchange for CiC painting and reading
+				</div>
+			</div>
+			<img class="fragment" data-src="/talks/assets/lpt_2048_field.png" style="height: 650px;"/>
+		</div>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Performance Benchmark</h3>
+
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/scaling_plot.png" style="height: 500px;" />
+					<br> Strong scaling plots of 3D FFT
+				</div>
+
+				<div class="col">
+					<div class="r-stack">
+					<div class="fragment current-visible" data-fragment-index="0" >
+						<img data-src="/talks/assets/cufftmp_strong.png" style="height: 500px;" />
+						<br>Official performance benchmark from NVIDIA with cuFFTMp
+					</div>
+					<div  class="fragment">
+						<img data-src="/talks/assets/timing_plot_lpt.png" style="height: 500px;" />
+						<br> Timing of 1LPT computation
+					</div>
+					</div>
+				</div>
+			</div>
 		</section>
 					
 		   <!-- <section>
@@ -946,6 +987,109 @@
 		   </div>
 	   </section> -->
 
+	   <section>
+		<h3>On the topic of JAX codes...</h3>
+	   </section>
+
+	   <section>
+		<section>
+			<h3 class="slide-title">Jax-GalSim: it's GalSim, but Differentiable and  GPU-accelerated!</h3>
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/github.png" class="plain" style="height:70px" />
+					<div> <a href="https://github.com/GalSim-developers/JAX-GalSim">https://github.com/GalSim-developers/JAX-GalSim</a>
+					</div>
+				</div>
+	
+				<div class="col">
+					<img data-src="/talks/assets/jax_galsim_contributors.png" class="plain" style="height: 130px" />
+				</div>
+			</div>
+			
+			<div class="container">
+				<div class="col">		
+					<pre class="python"><code data-trim data-noescape>
+						import jax_galsim as galsim
+	
+						psf_beta = 5       #
+						psf_re = 1.0       # arcsec
+						pixel_scale = 0.2  # arcsec / pixel
+						sky_level = 2.5e3  # counts / arcsec^2
+						
+						# Define the galaxy profile.
+						gal = galsim.Exponential(flux=1, scale_radius=2).shear(g1=.3, g2=.4)
+						gal = gal.shear(g1=0.01, g2=0.05)
+						
+						# Define the PSF profile.
+						psf = galsim.Gaussian(flux=1., half_light_radius=psf_re)
+						
+						# Final profile is the convolution of these.
+						final = galsim.Convolve([gal, psf])
+						
+						# Draw the image with a particular pixel scale.
+						image = final.drawImage(scale=pixel_scale)
+					</code></pre>
+					
+				</div>
+				<div class="col">
+					<br>
+					<div class="r-stack">
+						<img class="plain" data-src="/talks/assets/galaxy_galsim.png" />
+						<div class="fragment" data-fragment-index="2" >
+							<img class="plain" data-src="/talks/assets/jax_galsim_comparison.png" /><br>
+						
+							<div style="text-align: right; font-size: medium;">
+								metacalibration residuals, credit: Matt Becker
+							</div>
+						</div>
+					</div>
+					<br>
+					<br>
+	
+				</div>
+			</div>
+	
+			<div class="fragment" data-fragment-index="1"> <b>Guiding principles</b>:<br>
+			</div>
+			<ul>
+				<li class="fragment" data-fragment-index="1">Strictly <b class='alert'>follows the GalSim API</b>.</li>
+				<li class="fragment" data-fragment-index="2"><b class='alert'>Validated against GalSim</b> up to numerical accuracy: inherits from GalSim's test suite</li>
+				<li class="fragment" data-fragment-index="3">Implementations should be easy to read and understand.</li>
+			</ul>
+		</section>
+	
+		<section>
+			<h3 class="slide-title">Example use-case: Metacalibration in 3 lines of code!</h3>
+			<a href="https://colab.research.google.com/drive/1akPh_gmw2NGksZBYVWfvjMjngpaIGthf?usp=sharing" target="_parent" class="align-right">
+				<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain" style="height:25px;" />
+			</a>
+	
+	
+			<div class="container">
+				<div class="col">
+					<pre class="python"><code data-trim data-noescape>
+						@jax.jacfwd
+						def autometacal(shear, image, psf, rec_psf):
+							# Step 1: Deconvolve the image
+							deconvolved = jax_galsim.Convolve([image, 
+																		jax_galsim.Deconvolve(psf)])
+							# Step 2: Apply shear
+							sheared = deconvolved.shear(g1=shear[0], g2=shear[1])
+							# Step 3: Reconvolve by slightly dilated PSF
+							reconvolve = jax_galsim.Convolve([sheared, rec_psf])
+							return reconvolve.drawImage(scale=scale, method='no_pixel').array
+						</code></pre>
+	
+				</div>
+				<div class="col">
+					<img class="plain" data-src="/talks/assets/auto_metacal.png" />
+				</div>
+			</div>
+	
+	
+		</section>
+	</section> 
+	
 
 		</div>
 	</div>
