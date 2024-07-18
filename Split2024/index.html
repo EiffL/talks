@@ -1,0 +1,1093 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Full-Field Inference: Should I be Implicit or Explicit?</title>
+
+	<meta name="description" content="Cosmology in the Adriatic -- From PT to AI, July 2024">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-iframe="background.html">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1>Full-Field Inference: Should I be Implicit or Explicit?</h1>
+						<h4>Cosmology in the Adriatic -- From PT to AI, July 2024
+						</h4>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 20px;">
+								<h2>François Lanusse</h2>
+								<br>
+								<img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="/talks/assets/simons_logo.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://eiffl.github.io/talks/Split2024">eiffl.github.io/talks/Split2024</a> </div>
+				</div>
+			</section>
+
+<section>	
+	<section>
+		<h3 class='slide-title'>Full-Field Simulation-Based Inference</h3>
+	
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li data-fragment-index="0" > Instead of trying to analytically evaluate the likelihood of
+						sub-optimal summary statistics, let us build a forward model of the full observables.<br>
+						$\Longrightarrow$ <b class="alert">The simulator becomes the physical model</b>.
+					</li>
+					<br>
+					<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
+						cost of a <b>large number of latent variables</b>.
+					</li>
+				</ul>
+	
+				<br>
+				<br>
+	
+				<div class="block fragment">
+					<div class="block-title">
+						Benefits of a forward modeling approach
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Fully exploits the information content of the data
+								(aka "full field inference").
+							</li>
+	
+							<br>
+							<li> Easy to incorporate systematic effects.
+							</li>
+							<br>
+							<li> Easy to combine multiple cosmological probes by joint simulations.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	
+			<div class='col'>
+				<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+					<img class=" plain" data-src="/talks/assets/forward_model.png" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0" />
+					<img class="fragment plain" data-src="/talks/assets/porqueres_hbm.png" style="position:absolute;top:0;left:0;width:500px;background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);" data-fragment-index="1" />
+					<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Porqueres et al. 2021)</div>
+				</div>
+			</div>
+		</div>
+		<div class="fragment">For this talk, let's <b class="alert">ignore the elephant in the room</b>:<br> <b>Do we have reliable enough models for the full complexity of the data?</b></div>
+	</section>
+	
+	<section>
+		<h3 class="slide-title">...so why is this not completely mainstream?</h3>
+			<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:1000px;"/>
+	
+				<div class="r-stack">
+	
+					<img class="plain fragment" data-src="/talks/assets/plot_massive_nu.png" style="width:1000px;"/>
+	
+						<div class="block fragment">
+							<div class="block-title">
+								The Challenge of Simulation-Based Inference
+							</div>
+							<div class="block-content">
+								$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
+								Where $z$ are <b>stochastic latent variables</b> of the simulator.<br><br>
+								$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>!
+							</div>
+						</div>
+					</div>
+	</section>
+	</section>
+	
+	<section>
+	<section>
+				<br>
+				<br>
+
+						<div class="block">
+							<div class="block-title">
+								How to perform inference over forward simulation models?
+							</div>
+							<div class="block-content">
+								<br>
+								<ul>
+									<li class="fragment"> <b class="alert">Implicit Inference</b>: Treat the simulator as a black-box with only the ability to sample from the joint distribution 
+										$$(x, \theta) \sim p(x, \theta)$$
+										a.k.a.<br><ul>
+											<li> <b>Simulation-Based Inference</b> (SBI)
+											</li>
+											<li> <b>Likelihood-free inference</b> (LFI)
+											</li>
+											<li> <b>Approximate Bayesian Computation</b> (ABC)
+											</li>
+										</ul>
+									</li>
+
+									<br>
+
+									<li class="fragment"> <b class="alert">Explicit Inference</b>: Treat the simulator as a probabilistic model and perform inference over the joint posterior 
+										$$p(\theta, z | x) \propto p(x | z, \theta) p(z, \theta) p(\theta) $$
+										a.k.a.<br><ul>
+											<li> <b>Bayesian Hierarchical Modeling</b> (BHM)
+											</li>
+										</ul>
+									</li>
+									<br>
+								</ul>
+
+							</div>
+						</div>
+						<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods <b class="alert">should converge to the same posterior!</b></div>
+	</section>
+
+	<section>
+		<img data-src="/talks/assets/find-the-difference.png" style="height: 700px;" />
+	</section>
+	</section>
+
+	<section class="inverted" data-background="#000">
+		<h2>Main Questions for This Talk </h2>
+		<br> <br>
+		<ul>
+			<li class="fragment grow"> Do we have the <b>practical methodologies</b> for both form of inference <br> that <b>converge to the same solution</b>?
+				
+				<br> <br>
+				<br> <br>
+
+			<li class="fragment grow"> What is the tradeoff in <b>computational cost</b> between the two approaches?</li>
+		</ul>
+
+	</section>
+
+	   <section>
+		<h2>Optimal Neural Summarisation for Full-Field Weak Lensing Cosmological Implicit Inference</h2>
+		<a href="https://arxiv.org/abs/2407.10877"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2407.10877-B31B1B.svg" class="plain" style="height:25px;" /></a>
+		<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/sbi_lens?icon=github&label" class="plain" style="height:25px;" /></a>
+		<hr>
+		<div class="container">
+			<div class="col">
+				<div align="left" style="margin-left: 20px;">
+					<h4>Work led by:<br> <b class="alert">Denise Lanzieri</b> (now at Sony Computer Science Laboratory) <br> <b class="alert">Justine Zeghal</b> (moving to University of Montreal in the fall)
+					</h4>
+					<!-- <img data-src="/talks/assets/niall.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
+					<img data-src="/talks/assets/justin.jpeg" style='width:200px; height:200px;'></img> -->
+					<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:200px; height:200px;'></img>
+					<img data-src="/talks/assets/justine.jpeg" style='width:200px; height:200px;'></img>
+
+					<br>
+					<br>
+					$\Longrightarrow$ Compare strategies for neural compression in setting where explicit posterior is available.
+				</div>
+			</div>
+			<div class="col">
+				<img class="plain" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png" style="width:425px;" />
+			</div>
+		</div>
+		<br>
+	</section>
+
+	<section>
+	<section>
+		<h3 class="slide-title">Conventional Recipe for Full-Field Implicit Inference...</h3>
+		<br>
+		<img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+		<div class="block">
+			<div class="block-title">
+				A two-steps approach to Implicit Inference
+			</div>
+			<div class="block-content">
+				<ul>
+					<li> Automatically <b class="alert">learn</b> an <b>optimal low-dimensional summary statistic</b>
+						$$y = f_\varphi(x) $$
+					</li>
+
+					<li class="fragment"> Use Neural Density Estimation to either:
+						<ul>
+							<li>build an <b>estimate $p_\phi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+
+							</li>
+							<br>
+
+							<li>build an <b>estimate $p_\phi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
+
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slide-title">But a lot of variants!</h3>
+		<img data-src="/talks/assets/table_loss_functions.png" style="height:570px"><br>
+		* grey rows are papers analyzing survey data
+	</section>
+	</section>
+
+	<section>
+		<section>
+			<h3 class="slide-title">An easy-to-use experimentation testbed: log-normal lensing simulations</h3>
+	
+			<div class="container">
+				<div class="col"> 
+					<!-- <div class="container"> -->
+						<!-- <div class="col">
+							<img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:150px; height:150px;'></img>
+							<img data-src="/talks/assets/justine.jpeg" style='width:150px; height:150px;'></img>
+							<br>
+							<small>Denise Lanzieri (left) and Justine Zeghal (right) </small>
+						</div>
+	
+						<div class="col"> -->
+							<img data-src="/talks/assets/github.png" class="plain" style="height:70px" />
+							<br>
+							<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens">DifferentiableUniverseInitiative/sbi_lens</a><br>
+							JAX-based log-normal lensing simulation package 
+						<!-- </div> -->
+	
+					 <!-- </div> -->
+					<img data-src="/talks/assets/mass_map_tomo.png" />
+					<ul>
+						<li>10x10 deg$^2$ maps at LSST Y10 quality, conditioning the log-normal shift
+							parameter on $(\Omega_m, \sigma_8, w_0)$
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="0"> Provides <b class="alert">explicit posterior</b> by Hamiltonian-Monte Carlo (NUTS) sampling in <b>reasonable time</b>
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="1"> Can be used to sample a practically infinite number of maps for <b>implicit inference</b></li>
+					</ul>
+					
+				</div>
+				<div class="col r-stack">
+					<img class="fragment" data-fragment-index="0" data-src="/talks/assets/compare_ff_ps_contour_plot_multi_tomo_bins.png"/>
+					<!-- <img class="fragment" data-src="/talks/assets/compare_contour_plot_multi_tomo_bins.png"/> -->
+				</div>
+			</div>
+		</section>
+	
+		<!-- <section>
+			<h3 class="slide-title">but explicit inference yields intermediate data products</h3>
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/noisy_map.png" style="width: 500px;" />
+					<br> simulated observed data
+				</div>
+	
+				<div class="col">
+					<video loop="true" data-autoplay data-src="/talks/assets/recovered_field.mp4" style="width: 500px;" ></video>
+					<br> <br> <br> posterior samples of the converegence field $\kappa = f(z,\theta)$ with $z \sim p(z, \theta | x)$
+				</div>
+			</div>
+		</section> -->
+
+		<!-- <section>
+			<h3 class="slide-title">and not all compression techniques are equivalent</h3>
+			<img data-src="/talks/assets/contours_mse_vmim.png" style="height: 700px;" />
+		</section> -->
+		</section>
+					
+		<section>
+			<section>
+			  <h3 class="slide-title">Information Point of View on Neural Summarisation</h3>
+			  <img class="plain" data-src="/talks/assets/lfi_sim_sum.png" />
+				<br>
+				<br>
+				<div class="container">
+				  <div class="col">
+					<div class="r-stack">
+					  <img class="plain "  data-fragment-index="0"  data-src="/talks/assets/mutual_information.png" />
+					  <!-- <img class="plain fragment" data-fragment-index="1"  data-src="/talks/assets/imnn.png" /> -->
+					</div>
+					<!-- <div class="fragment" style="float:right; font-size: 15px"  data-fragment-index="1"> Makinen, Charnock, Alsing, Wandelt (2021) <a href="https://arxiv.org/abs/2107.07405"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2107.07405-B31B1B.svg" class="plain"
+						style="height:20px;vertical-align:middle;" /></a></div> -->
+		  
+				  </div>
+				  <div class="col">
+						  <div class="block" data-fragment-index="0">
+							<div class="block-title">
+							  Learning Sufficient Statistics 
+							</div>
+							<div class="block-content">
+							  <ul>
+								<li> Summary statistics <b>$y$ is sufficient for $\theta$</b> if
+								  $$ I(Y; \Theta) = I(X; \Theta) \Leftrightarrow p(\theta | x ) = p(\theta | y) $$
+								</li>
+								<li class="fragment" > <b class="alert">Variational Mutual Information Maximization</b>
+								  $$ \mathcal{L} \ = \ \mathbb{E}_{x, \theta} [ \log q_\phi(\theta | y=f_\varphi(x)) ] \leq  I(Y; \Theta) $$
+								  (Barber & Agakov variational lower bound)
+									<div style="float:right; font-size: 15px"> Jeffrey, Alsing, <b>Lanusse</b> (2021) <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+										  style="height:20px;vertical-align:middle;" /></a></div>
+								</li>
+		  
+								<!-- <li class="fragment" data-fragment-index="1" > Information Maximization Neural Network
+								  $$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+								  <div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+									  style="height:20px;vertical-align:middle;" /></a></div>
+								</li> -->
+							  </ul>
+							</div>
+						  </div>
+				  </div>
+				</div>
+			</section>
+			<!-- <section>
+			  <h3 class="slide-title">Another Approach: maximizing the Fisher information</h3>
+				
+			  <img class="plain " data-fragment-index="1"  data-src="/talks/assets/imnn.png" />
+		
+			  Information Maximization Neural Network (IMNN)
+								  $$\mathcal{L} \ = \ - | \det \mathbf{F} |  \ \mbox{with} \ \mathbf{F}_{\alpha, \beta} = tr[ \mu_{\alpha}^t C^{-1} \mu_{\beta} ] $$
+								  <div style="float:right; font-size: 15px"> Charnock, Lavaux, Wandelt (2018) <a href="https://arxiv.org/abs/1802.03537"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1802.03537-B31B1B.svg" class="plain"
+									  style="height:20px;vertical-align:middle;" /></a></div>
+		
+		
+			</section> -->
+			</section>
+
+			<section>
+				<h3 class="slide-title">Main takeaways </h3>
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0">Asymptotically <b class="alert">VMIM yields a sufficient statistics</b>
+								<ul>
+									<li>No reason not to use it in practice, it works well, and is asymptotically optimal</li>
+								</ul>
+							</li>
+
+							<br>
+
+							<li class="fragment" data-fragment-index="1">Mean Squared Error <b class="alert">(MSE) DOES NOT yield a sufficient statistics</b> even asymptotically
+								<ul>
+									<li>Same for Median Absolute Error (MAE) and weighted versions of MSE</li>
+								</ul>
+								<img data-src="/talks/assets/fom_justine.png"/>
+							</li>
+
+							<br>
+							
+							<li class="fragment" data-fragment-index="3"> <b>Spoiler</b>: in upcoming LSST DESC paper (Zeghal et al., in prep.) we report that in this setting:
+								<ul>
+									<li>Explicit inference converges in $O(10^6)$ model evaluations.</li>
+									<li>Implicit Inference converges in $O(10^3)$ model evaluations at fixed summary statistics.</li>
+								</ul>
+							</li>
+
+							<br>
+
+
+						</ul>
+
+					</div>
+
+					<div class="col">
+						<div class="r-stack">
+							<img class="fragment current-visible" data-fragment-index="0" data-src="/talks/assets/plot_vmim.png" style="height: 600px;" />
+							<img class="fragment current-visible" data-fragment-index="1"  data-src="/talks/assets/plot_mse.png" style="height: 600px;" />
+							<img class="fragment" data-fragment-index="2" data-src="/talks/assets/justine_posterior_explanation.png" style="height: 600px;"/>
+						</div>
+					</div>
+			
+			</section>
+
+
+		<section class="inverted" data-background="#000">
+			<h3><b>Implicit Inference is easier, cheaper</b>, and yields the same results as Explicit Inference...</h3>
+			<br>
+			<div class="fragment">
+			<h3>
+				But <b>Explicit Inference is cooler</b>, so can we do it anyway?
+				<div class="inverted">
+				<video loop="true" data-autoplay data-loop data-src="/talks/assets/sampling_lightcone.mp4" type="video/mp4"></video></br>
+				<img data-src="/talks/assets/average_lightcone.png" style="width: 940px"/>
+			</div>
+			</h3>
+			<a href="https://github.com/EiffL/LPTLensingComparison">https://github.com/EiffL/LPTLensingComparison </a>
+			</div>
+			<br>
+			<div class="fragment">
+				 More seriously, Explicit Inference has some advantages:<br>
+				<ul>
+					<li>More introspectable results to identify systematics</li>
+					<li>Allows for fitting parametric corrections/nuisances from data</li>
+					<li>Provides validation of statistical inference with a different method</li>
+				</ul>
+			</div>
+
+		</section>
+
+		<section>
+			<h2>Automatically Differentiable High Performance Computing</h2>
+			<a href="https://arxiv.org/abs/2407.10877"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2407.10877-B31B1B.svg" class="plain" style="height:25px;" /></a>
+			<a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp"><img src="https://badgen.net/badge/icon/sbi_lens?icon=github&label" class="plain" style="height:25px;" /></a>
+			<hr>
+			<div class="container">
+				<div class="col">
+					<div align="left" style="margin-left: 20px;">
+						<h4>Work led by:<br> <b class="alert">Wassim Kabalan</b> (PhD Student at IN2P3/APC)
+						</h4>
+						<!-- <img data-src="/talks/assets/niall.jpg" style='width:200px; height:200px;object-fit: cover;'></img>
+						<img data-src="/talks/assets/justin.jpeg" style='width:200px; height:200px;'></img> -->
+						<img data-src="https://avatars.githubusercontent.com/u/83787080?v=4" style='width:200px; height:200px;'></img>
+						<!-- <img data-src="https://avatars.githubusercontent.com/u/72620117?v=4" style='width:200px; height:200px;'></img> -->
+						<!-- <img data-src="/talks/assets/justine.jpeg" style='width:200px; height:200px;'></img> -->
+						<br>
+						<br>
+						$\Longrightarrow$ Build near compute-optimal distributed simulators in JAX
+					</div>
+				</div>
+				<div class="col">
+					<img class="plain" data-src="https://nvidia.github.io/cuDecomp/_images/decomposition.png" style="width:425px;" />
+				</div>
+			</div>
+			<br>
+		</section>
+
+		<section>
+			<h3 class="slide-title">the road ahead for Explicit Inference</h3>
+	
+			<br>
+			<br>
+	
+			<div class="block fragment">
+				<div class="block-title">
+					The Open Challenges for Cosmological Explicit Inference
+				</div>
+				<div class="block-content">
+					<ul>
+						<li class="fragment"><b>Modeling Challenges</b>: Full-field inference is very sensitive to model mispecification, models need to be 
+							accurate and realistic. But even at infinite computational budget <b>we don't know all physics involved</b>.<br>
+							<br>
+							$\Longrightarrow$ Requires <b class="alert">more realistic and data-driven forward models</b> while remaining fast and differentiable.
+						</li>
+						<br>
+						<br>
+						<li class="fragment"><b>Technical Challenges</b>: Probabilistic forward models need to be 
+							scaled up to cosmological volumes.<br>
+							<br>
+							$\Longrightarrow$ Requires frameworks allowing for <b class="alert">model distribution on large-scale GPU supercomputers</b>
+						</li>
+	
+						<br>
+						<br>
+	
+						<li class="fragment"><b>Methodological Challenges</b>: A realistic cosmological probabilistic model involves at least $O(10^9)$ latent variables,
+							and require very accurate posterior infence on these variables.<br>
+							<br>
+							$\Longrightarrow$ Requires <b class="alert">scalable inference methods</b> for high-dimensional and potentially multimodal posteriors.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	
+		<section>
+			<h3 class="slide-title">The need for distributed differentiable programming frameworks</h3>
+	
+			<ul>
+				<li>Most of parallel deep learning so far has relied on <b>data-parallelism</b> or <b>pipeline parallelism</b></li>
+				<br>
+	
+				<li>The <b>state vector</b> of a moderate size cosmological simulation volume can <b class="alert">easily require from 100GB to several TB.</b>
+					<br><div > $\Longrightarrow$ We need <b>model-parallelism</b>! Not currently fully supported by any mainstream autodiff frameworks!
+				</li>
+			</ul>
+	
+				<img class="fragment" data-fragment-index="3" data-src="/talks/assets/mesh_tensorflow.png" /><br>
+				<div class="fragment" data-fragment-index="3" style="float:right; font-size: 20px">(Gholami et al. 2018)</div>
+		</section>
+	
+		<section>
+			<h3 class='slide-title'>Mesh FlowPM: Distributed and Automatically Differentiable simulations</h3>
+			<!--
+	<img data-src="/talks/assets/mesh_flopwm.png" class="plain" style="height:450px;" /> -->
+	<div class="container">
+		<div class="col">
+			<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak (2020)
+				<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+		</div>
+	</div>
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/mfpm_demo_1024.png" />
+				</div>
+	
+				<div class="col">
+					<img data-src="/talks/assets/github.png" class="plain" style="height:70px" /><br>
+	
+					<div> <a href="https://github.com/DifferentiableUniverseInitiative/mesh">https://github.com/DifferentiableUniverseInitiative/mesh</a>
+					</div>
+					<br>
+					<ul>
+						<li> We developed a <b class="alert">Mesh TensorFlow</b> implementation that can scale on GPU clusters.
+							<ul>
+								<li>Based on low-level NVIDIA NCCL collectives, accessed through Horovod.</li>
+							</ul>
+						</li>
+						<br>
+						<li> For a $2048^3$ simulation:
+							<ul>
+								<li>Distributed on <b>256</b> NVIDIA V100 GPUs on the Jean Zay supercomputer</li>
+								<li>Runtime: ~3 mins</li>
+							</ul>
+						</li>
+						<br>
+	<!-- 					
+						<br>
+						<li class="fragment">
+						 <b>Now developing the next generation of these tools in JAX</b>
+						 <ul>
+							 <li><a href="https://github.com/eelregit/pmwd">pmwd</a> Differentiable PM library,  (Li et al. 2022) arXiv:2211.09958  </li>
+							 <li><a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp">jaxdecomp</a>: Domain Decomposition and Parallel FFTs</li>
+						 </ul>
+						</li> -->
+						<li class="fragment"> This is great... but Mesh TensorFlow is now abandonned.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	
+		<section>
+		<section>
+			<h3 class="slide-title">Towards a new generation of JAX-based distributed tools</h3>
+			<div class="container">
+	
+				<div class="col">
+					<img data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png" class="plain" />
+	
+					<br>
+					<br>
+					<br>
+	
+					<img data-src="https://nvidia.github.io/cuDecomp/_images/decomposition.png"  class="fragment" data-fragment-index="1"/>
+					</div>
+	
+				<div class="col">
+	
+					<ul>
+						<li><b>JAX v0.4</b> has made a strong push for bringing <b>automated parallelization</b>
+							and support multi-host GPU clusters!</li>
+						<br>
+						<li>Scientific HPC still most likely requires dedicated high-performance ops
+						</li>
+						<br>
+	
+						<li class="fragment" data-fragment-index="1"><a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp">jaxDecomp</a>: Domain Decomposition and Parallel FFTs
+						<center>
+							<img data-src="/talks/assets/github.png" class="plain" style="height:70px" /><br>
+	
+					<div> <a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp">https://github.com/DifferentiableUniverseInitiative/jaxDecomp</a>
+	
+	
+					</div>
+				</center>
+				<br>
+					<ul>
+						<li>JAX bindings to the high-performance <a href="https://github.com/NVIDIA/cuDecomp">cuDecomp</a> (Romero et al. 2022) adaptive domain decomposition library.</li>
+						<br>
+						<li>Provides parallel FFTs and halo-exchange operations.</li>
+						<br>
+						<li>Supports variety of backends: CUDA-aware MPI, NVIDIA NCCL, NVIDIA NVSHMEM.</li>
+					</ul>
+				</li>
+					</ul>
+				</div>
+			</div>
+			<br>
+	
+		</section>
+	
+		<section>
+			<h3 class="slide-title">Defining Custom Distributed Ops in JAX</h3>
+	
+			<div class="container">
+	
+				<div class="col">
+	
+					<div class="r-stack" >
+					<div class="fragment current-visible" data-fragment-index="0">
+					<pre class="python"  style="width: 600px;"> <code data-trim data-noescape>
+	from jax.experimental import mesh_utils
+	from jax.sharding import PositionalSharding
+	
+	# Create a Sharding object to distribute a value across devices:
+	sharding = PositionalSharding(mesh_utils.create_device_mesh((8,)))
+	
+	# Create an array of random values:
+	x = jax.random.normal(jax.random.PRNGKey(0), (8192, 8192))
+	# and use jax.device_put to distribute it across devices:
+	y = jax.device_put(x, sharding.reshape(4, 2))
+	jax.debug.visualize_array_sharding(y)
+	
+	---
+	
+	┌──────────┬──────────┐
+	│  TPU 0   │  TPU 1   │
+	├──────────┼──────────┤
+	│  TPU 2   │  TPU 3   │
+	├──────────┼──────────┤
+	│  TPU 6   │  TPU 7   │
+	├──────────┼──────────┤
+	│  TPU 4   │  TPU 5   │
+	└──────────┴──────────┘
+						</code></pre>
+						<div><a href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">Distributed arrays and automatic parallelization</a></div>
+					</div>
+	
+					<div class="fragment current-visible" data-fragment-index="1">
+					<pre class="python" style="width: 600px;"> <code data-trim data-noescape>
+	from jaxlib.hlo_helpers import custom_call
+	
+	def _rms_norm_fwd_cuda_lowering(ctx, x, weight, eps):
+		[...]
+		opaque = gpu_ops.create_rms_norm_descriptor([...])
+	
+		out = custom_call(
+			b"rms_forward_affine_mixed_dtype",
+			result_types=[
+				ir.RankedTensorType.get(x_shape, w_type.element_type),
+				ir.RankedTensorType.get((n1,), iv_element_type),
+			],
+			operands=[x, weight],
+			backend_config=opaque,
+			operand_layouts=default_layouts(x_shape, w_shape),
+			result_layouts=default_layouts(x_shape, (n1,)),
+		).results
+		return out
+	
+	_rms_norm_fwd_p = core.Primitive("rms_norm_fwd")
+	mlir.register_lowering(
+		_rms_norm_fwd_p,
+		_rms_norm_fwd_cuda_lowering,
+		platform="gpu",
+	)
+					</code></pre>
+					<div><a href="https://jax.readthedocs.io/en/latest/Custom_Operation_for_GPUs.html">Custom operations for GPUs with C++ and CUDA</a></div>
+					</div>
+	
+					<div class="fragment" data-fragment-index="2">
+					<pre class="python" style="width: 600px;"><code data-trim data-noescape>
+						def partition(mesh, arg_shapes, result_shape):
+							result_shardings = jax.tree.map(lambda x: x.sharding, result_shape)
+							arg_shardings = jax.tree.map(lambda x: x.sharding, arg_shapes)
+							return mesh, fft, \
+								supported_sharding(arg_shardings[0], arg_shapes[0]), \
+								(supported_sharding(arg_shardings[0], arg_shapes[0]),)
+				  
+						def infer_sharding_from_operands(mesh, arg_shapes, result_shape):
+							arg_shardings = jax.tree.map(lambda x: x.sharding, arg_shapes)
+							return supported_sharding(arg_shardings[0], arg_shapes[0])
+				  
+						@custom_partitioning
+						def my_fft(x):
+							return fft(x)
+				  
+						my_fft.def_partition(
+							infer_sharding_from_operands=infer_sharding_from_operands,
+							partition=partition)			  
+					</code></pre>
+					<div><a href="https://github.com/google/jax/blob/8569b893b1c124cad6b28931919ed99e69423920/jax/experimental/custom_partitioning.py#L258">jax.experimental.custom_partitioning</a></div>				
+					</div>
+				</div>
+				</div>
+	
+				<div class="col">
+					<div>
+						<img data-src="https://avatars.githubusercontent.com/u/83787080?v=4" style='width:200px; height:200px;'></img>
+					<br>JAX cuDecomp interface led by <b>Wassim Kabalan (IN2P3/APC)</b>
+					</div>
+	
+					<ul>
+						<li class="fragment"  data-fragment-index="0">JAX>=v0.4.1 defines sharded tensors and a "<b>computation follows data</b>" philosophy.</li>
+						<br>
+						<li class="fragment"  data-fragment-index="1">jaxlib provides a helper to define <b>custom CUDA lowering</b></li>
+						<br>
+						<li class="fragment"  data-fragment-index="2">Recent API allows us to define <b>custom partitioning schemes</b> compatible with a primitive</li>	
+					</ul>
+				</div>
+			</div>
+		</section>
+		</section>
+					
+		   <!-- <section>
+			   <h2>Conclusion</h2>
+		   </section>
+	
+		   <section>
+			   <h3 class="slide-title"> Conclusion </h3>
+	
+			   <div class="block fragment">
+				   <div class="block-title">
+					   Full-Field Explicit Inference for Cosmological Inference
+				   </div>
+				   <div class="block-content">
+	
+					   <ul>
+						   <li> A change of paradigm <b class="alert"> from analytic likelihoods to simulators as physical model</b>.
+							   <ul>
+								   <br>
+								   <li> Progress in differentiable simulators and inference methodology paves the way to full inference over probabilistic model.
+								   </li>
+							   </ul>
+	
+						   </li>
+	
+						   <br>
+	
+						   <li> Still subject to a number of outstanding challenges
+							<ul>
+								<li ><b>Technical Challenges</b>: <b class="alert">model distribution on large-scale GPU supercomputers</b>
+								</li>
+			
+								<li ><b>Methodological Challenges</b>:  <b class="alert">scalable inference methods</b> for high-dimensional and potentially multimodal posteriors.
+								</li>
+			
+								<li ><b>Modeling Challenges</b>: <b class="alert">more realistic and data-driven forward models</b> while remaining fast and differentiable.
+								</li>
+							</ul>
+							</li>
+	
+						   <br>
+	
+						   <li> Ultimately, promises <b>optimal exploitation of cosmological surveys</b>.
+						   </li>
+					   </ul>
+				   </div>
+			   </div>
+	
+			   <br>
+			   <div class="fragment fade-up">
+				   <b class="alert" > Call to action:</b> <b>If you are interested in contributing to building JAX-based HPC tools</b>, please get in touch :-) ! 
+			   </div>
+			   <br>
+			   <br>
+	
+			   <div class="fragment">
+				   Thank you!
+			   </div>
+		   </section> -->
+	
+	
+
+		
+<!-- 
+	<section>
+		<h3 class="slide-title">Other examples of Deep Priors</h3>
+		<br>
+		<div class="container">
+		  <div class="col">
+			<ul>
+			  <li><em>Hybrid Physical-Deep Learning Model for Astronomical Inverse Problems</em><br> <b> F. Lanusse</b>, P. Melchior, F. Moolekamp<br>
+				<a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<a href="https://www.youtube.com/watch?v=oWOU3qNHoL0"><img src="https://img.shields.io/badge/-youtube-red?logo=youtube&labelColor=grey" class="plain" style="height:25px;" /></a>
+			  </li>
+			</ul>
+			<br> <br>
+			$\mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i)$
+			<br> <br>
+			<img class=" plain" data-src="/talks/assets/scarlet_hsc.png" />
+			<br> <br>
+
+		  </div>
+		  <div class="col fragment">
+			<ul>
+			  <li><em>Denoising Score-Matching for Uncertainty Quantification in Inverse Problems</em><br> Z. Ramzi, B. Remy, <b>F. Lanusse</b>, P. Ciuciu, J.L. Starck<br>
+				<a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+			  </li>
+			</ul>
+			<img class="plain" data-src="/talks/assets/knee.gif" style="height:410px;"/>
+
+		  </div>
+		</div>
+	  </section> -->
+
+
+<!-- 
+	   <section>
+		   <h3 class="slide-title">Why isn't it easy?</h3>
+		   <br>
+		   <ul>
+			   <li> The <b class="alert">curse of dimensionality</b> put all points far apart in high dimension
+			   </li>
+		   </ul>
+		   <div class="container">
+			   <div class="col fragment fade-up">
+				   <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756597/pasted-from-clipboard.png" class="plain"></img>
+			   </div>
+
+			   <div class="col fragment fade-up">
+				   <img style="height:350px;" data-src="https://developers.google.com/machine-learning/clustering/images/CurseofDimensionality.svg" class="plain"></img>
+				   <br>Distance between pairs of points drawn from a Gaussian distribution.
+			   </div>
+		   </div>
+
+		   <br>
+		   <ul>
+			   <li class="fragment"><b>Classical methods</b> for estimating probability densities, i.e. Kernel Density Estimation (KDE) start to <b>fail in high dimension</b> because of all the gaps
+			   </li>
+		   </ul>
+	   </section> -->
+
+	   <!-- <section>
+		   <h3 class="slide-title">Deep Learning Approaches to Likelihood-Free Inference</h3>
+
+		   <div class="block fragment">
+			   <div class="block-title">
+				   A two-steps approach to Likelihood-Free Inference
+			   </div>
+			   <div class="block-content">
+				   <ul>
+					   <li> Automatically learn an <b>optimal low-dimensional summary statistic</b>
+						   $$y = f_\varphi(x) $$
+					   </li>
+
+					   <li class="fragment"> Use Neural Density Estimation to either:
+						   <ul>
+							   <li>build an <b>estimate $p_\phi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+
+							   </li>
+							   <br>
+
+							   <li>build an <b>estimate $p_\phi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
+
+							   </li>
+						   </ul>
+					   </li>
+				   </ul>
+			   </div>
+		   </div>
+	   </section> -->
+	   <!-- </section>
+
+	   <section> -->
+
+<!-- 							
+	   <section>
+		   <h2>Conclusion</h2>
+	   </section>
+
+	   <section>
+		   <h3 class="slide-title"> Conclusion </h3>
+
+		   <br>
+		   <br>
+
+
+		   <div class="block fragment">
+			   <div class="block-title">
+				   Methodology for inference over simulators
+			   </div>
+			   <div class="block-content">
+
+				   <ul>
+					   <li> A change of paradigm <b class="alert"> from analytic likelihoods to simulators as physical model</b>.
+						   <ul>
+							   <br>
+							   <li> State of the art Machine Learning models enable Likelihood-Free Inference over black-box simulators.
+							   </li>
+
+							   <br>
+
+							   <li> Progress in differentiable simulators and inference methodology paves the way to full inference over probabilistic model.
+							   </li>
+						   </ul>
+
+					   </li>
+
+					   <br>
+
+					   <li> Ultimately, promises optimal exploitation of survey data, although the <b class="alert">"information gap" against analytic likelihoods in realistic settingns remains uncertain.</b>
+					   </li>
+				   </ul>
+			   </div>
+		   </div>
+
+		   <br>
+		   <br>
+
+		   <div class="fragment">
+			   Thank you!
+		   </div>
+	   </section> -->
+
+
+		</div>
+	</div>
+
+	<style>
+		/* .reveal .slides {
+			border: 5px solid red;
+			min-height: 100%;
+			width: 128mm;
+			height: 96mm;
+		}  */
+
+		.reveal .block {
+			background-color: #191919;
+			margin-left: 20px;
+			margin-right: 20px;
+			text-align: left;
+			padding-bottom: 0.1em;
+		}
+
+		.reveal .block-title {
+			background-color: #333333;
+			padding: 8px 35px 8px 14px;
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .block-content {
+			padding: 8px 35px 8px 14px;
+		}
+
+		.reveal .slide-title {
+			border-left: 5px solid white;
+			text-align: left;
+			margin-left: 20px;
+			padding-left: 20px;
+		}
+
+		.reveal .alert {
+			color: #FFAA7F;
+			font-weight: bold;
+		}
+
+		.reveal .inverted {
+			filter: invert(100%);
+		}
+
+		/*
+	/* .reveal .alert {
+	padding:8px 35px 8px 14px; margin-bottom:18px;
+	text-shadow:0 1px 0 rgba(255,255,255,1);
+	border:5px solid #FFAA7F;
+	-webkit-border-radius: 14px; -moz-border-radius: 14px;
+	border-radius:14px
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-size: 38px;
+	padding-left: 30px; /* 55px; if icon
+	}
+	.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+	.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+	/*.reveal .alert li {margin-top: 1em}
+	.reveal .alert-block p+p {margin-top:5px} */
+	</style>
+
+
+	<script src="reveal.js/dist/reveal.js"></script>
+	<script src="reveal.js/plugin/notes/notes.js"></script>
+	<script src="reveal.js/plugin/markdown/markdown.js"></script>
+	<script src="reveal.js/plugin/highlight/highlight.js"></script>
+	<script src="reveal.js/plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+
+			//center: false,
+			hash: true,
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'hidden',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// The "normal" size of the presentation, aspect ratio will be preserved
+			// when the presentation is scaled to fit different resolutions. Can be
+			// specified using percentage units.
+			width: 1280,
+			height: 720,
+
+			// Factor of the display size that should remain empty around the content
+			margin: 0.1,
+
+			// Bounds for smallest/largest possible scale to apply to content
+			minScale: 0.2,
+			maxScale: 1.5,
+
+			autoPlayMedia: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+			dependencies: [{
+					src: 'reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/math/math.js',
+					async: true
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+				},
+				{
+					src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+				},
+				{
+					src: 'reveal.js/plugin/highlight/highlight.js',
+					async: true
+				},
+			]
+
+		});
+	</script>
+</body>
+
+</html>
