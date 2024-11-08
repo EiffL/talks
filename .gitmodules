@@ -229,3 +229,6 @@
 [submodule "Split2024/reveal.js"]
 	path = Split2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Paris2024/reveal.js"]
+	path = Paris2024/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
