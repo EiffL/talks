@@ -235,3 +235,6 @@
 [submodule "COB2024/reveal.js"]
 	path = COTB2024/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Cagliari2025/reveal.js"]
+	path = Cagliari2025/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
