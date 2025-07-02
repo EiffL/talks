@@ -238,3 +238,6 @@
 [submodule "Cagliari2025/reveal.js"]
 	path = Cagliari2025/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Lyon2025/reveal.js"]
+	path = Lyon2025/reveal.js
+	url = https://github.com/EiffL/reveal.js.git

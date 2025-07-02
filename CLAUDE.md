@@ -40,9 +40,11 @@ cd reveal.js
 git submodule update --init --recursive
 
 # 3. Copy build files
-cp package.json gulpfile.js ../
+cp package.json ../
+cp gulpfile.js ../
 
 # 4. Install dependencies and start development
+cd ..
 npm install
 npm start
 ```
