@@ -82,12 +82,13 @@
 			</div>
 
 			<ul> 
-				<li class="fragment"><b class="alert">First Hour</b>: <b>Probabilistic Deep Learning</b>
+				<li class="fragment"><b class="alert">First Hour</b>: <b>Combining Physical Models and Generative Modeling</b>
 					<ul>
-						<li>Why using deep learning as a black box is dangerous</li>
-						<li>Bayesian approach to inverse problems: separating likelihood from prior</li>
-						<li>Using diffusion to model implicit priors along with explicit likelihoods</li>
-						<li>Applications in astrophysics: from mapping dark matter mapping to gravitational telescopes</li>
+						<li>Understanding the limits of black-box deep learning</li>
+						<li>Taking a Bayesian point of view on inverse problems</li>
+						<li>Using generative models to capture implicit distributions</li>
+						<li>Combining deep priors with explicit likelihoods</li>
+						<li>Applications in astrophysics: mapping the invisible dark matter</li>
 					</ul>
 				</li>
 			
@@ -96,7 +97,7 @@
 				<li class="fragment"><b class="alert">Second Hour</b>: <b>Practical Work: Conditional Forecasting for Heliophysics</b>
 					<ul>
 						<li>Compare deterministic vs stochastic forecasting methods</li>
-						<li>Implement guidance with explicit likelihood for solar wind prediction</li>
+						<li>Implement guidance with explicit likelihood on a diffusion model</li>
 					</ul>
 				</li>
 			</ul>
@@ -292,7 +293,7 @@
 					<br>
 
 					<ul>
-						<li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b class="alert">contains the
+						<li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the
 								physics</b><br>
 						</li>
 						<br>
@@ -301,19 +302,22 @@
 					<br>
 					<br>
 					<div class="fragment fade-up">
-						With these concepts in hand, we want to estimate the Maximum A Posteriori solution:
-						<br>
+						With these concepts in hand, we can for instance estimate the <b class="alert">Maximum A Posteriori solution</b>:
 						<br>
 						$$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
-						<br>
 						For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ - \frac{1}{2} \parallel y -
 						\mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+					</div>
+					<br>
+					<div class="fragment fade-up">
+						Or, we can aim to sample from the <b class="alert">full posterior distribution</b> by MCMC techniques.
 					</div>
 					<br>
 					<div class="fragment fade-up">
 						<h3>How do you choose the prior ?</h3>
 					</div>
 				</section>
+
 
 				<section>
 					<h3 class="slide-title"> Classical examples of signal priors </h3>
@@ -458,22 +462,6 @@
 				</div>
 				<br> <br> <br>
 			</section>
-
-			<section>
-				<h3 class="slide-title"> A visual Turing test </h3>
-				<div class="container">
-					<div class="col">
-						<img data-src="/talks/assets/samples_pixel_cnn.png" class="plain" style="height: 500px;"></img>
-						<br>
-						<div class="fragment fade-up" data-fragment-index="0"> Fake PixelCNN samples </div>
-					</div>
-					<div class="col">
-						<img data-src="/talks/assets/sdss5.png" class="plain" style="height: 500px;"></img>
-						<br>
-						<div class="fragment fade-up" data-fragment-index="0"> Real galaxies from SDSS </div>
-					</div>
-				</div>
-			</section> 
 
 			<section>
 				<h3 class="slide-title">A brief survey of Generative Models Families </h3>
@@ -768,6 +756,55 @@
 
 			
 			<section>
+
+			<section>
+				  <h3 class="slide-title" style="position:absolute;top:0;">Back to our motivating example</h3>
+				  <br>
+				  <br>
+				   <div class="container">
+					 <div class="col">
+						 <img class="plain" data-src="/talks/assets/cosmos_gal.png" style="width: 250px"/>
+						 <br><b class="alert">Hubble Space Telescope</b>
+					 </div>
+
+					 <div class="col fragment fade-up">
+						 <img class="plain " data-src="/talks/assets/generic_network.png" style="height: 250px; width:500px"/>
+						 <br>some deep neural network
+					 </div>
+
+					 <div class="col">
+					   <img class="plain" data-src="/talks/assets/cosmos_gal_ground.png" style="width: 250px"/>
+					   <br><b class="alert">Simulated Ground-Based Telescope</b>
+					 </div>
+				   </div>
+				   <div class="r-stack">
+				   <div class="block fragment" >
+				   <div class="block-title">
+					The issue with generic black box deep learning inference
+				   </div>
+				   <div class="block-content">
+					   <ul>
+						 <li class="fragment">No explicit control of noise, PSF, depth.
+						   <ul>
+							 <li>Unless covered by the training data, the result becomes unpredictable.
+							 </li>
+						   </ul>
+						 </li>
+						 <br>
+						 <li class="fragment">No guarantees some physical properties are preserved
+						   <br>$\Longrightarrow$ In this case, the flux of the deconvolved object
+						 </li>
+						 <br>
+						 <li class="fragment"><b>Robust</b> quantification of uncertainties is extremely difficult.
+						 </li>
+					   </ul>
+				   <br>
+				 </div>
+				 </div>
+				</div>
+
+				</section>
+
 				<section>
 				   <h3 class="slide-title" style="position:absolute;top:0;">A Physicist's approach to the deconvolution problem: let's build a model</h3>
 				   <br>
@@ -956,11 +993,251 @@
 		<hr>
 	</section>
 
+			<section>
+			  <h3 class="slide-title">First realization: The score is all you need!</h3>
+			  <br>
+			  <div class="container">
+				  <div class="col">
+					  <ul>
+						  <li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+							  <b class="alert">only need access to the score</b> of the posterior:
+							  $$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+							  d
+							  \color{orange}x}$$
+							  <ul>
+								  <li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+								  <li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+							  </ul>
+						  </li>
+						  <br>
+					  </ul>
+				  </div>
+				  <div class="col">
+					  <img data-src="/talks/assets/score_two_moons.png"></img>
+				  </div>
+			  </div>
+			  <br>
+			  <br>
+			  <ul>
+				  <li > The score of the full posterior is simply:
+					  $$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known explicitly}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{known implicitly}}$$
+					  $\Longrightarrow$ "all" we have to do is <b class="alert">model/learn the score of the prior</b>.
+				  </li>
+			  </ul> 
+		  </section>
 
+	<section>
+		  <section>
+			  <h3 class="slide-title">Score-Based Generative Modeling <a href="https://arxiv.org/abs/2011.13456"> Song et al. (2021)</a></h3>
+			  <img data-src="/talks/assets/diffusion.png" style="height:350px;"/><br>
+			  <br>
+			  <ul>
+				  <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+					  $$p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$$
+				  </li>
+				  <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+			  </ul>
+		  </section>
 
+  
+		  <section>
+			  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching (Vincent 2011)</h3>
+			  <ul>
+				  <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+					  <ul>
+						  <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+							  $$x^\prime = x + u$$
+						  </li>
+						  <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+							  $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+						  </li>
+						  <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+							  $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+						  </li>
+					  </ul>
+				  </li>
+			  </ul>
+  
+			  <div class="fragment fade-up">
+				  <div class="container">
+					  <div class="col">$\boldsymbol{x}'$
+					  </div>
+					  <div class="col">$\boldsymbol{x}$
+					  </div>
+					  <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+					  </div>
+					  <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+					  </div>
+				  </div>
+				  <img data-src="/talks/assets/denoised_mnist.png" style='width:1200px;'></img>
+			  </div>
+		  </section>
+		</section>
+		  <section>
+			  <h3 class="slide-title">Second Realization: Annealing is fantastic!</h3>
+  
+			  <ul>
+				  <li> Even with knowledge of the score, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+				  </li>
+				  <br>
+				  <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+					  <div>
+						  $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+						  <img data-src="/talks/assets/annealing.png" />
+					  </div>
+				  </li>
+  
+				  <li class="fragment fade-up"> Hints to running many MCMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+				  </li>
+			  </ul>
+		  </section>
+  
+		  <section>
+		  <section>
+			<h3 class="slide-title">But... We don't actually know the marginal posterior score!</h3>
+			<ul>
+				<li>We know the following quantities: 
+					<ul>
+						<li>Annealed likelihood (analytically): $p_\sigma(y | x) = \mathcal{N}(y; \mathbf{A} x, \mathbf{\Sigma} + \sigma^2 \mathbf{I})$</li>
+						<li>Annealed prior score (by score matching): $\nabla_x \log p_\sigma(x)$ </li>
+					</ul>
+				</li>
+				<li class="fragment" data-fragment-index="1">But, unfortunately: $\boxed{p_\sigma(x|y) \neq p_\sigma(y|x) \  p_\sigma(x)}$
+					$\Longrightarrow$ <b class="alert">We don't know the marginal posterior score!</b>
+				</li>
+			</ul>
+			<div class="r-stack">
+				<!-- <img data-src="/talks/assets/post_prod.png" style="height: 500px;"/> -->
+				<div class="fragment highlight-red">
+					<video data-fragment-index="1" data-src="/talks/assets/post_prod.mp4" style="height: 500px;"></video>
+				</div>
+			</div>
+		</section>
 
 		<section>
-			<h1>Example of Application at Scale</h1>
+			<ul>
+				<li>We cannot use the reverse SDE/ODE of diffusion models to sample from the posterior.
+					$$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_t(x|y)}_{\mbox{unknown}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
+				</li>
+			</ul> 
+			<div class="r-stack">
+			<div class="block fragment fade-up current-visible" >
+				<div class="block-title">
+				 Proposed sampling strategy <a href="https://arxiv.org/abs/2201.05561">(Remy et al. 2020)</a>
+				</div>
+				<div class="block-content">
+				  <ul>
+					<li> Even if not equivalent to the marginal posterior score, $\nabla_x \log p_{\sigma^2}(y | x) + \nabla_x \log p_{\sigma^2}(x)$ still 
+						has good properties:
+						<ul>
+							<li>Tends to an isotropic Gaussian distribution for large $\sigma$ </li>
+							<li>Corresponds to the target posterior for $\sigma=0$ </li>
+						</ul> 
+					</li>
+					<br>
+					<li> If we simulate this SDE sufficiently slowly (i.e. timescale of change of $\sigma$ is much larger than the timescale of the SDE)
+						we can expect to sample from the target posterior. 
+					</li>
+				  </ul>
+
+			  </div>
+			  </div>
+
+				<img class="fragment current-visible" data-src="/talks/assets/sampling_1.png" style="height: 500px;"/>
+				<img class="fragment "  data-src="/talks/assets/sampling_2.png" style="height: 500px;"/>
+			</div>
+			<div class="fragment">
+				$\Longrightarrow$ In practice, we sample the annealed distribution using an Hamiltonian Monte-Carlo,
+				with discrete annealing steps.
+			</div>
+		</section>
+		</section>	
+
+		<section>
+		<section>
+			<h3 class="slide-title">Approximation methods for the marginal likelihood: <b>DPS</b> <a href="https://arxiv.org/abs/2209.14687">(Chung et al. 2023)</a></h3>
+
+			<div class="container">
+				<div class="col">
+					<!-- <div class="r-stack"> -->
+						<img data-src="/talks/assets/dps_1.png" style="height: 200px;"/>
+						<img data-src="/talks/assets/dps_2.png" style="height: 400px;"/>
+					<!-- </div> -->
+				</div>
+				<div class="col">
+					<ul>
+						<li> Let's express the marginal likelihood in terms of x_0: <br>
+							\begin{align*}
+							p(y | x_t) &= \int p(y | x_0) \, p(x_0 | x_t) \, d x_0 \\
+									   &= \mathbb{E}_{x_0 \sim p(x_0 | x_t)}[p(y | x_0)]
+							\end{align*}
+						</li>
+						<br>
+						<li class="fragment fade-up">The <b>DPS approximation</b>: <br>
+							$$p(y | x_t) \simeq p(y | \hat{x}_0)$$ with $\hat{x}_0 = \mathbb{E}[x_0 | x_t] = x_t - \sigma_t^2 \nabla_{x_t} \log p_t(x_t)$
+						</li>
+						<br>
+						<li class="fragment fade-up">In the case of a Gaussian likelihood and usual linear inverse problem:
+							$$ \nabla_{x_t} \log p_t( y | x_t ) \simeq - \frac{1}{\sigma^2} \nabla_{x_t} \parallel y - \mathbf{A} \hat{x}_0 \parallel_2^2 $$
+						</li>
+						</ul>
+				</div>
+			</div>
+		</section>
+		<section>
+			<h3 class="slide-title">DPS in practice</h3>
+			<iframe data-src="https://dps2022.github.io/diffusion-posterior-sampling-page/" style="width: 100%; height: 600px; border: none;"></iframe>
+		</section>
+
+		<section>
+			<h3 class="slide-title">Better methods: e.g. <b>Moment Matching Posterior Sampling</b> <a href="https://arxiv.org/abs/2405.13712">Rozet et al. 2024</a></h3>
+			<img data-src="/talks/assets/dps_comparison.png" style="height: 500px;"/>
+			\[
+p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0 
+= \mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + A\mathrm{V}[x_0 \mid x_t]A^\top \right)
+\]
+		</section>
+		<section>
+			<h3 class="slide-title">Advertisement!</h3>
+
+			<div class="container">
+				<div class="col">
+					<img data-src="/talks/assets/azula.png"/>
+					<img data-src="https://francois-rozet.github.io/files/avatar.jpg" style="width: 300px;"/>
+					<p><b>Francois Rozet</b> @ University of Liege</p>	
+				</div>
+				<div class="col">
+					<pre>
+					<code class="language-python">
+from azula.denoise import PreconditionedDenoiser
+from azula.noise import VPSchedule
+from azula.sample import DDPMSampler
+
+# Choose the variance preserving (VP) noise schedule
+schedule = VPSchedule()
+
+# Initialize a denoiser
+denoiser = PreconditionedDenoiser(
+	backbone=CustomNN(in_features=5, out_features=5),
+	schedule=schedule,
+)
+
+# Generate 64 points in 1000 steps
+sampler = DDPMSampler(denoiser.eval(), steps=1000)
+
+x1 = sampler.init((64, 5))
+x0 = sampler(x1)
+					</code>
+					</pre>
+
+					<a href="https://github.com/probabilists/azula">https://github.com/probabilists/azula</a>
+				</div>
+			</div>
+		</section>
+		</section>
+
+		<section>
+			<h1>Example of Scientific Application</h1>
 			<hr>
 		</section>
 
@@ -1033,116 +1310,11 @@
 				<div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior from simulation</b>,
 					and then <b class="alert">sample the full posterior</b>.</div>
 	  </section>
-
-		<section class="inverted" data-background="#000">
-			<h2> How do you do this in practice in very high dimensional problems?</h2>
-		</section>
-
-
-		<section>
-			<section>
-			  <h3 class="slide-title">First realization: The score is all you need!</h3>
-			  <br>
-			  <div class="container">
-				  <div class="col">
-					  <ul>
-						  <li> Whether you are looking for the MAP or sampling with HMC or MALA, you
-							  <b class="alert">only need access to the score</b> of the posterior:
-							  $$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
-							  d
-							  \color{orange}x}$$
-							  <ul>
-								  <li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
-								  <li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
-							  </ul>
-						  </li>
-						  <br>
-					  </ul>
-				  </div>
-				  <div class="col">
-					  <img data-src="/talks/assets/score_two_moons.png"></img>
-				  </div>
-			  </div>
-			  <br>
-			  <br>
-			  <ul>
-				  <li > The score of the full posterior is simply:
-					  $$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known explicitly}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{known implicitly}}$$
-					  $\Longrightarrow$ "all" we have to do is <b class="alert">model/learn the score of the prior</b>.
-				  </li>
-			  </ul> 
-		  </section>
-  
-		  <section>
-			  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching (Vincent 2011)</h3>
-			  <ul>
-				  <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
-					  <ul>
-						  <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
-							  $$x^\prime = x + u$$
-						  </li>
-						  <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
-							  $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
-						  </li>
-						  <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
-							  $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
-						  </li>
-					  </ul>
-				  </li>
-			  </ul>
-  
-			  <div class="fragment fade-up">
-				  <div class="container">
-					  <div class="col">$\boldsymbol{x}'$
-					  </div>
-					  <div class="col">$\boldsymbol{x}$
-					  </div>
-					  <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
-					  </div>
-					  <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
-					  </div>
-				  </div>
-				  <img data-src="/talks/assets/denoised_mnist.png" style='width:1200px;'></img>
-			  </div>
-		  </section>
-		  </section>
-  
-		  <section>
-			  <h3 class="slide-title">Second Realization: Annealing is everything!</h3>
-  
-			  <ul>
-				  <li> Even with knowledge of the score, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
-				  </li>
-				  <br>
-				  <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
-					  <div>
-						  $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
-						  <img data-src="/talks/assets/annealing.png" />
-					  </div>
-				  </li>
-  
-				  <li class="fragment fade-up"> Hints to running many MCMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
-				  </li>
-			  </ul>
-		  </section>
-  
-		  <section>
-			  <h3 class="slide-title">Score-Based Generative Modeling <a href="https://arxiv.org/abs/2011.13456"> Song et al. (2021)</a></h3>
-			  <img data-src="/talks/assets/diffusion.png" style="height:350px;"/><br>
-			  <br>
-			  <ul>
-				  <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
-					  $$p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$$
-				  </li>
-				  <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
-			  </ul>
-		  </section>
-  
   
 		  <section>  
   
 			  <section>
-				  <h3 class="slide-title">Example of one chain during annealing</h3>
+				  <h3 class="slide-title">Example of one chain during Annealed Posterior Sampling</h3>
 				  <img data-src="/talks/assets/hmc-annealing.gif"/>
 		  </section>
   
@@ -1152,66 +1324,6 @@
 			  <img  style="height:600px;" data-src="/talks/assets/Remy2022Wiener.png"/>
   
 		  </section>
-  
-		  <section>
-			<h3 class="slide-title">Some details: We don't actually know the marginal posterior score!</h3>
-			<ul>
-				<li>We know the following quantities: 
-					<ul>
-						<li>Annealed likelihood (analytically): $p_\sigma(y | x) = \mathcal{N}(y; \mathbf{A} x, \mathbf{\Sigma} + \sigma^2 \mathbf{I})$</li>
-						<li>Annealed prior score (by score matching): $\nabla_x \log p_\sigma(x)$ </li>
-					</ul>
-				</li>
-				<li class="fragment" data-fragment-index="1">But, unfortunately: $\boxed{p_\sigma(x|y) \neq p_\sigma(y|x) \  p_\sigma(x)}$
-					$\Longrightarrow$ <b class="alert">We don't know the marginal posterior score!</b>
-				</li>
-			</ul>
-			<div class="r-stack">
-				<!-- <img data-src="/talks/assets/post_prod.png" style="height: 500px;"/> -->
-				<div class="fragment highlight-red">
-					<video data-fragment-index="1" data-src="/talks/assets/post_prod.mp4" style="height: 500px;"></video>
-				</div>
-			</div>
-		</section>
-
-		<section>
-			<ul>
-				<li>We cannot use the reverse SDE/ODE of diffusion models to sample from the posterior.
-					$$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_t(x|y)}_{\mbox{unknown}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
-				</li>
-			</ul> 
-			<div class="r-stack">
-			<div class="block fragment fade-up current-visible" >
-				<div class="block-title">
-				 Proposed sampling strategy
-				</div>
-				<div class="block-content">
-				  <ul>
-					<li> Even if not equivalent to the marginal posterior score, $\nabla_x \log p_{\sigma^2}(y | x) + \nabla_x \log p_{\sigma^2}(x)$ still 
-						has good properties:
-						<ul>
-							<li>Tends to an isotropic Gaussian distribution for large $\sigma$ </li>
-							<li>Corresponds to the target posterior for $\sigma=0$ </li>
-						</ul> 
-					</li>
-					<br>
-					<li> If we simulate this SDE sufficiently slowly (i.e. timescale of change of $\sigma$ is much larger than the timescale of the SDE)
-						we can expect to sample from the target posterior. 
-					</li>
-				  </ul>
-
-			  </div>
-			  </div>
-
-				<img class="fragment current-visible" data-src="/talks/assets/sampling_1.png" style="height: 500px;"/>
-				<img class="fragment "  data-src="/talks/assets/sampling_2.png" style="height: 500px;"/>
-			</div>
-			<div class="fragment">
-				$\Longrightarrow$ In practice, we sample the annealed distribution using an Hamiltonian Monte-Carlo,
-				with discrete annealing steps.
-			</div>
-		</section>
-
 		  </section>
   
 			  <section>
@@ -1334,11 +1446,11 @@
 					</div>
 				  </section>
 
-				<section>
-					<iframe src="https://giphy.com/embed/xUPOqo6E1XvWXwlCyQ" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/spacejam-space-jam-movie-xUPOqo6E1XvWXwlCyQ">via GIPHY</a></p>
+				<section data-background-video="/talks/assets/20250702_1024_0171.mp4"
+          data-background-video-loop data-background-video-muted>
+					<h3>Let's look at a different problem, probabilistic forecasting!</h3>
 
 
-					<h3>Let's open up to unstructured questions</h3>
 
 				</section>
 
@@ -1346,12 +1458,12 @@
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		}  
+		}   */
 
 		.reveal .block {
 			background-color: #191919;
