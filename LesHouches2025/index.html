@@ -213,7 +213,7 @@
 	</section>
 	</section>
 	
-
+	<section>
 	<section>
 		<h3 class="slide-title">Where do likelihoods come from?</h3>
 
@@ -245,26 +245,19 @@
 				</li>
 
 				<br>
-<!-- 
-				<li class="fragment"> Let me <b class="alert">assume</b> my $\kappa_{lm}$ are Gaussian:
-					$$ p(\kappa_{l m} | \theta) = \mathcal{CN}(\kappa_{l m} ; 0, C_\ell(\theta)) $$
-				</li> -->
 
 				<li class="fragment"> If I estimate my angular power spectrum from data with:
 					$$\hat{C}_\ell = \frac{1}{2\ell+1} \sum_{m=-\ell}^{\ell} |\kappa_{\ell m}|^2$$
 					then by the Central Limit Theorem, for $\ell > 50$:
-					$$\hat{C}_\ell \approx \mathcal{N}\left(C_\ell, \frac{2C_\ell^2}{2\ell+1}\right)$$
+					$$ p(\hat{C}_\ell | \theta) \approx \mathcal{N}\left(\hat{C}_\ell  ; C_\ell(\theta), \frac{2C_\ell^2(\theta)}{2\ell+1}\right)$$
 				</li>
 			</ul>
-
 		</div>
 	</div>
-
-
 	</section>
 
 	<section>
-		<h3 class="slide-title">...so why is this not mainstream?</h3>
+		<h3 class="slide-title">Inference with a Simulation Model</h3>
 			<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:1000px;"/>
 	
 				<div class="r-stack">
@@ -278,10 +271,11 @@
 							<div class="block-content">
 								$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
 								Where $z$ are <b>stochastic latent variables</b> of the simulator.<br><br>
-								$\Longrightarrow$ This <b class="alert">marginal likelihood is intractable</b>!
+								$\Longrightarrow$ This <b class="alert">marginal likelihood is in general intractable</b>!
 							</div>
 						</div>
 					</div>
+	</section>
 	</section>
 
 	<section>
@@ -295,7 +289,7 @@
 
 			<br>
 
-			<li class="fragment"> We need to infer the joint posterior $p(\theta, z | x)$ before marginalization to
+			<li class="fragment"> <b class="alert">We need to infer the joint posterior</b> $p(\theta, z | x)$ before marginalization to
 				yield $p(\theta | x) = \int p(\theta, z | x) dz$.<br>
 				$\Longrightarrow$ Extremely difficult problem as <b>$z$ is typically very high-dimensional</b>.
 			</li>
@@ -309,8 +303,44 @@
 			<br>
 		</ul>
 
-		<div class="fragment">$\Longrightarrow$ The only hope for explicit cosmological inference is to have <b class="alert">fully-differentiable cosmological simulations</b>!</div>
+		<div class="fragment">$\Longrightarrow$ This is what we will call <b class="alert">Explicit Inference</b>, because we can evaluate $p(x | z, \theta)$ explicitly.</div>
 	</section>
+
+			<section>
+		   <h3 class="slide-title">Black-box Simulators Define Implicit Distributions</h3>
+		   <img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:750px;"/>
+		   <ul>
+			   <li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+			   </li>
+			   <li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_\phi$ to approximate the implicit distribution $\mathbb{P}$</b>.
+			   </li>
+		   </ul>
+
+		   <div class="container">
+			   <div class="col fragment fade-up">
+				   <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+				   <br>
+				   True $\mathbb{P}$
+			   </div>
+
+			   <div class="col  fragment fade-up">
+				   <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+				   <br>
+				   Samples $x_i \sim \mathbb{P}$
+			   </div>
+
+			   <div class="col  fragment fade-up">
+				   <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+				   <br>
+				   Model $\mathbb{P}_\varphi$
+			   </div>
+		   </div>
+		   <ul>
+			<li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\phi$</b> and/or <b class="alert">evaluate the likelihood $p_\phi(x | \theta)$</b>.
+			</li>
+		</ul>
+	   </section>
+
 
 	<section>
 				<br>
@@ -438,34 +468,34 @@
 						from which a <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
 					</li>
 					<br>
-					<li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+					<li> Usually, this means building a parametric model $\mathbb{P}_\phi$
 						that tries to be close to $\mathbb{P}$.
 					</li>
 				</ul>
 
 				<br>
 				<div class="container">
-					<div class="col fragment fade-up">
+					<div class="col  fade-up">
 						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
 						<br>
 						True $\mathbb{P}$
 					</div>
 
-					<div class="col  fragment fade-up">
+					<div class="col   fade-up">
 						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
 						<br>
 						Samples $x_i \sim \mathbb{P}$
 					</div>
 
-					<div class="col  fragment fade-up">
+					<div class="col fade-up">
 						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
 						<br>
-						Model $\mathbb{P}_\theta$
+						Model $\mathbb{P}_\phi$
 					</div>
 				</div>
 				<br>
 				<ul>
-					<li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b> and/or <b class="alert">evaluate the likelihood $p_\theta(x)$</b>.
+					<li class="fragment"> <b>How do we do this?</b>
 					</li>
 				</ul>
 
@@ -533,7 +563,7 @@
 				  <div class="block-content">
 					<ul>
 					  <li> Assumes a <b class="alert">bijective</b> mapping between
-						data space $x$ and latent space $z$ with prior $p(z)$:
+						data space $x$ and latent space $z$ with known $p(z)$:
 						$$ z = f_{\theta} ( x ) \qquad \mbox{and} \qquad x = f^{-1}_{\theta}(z)$$
 					  </li>
 					  <li class="fragment" data-fragment-index="2"> Admits an explicit marginal likelihood:
@@ -643,7 +673,7 @@
 
 	   <section>
 	   	<section>
-			<h3 class="slide-title fragment">A closer look at <b>Neural Posterior Estimation</b> (NPE)</h3>
+			<h3 class="slide-title">A closer look at <b>Neural Posterior Estimation</b> (NPE)</h3>
 
 			<div class="container">
 				<div class="col">
@@ -903,7 +933,7 @@
 
 	<section>
 		<section>
-			<h3 class="slide-title">The proof is in the pudding: validation on log-normal lensing simulations</h3>
+			<h3 class="slide-title">Validation on log-normal lensing simulations</h3>
 			<div class="container">
 				<div style="float:right; font-size: 20px">
 				<a href="https://arxiv.org/abs/2407.10877"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2407.10877-B31B1B.svg" class="plain" style="height:25px;" /></a>
@@ -974,6 +1004,67 @@
 					<img data-src="/talks/assets/fom_denise.png"/>
 				</div>
 		</section>
+
+	<section class="inverted" data-background="#000">
+		<h2>How can I build efficient and robust SBI analyses?</h2>
+		<br>
+		<br>
+		<figure class="fragment">
+			<blockquote>
+				A neural network will <b class="alert">try</b> to answer <br>the <b class="alert">question
+					you
+					ask</b>.
+			</blockquote>
+			<figcaption style="align-items: right;">
+				@EiffL - Les Houches, July 2025
+			</figcaption>
+		</figure>
+	</section>
+
+	<section>
+		<h3 class="slide-title">A Simple Strategy to Evaluate Epistemic Errors: Ensembles of NDEs</h3>
+			<div class="container">
+				<div class="col">
+				<div style="float:right; font-size: 20px">
+				<a href="https://arxiv.org/abs/1903.00007"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A1903.00007-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				<a href="https://arxiv.org/abs/2409.17975"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2409.17975-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				</div>
+				</div>
+			</div>
+		<div class="container">
+			<div class="col">
+				<img data-src="/talks/assets/posterior_100.png" style="height: 550px;" />
+			</div>
+
+			<div class="col">
+				<img class="fragment" data-src="/talks/assets/posterior_2000.png" style="height: 550px;" />
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Verifying Proper Coverage</h3>
+			<div class="container">
+				<div class="col">
+				<div style="float:right; font-size: 20px">
+				<a href="https://arxiv.org/abs/2110.06581"><img src="https://img.shields.io/badge/stats.ML-arXiv%3A2110.06581-B31B1B.svg" class="plain" style="height:25px;" /></a>
+				</div>
+				</div>
+			</div>
+		<div class="container">
+			<div class="col">
+				<img data-src="/talks/assets/calibration_plots.png"/>
+			</div>
+
+			<div class="col">
+				<img data-src="/talks/assets/calibration_1.png" />
+			</div>
+	</section>
+
+	<section>
+		<h1>Applications</h1>
+		<hr>
+	</section>
 
 	<section>
 		<h3 class="slide-title">Our humble beginnings: Likelihood-Free Parameter Inference with DES SV...</h3>
@@ -1299,12 +1390,12 @@
 	</div>
 
 	<style>
-		.reveal .slides {
+		/* .reveal .slides {
 			border: 5px solid red;
 			min-height: 100%;
 			width: 128mm;
 			height: 96mm;
-		} 
+		}  */
 
 		.reveal .block {
 			background-color: #191919;
