@@ -105,8 +105,8 @@
 	</section>
 	
 	<section>
-		<h3 class='slide-title'>Full-Field Simulation-Based Inference</h3>
-	
+		<h3 class='slide-title'>Full-Field Bayesian Inference</h3>
+
 		<div class='container'>
 			<div class='col'>
 				<ul>
@@ -150,7 +150,119 @@
 			</div>
 		</div>
 	</section>
+	</section>
+
+	<section class="inverted" data-background="#000">
+		<h2>How can we <b>perform Bayesian inference</b> if all we have access to is a <b>simulator</b>?</h2>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Learning objectives for this lecture</h3>
+
+		<br>
+		<br>
+		<br>
+		<br>
+
+		<ul>
+			<li class="fragment grow">Differences and relative benefits between Full-Field Inference, SBI, traditional MCMC, etc...</li>
+			<br>
+			<li class="fragment grow">Basics of <b>Neural Networks</b> for <b>Density Estimation</b>.</li>
+			<br>
+			<li class="fragment grow">How <b>Neural Density Estimation enables SBI</b>.</li>
+			<br>
+			<li class="fragment grow"><b>Practical considerations</b> around deploying SBI for cosmological analyses.</li>
+		</ul>
+
+		<br>
+		<br>
+	</section>
+
+	<section>
+		<h1>There is More than One Way to Perform Bayesian Inference</h1>
+		<hr>
+	</section>
+
+	<section>
+	<section>
+		<h3 class="slide-title">Back to the fundamentals</h3>
+		<br>
+		<div class="block">
+		<div class="block-title">
+			Bayes' theorem
+		</div>
+		<div class="block-content">
+			<div class="bayes-equation" style="margin: 10px 0;">
+			$$\overbrace{p(\theta|d, \mathcal{M})}^{\text{posterior}} = \frac{ \overbrace{p(d|\theta, \mathcal{M})}^{\text{likelihood}} \ \overbrace{p(\theta|\mathcal{M})}^{\text{prior}}}{\underbrace{p(d|\mathcal{M})}_{\text{evidence}}}$$
+			</div>
+		<ul style="margin-top: 40px;">
+			<li class="fragment"> The <strong class="prior">prior</strong> is our belief about the model parameters before observing the data.</li>
+			<li class="fragment"> The <strong class="likelihood">likelihood</strong> is the probability distribution of data given particular model parameters $\theta$.</li>
+			<li class="fragment"> The <strong class="posterior">posterior</strong> is the probability distribution of model parameters given particular data $d$.</li>
+		</ul>
+		</div>
+	</div>
+	<br>
+	<div class="fragment">$\Longrightarrow$ Classically, we need to be able to <b class="alert">evaluate the log posterior</b> $p(\theta|d, \mathcal{M}) \propto \log p(d|\theta, \mathcal{M}) + \log p(\theta|\mathcal{M})$.</div>
+	<br>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Classical Bayesian inference relies on tractable <b>posterior evaluation</b></h3>
+		<iframe class="plain" data-src="https://flanusse.net/LesHouches2025/mcmc_banana" style="width: 1200px; height: 650px;"></iframe>
+	</section>
+	</section>
 	
+
+	<section>
+		<h3 class="slide-title">Where do likelihoods come from?</h3>
+
+	<div class="container">
+		<div class="col fragment">
+			<img class="plain" data-src="/talks/assets/y3_mass_map.png" style="width:500px;"/>
+			<div style="float:right; font-size: 15px"> Jeffrey, et al. (2021) <a href="https://arxiv.org/abs/2105.13539"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2105.13539-B31B1B.svg" class="plain"
+																	style="height:20px;vertical-align:middle;" /></a></div>
+
+				<br> <br>
+				<br>
+				<br>
+				<br>
+				How can I write the likelihood $p(d | \theta)$?
+				<br>
+				<br>
+				<b>Note</b>: let's ignore masks here for simplicity
+		</div>
+		<div class="col">
+			<ul>
+				<li class="fragment"> I can represent my map in harmonic space as:
+					$$\kappa(\hat{n}) = \sum_{\ell m} \kappa_{\ell m} Y_{\ell m} (\hat{n})$$
+				</li>
+				
+				<br>
+
+				<li class="fragment"> I can <b>compute the covariance</b> of $\kappa_{\ell m}$ <b>from theory</b>:
+					$$\langle \kappa_{\ell m} \kappa_{\ell' m'} \rangle = C_\ell (\theta)  \delta_{\ell \ell'} \delta_{m m'}$$
+				</li>
+
+				<br>
+<!-- 
+				<li class="fragment"> Let me <b class="alert">assume</b> my $\kappa_{lm}$ are Gaussian:
+					$$ p(\kappa_{l m} | \theta) = \mathcal{CN}(\kappa_{l m} ; 0, C_\ell(\theta)) $$
+				</li> -->
+
+				<li class="fragment"> If I estimate my angular power spectrum from data with:
+					$$\hat{C}_\ell = \frac{1}{2\ell+1} \sum_{m=-\ell}^{\ell} |\kappa_{\ell m}|^2$$
+					then by the Central Limit Theorem, for $\ell > 50$:
+					$$\hat{C}_\ell \approx \mathcal{N}\left(C_\ell, \frac{2C_\ell^2}{2\ell+1}\right)$$
+				</li>
+			</ul>
+
+		</div>
+	</div>
+
+
+	</section>
+
 	<section>
 		<h3 class="slide-title">...so why is this not mainstream?</h3>
 			<img class="plain" data-src="/talks/assets/lfi_sim.png" style="width:1000px;"/>
@@ -171,58 +283,6 @@
 						</div>
 					</div>
 	</section>
-	</section>
-
-	<section class="inverted" data-background="#000">
-		<h2>How can we perform Bayesian inference if we cannot evaluate the likelihood?</h2>
-	</section>
-
-	<section>
-		<h3 class="slide-title">Learning objectives for this lecture</h3>
-
-		<ul>
-		</ul>
-	</section>
-
-	<section>
-		<h1>The Many Flavors of Bayesian Inference</h1>
-		<hr>
-	</section>
-
-
-	<section>
-
-	<section>
-		<h3 class="slide-title">Back to the basics</h3>
-		<br>
-		<div class="block">
-		<div class="block-title">
-			Bayes' theorem
-		</div>
-		<div class="block-content">
-			<div class="bayes-equation" style="margin: 10px 0;">
-			$$\overbrace{p(\theta|d, \mathcal{M})}^{\text{posterior}} = \frac{ \overbrace{p(d|\theta, \mathcal{M})}^{\text{likelihood}} \ \overbrace{p(\theta|\mathcal{M})}^{\text{prior}}}{\underbrace{p(d|\mathcal{M})}_{\text{evidence}}}$$
-			</div>
-		<ul style="margin-top: 40px;">
-			<li class="fragment"> The <strong class="prior">prior</strong> is our belief about the model parameters before observing the data.</li>
-			<li class="fragment"> The <strong class="likelihood">likelihood</strong> is the probability distribution of data given particular model parameters $\theta$.</li>
-			<li class="fragment"> The <strong class="posterior">posterior</strong> is the probability distribution of model parameters given particular data $d$.</li>
-		</ul>
-		</div>
-	</div>
-	</section>
-
-	<section>
-		<h3 class="slide-title">Classical Bayesian inference relies on tractable <b>posterior evaluation</b></h3>
-		<iframe class="plain" data-src="https://flanusse.net/LesHouches2025/mcmc_banana" style="width: 1200px; height: 650px;"></iframe>
-	</section>
-	</section>
-	
-
-	<section>
-		<h3 class="slide-title">Where do likelihoods come from?</h3>
-	</section>
-
 
 	<section>
 		<h3 class="slide-title"> Simulators as Hierarchical Bayesian Models</h3>
@@ -298,17 +358,6 @@
 		<hr>
 		<h3>The key to manipulating <b>Implicit Distributions</b></h3>
 	</section>
-
-
-	<!-- 
-	What we are going to cover here:
-		- What is a neural network fundamentally?
-		- How can we use neural networks to model distributions?
-		- How can we train a neural network to learn conditional distributions?
-		- Flexible neural network models for learning distributions
-		   = <b>Normalizing Flows</b>
-	-->
-
 
 			<section>
 			<section>
