@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #timeline-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .timeline-bar {
+            cursor: pointer;
+        }
+        
+        .timeline-bar:hover rect {
+            opacity: 1 !important;
+        }
+        
+        .axis-label {
+            fill: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="timeline-container"></div>
+    
+    <script>
+        // DETF Stages Timeline Data
+        const timelineData = [
+            { 
+                stage: "Stage I", 
+                start: 1998, 
+                end: 2005, 
+                desc: "Initial experiments", 
+                examples: "Early SNe Ia, WMAP", 
+                color: "#ff6b6b",
+                fragmentIndex: 0
+            },
+            { 
+                stage: "Stage II", 
+                start: 2005, 
+                end: 2014, 
+                desc: "Ground-based surveys", 
+                examples: "SDSS, Early DES", 
+                color: "#4ecdc4",
+                fragmentIndex: 1
+            },
+            { 
+                stage: "Stage III", 
+                start: 2012, 
+                end: 2022, 
+                desc: "Precision cosmology", 
+                examples: "DES, BOSS, eBOSS", 
+                color: "#45b7d1",
+                fragmentIndex: 2
+            },
+            { 
+                stage: "Stage IV", 
+                start: 2022, 
+                end: 2035, 
+                desc: "Next-generation", 
+                examples: "LSST, Euclid, Roman", 
+                color: "#f9ca24",
+                fragmentIndex: 3
+            }
+        ];
+
+        let currentFragmentIndex = -1;
+        let barsGroup = null;
+
+        function createAnimatedTimeline() {
+            const container = d3.select("#timeline-container");
+            container.selectAll("*").remove();
+
+            const margin = { top: 30, right: 30, bottom: 60, left: 90 };
+            const width = 580 - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
+
+            const svg = container
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .style("display", "block")
+                .style("margin", "0 auto");
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Scales
+            const xScale = d3.scaleLinear()
+                .domain([1998, 2035])
+                .range([0, width]);
+
+            const yScale = d3.scaleBand()
+                .domain(timelineData.map(d => d.stage))
+                .range([0, height])
+                .padding(0.25);
+
+            // Add background grid lines
+            const gridLines = g.append("g")
+                .attr("class", "grid")
+                .attr("opacity", 0.2);
+
+            gridLines.selectAll("line")
+                .data(xScale.ticks(8))
+                .enter()
+                .append("line")
+                .attr("x1", d => xScale(d))
+                .attr("x2", d => xScale(d))
+                .attr("y1", 0)
+                .attr("y2", height)
+                .style("stroke", "#ffffff")
+                .style("stroke-width", 1);
+
+            // Add axes with animation
+            const xAxis = g.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .style("opacity", 0);
+
+            xAxis.call(d3.axisBottom(xScale)
+                .ticks(8)
+                .tickFormat(d3.format("d")))
+                .selectAll("text")
+                .style("fill", "#ffffff")
+                .style("font-size", "12px");
+
+            const yAxis = g.append("g")
+                .style("opacity", 0);
+
+            yAxis.call(d3.axisLeft(yScale))
+                .selectAll("text")
+                .style("fill", "#ffffff")
+                .style("font-size", "14px")
+                .style("font-weight", "bold");
+
+            // Style axes
+            g.selectAll(".domain, .tick line")
+                .style("stroke", "#ffffff")
+                .style("stroke-width", 1);
+
+            // Animate axes in immediately
+            xAxis.transition()
+                .duration(800)
+                .style("opacity", 1);
+
+            yAxis.transition()
+                .duration(800)
+                .style("opacity", 1);
+
+            // Create timeline bars (initially hidden)
+            barsGroup = g.selectAll(".timeline-bar")
+                .data(timelineData)
+                .enter()
+                .append("g")
+                .attr("class", "timeline-bar")
+                .attr("data-fragment-index", d => d.fragmentIndex)
+                .style("opacity", 0);
+
+            // Add rectangles
+            barsGroup.append("rect")
+                .attr("x", d => xScale(d.start))
+                .attr("y", d => yScale(d.stage))
+                .attr("width", 0) // Start with 0 width for animation
+                .attr("height", yScale.bandwidth())
+                .attr("fill", d => d.color)
+                .attr("opacity", 0.85)
+                .attr("rx", 6)
+                .attr("ry", 6);
+
+            // Add stage names
+            barsGroup.append("text")
+                .attr("class", "stage-name")
+                .attr("x", d => xScale(d.start) + (xScale(d.end) - xScale(d.start)) / 2)
+                .attr("y", d => yScale(d.stage) + yScale.bandwidth() / 2 - 15)
+                .attr("text-anchor", "middle")
+                .style("fill", "#ffffff")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("text-shadow", "2px 2px 4px rgba(0,0,0,0.8)")
+                .text(d => d.stage);
+
+            // Add descriptions
+            barsGroup.append("text")
+                .attr("class", "description")
+                .attr("x", d => xScale(d.start) + (xScale(d.end) - xScale(d.start)) / 2)
+                .attr("y", d => yScale(d.stage) + yScale.bandwidth() / 2)
+                .attr("text-anchor", "middle")
+                .style("fill", "#ffffff")
+                .style("font-size", "11px")
+                .style("font-weight", "normal")
+                .style("text-shadow", "1px 1px 2px rgba(0,0,0,0.8)")
+                .text(d => d.desc);
+
+            // Add examples
+            barsGroup.append("text")
+                .attr("class", "examples")
+                .attr("x", d => xScale(d.start) + (xScale(d.end) - xScale(d.start)) / 2)
+                .attr("y", d => yScale(d.stage) + yScale.bandwidth() / 2 + 15)
+                .attr("text-anchor", "middle")
+                .style("fill", "#e0e0e0")
+                .style("font-size", "9px")
+                .style("font-style", "italic")
+                .style("text-shadow", "1px 1px 2px rgba(0,0,0,0.8)")
+                .text(d => d.examples);
+
+            // Add "Now" indicator (initially hidden)
+            const currentYear = 2025;
+            const nowGroup = g.append("g")
+                .attr("class", "now-indicator")
+                .attr("data-fragment-index", "4")
+                .style("opacity", 0);
+
+            nowGroup.append("line")
+                .attr("x1", xScale(currentYear))
+                .attr("x2", xScale(currentYear))
+                .attr("y1", 0)
+                .attr("y2", 0) // Start with 0 height
+                .style("stroke", "#ff4757")
+                .style("stroke-width", 3)
+                .style("stroke-dasharray", "8,4");
+
+            nowGroup.append("text")
+                .attr("x", xScale(currentYear))
+                .attr("y", -20)
+                .attr("text-anchor", "middle")
+                .style("fill", "#ff4757")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("text-shadow", "1px 1px 2px rgba(0,0,0,0.8)")
+                .text("Now");
+
+            // Add hover effects
+            barsGroup.on("mouseover", function(event, d) {
+                d3.select(this).select("rect")
+                    .transition()
+                    .duration(200)
+                    .attr("opacity", 1)
+                    .attr("stroke", "#ffffff")
+                    .attr("stroke-width", 2);
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).select("rect")
+                    .transition()
+                    .duration(200)
+                    .attr("opacity", 0.85)
+                    .attr("stroke", "none");
+            });
+        }
+
+        // Function to animate a specific stage
+        function animateStage(fragmentIndex) {
+            if (!barsGroup) return;
+            
+            const stageData = timelineData.find(d => d.fragmentIndex === fragmentIndex);
+            if (!stageData) return;
+
+            const bar = barsGroup.filter(d => d.fragmentIndex === fragmentIndex);
+            
+            // Animate the bar group
+            bar.transition()
+                .duration(600)
+                .style("opacity", 1);
+
+            // Animate the rectangle width with elastic effect
+            bar.select("rect")
+                .transition()
+                .delay(200)
+                .duration(800)
+                .ease(d3.easeElastic)
+                .attr("width", d => {
+                    const xScale = d3.scaleLinear()
+                        .domain([1998, 2035])
+                        .range([0, 460]); // Recalculate scale
+                    return xScale(d.end) - xScale(d.start);
+                });
+        }
+
+        // Function to animate the "Now" indicator
+        function animateNowIndicator() {
+            const nowGroup = d3.select(".now-indicator");
+            if (nowGroup.empty()) return;
+
+            // Animate "Now" indicator
+            nowGroup.transition()
+                .duration(1000)
+                .style("opacity", 1);
+
+            nowGroup.select("line")
+                .transition()
+                .delay(200)
+                .duration(800)
+                .ease(d3.easeBounce)
+                .attr("y2", d => {
+                    // Recalculate height
+                    return 310; // Approximate height based on our calculations
+                });
+        }
+
+        // Listen for fragment events from parent window
+        function setupFragmentListeners() {
+            try {
+                if (window.parent && window.parent.Reveal) {
+                    window.parent.Reveal.on('fragmentshown', function(event) {
+                        const fragmentIndex = parseInt(event.fragment.getAttribute('data-fragment-index'));
+                        
+                        if (fragmentIndex >= 0 && fragmentIndex <= 3) {
+                            animateStage(fragmentIndex);
+                        } else if (fragmentIndex === 4) {
+                            animateNowIndicator();
+                        }
+                    });
+
+                    window.parent.Reveal.on('fragmenthidden', function(event) {
+                        const fragmentIndex = parseInt(event.fragment.getAttribute('data-fragment-index'));
+                        
+                        if (fragmentIndex >= 0 && fragmentIndex <= 3) {
+                            // Hide the stage
+                            if (barsGroup) {
+                                const bar = barsGroup.filter(d => d.fragmentIndex === fragmentIndex);
+                                bar.style("opacity", 0);
+                                bar.select("rect").attr("width", 0);
+                            }
+                        } else if (fragmentIndex === 4) {
+                            // Hide now indicator
+                            const nowGroup = d3.select(".now-indicator");
+                            nowGroup.style("opacity", 0);
+                            nowGroup.select("line").attr("y2", 0);
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log("Fragment listeners not available:", e);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createAnimatedTimeline();
+            setTimeout(setupFragmentListeners, 100);
+        });
+        
+        // For reveal.js integration
+        if (typeof reveald3 !== 'undefined') {
+            reveald3.onSlideChanged(function() {
+                createAnimatedTimeline();
+                setTimeout(setupFragmentListeners, 100);
+            });
+        }
+        
+        // Also create immediately if called directly
+        createAnimatedTimeline();
+        setTimeout(setupFragmentListeners, 100);
+    </script>
+</body>
+</html> 

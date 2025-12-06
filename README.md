@@ -19,4 +19,3 @@ Creating a new Presentation:
     ```
     $ npm start
     ```
-
