@@ -1,4 +1,9 @@
 <section>
+  <h2>Tractable Bayesian Inference in High Dimensions for Inverse Problems</h2>
+  <hr>
+</section>
+
+<section>
   <h3 class="slide-title">Linear inverse problems</h3>
 
   $\boxed{y = \mathbf{A}x + n}$
@@ -61,76 +66,50 @@
   </div>
 </section>
 
-
 <section>
-  <h3 class="slide-title"> Classical examples of signal priors </h3>
-  <div class="container">
-    <div class="col">
-      Sparse
-      <img data-src="/talks/assets/wavelet.png" height="400" class="plain"></img><br>
-      $$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
-    </div>
-    <div class="col">
-      Gaussian
-      <img data-src="/talks/assets/zknj8.jpg" height="400" class="plain"></img>
-      $$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
-    </div>
-    <div class="col">
-      Total Variation
-      <img data-src="/talks/assets/shepp-Logan.ppm" class="plain"></img>
-      $$ \log p(x) = \parallel \nabla x \parallel_1 $$
+  <h3 class="slide-title">A simple example of implicit prior</h3>
+  $$ \boxed{{\color{Orchid} y} = {\color{SkyBlue} x} + n} $$
+				<div class="container">
+					<div class="col">
+						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="/talks/assets/points.png"
+								style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+							<div class="fig-container fragment" data-file="dgm_prior_denoising.html"
+								data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;"
+								data-fragment-index="1"></div>
+						</div>
+						<!-- <img data-src="/talks/assets/points.png"/>
+																														  															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
+					</div>
 
-    </div>
-  </div>
-</section>
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Let us assume we have access to examples of $
+								{\color{SkyBlue} x}$ without noise.</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">We learn the <b class="alert">distribution of
+									noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.
+							</li>
+							<br>
+							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+																														  																<br> -->
+							<li class="fragment">The solution should lie on the <b class="alert">realistic data
+									manifold</b>, symbolized by the two-moons distribution.
+								<div class="fragment">
+									<p> We want to solve for the Maximum A Posterior solution: </p>
+									$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x}
+									\parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
 
-<section data-background="/talks/assets/hsc_screen.png">
-  <h2>But what about this?</h2>
-</section>
-
-<section>
-  <h3 class="slide-title"> Maybe we can learn priors from the data!</h3>
-  <br>
-  <ul>
-    <li>Generative modeling aims to <b>learn an <b class="alert">implicit</b> distribution
-        $\mathbb{P}$</b>
-      from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
-    </li>
-    <br>
-    <li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
-      that tries to be close to $\mathbb{P}$.
-    </li>
-  </ul>
-
-  <br>
-  <div class="container">
-    <div class="col fragment fade-up">
-      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
-      <br>
-      True $\mathbb{P}$
-    </div>
-
-    <div class="col  fragment fade-up">
-      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
-      <br>
-      Samples $x_i \sim \mathbb{P}$
-    </div>
-
-    <div class="col  fragment fade-up">
-      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
-      <br>
-      Model $\mathbb{P}_\theta$
-    </div>
-  </div>
-  <br>
-  <br>
-  <ul>
-    <li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
-      and/or <b class="alert">evaluate the probability $p_\theta(x)$</b>.
-    </li>
-  </ul>
-
-</section>
+									This can be done by <b>gradient descent</b> as long as one has access to the <b
+										class="alert">score function</b> $\frac{\color{orange} d \color{orange}\log
+									\color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d
+									\color{orange}x}$ of the learned distribution $p_\theta(x)$.
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
 
   <section>
     <h3 class="slide-title">But... We don't actually know the marginal posterior score!</h3>

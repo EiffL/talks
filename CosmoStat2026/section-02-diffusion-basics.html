@@ -1,49 +1,83 @@
 <section>
-  <h3 class="slide-title">Getting started with Deep Priors: deep denoising example</h3>
-  $$ \boxed{{\color{Orchid} y} = {\color{SkyBlue} x} + n} $$
-				<div class="container">
-					<div class="col">
-						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
-							<img class="fragment current-visible plain" data-src="/talks/assets/points.png"
-								style="position:absolute;top:0;left:0;" data-fragment-index="0" />
-							<div class="fig-container fragment" data-file="dgm_prior_denoising.html"
-								data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;"
-								data-fragment-index="1"></div>
-						</div>
-						<!-- <img data-src="/talks/assets/points.png"/>
-																														  															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
-					</div>
+	<h2>A Primer on Diffusion Models</h2>
+	<hr>
+</section>
 
-					<div class="col">
-						<ul>
-							<li class="fragment" data-fragment-index="0"> Let us assume we have access to examples of $
-								{\color{SkyBlue} x}$ without noise.</li>
-							<br>
-							<li class="fragment" data-fragment-index="1">We learn the <b class="alert">distribution of
-									noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.
-							</li>
-							<br>
-							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
-																														  																<br> -->
-							<li class="fragment">The solution should lie on the <b class="alert">realistic data
-									manifold</b>, symbolized by the two-moons distribution.
-								<div class="fragment">
-									<p> We want to solve for the Maximum A Posterior solution: </p>
-									$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x}
-									\parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+<section>
+  <h3 class="slide-title">Score-Based Generative Modeling</h3>
+  <div style="float:right; font-size: 20px">Song et al. (2021) <a href="https://arxiv.org/abs/2011.13456"><img src="https://img.shields.io/badge/arXiv-2011.13456-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <img data-src="/talks/assets/diffusion.png" style="height:350px;" /><br>
+  <ul>
+    <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+      $p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$
+    </li>
+	<br>
+    <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+  </ul>
+</section>
 
-									This can be done by <b>gradient descent</b> as long as one has access to the <b
-										class="alert">score function</b> $\frac{\color{orange} d \color{orange}\log
-									\color{orange}p\color{orange}(\color{orange}x\color{orange})}{\color{orange} d
-									\color{orange}x}$.
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</section>
+<section>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <ul>
+    <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+      <ul>
+        <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+          $x^\prime = x + u$
+        </li>
+        <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+          $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+        </li>
+        <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+          $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+        </li>
+      </ul>
+    </li>
+  </ul>
 
-			<section>
+  <div class="fragment fade-up">
+    <div class="container">
+      <div class="col">$\boldsymbol{x}'$
+      </div>
+      <div class="col">$\boldsymbol{x}$
+      </div>
+      <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+      <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+    </div>
+    <img data-src="/talks/assets/denoised_mnist.png" style="width:1200px;" />
+  </div>
+</section>
+
+<section>
+	<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
+
+	<div class="container">
+		<div class="col">
+			<br>
+			<img data-src="/talks/assets/unet.png" data-fragment-index="1" /><br>
+			<br> A standard UNet
+		</div>
+
+		<div class="col">
+			<ul>
+				<li> Typically use a standard residual UNet, and adopt a residual
+					score matching loss:
+					$$ \mathcal{L}_{DSM} = \underset{\boldsymbol{x} \sim P}{\mathbb{E}} \underset{\begin{subarray}{c}
+					\boldsymbol{u} \sim \mathcal{N}(0, I) \\
+					\sigma_s \sim \mathcal{N}(0, s^2)
+					\end{subarray}}{\mathbb{E}} \parallel \boldsymbol{u} + \sigma_s \boldsymbol{r}_{\theta}(\boldsymbol{x} + \sigma_s \boldsymbol{u}, \sigma_s) \parallel_2^2$$
+					$\Longrightarrow$ direct estimator of the score $\nabla \log p_\sigma(x)$
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+
+<!-- 
+<section>
 			  <h3 class="slide-title">First realization: The score is all you need!</h3>
 			  <br>
 			  <div class="container">
@@ -77,7 +111,8 @@
 </section>
 
 <section>
-  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching (Vincent 2011)</h3>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
   <ul>
     <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
       <ul>
@@ -128,15 +163,4 @@
   </ul>
 </section>
 
-
-<section>
-  <h3 class="slide-title">Score-Based Generative Modeling <a href="https://arxiv.org/abs/2011.13456"> Song et al. (2021)</a></h3>
-  <img data-src="/talks/assets/diffusion.png" style="height:350px;" /><br>
-  <br>
-  <ul>
-    <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
-      $$p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$$
-    </li>
-    <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
-  </ul>
-</section>
+ -->

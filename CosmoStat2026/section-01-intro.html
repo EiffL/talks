@@ -38,61 +38,86 @@
   <br> <br> <br>
 </section>
 
-<!-- Why are these generative models useful -->
 <section>
-  <h3 class="slide-title">Why are these generative models useful?</h3>
-
-  <b class="alert">Implicit distributions are everywhere!</b>
+  <h3 class="slide-title">Generative modeling</h3>
   <br>
+  <ul>
+    <li>Generative modeling aims to <b>learn an <b class="alert">implicit</b> distribution
+        $\mathbb{P}$</b>
+      from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+    </li>
+    <br>
+    <li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+      that tries to be close to $\mathbb{P}$.
+    </li>
+  </ul>
+
   <br>
   <div class="container">
-    <div class="col fragment">
-      <b>Case I</b>: Examples from data, no accurate physical model<br>
-      <img data-src="/talks/assets/real_gal-inv-small.png" style="height:400px;" /><br>
-      <div style="float:right; font-size: 20px">Mandelbaum et al. 2014</div>
+    <div class="col fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png"
+        class="plain"></img>
       <br>
+      True $\mathbb{P}$
     </div>
 
-    <div class="col fragment">
-      <b>Case II</b>: Physical model only available as a simulator<br>
-      <img data-src='/talks/assets/convergence.png' style="height:400px;" /><br>
-      <div style="float:right; font-size: 20px">Osato et al. 2020</div>
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png"
+        class="plain"></img>
       <br>
+      Samples $x_i \sim \mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      Model $\mathbb{P}_\theta$
     </div>
   </div>
   <br>
-  <div class="fragment">$\Longrightarrow$ Generative models <b class="alert">will enable Bayesian
-      inference</b> in cases where
-    implicit distributions are involved, by providing a tractable $p_\theta(x)$.
-  </div>
+  <br>
+  <ul>
+    <li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
+      and/or <b class="alert">evaluate the probability $p_\theta(x)$</b>.
+    </li>
+  </ul>
+
 </section>
 
-<!-- NEW TRANSITION SLIDE -->
+<!-- Why are these generative models useful - Combined with applications -->
 <section>
-  <h3 class="slide-title">Two Applications of Diffusion Models</h3>
+  <h3 class="slide-title">Why are generative models useful?</h3>
+
+  <b class="alert">Implicit distributions are everywhere!</b>
+  <span class="fragment">Generative models <b class="alert">enable Bayesian inference</b> by providing tractable $p_\theta(x)$</span>
   <br>
-  <br>
-  <p>Today we'll see how diffusion models enable:</p>
   <br>
   <div class="container">
     <div class="col">
-      <div class="block">
-        <div class="block-title">1. Inverse Problems</div>
-        <div class="block-content">
-          Recover $x$ from observations $y = Ax + n$
+      <div class="block fragment">
+        <div class="block-title">Inverse Problems</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Recover <b>posterior $p(x|y)$</b> from observations $y = Ax + n$<br> when the 
+          prior $p(x)$ is only known implicitly (data-driven)
+          <br>
+          <img class="plain" data-src="/talks/assets/knee.gif" style="height:400px; display: block; margin: 10px auto 0 auto;" />
         </div>
       </div>
     </div>
     <div class="col">
-      <div class="block">
-        <div class="block-title">2. Probabilistic Forecasting</div>
-        <div class="block-content">
-          Predict future states with uncertainty
+      <div class="block fragment">
+        <div class="block-title">Probabilistic Forecasting</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Forecast <b>posterior $p(x_{t+1} | x_t)$</b> from examples of past trajectories. 
+          <br>
+          <video class="plain" data-src="/talks/assets/20250702_1024_0171.mp4" style="height:400px; display: block; margin: 10px auto 0 auto;" autoplay loop muted></video>
         </div>
       </div>
     </div>
   </div>
   <br>
-  <br>
-  <p class="fragment">Both benefit from learned priors $p(x)$</p>
+  <div class="fragment" style="text-align: center;">
+    $\Longrightarrow$ <b class="alert">Diffusion models</b> for these tasks: methods and challenges.
+  </div>
 </section>
