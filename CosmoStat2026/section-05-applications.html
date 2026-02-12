@@ -1,0 +1,203 @@
+<section>
+  <h1>Example of Scientific Application</h1>
+  <hr>
+</section>
+
+<section data-background-image="/talks/assets/gravitational-lensing-diagram.jpg">
+  <h3 class="slide-title">Let's set the stage: Gravitational lensing</h3>
+  <div class="fade-up">
+    <img class="plain" data-src="/talks/assets/great.jpg" />
+
+    <div class="block ">
+      <div class="block-title">
+        Galaxy shapes as estimators for gravitational shear
+      </div>
+      <div class="block-content">
+        $$ e = \gamma + e_i \qquad \mbox{ with } \qquad e_i \sim \mathcal{N}(0, I)$$
+        <ul>
+          <li> We are trying the measure the <b class="alert"> ellipticity $e$</b> of
+            galaxies as an estimator for the <b class="alert">gravitational shear $\gamma$ </b>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">Gravitational Lensing as an Inverse Problem</h3>
+  <div class="container">
+    <div class="col">
+      Shear <b class="alert">$\gamma$</b><br>
+      <img data-src="/talks/assets/shear_cat1.png" style="width:450px;"></img>
+    </div>
+
+    <div class="col fragment fade-up">
+      Convergence <b class="alert">$\kappa$</b><br>
+      <img data-src="/talks/assets/kappa.png" style="width:450px;"></img>
+    </div>
+  </div>
+
+  <div style="position:relative; width:1000px; height:100px; margin:0 auto;">
+    <div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+      $$\gamma_1 = \frac{1}{2} (\partial_1^2 - \partial_2^2) \ \Psi \quad;\quad \gamma_2 = \partial_1 \partial_2 \ \Psi \quad;\quad \kappa = \frac{1}{2} (\partial_1^2 + \partial_2^2) \ \Psi$$
+    </div>
+    <div class="fragment current-visible plain fade-up" style="position:absolute;top:0;left:0;width:1000px;">
+      $$\boxed{\gamma = \mathbf{P} \kappa}$$
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <h3 class="slide-title">Writing down the convergence map log posterior</h3>
+
+  $$ \log p( \kappa | e) = \underbrace{\log p(e | \kappa)}_{\simeq -\frac{1}{2} \parallel e - P \kappa \parallel_\Sigma^2} + \log p(\kappa) +cst $$
+
+  <ul>
+    <li> The likelihood term is <b class="alert">known analytically</b>, given to us by the physics of gravitational lensing.
+    </li>
+
+    <li class="fragment fade-up"> There is <b class="alert">no close form expression for the prior</b> on dark matter maps $\kappa$.
+      <br> However:
+      <ul>
+        <li class='fragment'> <b>We do have access to samples of full <b class="alert">implicit</b> prior</b> through simulations: $X = \{x_0, x_1, \ldots, x_n \}$ with $x_i \sim \mathbb{P}$
+          <img data-src='/talks/assets/plot_massive_nu.png' />
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div class="fragment">$\Longrightarrow$ Our strategy: <b class="alert">Learn the prior from simulation</b>,
+    and then <b class="alert">sample the full posterior</b>.</div>
+</section>
+
+
+<section>
+  <h3 class="slide-title">Example of one chain during Annealed Posterior Sampling</h3>
+  <img data-src="/talks/assets/hmc-annealing.gif" />
+</section>
+
+<section>
+  <h3 class="slide-title">Validating Posterior Sampling under a Gaussian prior</h3>
+
+  <img style="height:600px;" data-src="/talks/assets/Remy2022Wiener.png" />
+
+</section>
+
+<section>
+  <h3 class="slide-title">Illustration on $\kappa$-TNG simulations</h3>
+  <div class="container">
+    <div class="col">
+      <div style="float:right; font-size: 20px"> Remy, Lanusse, et al. (2022) <a href="https://arxiv.org/abs/2201.05561"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2201.05561-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col">
+      <img data-src='/talks/assets/ref_ktng.png' style="width:350px; height:350px;" />
+      <br>
+      True convergence map
+    </div>
+    <div class="col">
+      <div class="block-content">
+        <div style="position:relative; width:350px; height:350px; top:10px; left:40px;">
+          <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="0">
+            <img data-src='/talks/assets/ks_ktng.png' style="width:350px; height:350px;" />
+          </div>
+          <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="1">
+            <img data-src='/talks/assets/wiener_ktng.png' style="width:350px; height:350px;" />
+          </div>
+          <div class="plain fragment" style="position:absolute;top:0;left:0;width:350px;" data-fragment-index="2">
+            <img data-src='/talks/assets/mean_post_ktng.png' style="width:350px; height:350px;" />
+          </div>
+        </div>
+        <div class="block-content">
+          <div style="position:relative; width:350px; height:20px; top:50px; left:10px;">
+            <div class="fragment current-visible " data-fragment-index="0" style="position:absolute;top:0;left:0;width:350px;">Traditional Kaiser-Squires</div>
+            <div class="fragment current-visible " data-fragment-index="1" style="position:absolute;top:0;left:0;width:350px;">Wiener Filter</div>
+            <div class="fragment" data-fragment-index="2" style="position:absolute;top:0;left:0;width:350px;">Posterior Mean (ours)</div>
+          </div>
+        </div>
+        <br>
+        <br>
+      </div>
+
+    </div>
+    <div class="col fragment">
+      <img data-src='/talks/assets/cropped.gif' style="width:350px; height:350px;" />
+      <br>
+      Posterior samples
+    </div>
+  </div>
+
+</section>
+
+
+<section>
+  <h3 class="slide-title">Reconstruction of the <b class="alert">HST/ACS COSMOS field</b></h3>
+
+  <ul>
+    <li> COSMOS shear data from <a href=https://ui.adsabs.harvard.edu/abs/2010A%26A...516A..63S/abstract>Schrabback et al. 2010</a>
+    </li>
+    <li> Prior learned from $\kappa$-TNG simulation from <a href=https://arxiv.org/abs/2010.09731>Osato et al. 2021</a>.
+    </li>
+  </ul>
+  <br>
+  <div class="container">
+    <div class="col">
+      <div class="block-content">
+        <div style="position:relative; height:570px; top:0px; left:0px;">
+          Massey et al. (2007)
+          <img data-src="/talks/assets/massey.png" style="height:500px;"></img>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="block-content">
+        <div style="position:relative; height:570px; top:0px; left:0px;">
+          <div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+            Remy et al. (2022) <b class="alert">Posterior mean</b>
+            <img data-src='/talks/assets/remy.png' style="height:500px;" />
+          </div>
+
+          <div class="plain fragment" style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+            Remy et al. (2022) <b class="alert">Posterior samples</b>
+            <img data-src='/talks/assets/cosmos_samples.gif' style="height:500px;" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">Other examples of Deep Priors</h3>
+  <br>
+  <div class="container">
+    <div class="col">
+      <ul>
+        <li><em>Hybrid Physical-Deep Learning Model for Astronomical Inverse Problems</em><br> <b> F. Lanusse</b>, P. Melchior, F. Moolekamp<br>
+          <a href="https://arxiv.org/abs/1912.03980"><img src="https://img.shields.io/badge/astro--ph.IM-arXiv%3A1912.03980-B31B1B.svg" class="plain" style="height:25px;" /></a>
+          <a href="https://www.youtube.com/watch?v=oWOU3qNHoL0"><img src="https://img.shields.io/badge/-youtube-red?logo=youtube&labelColor=grey" class="plain" style="height:25px;" /></a>
+        </li>
+      </ul>
+      <br> <br>
+      $\mathcal{L} = \frac{1}{2} \parallel \mathbf{\Sigma}^{-1/2} (\ Y - P \ast A S \ ) \parallel_2^2 - \sum_{i=1}^K \log p_{\theta}(S_i)$
+      <br> <br>
+      <img class=" plain" data-src="/talks/assets/scarlet_hsc.png" />
+      <br> <br>
+
+    </div>
+    <div class="col fragment">
+      <ul>
+        <li><em>Denoising Score-Matching for Uncertainty Quantification in Inverse Problems</em><br> Z. Ramzi, B. Remy, <b>F. Lanusse</b>, P. Ciuciu, J.L. Starck<br>
+          <a href="https://arxiv.org/abs/2011.08698"><img src="https://img.shields.io/badge/stat.ML-arXiv%3A2011.08698-B31B1B.svg" class="plain" style="height:25px;" /></a>
+        </li>
+      </ul>
+      <img class="plain" data-src="/talks/assets/knee.gif" style="height:410px;" />
+
+    </div>
+  </div>
+</section>

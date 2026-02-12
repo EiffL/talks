@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Diffusion Models for Inverse Problems and Forecasting</title>
+
+    <meta name="description" content="Deep CosmoStat Days, CEA Paris-Saclay, February 2026">
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section data-background-iframe="background.html">
+                <div class="container">
+                    <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+                        <h1>Diffusion Models for Inverse Problems and Forecasting</h1>
+                        <h3>Deep CosmoStat Days, CEA Paris-Saclay, February 2026</h3>
+                    </div>
+                </div>
+                <hr>
+                <div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+                    <div class="container">
+                        <div class="col">
+                            <div align="left" style="margin-left: 20px;">
+                                <h2>François Lanusse</h2>
+                                <br>
+                                <img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <img src="/talks/assets/cnrs_logo.svg" class="plain" height="150"></img>
+                        </div>
+
+                        <div class="col">
+                            <br>
+                            <br>
+                            <br>
+                            <img src="/talks/assets/aim.png" class="plain" height="150"></img>
+                        </div>
+                    </div>
+                    <div> slides at <a href="https://eiffl.github.io/talks/CosmoStat2026">eiffl.github.io/talks/CosmoStat2026</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: Introduction & Why Generative Models -->
+            <section data-external="section-01-intro.html"></section>
+
+            <!-- SECTION 2: What Are Diffusion Models? (Diffusion Basics) -->
+            <section data-external="section-02-diffusion-basics.html"></section>
+
+            <!-- SECTION 3: Diffusion Models for Inverse Problems -->
+            <section data-external="section-03-inverse-problems.html"></section>
+
+            <!-- SECTION 4: Learning Priors from Noisy Data (DiEM) -->
+            <section data-external="section-04-diem.html"></section>
+
+            <!-- SECTION 5: Application Examples -->
+            <section data-external="section-05-applications.html"></section>
+
+            <!-- SECTION 6: Probabilistic Forecasting -->
+            <section data-external="section-06-forecasting.html"></section>
+
+        </div>
+    </div>
+
+    <style>
+        .reveal .slides {
+            border: 5px solid red;
+            min-height: 100%;
+            width: 128mm;
+            height: 96mm;
+        }
+
+        .reveal .block {
+            background-color: #191919;
+            margin-left: 20px;
+            margin-right: 20px;
+            text-align: left;
+            padding-bottom: 0.1em;
+        }
+
+        .reveal .block-title {
+            background-color: #333333;
+            padding: 8px 35px 8px 14px;
+            color: #FFAA7F;
+            font-weight: bold;
+        }
+
+        .reveal .block-content {
+            padding: 8px 35px 8px 14px;
+        }
+
+        .reveal .slide-title {
+            border-left: 5px solid white;
+            text-align: left;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+
+        .reveal .alert {
+            color: #FFAA7F;
+            font-weight: bold;
+        }
+
+        .reveal .inverted {
+            filter: invert(100%);
+        }
+    </style>
+
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            controls: true,
+
+            //center: false,
+            hash: true,
+
+            // Visibility rule for backwards navigation arrows; "faded", "hidden"
+            // or "visible"
+            controlsBackArrows: 'hidden',
+
+            // Display a presentation progress bar
+            progress: true,
+
+            // Display the page number of the current slide
+            slideNumber: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            // The "normal" size of the presentation, aspect ratio will be preserved
+            // when the presentation is scaled to fit different resolutions. Can be
+            // specified using percentage units.
+            width: 1280,
+            height: 720,
+
+            // Factor of the display size that should remain empty around the content
+            margin: 0.1,
+
+            // Bounds for smallest/largest possible scale to apply to content
+            minScale: 0.2,
+            maxScale: 1.5,
+
+            autoPlayMedia: true,
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+            dependencies: [{
+                    src: 'reveal.js/plugin/markdown/marked.js'
+                },
+                {
+                    src: 'reveal.js/plugin/markdown/markdown.js'
+                },
+                {
+                    src: 'reveal.js/plugin/notes/notes.js',
+                    async: true
+                },
+                {
+                    src: 'reveal.js/plugin/math/math.js',
+                    async: true
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+                },
+                {
+                    src: 'reveal.js/plugin/highlight/highlight.js',
+                    async: true
+                },
+                {
+                    src: 'node_modules/reveal_external/external/external.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-external],[data-external-replace]');
+                    }
+                },
+            ]
+
+        });
+    </script>
+</body>
+
+</html>

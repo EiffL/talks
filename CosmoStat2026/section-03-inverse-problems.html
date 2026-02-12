@@ -1,0 +1,275 @@
+<section>
+  <h3 class="slide-title">Linear inverse problems</h3>
+
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+  <br>
+  $\mathbf{A}$ is known and encodes our physical understanding of the problem.
+  <span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse
+    problem is ill-posed with no unique solution $x$</span>
+  <div class="container fragment fade-up">
+    <div class="col">
+      <img data-src="/talks/assets/pluto_smooth.png" class="plain"></img>
+      Deconvolution
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/pluto_missing.png" class="plain"></img>
+      Inpainting
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/plutoNoise.png" class="plain"></img>
+      Denoising
+    </div>
+  </div>
+
+</section>
+
+<section data-vertical-align-top>
+  <h3 class="slide-title">A Bayesian view of the problem</h3>
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+
+  <br>
+  <div class="fragment">
+    $$ p(x | y) \propto p(y | x) \ p(x) $$
+  </div>
+  <br>
+
+  <ul>
+    <li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the
+        physics</b><br>
+    </li>
+    <br>
+    <li class="fragment fade-up">$p(x)$ is our prior knowledge on the solution.</li>
+  </ul>
+  <br>
+  <br>
+  <div class="fragment fade-up">
+    With these concepts in hand, we can for instance estimate the <b class="alert">Maximum A Posteriori solution</b>:
+    <br>
+    $$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+    For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ - \frac{1}{2} \parallel y -
+    \mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+  </div>
+  <br>
+  <div class="fragment fade-up">
+    Or, we can aim to sample from the <b class="alert">full posterior distribution</b> by MCMC techniques.
+  </div>
+  <br>
+  <div class="fragment fade-up">
+    <h3>How do you choose the prior ?</h3>
+  </div>
+</section>
+
+
+<section>
+  <h3 class="slide-title"> Classical examples of signal priors </h3>
+  <div class="container">
+    <div class="col">
+      Sparse
+      <img data-src="/talks/assets/wavelet.png" height="400" class="plain"></img><br>
+      $$ \log p(x) = \parallel \mathbf{W} x \parallel_1 $$
+    </div>
+    <div class="col">
+      Gaussian
+      <img data-src="/talks/assets/zknj8.jpg" height="400" class="plain"></img>
+      $$ \log p(x) = x^t \mathbf{\Sigma^{-1}} x $$
+    </div>
+    <div class="col">
+      Total Variation
+      <img data-src="/talks/assets/shepp-Logan.ppm" class="plain"></img>
+      $$ \log p(x) = \parallel \nabla x \parallel_1 $$
+
+    </div>
+  </div>
+</section>
+
+<section data-background="/talks/assets/hsc_screen.png">
+  <h2>But what about this?</h2>
+</section>
+
+<section>
+  <h3 class="slide-title"> Maybe we can learn priors from the data!</h3>
+  <br>
+  <ul>
+    <li>Generative modeling aims to <b>learn an <b class="alert">implicit</b> distribution
+        $\mathbb{P}$</b>
+      from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+    </li>
+    <br>
+    <li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+      that tries to be close to $\mathbb{P}$.
+    </li>
+  </ul>
+
+  <br>
+  <div class="container">
+    <div class="col fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png" class="plain"></img>
+      <br>
+      True $\mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png" class="plain"></img>
+      <br>
+      Samples $x_i \sim \mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png" class="plain"></img>
+      <br>
+      Model $\mathbb{P}_\theta$
+    </div>
+  </div>
+  <br>
+  <br>
+  <ul>
+    <li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
+      and/or <b class="alert">evaluate the probability $p_\theta(x)$</b>.
+    </li>
+  </ul>
+
+</section>
+
+  <section>
+    <h3 class="slide-title">But... We don't actually know the marginal posterior score!</h3>
+    <ul>
+      <li>We know the following quantities:
+        <ul>
+          <li>Annealed likelihood (analytically): $p_\sigma(y | x) = \mathcal{N}(y; \mathbf{A} x, \mathbf{\Sigma} + \sigma^2 \mathbf{I})$</li>
+          <li>Annealed prior score (by score matching): $\nabla_x \log p_\sigma(x)$ </li>
+        </ul>
+      </li>
+      <li class="fragment" data-fragment-index="1">But, unfortunately: $\boxed{p_\sigma(x|y) \neq p_\sigma(y|x) \ p_\sigma(x)}$
+        $\Longrightarrow$ <b class="alert">We don't know the marginal posterior score!</b>
+      </li>
+    </ul>
+    <div class="r-stack">
+      <!-- <img data-src="/talks/assets/post_prod.png" style="height: 500px;"/> -->
+      <div class="fragment highlight-red">
+        <video data-fragment-index="1" data-src="/talks/assets/post_prod.mp4" style="height: 500px;"></video>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <ul>
+      <li>We cannot use the reverse SDE/ODE of diffusion models to sample from the posterior.
+        $$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_t(x|y)}_{\mbox{unknown}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
+      </li>
+    </ul>
+    <div class="r-stack">
+      <div class="block fragment fade-up current-visible">
+        <div class="block-title">
+          Proposed sampling strategy <a href="https://arxiv.org/abs/2201.05561">(Remy et al. 2020)</a>
+        </div>
+        <div class="block-content">
+          <ul>
+            <li> Even if not equivalent to the marginal posterior score, $\nabla_x \log p_{\sigma^2}(y | x) + \nabla_x \log p_{\sigma^2}(x)$ still
+              has good properties:
+              <ul>
+                <li>Tends to an isotropic Gaussian distribution for large $\sigma$ </li>
+                <li>Corresponds to the target posterior for $\sigma=0$ </li>
+              </ul>
+            </li>
+            <br>
+            <li> If we simulate this SDE sufficiently slowly (i.e. timescale of change of $\sigma$ is much larger than the timescale of the SDE)
+              we can expect to sample from the target posterior.
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+      <img class="fragment current-visible" data-src="/talks/assets/sampling_1.png" style="height: 500px;" />
+      <img class="fragment " data-src="/talks/assets/sampling_2.png" style="height: 500px;" />
+    </div>
+    <div class="fragment">
+      $\Longrightarrow$ In practice, we sample the annealed distribution using an Hamiltonian Monte-Carlo,
+      with discrete annealing steps.
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Approximation methods for the marginal likelihood: <b>DPS</b> <a href="https://arxiv.org/abs/2209.14687">(Chung et al. 2023)</a></h3>
+
+    <div class="container">
+      <div class="col">
+        <!-- <div class="r-stack"> -->
+        <img data-src="/talks/assets/dps_1.png" style="height: 200px;" />
+        <img data-src="/talks/assets/dps_2.png" style="height: 400px;" />
+        <!-- </div> -->
+      </div>
+      <div class="col">
+        <ul>
+          <li> Let's express the marginal likelihood in terms of x_0: <br>
+            \begin{align*}
+            p_t(y | x_t) &= \int p(y | x_0) \, p(x_0 | x_t) \, d x_0 \\
+            &= \mathbb{E}_{x_0 \sim p(x_0 | x_t)}[p(y | x_0)]
+            \end{align*}
+          </li>
+          <br>
+          <li class="fragment fade-up">The <b>DPS approximation</b>: <br>
+            $$p(y | x_t) \simeq p(y | \hat{x}_0)$$ with $\hat{x}_0 = \mathbb{E}[x_0 | x_t] = x_t - \sigma_t^2 \nabla_{x_t} \log p_t(x_t)$
+          </li>
+          <br>
+          <li class="fragment fade-up">In the case of a Gaussian likelihood and usual linear inverse problem:
+            $$ \nabla_{x_t} \log p_t( y | x_t ) \simeq - \frac{1}{\sigma^2} \nabla_{x_t} \parallel y - \mathbf{A} \hat{x}_0 \parallel_2^2 $$
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">DPS in practice</h3>
+    <iframe data-src="https://dps2022.github.io/diffusion-posterior-sampling-page/" style="width: 100%; height: 600px; border: none;"></iframe>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Better methods: e.g. <b>Moment Matching Posterior Sampling</b> <a href="https://arxiv.org/abs/2405.13712">Rozet et al. 2024</a></h3>
+    <img data-src="/talks/assets/dps_comparison.png" style="height: 500px;" />
+    \[
+    p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0
+    = \mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + A\mathrm{V}[x_0 \mid x_t]A^\top \right)
+    \]
+  </section>
+  
+  <section>
+    <h3 class="slide-title">Advertisement!</h3>
+
+    <div class="container">
+      <div class="col">
+        <img data-src="/talks/assets/azula.png" />
+        <img data-src="https://francois-rozet.github.io/files/avatar.jpg" style="width: 300px;" />
+        <p><b>Francois Rozet</b> @ University of Liege</p>
+      </div>
+      <div class="col">
+        <pre>
+					<code class="language-python">
+from azula.denoise import PreconditionedDenoiser
+from azula.noise import VPSchedule
+from azula.sample import DDPMSampler
+
+# Choose the variance preserving (VP) noise schedule
+schedule = VPSchedule()
+
+# Initialize a denoiser
+denoiser = PreconditionedDenoiser(
+	backbone=CustomNN(in_features=5, out_features=5),
+	schedule=schedule,
+)
+
+# Generate 64 points in 1000 steps
+sampler = DDPMSampler(denoiser.eval(), steps=1000)
+
+x1 = sampler.init((64, 5))
+x0 = sampler(x1)
+					</code>
+					</pre>
+
+        <a href="https://github.com/probabilists/azula">https://github.com/probabilists/azula</a>
+      </div>
+    </div>
+  </section>

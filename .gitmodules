@@ -247,3 +247,6 @@
 [submodule "SanDiego2025/reveal.js"]
 	path = SanDiego2025/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "CosmoStat2026/reveal.js"]
+	path = CosmoStat2026/reveal.js
+	url = https://github.com/EiffL/reveal.js.git

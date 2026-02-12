@@ -1,0 +1,98 @@
+<!-- SECTION 1: Introduction & Why Generative Models -->
+
+<!-- Evolution of generative models -->
+<section>
+  <h3 class="slide-title"> The evolution of generative models </h3>
+
+  <br>
+  <div class='container'>
+    <div class='col'>
+      <div style="position:relative; width:500px; height:600px; margin:0 auto;">
+        <img class="fragment current-visible plain" data-src="/talks/assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+        <img class="fragment plain" data-src="/talks/assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+        <img class="fragment plain" data-src="https://preview.redd.it/de6cf3omoqpa1.jpg?width=960&format=pjpg&auto=webp&v=enabled&s=0f4641ba72ad4c7ef106efafc539804cf7247410" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+      </div>
+    </div>
+
+    <div class='col'>
+      <ul>
+        <li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling
+          2014) </li>
+        <br>
+        <li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br>
+          (Goodfellow et al. 2014)</li>
+        <br>
+        <li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="4"> Midjourney v5 Guided Diffusion (2023)
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br> <br> <br>
+</section>
+
+<!-- Why are these generative models useful -->
+<section>
+  <h3 class="slide-title">Why are these generative models useful?</h3>
+
+  <b class="alert">Implicit distributions are everywhere!</b>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col fragment">
+      <b>Case I</b>: Examples from data, no accurate physical model<br>
+      <img data-src="/talks/assets/real_gal-inv-small.png" style="height:400px;" /><br>
+      <div style="float:right; font-size: 20px">Mandelbaum et al. 2014</div>
+      <br>
+    </div>
+
+    <div class="col fragment">
+      <b>Case II</b>: Physical model only available as a simulator<br>
+      <img data-src='/talks/assets/convergence.png' style="height:400px;" /><br>
+      <div style="float:right; font-size: 20px">Osato et al. 2020</div>
+      <br>
+    </div>
+  </div>
+  <br>
+  <div class="fragment">$\Longrightarrow$ Generative models <b class="alert">will enable Bayesian
+      inference</b> in cases where
+    implicit distributions are involved, by providing a tractable $p_\theta(x)$.
+  </div>
+</section>
+
+<!-- NEW TRANSITION SLIDE -->
+<section>
+  <h3 class="slide-title">Two Applications of Diffusion Models</h3>
+  <br>
+  <br>
+  <p>Today we'll see how diffusion models enable:</p>
+  <br>
+  <div class="container">
+    <div class="col">
+      <div class="block">
+        <div class="block-title">1. Inverse Problems</div>
+        <div class="block-content">
+          Recover $x$ from observations $y = Ax + n$
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="block">
+        <div class="block-title">2. Probabilistic Forecasting</div>
+        <div class="block-content">
+          Predict future states with uncertainty
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <p class="fragment">Both benefit from learned priors $p(x)$</p>
+</section>

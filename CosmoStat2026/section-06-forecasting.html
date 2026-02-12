@@ -1,0 +1,199 @@
+<!-- SECTION 6: Probabilistic Forecasting -->
+<!-- NEW CONTENT - Placeholders based on SLIDE_PLAN.md -->
+
+<!-- Transition to Forecasting -->
+<section>
+  <h3 class="slide-title">A Different Challenge: Probabilistic Forecasting</h3>
+  <br>
+  <div class="container">
+    <div class="col">
+      <div class="block">
+        <div class="block-title">Inverse Problems</div>
+        <div class="block-content">
+          $y = Ax + n$<br>
+          Recover $x$ from $y$
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="block">
+        <div class="block-title">Forecasting</div>
+        <div class="block-content">
+          $x_{t+1} = f(x_t, x_{t-1}, ...)$<br>
+          Predict future from past
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <p class="fragment"><b class="alert">Both need generative models for uncertainty quantification!</b></p>
+</section>
+
+<!-- Why Diffusion Models for Forecasting? -->
+<section>
+  <h3 class="slide-title">Why Diffusion Models for Forecasting?</h3>
+  <br>
+  <ul>
+    <li class="fragment">Capture multi-modal futures
+      <div style="margin-left: 40px; font-size: 0.9em;">Many possible future states are plausible</div>
+    </li>
+    <br>
+    <li class="fragment">Uncertainty quantification
+      <div style="margin-left: 40px; font-size: 0.9em;">Essential for decision-making and risk assessment</div>
+    </li>
+    <br>
+    <li class="fragment"><b class="alert">Challenges:</b>
+      <ul>
+        <li>Long-range temporal dependencies</li>
+        <li>High-resolution data (computational cost)</li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<!-- Multiscale Inference for Long Memory -->
+<section>
+  <h3 class="slide-title">Multiscale Inference for Long-Range Temporal Correlation</h3>
+  <div style="float:right; font-size: 20px">From paper <a href="https://arxiv.org/abs/2511.19390"><img src="https://img.shields.io/badge/arXiv-2511.19390-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col">
+      <h4>Problem:</h4>
+      <ul>
+        <li>Solar active regions have long-term memory</li>
+        <li>Standard autoregressive: error accumulation, limited context</li>
+      </ul>
+      <br>
+      <div class="fragment">
+        <h4>Solution: Multiscale Templates</h4>
+        <ul>
+          <li>Exponentially-spaced time indices</li>
+          <li><b class="alert">Allows exponential horizons with fixed computational budget</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col fragment">
+      <div class="block">
+        <div class="block-content">
+          <p style="text-align:center;">[Multiscale template diagram placeholder]</p>
+          <p style="text-align:center;">Visual showing exponential spacing<br>of temporal context</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solar Dynamics Application -->
+<section>
+  <h3 class="slide-title">Solar Dynamics Application</h3>
+  <br>
+  <div class="container">
+    <div class="col">
+      <h4>Setup:</h4>
+      <ul>
+        <li>512×512 multi-modal solar data</li>
+        <li>12 channels</li>
+      </ul>
+      <br>
+      <div class="fragment">
+        <h4>Wasserstein Distance Improvements:</h4>
+        <table style="font-size: 0.8em;">
+          <tr>
+            <th>Horizon</th>
+            <th>Autoregressive</th>
+            <th>Multiscale</th>
+          </tr>
+          <tr>
+            <td>1-4h</td>
+            <td>3.9</td>
+            <td><b class="alert">3.0</b></td>
+          </tr>
+          <tr>
+            <td>4-16h</td>
+            <td>5.6</td>
+            <td><b class="alert">4.3</b></td>
+          </tr>
+          <tr>
+            <td>16-32h</td>
+            <td>7.9</td>
+            <td><b class="alert">5.5</b></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col fragment">
+      <div class="block">
+        <div class="block-content">
+          <p style="text-align:center;">[Results visualization placeholder]</p>
+          <p style="text-align:center;">Comparison plots<br>Autoregressive vs Multiscale</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latent Diffusion for Computational Efficiency -->
+<section>
+  <h3 class="slide-title">Latent Diffusion for Computational Efficiency</h3>
+  <div style="float:right; font-size: 20px">From paper <a href="https://arxiv.org/abs/2507.02608"><img src="https://img.shields.io/badge/arXiv-2507.02608-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col">
+      <h4>Problem:</h4>
+      <ul>
+        <li>Physics simulations are expensive</li>
+        <li>High-resolution forecasting is computationally prohibitive</li>
+      </ul>
+      <br>
+      <div class="fragment">
+        <h4>Solution: Latent-Space Diffusion</h4>
+        <ul>
+          <li><b class="alert">Accurate up to 1000× compression</b></li>
+          <li>84ms per state on GPU</li>
+          <li>vs hours for traditional simulators</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col fragment">
+      <h4>Applications:</h4>
+      <ul>
+        <li>Euler flow</li>
+        <li>Rayleigh-Bénard convection</li>
+        <li>Astrophysical turbulence</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Latent Diffusion Results -->
+<section>
+  <h3 class="slide-title">Latent Diffusion Results</h3>
+  <br>
+  <div class="container">
+    <div class="col">
+      <h4>Key Findings:</h4>
+      <ul>
+        <li class="fragment">Compression robustness validated</li>
+        <li class="fragment">Power spectrum comparison shows accuracy</li>
+        <li class="fragment">Spread-skill ratio demonstrates proper uncertainty</li>
+        <li class="fragment"><b class="alert">Diffusion models outperform deterministic neural solvers</b></li>
+      </ul>
+    </div>
+    <div class="col fragment">
+      <div class="block">
+        <div class="block-content">
+          <p style="text-align:center;">[Results figures placeholder]</p>
+          <p style="text-align:center;">Compression robustness<br>Power spectra<br>Spread-skill plots</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Forecasting Video (existing) -->
+<section data-background-video="/talks/assets/20250702_1024_0171.mp4" data-background-video-loop data-background-video-muted>
+  <h3>Solar active region prediction with multiscale diffusion model</h3>
+</section>
