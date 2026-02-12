@@ -1,124 +1,107 @@
 <!-- SECTION 4: Learning Priors from Noisy Data (DiEM) -->
-<!-- NEW CONTENT - Placeholders based on SLIDE_PLAN.md -->
 
-<!-- The Problem - What if we don't have clean data? -->
-<section>
-  <h3 class="slide-title">The Problem: What if we don't have clean data?</h3>
+<!-- Crisis Slide -->
+<section class="inverted" data-background="#000">
+  <h3 class="slide-title">A Critical Assumption We've Been Making</h3>
   <br>
-  <ul>
-    <li>So far we assumed access to clean training data $x \sim p(x)$</li>
-    <br>
-    <li class="fragment">But what if we only have noisy observations $y = Ax + n$?</li>
-    <br>
-    <li class="fragment">Real-world scenarios:
-      <ul>
-        <li>Medical imaging (always has measurement noise)</li>
-        <li>Astronomy (atmospheric effects, detector noise)</li>
-        <li>Many other domains where clean data is unavailable</li>
-      </ul>
-    </li>
-  </ul>
   <br>
-  <div class="fragment">
+  <div class="block">
+    <div class="block-title">Assumption so far</div>
+    <div class="block-content">
+      We have access to <b class="alert">clean training data</b> $x \sim p(x)$ to learn our diffusion prior
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="fragment fade-up">
     <div class="block">
-      <div class="block-title">Challenge</div>
+      <div class="block-title">Reality in Scientific Applications</div>
       <div class="block-content">
-        How can we learn diffusion priors when we only have access to corrupted data?
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DiEM - Learning Diffusion Priors by EM -->
-<section>
-  <h3 class="slide-title">DiEM: Learning Diffusion Priors from Observations</h3>
-  <div style="float:right; font-size: 20px">Rozet et al. (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
-  <br>
-  <br>
-  <div class="container">
-    <div class="col">
-      <div class="block">
-        <div class="block-title">Formulation as Empirical Bayes</div>
-        <div class="block-content">
-          <ul>
-            <li>Learn prior $p_\theta(x)$ from noisy observations $y_i$</li>
-            <li>Use Expectation-Maximization (EM) algorithm</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br>
-  <div class="fragment">
-    <h4>EM Algorithm Structure:</h4>
-    <ul>
-      <li><b class="alert">E-step</b>: Sample from posterior $p(x|y)$ using MMPS</li>
-      <li><b class="alert">M-step</b>: Train denoiser on samples</li>
-    </ul>
-  </div>
-  <br>
-  <div class="fragment">
-    <div class="block">
-      <div class="block-title">Key Insight</div>
-      <div class="block-content">
-        Produces "proper" diffusion models that can be used for any downstream task
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DiEM Algorithm Diagram -->
-<section>
-  <h3 class="slide-title">DiEM Algorithm</h3>
-  <br>
-  <div class="container">
-    <div class="col">
-      <h4>Iterative Process:</h4>
-      <ol>
-        <li class="fragment">Initialize with Gaussian prior</li>
-        <li class="fragment">E-step: Sample from posterior using current prior</li>
-        <li class="fragment">M-step: Update prior by training on samples</li>
-        <li class="fragment">Repeat until convergence</li>
-      </ol>
-    </div>
-    <div class="col fragment">
-      <div class="block">
-        <div class="block-content">
-          <p style="text-align:center;">[Diagram placeholder]</p>
-          <p style="text-align:center;">Visual showing the EM loop<br>with prior and posterior improvement</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DiEM Results -->
-<section>
-  <h3 class="slide-title">DiEM Results</h3>
-  <br>
-  <div class="container">
-    <div class="col">
-      <h4>CIFAR-10 with Corruption:</h4>
-      <ul>
-        <li>FID <b class="alert">13.18</b> at 75% corruption</li>
-        <li>vs 28.88 at 60% (baseline)</li>
-      </ul>
-      <br>
-      <div class="fragment">
-        <h4>MRI Reconstruction:</h4>
-        <ul>
-          <li>R=32 acceleration factor</li>
-          <li>Significantly outperforms alternatives</li>
+        We often only have <b class="alert">noisy observations</b> $y = Ax + n$
+        <br><br>
+        <ul style="font-size: 0.9em;">
+          <li><b>Medical imaging</b>: MRI k-space measurements, CT projections</li>
+          <li><b>Astronomy</b>: Atmospheric blur, detector noise, incomplete observations</li>
+          <li><b>Earth sciences</b>: Satellite measurements with gaps and noise</li>
         </ul>
       </div>
     </div>
-    <div class="col fragment">
-      <div class="block">
-        <div class="block-content">
-          <p style="text-align:center;">[Results visualization placeholder]</p>
-          <p style="text-align:center;">Corrupted CIFAR-10 results<br>MRI reconstruction comparisons</p>
+  </div>
+  <br>
+  <div class="fragment fade-up" style="text-align: center; font-size: 1.2em;">
+    <b class="alert">Can we learn diffusion priors directly from corrupted data?</b>
+  </div>
+</section>
+
+<!-- DiEM Solution -->
+<section>
+  <h3 class="slide-title">DiEM: Diffusion Models with <b>Expectation-Maximization</b></h3>
+  <div class="container">
+  <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  </div>
+  <br>
+    <div class="container">
+    <div class="col">
+      <ol style="font-size: 0.95em;">
+        <li><b>Initialize</b> with Gaussian prior $p_0(x) = \mathcal{N}(0, I)$</li>
+        <br>
+        <li class="fragment" data-fragment-index="1">
+          <b class="alert">E-step</b>: For each observation $y_i$:
+          <ul style="font-size: 0.9em;">
+            <li>Sample $\{x_i^{(j)}\}_{j=1}^M \sim p_\theta(x|y_i)$ using <b>MMPS</b></li>
+          </ul>
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="2">
+          <b class="alert">M-step</b>: Update denoiser $d_\theta$:
+          <ul style="font-size: 0.9em;">
+            <li>Standard DSM loss on all samples $\{x_i^{(j)}\}$:</li>
+          </ul>
+          $$\mathcal{L}_{DSM} = \mathbb{E}_{x,u,\sigma} \| u + \sigma d_\theta(x + \sigma u, \sigma) \|^2$$
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="3"><b>Repeat</b> until convergence (typically 10-30 iterations)</li>
+      </ol>
+    </div>
+    <div class="col">
+      <div class="fragment" data-fragment-index="1">
+        <div class="block">
+          <div class="block-title">Why MMPS in E-step?</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            Accurate posterior sampling is <b class="alert">critical</b>
+            <ul>
+              <li>Poor samples → biased prior</li>
+              <li>MMPS provides proper uncertainty</li>
+              <li>Accounts for posterior covariance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="fragment" data-fragment-index="2">
+        <div class="block">
+          <div class="block-title">M-step is Standard Training!</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            <ul>
+              <li>No modification to diffusion training</li>
+              <li>Use any diffusion architecture (UNet, etc.)</li>
+              <li>Leverage existing training infrastructure</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <br>
+</section>
+
+<!-- Convergence Visualization -->
+<section>
+  <h3 class="slide-title">DiEM Convergence: Visual Evidence</h3>
+  <img data-src="/talks/assets/diem.png" class="plain" style="height: 600px;" />
+</section>
+
+
+<section>
+  <img data-src="/talks/assets/diem2.png" class="plain" style="height: 700px;" />
 </section>
