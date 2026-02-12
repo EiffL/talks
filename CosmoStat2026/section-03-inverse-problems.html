@@ -175,15 +175,151 @@
     <iframe data-src="https://dps2022.github.io/diffusion-posterior-sampling-page/" style="width: 100%; height: 600px; border: none;"></iframe>
   </section>
 
+  <!-- MMPS Pedagogical Sequence -->
+
   <section>
-    <h3 class="slide-title">Better methods: e.g. <b>Moment Matching Posterior Sampling</b> <a href="https://arxiv.org/abs/2405.13712">Rozet et al. 2024</a></h3>
+    <h3 class="slide-title">The Problem with DPS</h3>
+    <br>
+    <p>Recall that DPS approximates the marginal likelihood as:</p>
+    $$p_t(y | x_t) \simeq p(y | \hat{x}_0) = \mathcal{N}(y \mid A\hat{x}_0,\, \Sigma_y)$$
+    <p>where $\hat{x}_0 = \mathbb{E}[x_0 | x_t]$ is the denoiser prediction.</p>
+    
+
+    <div class="fragment fade-up">
+      <p>This leads to the posterior score approximation:</p>
+      $$\nabla_{x_t} \log p_t(x_t | y) \simeq \nabla_{x_t} \log p_t(x_t) - \frac{1}{\sigma_y^2} A^\top (A\hat{x}_0 - y)$$
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Problem: Ignoring Posterior Uncertainty</div>
+        <div class="block-content">
+          DPS treats $\hat{x}_0$ as <b class="alert">deterministic</b>, completely ignoring the <b class="alert">posterior variance</b> $\mathbb{V}[x_0 | x_t]$.
+          <br>
+          <div class="fragment">
+          <span>This leads to:</span><br>
+          <ul>
+            <li>Overly narrow posterior coverage</li>
+            <li>Samples inconsistent with observations</li>
+            <li>Instability at early diffusion steps (high noise)</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Better methods: <b>Moment Matching Posterior Sampling</b></h3>
+    <div class="container">
+    <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+    </div>
+    <div class="container">
+      <div class="col">
+        <div class="block">
+          <div class="block-title">Key Insight</div>
+          <div class="block-content">
+            Instead of ignoring uncertainty, <b class="alert">incorporate the covariance structure</b> of the posterior:
+            $$p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0$$
+          </div>
+        </div>
+
+        <br>
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">DPS (wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y \right)$$
+          <p style="font-size: 0.75em;">Assumes posterior concentrates at mean</p>
+        </div>
+
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">MMPS (less wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + {\color{orange}A\mathbb{V}[x_0 \mid x_t]A^\top} \right)$$
+          <p style="font-size: 0.75em;">Accounts for posterior uncertainty</p>
+        </div>
+      </div>
+
+      <div class="col">
+        <img data-src="/talks/assets/rozet_a.png" class="plain" style="height: 600px;" /> <br><br><br>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Tweedie's Covariance Formula</h3>
+
+    <p>For Gaussian-corrupted observations $x_t = x_0 + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \Sigma_t)$:</p>
+
+    <div class="block fragment fade-up">
+      <div class="block-title">Tweedie's Formula</div>
+      <div class="block-content">
+        The posterior covariance can be expressed as:
+        $$\boxed{\mathbb{V}[x_0 \mid x_t] = \Sigma_t \nabla_{x_t}^\top d_\theta(x_t, t)}$$
+        where $d_\theta(x_t, t) = \mathbb{E}[x_0 | x_t]$ is the denoiser network.
+      </div>
+    </div>
+
+    <br>
+    <ul>
+      <li class="fragment">Replaces ad-hoc heuristics like $\Sigma_t$ or $(\Sigma_t^{-1} + \Sigma_x^{-1})^{-1}$</li>
+      <br>
+      <li class="fragment">But there's a challenge: $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ is <b class="alert">intractable</b> in high dimensions!</li>
+    </ul>
+    <br>
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve: $\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$
+          <br><br>
+          <b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation—no need to materialize the full $N \times N$ matrix! In practice: <b>1-3 CG iterations</b> suffice.
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- 
+  <section>
+    <h3 class="slide-title">Making it Tractable: Conjugate Gradient</h3>
+
+    <br>
+    <div class="block">
+      <div class="block-title">Challenge</div>
+      <div class="block-content">
+        Computing the full Jacobian $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ explicitly is <b class="alert">impossible</b> for high-dimensional problems (e.g., images: $N \sim 10^6$).
+      </div>
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve the linear system:
+          $$\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$$
+
+          <br>
+          <ul>
+            <li><b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation</li>
+            <li>No need to materialize the full $N \times N$ matrix!</li>
+            <li>In practice: <b>1-3 CG iterations</b> suffice for robustness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section>
+    <h3 class="slide-title">MMPS: Summary</h3>
     <img data-src="/talks/assets/dps_comparison.png" style="height: 500px;" />
     \[
     p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0
     = \mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + A\mathrm{V}[x_0 \mid x_t]A^\top \right)
     \]
+    <br>
   </section>
   
+
   <section>
     <h3 class="slide-title">Advertisement!</h3>
 
