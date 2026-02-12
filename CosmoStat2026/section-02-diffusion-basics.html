@@ -17,6 +17,20 @@
 </section>
 
 <section>
+  <h3 class="slide-title">Why diffusion works so well: annealing!</h3>
+	<br>
+  <ul>
+    <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+      <div>
+        $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+        <img data-src="/talks/assets/annealing.png" />
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<section>
   <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
   <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
   <ul>
