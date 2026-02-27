@@ -1,0 +1,180 @@
+<section>
+	<h2>A Primer on Diffusion Models</h2>
+	<hr>
+</section>
+
+<section>
+  <h3 class="slide-title">Score-Based Generative Modeling</h3>
+  <div style="float:right; font-size: 20px">Song et al. (2021) <a href="https://arxiv.org/abs/2011.13456"><img src="https://img.shields.io/badge/arXiv-2011.13456-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <img data-src="/talks/assets/diffusion.png" style="height:350px;" /><br>
+  <ul>
+    <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+      $p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$
+    </li>
+	<br>
+    <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Why diffusion works so well: annealing!</h3>
+	<br>
+  <ul>
+    <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+      <div>
+        $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+        <img data-src="/talks/assets/annealing.png" />
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <ul>
+    <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+      <ul>
+        <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+          $x^\prime = x + u$
+        </li>
+        <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+          $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+        </li>
+        <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+          $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="fragment fade-up">
+    <div class="container">
+      <div class="col">$\boldsymbol{x}'$
+      </div>
+      <div class="col">$\boldsymbol{x}$
+      </div>
+      <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+      <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+    </div>
+    <img data-src="/talks/assets/denoised_mnist.png" style="width:1200px;" />
+  </div>
+</section>
+
+<section>
+	<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
+
+	<div class="container">
+		<div class="col">
+			<br>
+			<img data-src="/talks/assets/unet.png" data-fragment-index="1" /><br>
+			<br> A standard UNet
+		</div>
+
+		<div class="col">
+			<ul>
+				<li> Typically use a standard residual UNet, and adopt a residual
+					score matching loss:
+					$$ \mathcal{L}_{DSM} = \underset{\boldsymbol{x} \sim P}{\mathbb{E}} \underset{\begin{subarray}{c}
+					\boldsymbol{u} \sim \mathcal{N}(0, I) \\
+					\sigma_s \sim \mathcal{N}(0, s^2)
+					\end{subarray}}{\mathbb{E}} \parallel \boldsymbol{u} + \sigma_s \boldsymbol{r}_{\theta}(\boldsymbol{x} + \sigma_s \boldsymbol{u}, \sigma_s) \parallel_2^2$$
+					$\Longrightarrow$ direct estimator of the score $\nabla \log p_\sigma(x)$
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+
+<!-- 
+<section>
+			  <h3 class="slide-title">First realization: The score is all you need!</h3>
+			  <br>
+			  <div class="container">
+				  <div class="col">
+					  <ul>
+						  <li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+							  <b class="alert">only need access to the score</b> of the posterior:
+							  $$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+							  d
+							  \color{orange}x}$$
+							  <ul>
+								  <li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+								  <li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+							  </ul>
+						  </li>
+						  <br>
+					  </ul>
+				  </div>
+				  <div class="col">
+					  <img data-src="/talks/assets/score_two_moons.png" />
+				  </div>
+			  </div>
+			  <br>
+			  <br>
+			  <ul>
+				  <li > The score of the full posterior is simply:
+					  $$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known explicitly}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{known implicitly}}$$
+  $\Longrightarrow$ "all" we have to do is <b class="alert">model/learn the score of the prior</b>.
+  </li>
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <ul>
+    <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+      <ul>
+        <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+          $$x^\prime = x + u$$
+        </li>
+        <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+          $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+        </li>
+        <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+          $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="fragment fade-up">
+    <div class="container">
+      <div class="col">$\boldsymbol{x}'$
+      </div>
+      <div class="col">$\boldsymbol{x}$
+      </div>
+      <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+      <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+    </div>
+    <img data-src="/talks/assets/denoised_mnist.png" style="width:1200px;" />
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">Second Realization: Annealing is fantastic!</h3>
+
+  <ul>
+    <li> Even with knowledge of the score, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+    </li>
+    <br>
+    <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+      <div>
+        $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+        <img data-src="/talks/assets/annealing.png" />
+      </div>
+    </li>
+
+    <li class="fragment fade-up"> Hints to running many MCMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+    </li>
+  </ul>
+</section>
+
+ -->

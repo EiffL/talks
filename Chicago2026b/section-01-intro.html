@@ -1,0 +1,123 @@
+<!-- SECTION 1: Introduction & Why Generative Models -->
+
+<!-- Evolution of generative models -->
+<section>
+  <h3 class="slide-title"> The evolution of generative models </h3>
+
+  <br>
+  <div class='container'>
+    <div class='col'>
+      <div style="position:relative; width:500px; height:600px; margin:0 auto;">
+        <img class="fragment current-visible plain" data-src="/talks/assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+        <img class="fragment plain" data-src="/talks/assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+        <img class="fragment plain" data-src="https://preview.redd.it/de6cf3omoqpa1.jpg?width=960&format=pjpg&auto=webp&v=enabled&s=0f4641ba72ad4c7ef106efafc539804cf7247410" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+      </div>
+    </div>
+
+    <div class='col'>
+      <ul>
+        <li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling
+          2014) </li>
+        <br>
+        <li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br>
+          (Goodfellow et al. 2014)</li>
+        <br>
+        <li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="4"> Midjourney v5 Guided Diffusion (2023)
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br> <br> <br>
+</section>
+
+<section>
+  <h3 class="slide-title">Generative modeling</h3>
+  <br>
+  <ul>
+    <li>Generative modeling aims to <b>learn an <b class="alert">implicit</b> distribution
+        $\mathbb{P}$</b>
+      from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+    </li>
+    <br>
+    <li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+      that tries to be close to $\mathbb{P}$.
+    </li>
+  </ul>
+
+  <br>
+  <div class="container">
+    <div class="col fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      True $\mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      Samples $x_i \sim \mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      Model $\mathbb{P}_\theta$
+    </div>
+  </div>
+  <br>
+  <br>
+  <ul>
+    <li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
+      and/or <b class="alert">evaluate the probability $p_\theta(x)$</b>.
+    </li>
+  </ul>
+
+</section>
+
+<!-- Why are these generative models useful - Combined with applications -->
+<section>
+  <h3 class="slide-title">Why are generative models useful?</h3>
+
+  <b class="alert">Implicit distributions are everywhere!</b>
+  <span class="fragment">Generative models <b class="alert">enable Bayesian inference</b> by providing tractable $p_\theta(x)$</span>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col">
+      <div class="block fragment">
+        <div class="block-title">Inverse Problems</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Recover <b>posterior $p(x|y)$</b> from observations $y = Ax + n$<br> when the 
+          prior $p(x)$ is only known implicitly (data-driven)
+          <br>
+          <img class="plain" data-src="/talks/assets/knee.gif" style="height:400px; display: block; margin: 10px auto 0 auto;" />
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="block fragment">
+        <div class="block-title">Probabilistic Forecasting</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Forecast <b>posterior $p(x_{t+1} | x_t)$</b> from examples of past trajectories. 
+          <br>
+          <video class="plain" data-src="/talks/assets/20250702_1024_0171.mp4" style="height:400px; display: block; margin: 10px auto 0 auto;" autoplay loop muted></video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="fragment" style="text-align: center;">
+    $\Longrightarrow$ <b class="alert">Diffusion models</b> for these tasks: methods and challenges.
+  </div>
+</section>

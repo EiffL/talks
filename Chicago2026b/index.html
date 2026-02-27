@@ -1,0 +1,1105 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Diffusion Models for Inverse Problems and Forecasting</title>
+
+    <meta name="description" content="February 2026">
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section data-background-iframe="background.html">
+                <div class="container">
+                    <div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+                        <h1>Diffusion Models for Inverse Problems and Forecasting</h1>
+                    </div>
+                </div>
+                <hr>
+                <div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+                    <div class="container">
+                        <div class="col">
+                            <div align="left" style="margin-left: 20px;">
+                                <h2>François Lanusse</h2>
+                                <br>
+                                <img src="/talks/assets/CosmoStatDarkBK.png" class="plain"></img>
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <img src="/talks/assets/cnrs_logo.svg" class="plain" height="150"></img>
+                        </div>
+
+                        <div class="col">
+                            <br>
+                            <br>
+                            <br>
+                            <img src="/talks/assets/aim.png" class="plain" height="150"></img>
+                        </div>
+                    </div>
+                    <!-- <div> slides at <a href="https://eiffl.github.io/talks/CosmoStat2026">eiffl.github.io/talks/CosmoStat2026</a>
+                    </div> -->
+                </div>
+            </section>
+
+            <!-- SECTION 1: Introduction & Why Generative Models -->
+<!-- SECTION 1: Introduction & Why Generative Models -->
+<section>
+<!-- Evolution of generative models -->
+<section>
+  <h3 class="slide-title"> The evolution of generative models </h3>
+
+  <br>
+  <div class='container'>
+    <div class='col'>
+      <div style="position:relative; width:500px; height:600px; margin:0 auto;">
+        <img class="fragment current-visible plain" data-src="/talks/assets/DBN.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="0" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/vae_faces.jpg" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="1" />
+        <img class="fragment current-visible plain" data-src="/talks/assets/gan-samples-1.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="2" />
+        <img class="fragment plain" data-src="/talks/assets/karras2017.png" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="3" />
+        <img class="fragment plain" data-src="https://preview.redd.it/de6cf3omoqpa1.jpg?width=960&format=pjpg&auto=webp&v=enabled&s=0f4641ba72ad4c7ef106efafc539804cf7247410" style="position:absolute;top:0;left:0;width:500px;" data-fragment-index="4" />
+      </div>
+    </div>
+
+    <div class='col'>
+      <ul>
+        <li class="fragment" data-fragment-index="0"> Deep Belief Network <br> (Hinton et al. 2006)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="1"> Variational AutoEncoder <br> (Kingma & Welling
+          2014) </li>
+        <br>
+        <li class="fragment" data-fragment-index="2"> Generative Adversarial Network <br>
+          (Goodfellow et al. 2014)</li>
+        <br>
+        <li class="fragment" data-fragment-index="3"> Wasserstein GAN <br> (Arjovsky et al. 2017)
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="4"> Midjourney v5 Guided Diffusion (2023)
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br> <br> <br>
+</section>
+
+<section>
+  <h3 class="slide-title">Generative modeling</h3>
+  <br>
+  <ul>
+    <li>Generative modeling aims to <b>learn an <b class="alert">implicit</b> distribution
+        $\mathbb{P}$</b>
+      from which the <b>training set $X = \{x_0, x_1, \ldots, x_n \}$</b> is drawn.
+    </li>
+    <br>
+    <li class='fragment'> Usually, this means building a parametric model $\mathbb{P}_\theta$
+      that tries to be close to $\mathbb{P}$.
+    </li>
+  </ul>
+
+  <br>
+  <div class="container">
+    <div class="col fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756538/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      True $\mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756539/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      Samples $x_i \sim \mathbb{P}$
+    </div>
+
+    <div class="col  fragment fade-up">
+      <img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/866922/images/7756554/pasted-from-clipboard.png"
+        class="plain"></img>
+      <br>
+      Model $\mathbb{P}_\theta$
+    </div>
+  </div>
+  <br>
+  <br>
+  <ul>
+    <li class="fragment"> Once trained, you can typically <b>sample from $\mathbb{P}_\theta$</b>
+      and/or <b class="alert">evaluate the probability $p_\theta(x)$</b>.
+    </li>
+  </ul>
+
+</section>
+
+<!-- Why are these generative models useful - Combined with applications -->
+<section>
+  <h3 class="slide-title">Why are generative models useful?</h3>
+
+  <b class="alert">Implicit distributions are everywhere!</b>
+  <span class="fragment">Generative models <b class="alert">enable Bayesian inference</b> by providing tractable $p_\theta(x)$</span>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col">
+      <div class="block fragment">
+        <div class="block-title">Inverse Problems</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Recover <b>posterior $p(x|y)$</b> from observations $y = Ax + n$<br> when the 
+          prior $p(x)$ is only known implicitly (data-driven)
+          <br>
+          <img class="plain" data-src="/talks/assets/knee.gif" style="height:400px; display: block; margin: 10px auto 0 auto;" />
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="block fragment">
+        <div class="block-title">Probabilistic Forecasting</div>
+        <div class="block-content" style="text-align: left; font-size: 0.85em;">
+          Forecast <b>posterior $p(x_{t+1} | x_t)$</b> from examples of past trajectories. 
+          <br>
+          <video class="plain" data-src="/talks/assets/20250702_1024_0171.mp4" style="height:400px; display: block; margin: 10px auto 0 auto;" autoplay loop muted></video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="fragment" style="text-align: center;">
+    $\Longrightarrow$ <b class="alert">Diffusion models</b> for these tasks: methods and challenges.
+  </div>
+</section>
+
+</section>
+            <!-- SECTION 2: What Are Diffusion Models? (Diffusion Basics) -->
+
+<section>
+	<h2>A Primer on Diffusion Models</h2>
+	<hr>
+</section>
+
+<section>
+
+<section>
+  <h3 class="slide-title">Score-Based Generative Modeling</h3>
+  <div style="float:right; font-size: 20px">Song et al. (2021) <a href="https://arxiv.org/abs/2011.13456"><img src="https://img.shields.io/badge/arXiv-2011.13456-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <img data-src="/talks/assets/diffusion.png" style="height:350px;" /><br>
+  <ul>
+    <li class="fragment"> The SDE defines a <b class="alert">marginal distribution $p_t(x)$</b> as the convolution of the target distribution $p(x)$ with a noise kernel $p_{t|s}(\cdot | x_s)$:
+      $p_t(x) = \int p(x_s) p_{t|s}(x | x_s) d x_s$
+    </li>
+	<br>
+    <li class="fragment"> For a given forward SDE that evolves $p(x)$ to $p_T(x)$, there exists a <b>reverse SDE</b> that evolves $p_T(x)$ back into $p(x)$. It involves having access to the <b class="alert">marginal score $\nabla_x \log_t p(x)$</b>.</li>
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Why diffusion works so well: annealing!</h3>
+	<br>
+  <ul>
+    <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+      <div>
+        $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+        <img data-src="/talks/assets/annealing.png" />
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <ul>
+    <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+      <ul>
+        <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+          $x^\prime = x + u$
+        </li>
+        <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+          $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+        </li>
+        <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+          $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="fragment fade-up">
+    <div class="container">
+      <div class="col">$\boldsymbol{x}'$
+      </div>
+      <div class="col">$\boldsymbol{x}$
+      </div>
+      <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+      <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+    </div>
+    <img data-src="/talks/assets/denoised_mnist.png" style="width:1200px;" />
+  </div>
+</section>
+
+<section>
+	<h3 class="slide-title">Training a Neural Score Estimator in practice</h3>
+
+	<div class="container">
+		<div class="col">
+			<br>
+			<img data-src="/talks/assets/unet.png" data-fragment-index="1" /><br>
+			<br> A standard UNet
+		</div>
+
+		<div class="col">
+			<ul>
+				<li> Typically use a standard residual UNet, and adopt a residual
+					score matching loss:
+					$$ \mathcal{L}_{DSM} = \underset{\boldsymbol{x} \sim P}{\mathbb{E}} \underset{\begin{subarray}{c}
+					\boldsymbol{u} \sim \mathcal{N}(0, I) \\
+					\sigma_s \sim \mathcal{N}(0, s^2)
+					\end{subarray}}{\mathbb{E}} \parallel \boldsymbol{u} + \sigma_s \boldsymbol{r}_{\theta}(\boldsymbol{x} + \sigma_s \boldsymbol{u}, \sigma_s) \parallel_2^2$$
+					$\Longrightarrow$ direct estimator of the score $\nabla \log p_\sigma(x)$
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+
+<!-- 
+<section>
+			  <h3 class="slide-title">First realization: The score is all you need!</h3>
+			  <br>
+			  <div class="container">
+				  <div class="col">
+					  <ul>
+						  <li> Whether you are looking for the MAP or sampling with HMC or MALA, you
+							  <b class="alert">only need access to the score</b> of the posterior:
+							  $$\frac{\color{orange} d \color{orange}\log \color{orange}p\color{orange}(\color{orange}x \color{orange}|\color{orange} y\color{orange})}{\color{orange}
+							  d
+							  \color{orange}x}$$
+							  <ul>
+								  <li>Gradient descent: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) $</li>
+								  <li>Langevin algorithm: $x_{t+1} = x_t + \tau \nabla_x \log p(x_t | y) + \sqrt{2\tau} n_t$ </li>
+							  </ul>
+						  </li>
+						  <br>
+					  </ul>
+				  </div>
+				  <div class="col">
+					  <img data-src="/talks/assets/score_two_moons.png" />
+				  </div>
+			  </div>
+			  <br>
+			  <br>
+			  <ul>
+				  <li > The score of the full posterior is simply:
+					  $$\nabla_x \log p(x |y) = \underbrace{\nabla_x \log p(y |x)}_{\mbox{known explicitly}} \quad + \quad \underbrace{\nabla_x \log p(x)}_{\mbox{known implicitly}}$$
+  $\Longrightarrow$ "all" we have to do is <b class="alert">model/learn the score of the prior</b>.
+  </li>
+  </ul>
+</section>
+
+<section>
+  <h3 class="slide-title">Neural Score Estimation by Denoising Score Matching</h3>
+  <div style="float:right; font-size: 20px">Vincent (2011) <a href="https://doi.org/10.1162/NECO_a_00142"><img src="https://img.shields.io/badge/DOI-10.1162%2FNECO__a__00142-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <ul>
+    <li><b>Denoising Score Matching</b>: An optimal <b class="alert">Gaussian denoiser learns the score</b> of a given distribution.
+      <ul>
+        <li class="fragment fade-up"> If $x \sim \mathbb{P}$ is corrupted by additional Gaussian noise $u \in \mathcal{N}(0, \sigma^2)$ to yield
+          $$x^\prime = x + u$$
+        </li>
+        <li class="fragment fade-up"> Let's consider a denoiser $r_\theta$ trained under an $\ell_2$ loss:
+          $$\mathcal{L}=\parallel x - r_\theta(x^\prime, \sigma) \parallel_2^2$$
+        </li>
+        <li class="fragment fade-up"> The optimal denoiser $r_{\theta^\star}$ verifies:
+          $$\boxed{\boldsymbol{r}_{\theta^\star}(\boldsymbol{x}', \sigma) = \boldsymbol{x}' + \sigma^2 \nabla_{\boldsymbol{x}} \log p_{\sigma^2}(\boldsymbol{x}')}$$
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="fragment fade-up">
+    <div class="container">
+      <div class="col">$\boldsymbol{x}'$
+      </div>
+      <div class="col">$\boldsymbol{x}$
+      </div>
+      <div class="col">$\boldsymbol{x}'- \boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+      <div class="col">$\boldsymbol{r}^\star(\boldsymbol{x}', \sigma)$
+      </div>
+    </div>
+    <img data-src="/talks/assets/denoised_mnist.png" style="width:1200px;" />
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">Second Realization: Annealing is fantastic!</h3>
+
+  <ul>
+    <li> Even with knowledge of the score, <b class="alert">sampling in high number of dimensions is difficult!</b><br>
+    </li>
+    <br>
+    <li class="fragment fade-up"> Convolving a target distribution $p$ with a noise kernel, makes $p_\sigma(x) = \int \mathcal{N}(x; x^\prime, \sigma^2) (x^\prime) d x^{\prime}$ it much better behaved
+      <div>
+        $$\sigma_1 > \sigma_2 > \sigma_3 > \sigma_4 $$
+        <img data-src="/talks/assets/annealing.png" />
+      </div>
+    </li>
+
+    <li class="fragment fade-up"> Hints to running many MCMC chains in parallel, progressively annealing the $\sigma$ to 0, <b class="chain">keep last point in the chain as independent sample</b>.
+    </li>
+  </ul>
+</section>
+
+ -->
+</section>
+            
+            <!-- SECTION 3: Diffusion Models for Inverse Problems -->
+
+            <section>
+  <h2>Tractable Bayesian Inference in High Dimensions for Inverse Problems</h2>
+  <hr>
+</section>
+
+<section>
+
+<section>
+  <h3 class="slide-title">Linear inverse problems</h3>
+
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+  <br>
+  $\mathbf{A}$ is known and encodes our physical understanding of the problem.
+  <span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse
+    problem is ill-posed with no unique solution $x$</span>
+  <div class="container fragment fade-up">
+    <div class="col">
+      <img data-src="/talks/assets/pluto_smooth.png" class="plain"></img>
+      Deconvolution
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/pluto_missing.png" class="plain"></img>
+      Inpainting
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/plutoNoise.png" class="plain"></img>
+      Denoising
+    </div>
+  </div>
+
+</section>
+
+<section data-vertical-align-top>
+  <h3 class="slide-title">A Bayesian view of the problem</h3>
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+
+  <br>
+  <div class="fragment">
+    $$ p(x | y) \propto p(y | x) \ p(x) $$
+  </div>
+  <br>
+
+  <ul>
+    <li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the
+        physics</b><br>
+    </li>
+    <br>
+    <li class="fragment fade-up">$p(x)$ is our prior knowledge on the solution.</li>
+  </ul>
+  <br>
+  <br>
+  <div class="fragment fade-up">
+    With these concepts in hand, we can for instance estimate the <b class="alert">Maximum A Posteriori solution</b>:
+    <br>
+    $$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+    For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ - \frac{1}{2} \parallel y -
+    \mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+  </div>
+  <br>
+  <div class="fragment fade-up">
+    Or, we can aim to sample from the <b class="alert">full posterior distribution</b> by MCMC techniques.
+  </div>
+  <br>
+  <!-- <div class="fragment fade-up">
+    <div class="block">
+      <div class="block-title">Diffusion models for posterior inference</div>
+      <div class="block-content">
+        Take the gradient to get the posterior score:
+        $$\nabla_x \log p(x | y) = \underbrace{\nabla_x \log p(y | x)}_{\text{known}} + \underbrace{\nabla_x \log p(x)}_{\text{prior model}}$$
+        <span class="fragment"><b class="alert">This works... but only for $\sigma = 0$!</b></span>
+      </div>
+    </div>
+  </div> -->
+  <br>
+  <div class="fragment fade-up">
+    <h3>How do you choose the prior ?</h3>
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">A simple example of implicit prior</h3>
+  $$ \boxed{{\color{Orchid} y} = {\color{SkyBlue} x} + n} $$
+				<div class="container">
+					<div class="col">
+						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="/talks/assets/points.png"
+								style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+							<div class="fig-container fragment" data-file="dgm_prior_denoising.html"
+								data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;"
+								data-fragment-index="1"></div>
+						</div>
+						<!-- <img data-src="/talks/assets/points.png"/>
+																														  															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
+					</div>
+
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Let us assume we have access to examples of $
+								{\color{SkyBlue} x}$ without noise.</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">We learn the <b class="alert">distribution of
+									noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.
+							</li>
+							<br>
+							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+																														  																<br> -->
+							<li class="fragment">The solution should lie on the <b class="alert">realistic data
+									manifold</b>, symbolized by the two-moons distribution.
+								<div class="fragment">
+									<p> We want to solve for the Maximum A Posterior solution: </p>
+									$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x}
+									\parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+
+									This can be done by <b>gradient descent</b>.
+                  <br>
+                  <br>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+
+  <section class="inverted" data-background="#000">
+    <h3 class="slide-title"> First Issue: The Score We Need vs. The Score We Have</h3>
+    <br>
+        Sampling the posterior of an inverse problem with the SDE of diffusion models would look like this:
+        $$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_{\sigma(t)}(x|y)}_{\mbox{annealed posterior score}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
+      
+      <br>
+    <ul>
+      <li class="fragment">But diffusion models learn the <b class="alert">score of the prior distribution</b>:
+        $$\nabla_x \log p_\sigma(x)$$
+      </li>
+      <br>
+      <li class="fragment">And these are <b class="alert">NOT easily related</b>!
+        $$\boxed{\nabla_x \log p_\sigma(x | y) \neq \nabla_x \log p_\sigma(y | x) + \nabla_x \log p_\sigma(x)}$$
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Approximation methods for the marginal likelihood: <b>DPS</b> <a href="https://arxiv.org/abs/2209.14687">(Chung et al. 2023)</a></h3>
+    <div class="container">
+      <div class="col">
+        <!-- <div class="r-stack"> -->
+        <img data-src="/talks/assets/dps_1.png" style="height: 200px;" />
+        <img data-src="/talks/assets/dps_2.png" style="height: 400px;" />
+        <!-- </div> -->
+      </div>
+      <div class="col">
+        <ul>
+          <li> Let's express the marginal likelihood in terms of $x_0$: <br>
+            \begin{align*}
+            p_t(y | x_t) &= \int p(y | x_0) \, p(x_0 | x_t) \, d x_0 \\
+            &= \mathbb{E}_{x_0 \sim p(x_0 | x_t)}[p(y | x_0)]
+            \end{align*}
+          </li>
+          <br>
+          <li class="fragment fade-up">The <b>DPS approximation</b>: <br>
+            $$p(y | x_t) \simeq p(y | \hat{x}_0)$$ with $\hat{x}_0 = \mathbb{E}[x_0 | x_t] = x_t - \sigma_t^2 \nabla_{x_t} \log p_t(x_t)$
+          </li>
+          <br>
+          <li class="fragment fade-up">In the case of a Gaussian likelihood and usual linear inverse problem:
+            $$ \nabla_{x_t} \log p_t( y | x_t ) \simeq - \frac{1}{\sigma^2} \nabla_{x_t} \parallel y - \mathbf{A} \hat{x}_0 \parallel_2^2 $$
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">DPS in practice</h3>
+    <iframe data-src="https://dps2022.github.io/diffusion-posterior-sampling-page/" style="width: 100%; height: 600px; border: none;"></iframe>
+  </section>
+
+  <!-- MMPS Pedagogical Sequence -->
+
+  <section>
+    <h3 class="slide-title">The Problem with DPS</h3>
+    <br>
+    <p>Recall that DPS approximates the marginal likelihood as:</p>
+    $$p_t(y | x_t) \simeq p(y | \hat{x}_0) = \mathcal{N}(y \mid A\hat{x}_0,\, \Sigma_y)$$
+    <p>where $\hat{x}_0 = \mathbb{E}[x_0 | x_t]$ is the denoiser prediction.</p>
+    
+
+    <div class="fragment fade-up">
+      <p>This leads to the posterior score approximation:</p>
+      $$\nabla_{x_t} \log p_t(x_t | y) \simeq \nabla_{x_t} \log p_t(x_t) - \frac{1}{\sigma_y^2} A^\top (A\hat{x}_0 - y)$$
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Problem: Ignoring Posterior Uncertainty</div>
+        <div class="block-content">
+          DPS treats $\hat{x}_0$ as <b class="alert">deterministic</b>, completely ignoring the <b class="alert">posterior variance</b> $\mathbb{V}[x_0 | x_t]$.
+          <br>
+          <div class="fragment">
+          <span>This leads to:</span><br>
+          <ul>
+            <li>Overly narrow posterior coverage</li>
+            <li>Samples inconsistent with observations</li>
+            <li>Instability at early diffusion steps (high noise)</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Better methods: <b>Moment Matching Posterior Sampling</b></h3>
+    <div class="container">
+    <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+    </div>
+    <div class="container">
+      <div class="col">
+        <div class="block">
+          <div class="block-title">Key Insight</div>
+          <div class="block-content">
+            Instead of ignoring uncertainty, <b class="alert">incorporate the covariance structure</b> of the posterior:
+            $$p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0$$
+          </div>
+        </div>
+
+        <br>
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">DPS (wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y \right)$$
+          <p style="font-size: 0.75em;">Assumes posterior concentrates at mean</p>
+        </div>
+
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">MMPS (less wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + {\color{orange}A\mathbb{V}[x_0 \mid x_t]A^\top} \right)$$
+          <p style="font-size: 0.75em;">Accounts for posterior uncertainty</p>
+        </div>
+      </div>
+
+      <div class="col">
+        <img data-src="/talks/assets/rozet_a.png" class="plain" style="height: 600px;" /> <br><br><br>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Tweedie's Covariance Formula</h3>
+
+    <p>For Gaussian-corrupted observations $x_t = x_0 + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \Sigma_t)$:</p>
+
+    <div class="block fragment fade-up">
+      <div class="block-title">Tweedie's Formula</div>
+      <div class="block-content">
+        The posterior covariance can be expressed as:
+        $$\boxed{\mathbb{V}[x_0 \mid x_t] = \Sigma_t \nabla_{x_t}^\top d_\theta(x_t, t)}$$
+        where $d_\theta(x_t, t) = \mathbb{E}[x_0 | x_t]$ is the denoiser network.
+      </div>
+    </div>
+
+    <br>
+    <ul>
+      <li class="fragment">Replaces ad-hoc heuristics like $\Sigma_t$ or $(\Sigma_t^{-1} + \Sigma_x^{-1})^{-1}$</li>
+      <br>
+      <li class="fragment">But there's a challenge: $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ is <b class="alert">intractable</b> in high dimensions!</li>
+    </ul>
+    <br>
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve: $\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$
+          <br><br>
+          <b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation—no need to materialize the full $N \times N$ matrix! In practice: <b>1-3 CG iterations</b> suffice.
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- 
+  <section>
+    <h3 class="slide-title">Making it Tractable: Conjugate Gradient</h3>
+
+    <br>
+    <div class="block">
+      <div class="block-title">Challenge</div>
+      <div class="block-content">
+        Computing the full Jacobian $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ explicitly is <b class="alert">impossible</b> for high-dimensional problems (e.g., images: $N \sim 10^6$).
+      </div>
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve the linear system:
+          $$\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$$
+
+          <br>
+          <ul>
+            <li><b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation</li>
+            <li>No need to materialize the full $N \times N$ matrix!</li>
+            <li>In practice: <b>1-3 CG iterations</b> suffice for robustness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section>
+    <h3 class="slide-title">MMPS: Summary</h3>
+    <img data-src="/talks/assets/dps_comparison.png" style="height: 500px;" />
+    \[
+    p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0
+    = \mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + A\mathrm{V}[x_0 \mid x_t]A^\top \right)
+    \]
+    <br>
+  </section>
+  
+
+  <section>
+    <h3 class="slide-title">Advertisement!</h3>
+
+    <div class="container">
+      <div class="col">
+        <img data-src="/talks/assets/azula.png" />
+        <img data-src="https://francois-rozet.github.io/files/avatar.jpg" style="width: 300px;" />
+        <p><b>Francois Rozet</b> @ University of Liege</p>
+      </div>
+      <div class="col">
+        <pre>
+					<code class="language-python">
+from azula.denoise import PreconditionedDenoiser
+from azula.noise import VPSchedule
+from azula.sample import DDPMSampler
+
+# Choose the variance preserving (VP) noise schedule
+schedule = VPSchedule()
+
+# Initialize a denoiser
+denoiser = PreconditionedDenoiser(
+	backbone=CustomNN(in_features=5, out_features=5),
+	schedule=schedule,
+)
+
+# Generate 64 points in 1000 steps
+sampler = DDPMSampler(denoiser.eval(), steps=1000)
+
+x1 = sampler.init((64, 5))
+x0 = sampler(x1)
+					</code>
+					</pre>
+
+        <a href="https://github.com/probabilists/azula">https://github.com/probabilists/azula</a>
+      </div>
+    </div>
+  </section>
+            </section>
+            <!-- SECTION 4: Learning Priors from Noisy Data (DiEM) -->
+<!-- SECTION 4: Learning Priors from Noisy Data (DiEM) -->
+<section>
+<!-- Crisis Slide -->
+<section class="inverted" data-background="#000">
+  <h3 class="slide-title">A Critical Assumption We've Been Making</h3>
+  <br>
+  <br>
+  <div class="block">
+    <div class="block-title">Assumption so far</div>
+    <div class="block-content">
+      We have access to <b class="alert">clean training data</b> $x \sim p(x)$ to learn our diffusion prior
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="fragment fade-up">
+    <div class="block">
+      <div class="block-title">Reality in Scientific Applications</div>
+      <div class="block-content">
+        We often only have <b class="alert">noisy observations</b> $y = Ax + n$
+        <br><br>
+        <ul style="font-size: 0.9em;">
+          <li><b>Medical imaging</b>: MRI k-space measurements, CT projections</li>
+          <li><b>Astronomy</b>: Atmospheric blur, detector noise, incomplete observations</li>
+          <li><b>Earth sciences</b>: Satellite measurements with gaps and noise</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="fragment fade-up" style="text-align: center; font-size: 1.2em;">
+    <b class="alert">Can we learn diffusion priors directly from corrupted data?</b>
+  </div>
+</section>
+
+<!-- DiEM Solution -->
+<section>
+  <h3 class="slide-title">DiEM: Diffusion Models with <b>Expectation-Maximization</b></h3>
+  <div class="container">
+  <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  </div>
+  <br>
+    <div class="container">
+    <div class="col">
+      <ol style="font-size: 0.95em;">
+        <li><b>Initialize</b> with Gaussian prior $p_0(x) = \mathcal{N}(0, I)$</li>
+        <br>
+        <li class="fragment" data-fragment-index="1">
+          <b class="alert">E-step</b>: For each observation $y_i$:
+          <ul style="font-size: 0.9em;">
+            <li>Sample $\{x_i^{(j)}\}_{j=1}^M \sim p_\theta(x|y_i)$ using <b>MMPS</b></li>
+          </ul>
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="2">
+          <b class="alert">M-step</b>: Update denoiser $d_\theta$:
+          <ul style="font-size: 0.9em;">
+            <li>Standard DSM loss on all samples $\{x_i^{(j)}\}$:</li>
+          </ul>
+          $$\mathcal{L}_{DSM} = \mathbb{E}_{x,u,\sigma} \| u + \sigma d_\theta(x + \sigma u, \sigma) \|^2$$
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="3"><b>Repeat</b> until convergence (typically 10-30 iterations)</li>
+      </ol>
+    </div>
+    <div class="col">
+      <div class="fragment" data-fragment-index="1">
+        <div class="block">
+          <div class="block-title">Why MMPS in E-step?</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            Accurate posterior sampling is <b class="alert">critical</b>
+            <ul>
+              <li>Poor samples → biased prior</li>
+              <li>MMPS provides proper uncertainty</li>
+              <li>Accounts for posterior covariance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="fragment" data-fragment-index="2">
+        <div class="block">
+          <div class="block-title">M-step is Standard Training!</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            <ul>
+              <li>No modification to diffusion training</li>
+              <li>Use any diffusion architecture (UNet, etc.)</li>
+              <li>Leverage existing training infrastructure</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</section>
+
+<!-- Convergence Visualization -->
+<section>
+  <h3 class="slide-title">DiEM Convergence: Visual Evidence</h3>
+  <img data-src="/talks/assets/diem.png" class="plain" style="height: 600px;" />
+</section>
+
+
+<section>
+  <img data-src="/talks/assets/diem2.png" class="plain" style="height: 700px;" />
+</section>
+</section>
+            <!-- SECTION 6: Probabilistic Forecasting -->
+<section>
+  <h2>Probabilistic Forecasting</h2>
+  <hr>
+</section>
+<section>
+<!-- Forecasting Video (existing) -->
+<section data-background-video="/talks/assets/20250702_1024_0171.mp4" data-background-video-loop data-background-video-muted>
+</section>
+
+<!-- Forecasting as Conditional Distribution -->
+<section>
+  <h3 class="slide-title">Forecasting as Conditional Distribution Sampling</h3>
+  <div style="float:right; font-size: 20px">Morel et al. 2025 <a href="https://arxiv.org/abs/2511.19390"><img src="https://img.shields.io/badge/arXiv-2511.19390-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  <br>
+  <img data-src="/talks/assets/rudy1.png" class="plain"></img>
+  <div class="block">
+    <div class="block-title">Probabilistic Formulation</div>
+    <div class="block-content">
+      Learn the conditional distribution of future trajectories given past observations:
+      $$\boxed{p(x_{1:T} \mid x_{t \leq 0})}$$
+    </div>
+  </div>
+</section>
+
+<!-- Why Deterministic Methods Fail -->
+<section class="inverted" data-background="#000">
+  <h3 class="slide-title">Why Deterministic Forecasts Collapse</h3>
+  <br>
+  <div class="block">
+    <div class="block-title">The Standard Autoregressive Approach</div>
+    <div class="block-content">
+      Generate predictions sequentially: $\hat{x}_{t+1} = f(\hat{x}_t, \hat{x}_{t-1}, ...)$<br>
+      Each prediction becomes input to the next step
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="container">
+    <div class="col">
+      <h4 class="fragment" data-fragment-index="1">Problem 1: <b class="alert">Error Accumulation</b></h4>
+      <ul class="fragment" data-fragment-index="1" style="font-size: 0.9em;">
+        <li>Small prediction errors at $t$ amplify at $t+1, t+2, ...$</li>
+        <li>Deterministic point estimates ignore uncertainty</li>
+        <li>No mechanism to quantify or propagate epistemic uncertainty</li>
+      </ul>
+      <br>
+      <br>
+      <h4 class="fragment" data-fragment-index="2">Problem 2: <b class="alert">Context Loss</b></h4>
+      <ul class="fragment" data-fragment-index="2" style="font-size: 0.9em;">
+        <li>After a few steps, model only sees its own predictions</li>
+        <li><b>Lost connection to actual observations</b></li>
+        <li>No grounding in real measurements</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="fragment" data-fragment-index="3">
+        <img data-src="/talks/assets/rudy2.png" class="plain"></img>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Multiscale Inference for Long Memory -->
+<section>
+  <h3 class="slide-title">Multiscale Inference for Long-Range Memory</h3>
+  <br>
+  <div class="block">
+    <div class="block-title">Key Idea: Exponentially-Spaced Temporal Templates</div>
+    <div class="block-content">
+      Instead of conditioning only on recent past, use <b class="alert">multiscale templates</b> with exponentially-spaced time indices:
+      $$t^{\alpha}_{k+1} = t^{\alpha}_k + \alpha^k, \quad \alpha > 1$$
+    </div>
+  </div>
+  <br>
+<img data-src="/talks/assets/rudy3.png" class="plain"></img>
+</section>
+
+<section>
+  <img data-src="/talks/assets/rudy4.png" class="plain"></img>
+</section>
+</section>
+
+            <section>
+                <h2> Thank you for your attention! </h2>
+                <br>
+                <div style="text-align: center;">
+                    <img src="/talks/assets/NeurIPS.png" class="plain" style="height: 80px; display: inline-block;" />
+                </div>
+                <br>
+                <h3 style="font-size: 0.9em;">Key Papers Presented:</h3>
+                <div class="container" style="font-size: 0.7em;">
+                    <div class="col">
+                        <div class="block">
+                            <div class="block-title" style="font-size: 0.95em;">DiEM & MMPS</div>
+                            <div class="block-content">
+                                <p style="margin-bottom: 10px;"><b>Learning Diffusion Priors from Observations by Expectation Maximization</b></p>
+                                <p style="font-size: 0.9em; margin-bottom: 10px;">F. Rozet, G. Andry, F. Lanusse, G. Louppe</p>
+                                <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:22px;" /></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="block">
+                            <div class="block-title" style="font-size: 0.95em;">Multiscale Forecasting</div>
+                            <div class="block-content">
+                                <p style="margin-bottom: 10px;"><b>Predicting partially observable dynamical systems via diffusion models with a multiscale inference scheme</b></p>
+                                <p style="font-size: 0.85em; margin-bottom: 10px;">R. Morel, F.P. Ramunno, J. Shen, A. Bietti, K. Cho, M. Cranmer, S. Golkar, O. Gugnin, G. Krawezik, T. Marwah, M. McCabe, L. Meyer, P. Mukhopadhyay, R. Ohana, L. Parker, H. Qu, F. Rozet, K.D. Leka, F. Lanusse, D. Fouhey, S. Ho</p>
+                                <a href="https://arxiv.org/abs/2511.19390"><img src="https://img.shields.io/badge/arXiv-2511.19390-B31B1B.svg" class="plain" style="height:22px;" /></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="block">
+                            <div class="block-title" style="font-size: 0.95em;">Latent Diffusion</div>
+                            <div class="block-content">
+                                <p style="margin-bottom: 10px;"><b>Lost in Latent Space: An Empirical Study of Latent Diffusion Models for Physics Emulation</b></p>
+                                <p style="font-size: 0.9em; margin-bottom: 10px;">F. Rozet, R. Ohana, M. McCabe, G. Louppe, F. Lanusse, S. Ho</p>
+                                <a href="https://arxiv.org/abs/2507.02608"><img src="https://img.shields.io/badge/arXiv-2507.02608-B31B1B.svg" class="plain" style="height:22px;" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+
+    <style>
+        /* .reveal .slides {
+            border: 5px solid red;
+            min-height: 100%;
+            width: 128mm;
+            height: 96mm;
+        } */
+
+        .reveal .block {
+            background-color: #191919;
+            margin-left: 20px;
+            margin-right: 20px;
+            text-align: left;
+            padding-bottom: 0.1em;
+        }
+
+        .reveal .block-title {
+            background-color: #333333;
+            padding: 8px 35px 8px 14px;
+            color: #FFAA7F;
+            font-weight: bold;
+        }
+
+        .reveal .block-content {
+            padding: 8px 35px 8px 14px;
+        }
+
+        .reveal .slide-title {
+            border-left: 5px solid white;
+            text-align: left;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+
+        .reveal .alert {
+            color: #FFAA7F;
+            font-weight: bold;
+        }
+
+        .reveal .inverted {
+            filter: invert(100%);
+        }
+    </style>
+
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            controls: true,
+
+            //center: false,
+            hash: true,
+
+            // Visibility rule for backwards navigation arrows; "faded", "hidden"
+            // or "visible"
+            controlsBackArrows: 'hidden',
+
+            // Display a presentation progress bar
+            progress: true,
+
+            // Display the page number of the current slide
+            slideNumber: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            // The "normal" size of the presentation, aspect ratio will be preserved
+            // when the presentation is scaled to fit different resolutions. Can be
+            // specified using percentage units.
+            width: 1280,
+            height: 720,
+
+            // Factor of the display size that should remain empty around the content
+            margin: 0.1,
+
+            // Bounds for smallest/largest possible scale to apply to content
+            minScale: 0.2,
+            maxScale: 1.5,
+
+            autoPlayMedia: true,
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+            dependencies: [{
+                    src: 'reveal.js/plugin/markdown/marked.js'
+                },
+                {
+                    src: 'reveal.js/plugin/markdown/markdown.js'
+                },
+                {
+                    src: 'reveal.js/plugin/notes/notes.js',
+                    async: true
+                },
+                {
+                    src: 'reveal.js/plugin/math/math.js',
+                    async: true
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+                },
+                {
+                    src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+                },
+                {
+                    src: 'reveal.js/plugin/highlight/highlight.js',
+                    async: true
+                },
+                {
+                    src: 'node_modules/reveal_external/external/external.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-external],[data-external-replace]');
+                    }
+                },
+            ]
+
+        });
+    </script>
+</body>
+
+</html>

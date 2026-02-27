@@ -1,0 +1,107 @@
+<!-- SECTION 4: Learning Priors from Noisy Data (DiEM) -->
+
+<!-- Crisis Slide -->
+<section class="inverted" data-background="#000">
+  <h3 class="slide-title">A Critical Assumption We've Been Making</h3>
+  <br>
+  <br>
+  <div class="block">
+    <div class="block-title">Assumption so far</div>
+    <div class="block-content">
+      We have access to <b class="alert">clean training data</b> $x \sim p(x)$ to learn our diffusion prior
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="fragment fade-up">
+    <div class="block">
+      <div class="block-title">Reality in Scientific Applications</div>
+      <div class="block-content">
+        We often only have <b class="alert">noisy observations</b> $y = Ax + n$
+        <br><br>
+        <ul style="font-size: 0.9em;">
+          <li><b>Medical imaging</b>: MRI k-space measurements, CT projections</li>
+          <li><b>Astronomy</b>: Atmospheric blur, detector noise, incomplete observations</li>
+          <li><b>Earth sciences</b>: Satellite measurements with gaps and noise</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="fragment fade-up" style="text-align: center; font-size: 1.2em;">
+    <b class="alert">Can we learn diffusion priors directly from corrupted data?</b>
+  </div>
+</section>
+
+<!-- DiEM Solution -->
+<section>
+  <h3 class="slide-title">DiEM: Diffusion Models with <b>Expectation-Maximization</b></h3>
+  <div class="container">
+  <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+  </div>
+  <br>
+    <div class="container">
+    <div class="col">
+      <ol style="font-size: 0.95em;">
+        <li><b>Initialize</b> with Gaussian prior $p_0(x) = \mathcal{N}(0, I)$</li>
+        <br>
+        <li class="fragment" data-fragment-index="1">
+          <b class="alert">E-step</b>: For each observation $y_i$:
+          <ul style="font-size: 0.9em;">
+            <li>Sample $\{x_i^{(j)}\}_{j=1}^M \sim p_\theta(x|y_i)$ using <b>MMPS</b></li>
+          </ul>
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="2">
+          <b class="alert">M-step</b>: Update denoiser $d_\theta$:
+          <ul style="font-size: 0.9em;">
+            <li>Standard DSM loss on all samples $\{x_i^{(j)}\}$:</li>
+          </ul>
+          $$\mathcal{L}_{DSM} = \mathbb{E}_{x,u,\sigma} \| u + \sigma d_\theta(x + \sigma u, \sigma) \|^2$$
+        </li>
+        <br>
+        <li class="fragment" data-fragment-index="3"><b>Repeat</b> until convergence (typically 10-30 iterations)</li>
+      </ol>
+    </div>
+    <div class="col">
+      <div class="fragment" data-fragment-index="1">
+        <div class="block">
+          <div class="block-title">Why MMPS in E-step?</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            Accurate posterior sampling is <b class="alert">critical</b>
+            <ul>
+              <li>Poor samples → biased prior</li>
+              <li>MMPS provides proper uncertainty</li>
+              <li>Accounts for posterior covariance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="fragment" data-fragment-index="2">
+        <div class="block">
+          <div class="block-title">M-step is Standard Training!</div>
+          <div class="block-content" style="font-size: 0.85em;">
+            <ul>
+              <li>No modification to diffusion training</li>
+              <li>Use any diffusion architecture (UNet, etc.)</li>
+              <li>Leverage existing training infrastructure</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</section>
+
+<!-- Convergence Visualization -->
+<section>
+  <h3 class="slide-title">DiEM Convergence: Visual Evidence</h3>
+  <img data-src="/talks/assets/diem.png" class="plain" style="height: 600px;" />
+</section>
+
+
+<section>
+  <img data-src="/talks/assets/diem2.png" class="plain" style="height: 700px;" />
+</section>

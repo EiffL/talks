@@ -1,0 +1,359 @@
+<section>
+  <h2>Tractable Bayesian Inference in High Dimensions for Inverse Problems</h2>
+  <hr>
+</section>
+
+<section>
+  <h3 class="slide-title">Linear inverse problems</h3>
+
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+  <br>
+  $\mathbf{A}$ is known and encodes our physical understanding of the problem.
+  <span class="fragment"><br>$\Longrightarrow$ When non-invertible or ill-conditioned, the inverse
+    problem is ill-posed with no unique solution $x$</span>
+  <div class="container fragment fade-up">
+    <div class="col">
+      <img data-src="/talks/assets/pluto_smooth.png" class="plain"></img>
+      Deconvolution
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/pluto_missing.png" class="plain"></img>
+      Inpainting
+    </div>
+    <div class="col">
+      <img data-src="/talks/assets/plutoNoise.png" class="plain"></img>
+      Denoising
+    </div>
+  </div>
+
+</section>
+
+<section data-vertical-align-top>
+  <h3 class="slide-title">A Bayesian view of the problem</h3>
+  $\boxed{y = \mathbf{A}x + n}$
+  <br>
+
+  <br>
+  <div class="fragment">
+    $$ p(x | y) \propto p(y | x) \ p(x) $$
+  </div>
+  <br>
+
+  <ul>
+    <li class="fragment fade-up">$p(y | x)$ is the data likelihood, which <b>contains the
+        physics</b><br>
+    </li>
+    <br>
+    <li class="fragment fade-up">$p(x)$ is our prior knowledge on the solution.</li>
+  </ul>
+  <br>
+  <br>
+  <div class="fragment fade-up">
+    With these concepts in hand, we can for instance estimate the <b class="alert">Maximum A Posteriori solution</b>:
+    <br>
+    $$\hat{x} = \arg\max\limits_x \ \log p(y \ | \ x) + \log p(x)$$
+    For instance, if $n$ is Gaussian, $\hat{x} = \arg\max\limits_x \ - \frac{1}{2} \parallel y -
+    \mathbf{A} x \parallel_{\mathbf{\Sigma}}^2 + \log p(x)$
+  </div>
+  <br>
+  <div class="fragment fade-up">
+    Or, we can aim to sample from the <b class="alert">full posterior distribution</b> by MCMC techniques.
+  </div>
+  <br>
+  <!-- <div class="fragment fade-up">
+    <div class="block">
+      <div class="block-title">Diffusion models for posterior inference</div>
+      <div class="block-content">
+        Take the gradient to get the posterior score:
+        $$\nabla_x \log p(x | y) = \underbrace{\nabla_x \log p(y | x)}_{\text{known}} + \underbrace{\nabla_x \log p(x)}_{\text{prior model}}$$
+        <span class="fragment"><b class="alert">This works... but only for $\sigma = 0$!</b></span>
+      </div>
+    </div>
+  </div> -->
+  <br>
+  <div class="fragment fade-up">
+    <h3>How do you choose the prior ?</h3>
+  </div>
+</section>
+
+<section>
+  <h3 class="slide-title">A simple example of implicit prior</h3>
+  $$ \boxed{{\color{Orchid} y} = {\color{SkyBlue} x} + n} $$
+				<div class="container">
+					<div class="col">
+						<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+							<img class="fragment current-visible plain" data-src="/talks/assets/points.png"
+								style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+							<div class="fig-container fragment" data-file="dgm_prior_denoising.html"
+								data-style="height: 550px;width: 550px;" style="position:absolute;top:0;left:0;"
+								data-fragment-index="1"></div>
+						</div>
+						<!-- <img data-src="/talks/assets/points.png"/>
+																														  															<div class="fig-container" data-file="dgm_prior_denoising.html" data-style="height: 550px;"></div> -->
+					</div>
+
+					<div class="col">
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Let us assume we have access to examples of $
+								{\color{SkyBlue} x}$ without noise.</li>
+							<br>
+							<li class="fragment" data-fragment-index="1">We learn the <b class="alert">distribution of
+									noiseless data $\log p_\theta(x)$</b> from samples using a deep generative model.
+							</li>
+							<br>
+							<!-- <li class="fragment"> We measure a noisy ${\color{Orchid} y}$ and we want to estimate a denoised ${\color{SkyBlue} x}$</li>
+																														  																<br> -->
+							<li class="fragment">The solution should lie on the <b class="alert">realistic data
+									manifold</b>, symbolized by the two-moons distribution.
+								<div class="fragment">
+									<p> We want to solve for the Maximum A Posterior solution: </p>
+									$$\arg \max - \frac{1}{2} \parallel {\color{Orchid} y} - {\color{SkyBlue} x}
+									\parallel_2^2 + \log p_\theta({\color{SkyBlue} x})$$
+
+									This can be done by <b>gradient descent</b>.
+                  <br>
+                  <br>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+
+  <section class="inverted" data-background="#000">
+    <h3 class="slide-title"> First Issue: The Score We Need vs. The Score We Have</h3>
+    <br>
+        Sampling the posterior of an inverse problem with the SDE of diffusion models would look like this:
+        $$\mathrm{d} x = [f(x, t) - g^2(t) \underbrace{\nabla_x \log p_{\sigma(t)}(x|y)}_{\mbox{annealed posterior score}} ] \mathrm{d}t + g(t) \mathrm{d} w$$
+      
+      <br>
+    <ul>
+      <li class="fragment">But diffusion models learn the <b class="alert">score of the prior distribution</b>:
+        $$\nabla_x \log p_\sigma(x)$$
+      </li>
+      <br>
+      <li class="fragment">And these are <b class="alert">NOT easily related</b>!
+        $$\boxed{\nabla_x \log p_\sigma(x | y) \neq \nabla_x \log p_\sigma(y | x) + \nabla_x \log p_\sigma(x)}$$
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Approximation methods for the marginal likelihood: <b>DPS</b> <a href="https://arxiv.org/abs/2209.14687">(Chung et al. 2023)</a></h3>
+    <div class="container">
+      <div class="col">
+        <!-- <div class="r-stack"> -->
+        <img data-src="/talks/assets/dps_1.png" style="height: 200px;" />
+        <img data-src="/talks/assets/dps_2.png" style="height: 400px;" />
+        <!-- </div> -->
+      </div>
+      <div class="col">
+        <ul>
+          <li> Let's express the marginal likelihood in terms of $x_0$: <br>
+            \begin{align*}
+            p_t(y | x_t) &= \int p(y | x_0) \, p(x_0 | x_t) \, d x_0 \\
+            &= \mathbb{E}_{x_0 \sim p(x_0 | x_t)}[p(y | x_0)]
+            \end{align*}
+          </li>
+          <br>
+          <li class="fragment fade-up">The <b>DPS approximation</b>: <br>
+            $$p(y | x_t) \simeq p(y | \hat{x}_0)$$ with $\hat{x}_0 = \mathbb{E}[x_0 | x_t] = x_t - \sigma_t^2 \nabla_{x_t} \log p_t(x_t)$
+          </li>
+          <br>
+          <li class="fragment fade-up">In the case of a Gaussian likelihood and usual linear inverse problem:
+            $$ \nabla_{x_t} \log p_t( y | x_t ) \simeq - \frac{1}{\sigma^2} \nabla_{x_t} \parallel y - \mathbf{A} \hat{x}_0 \parallel_2^2 $$
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">DPS in practice</h3>
+    <iframe data-src="https://dps2022.github.io/diffusion-posterior-sampling-page/" style="width: 100%; height: 600px; border: none;"></iframe>
+  </section>
+
+  <!-- MMPS Pedagogical Sequence -->
+
+  <section>
+    <h3 class="slide-title">The Problem with DPS</h3>
+    <br>
+    <p>Recall that DPS approximates the marginal likelihood as:</p>
+    $$p_t(y | x_t) \simeq p(y | \hat{x}_0) = \mathcal{N}(y \mid A\hat{x}_0,\, \Sigma_y)$$
+    <p>where $\hat{x}_0 = \mathbb{E}[x_0 | x_t]$ is the denoiser prediction.</p>
+    
+
+    <div class="fragment fade-up">
+      <p>This leads to the posterior score approximation:</p>
+      $$\nabla_{x_t} \log p_t(x_t | y) \simeq \nabla_{x_t} \log p_t(x_t) - \frac{1}{\sigma_y^2} A^\top (A\hat{x}_0 - y)$$
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Problem: Ignoring Posterior Uncertainty</div>
+        <div class="block-content">
+          DPS treats $\hat{x}_0$ as <b class="alert">deterministic</b>, completely ignoring the <b class="alert">posterior variance</b> $\mathbb{V}[x_0 | x_t]$.
+          <br>
+          <div class="fragment">
+          <span>This leads to:</span><br>
+          <ul>
+            <li>Overly narrow posterior coverage</li>
+            <li>Samples inconsistent with observations</li>
+            <li>Instability at early diffusion steps (high noise)</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Better methods: <b>Moment Matching Posterior Sampling</b></h3>
+    <div class="container">
+    <div style="float:right; font-size: 20px">Rozet, Andry, Lanusse, Louppe (2024) <a href="https://arxiv.org/abs/2405.13712"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+    </div>
+    <div class="container">
+      <div class="col">
+        <div class="block">
+          <div class="block-title">Key Insight</div>
+          <div class="block-content">
+            Instead of ignoring uncertainty, <b class="alert">incorporate the covariance structure</b> of the posterior:
+            $$p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0$$
+          </div>
+        </div>
+
+        <br>
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">DPS (wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y \right)$$
+          <p style="font-size: 0.75em;">Assumes posterior concentrates at mean</p>
+        </div>
+
+        <div class="fragment fade-up">
+          <h4 style="font-size: 0.9em;">MMPS (less wrong):</h4>
+          $$\mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + {\color{orange}A\mathbb{V}[x_0 \mid x_t]A^\top} \right)$$
+          <p style="font-size: 0.75em;">Accounts for posterior uncertainty</p>
+        </div>
+      </div>
+
+      <div class="col">
+        <img data-src="/talks/assets/rozet_a.png" class="plain" style="height: 600px;" /> <br><br><br>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="slide-title">Tweedie's Covariance Formula</h3>
+
+    <p>For Gaussian-corrupted observations $x_t = x_0 + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \Sigma_t)$:</p>
+
+    <div class="block fragment fade-up">
+      <div class="block-title">Tweedie's Formula</div>
+      <div class="block-content">
+        The posterior covariance can be expressed as:
+        $$\boxed{\mathbb{V}[x_0 \mid x_t] = \Sigma_t \nabla_{x_t}^\top d_\theta(x_t, t)}$$
+        where $d_\theta(x_t, t) = \mathbb{E}[x_0 | x_t]$ is the denoiser network.
+      </div>
+    </div>
+
+    <br>
+    <ul>
+      <li class="fragment">Replaces ad-hoc heuristics like $\Sigma_t$ or $(\Sigma_t^{-1} + \Sigma_x^{-1})^{-1}$</li>
+      <br>
+      <li class="fragment">But there's a challenge: $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ is <b class="alert">intractable</b> in high dimensions!</li>
+    </ul>
+    <br>
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve: $\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$
+          <br><br>
+          <b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation—no need to materialize the full $N \times N$ matrix! In practice: <b>1-3 CG iterations</b> suffice.
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- 
+  <section>
+    <h3 class="slide-title">Making it Tractable: Conjugate Gradient</h3>
+
+    <br>
+    <div class="block">
+      <div class="block-title">Challenge</div>
+      <div class="block-content">
+        Computing the full Jacobian $\nabla_{x_t}^\top d_\theta(x_t, t) \in \mathbb{R}^{N \times N}$ explicitly is <b class="alert">impossible</b> for high-dimensional problems (e.g., images: $N \sim 10^6$).
+      </div>
+    </div>
+
+    <br>
+    <div class="fragment fade-up">
+      <div class="block">
+        <div class="block-title">Solution: Conjugate Gradient Method</div>
+        <div class="block-content">
+          We only need to solve the linear system:
+          $$\left(\Sigma_y + A\mathbb{V}[x_0 \mid x_t]A^\top\right) u = (y - A\hat{x}_0)$$
+
+          <br>
+          <ul>
+            <li><b class="alert">CG only requires vector-Jacobian products</b> via automatic differentiation</li>
+            <li>No need to materialize the full $N \times N$ matrix!</li>
+            <li>In practice: <b>1-3 CG iterations</b> suffice for robustness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section>
+    <h3 class="slide-title">MMPS: Summary</h3>
+    <img data-src="/talks/assets/dps_comparison.png" style="height: 500px;" />
+    \[
+    p_t(y \mid x_t) = \int p(y \mid x_0)\, q(x_0 \mid x_t) \, \mathrm{d}x_0
+    = \mathcal{N}\left(y \mid A\mathbb{E}[x_0 \mid x_t],\, \Sigma_y + A\mathrm{V}[x_0 \mid x_t]A^\top \right)
+    \]
+    <br>
+  </section>
+  
+
+  <section>
+    <h3 class="slide-title">Advertisement!</h3>
+
+    <div class="container">
+      <div class="col">
+        <img data-src="/talks/assets/azula.png" />
+        <img data-src="https://francois-rozet.github.io/files/avatar.jpg" style="width: 300px;" />
+        <p><b>Francois Rozet</b> @ University of Liege</p>
+      </div>
+      <div class="col">
+        <pre>
+					<code class="language-python">
+from azula.denoise import PreconditionedDenoiser
+from azula.noise import VPSchedule
+from azula.sample import DDPMSampler
+
+# Choose the variance preserving (VP) noise schedule
+schedule = VPSchedule()
+
+# Initialize a denoiser
+denoiser = PreconditionedDenoiser(
+	backbone=CustomNN(in_features=5, out_features=5),
+	schedule=schedule,
+)
+
+# Generate 64 points in 1000 steps
+sampler = DDPMSampler(denoiser.eval(), steps=1000)
+
+x1 = sampler.init((64, 5))
+x0 = sampler(x1)
+					</code>
+					</pre>
+
+        <a href="https://github.com/probabilists/azula">https://github.com/probabilists/azula</a>
+      </div>
+    </div>
+  </section>

@@ -250,3 +250,6 @@
 [submodule "CosmoStat2026/reveal.js"]
 	path = CosmoStat2026/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Chicago2026b/reveal.js"]
+	path = Chicago2026b/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
