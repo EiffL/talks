@@ -1749,7 +1749,44 @@
 	</section>
 
 	<section>
-		<h3>Distributed Training</h3>
+		<section>
+			<h3 class="slide-title">Distributed Training: scaling up compute</h3>
+			<img class="plain" data-src="/talks/assets/zero_memory_partitioning.png" style="width:920px; background:white; padding:12px; border-radius:8px;" />
+			<div class="container" style="margin-top: 15px;">
+				<div class="col">
+					<ul>
+						<li> Progressive ZeRO stages:
+							<ul>
+								<li> partition <b>optimizer states</b> </li>
+								<li> + partition <b>gradients</b> </li>
+								<li> + partition <b>parameters</b> &nbsp;(= PyTorch <b class="alert">FSDP</b>) </li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class="col">
+					<ul>
+					
+						<li class="fragment"> Combined with <b>tensor</b> and <b>pipeline</b> parallelism (<b class="alert">3D parallelism</b>) to train models with billions of parameters across <b>thousands of GPUs</b>. </li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	</section>
+
+
+	<section>
+		<h3 class="slide-title">Example of large multimodal generative model in astrophysics</h3>
+		<br>
+		<br>
+		<div class="fragment">
+			For a deep dive into this example, see the dedicated talk:
+			<br>
+			<br>
+			<a href="https://slides.com/eiffl/geneva2026#/19/0/0" target="_blank" style="font-size: 1.2em;">
+				<b class="alert">slides.com/eiffl/geneva2026</b>
+			</a>
+		</div>
 	</section>
 
 
