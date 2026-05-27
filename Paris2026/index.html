@@ -1665,11 +1665,93 @@
 	</section> 
 
 	<section data-background-iframe="https://www.youtube.com/embed/KUyRq7szZsM?rel=0" data-background-interactive>
-		<p style="position: absolute; bottom: 0; left: 0; width: 100%; margin: 0; font-size: 0.4em; text-align: center;">
-			<a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni/">blog.google — Gemini Omni</a>
-		</p>
+			<!-- <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni/">blog.google — Gemini Omni</a> -->
 	</section>
 	
+	<section>
+		<section>
+			<h3 class="slide-title">Attention is all you need</h3>
+						<div style="float:right; font-size: 20px"> Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin (2017) <a href="https://arxiv.org/abs/1706.03762"><img src="https://img.shields.io/badge/cs.CL-arXiv%3A1706.03762-B31B1B.svg" class="plain" style="height:25px; vertical-align:middle;" /></a>
+			<div class="container">
+				<div class="col">
+					<img class="plain" data-src="/talks/assets/transformer_architecture.png" style="height:560px; background:white; padding:10px; border-radius:8px;" />
+					<div style="font-size: 20px"> Encoder &ndash; Decoder architecture </div>
+				</div>
+				<div class="col">
+					<img class="plain" data-src="/talks/assets/multihead_attention.png" style="height:430px; background:white; padding:10px; border-radius:8px;" />
+					<br>
+					<div class="fragment"> <b class="alert">Scaled Dot-Product Attention</b>
+						$$ \text{Attention}(Q,K,V) = \text{softmax}\!\left( \frac{Q K^\top}{\sqrt{d_k}} \right) V $$
+					</div>
+				</div>
+			</div>
+		</section>
+	</section>
+
+	<section>
+		<h3 class="slide-title">GPT-2: a Decoder-Only Transformer</h3>
+				<div style="float:right; font-size: 20px"> Radford, Wu, Child, Luan, Amodei, Sutskever (2019) <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"><img src="https://img.shields.io/badge/OpenAI-Language%20Models%20are%20Unsupervised%20Multitask%20Learners-412991.svg" class="plain" style="height:25px; vertical-align:middle;" /></a>
+
+		<div class="container">
+			<div class="col">
+				<img class="plain" data-src="/talks/assets/gpt_decoder_only.png" style="height:500px; background:white; padding:10px; border-radius:8px;" />
+				<div style="font-size: 20px"> A stack of masked self-attention decoder blocks </div>
+			</div>
+			<div class="col">
+				<div class="block">
+					<div class="block-title"> Autoregressive modeling </div>
+					<div class="block-content">
+						Any sequence can be factored with the <b class="alert">chain rule of probability</b>:
+						$$ p(x_1, \ldots, x_T) = \prod_{t=1}^{T} p(x_t \,|\, x_{1}, \ldots, x_{t-1}) $$
+						The model only needs to learn to predict the <b>next token</b> given the previous ones.
+					</div>
+				</div>
+				<br>
+				<ul>
+					<li class="fragment"> GPT-2 keeps only the <b class="alert">decoder</b>: <b>masked</b> self-attention prevents a token from attending to the future. </li>
+					<br>
+					<li class="fragment"> Training is pure <b>self-supervision</b> &mdash; no labels needed, just predict the next token over huge text corpora. </li>
+					<br>
+					<li class="fragment"> Same architecture, <b class="alert">more parameters + more data</b> &rArr; the recipe behind modern LLMs. </li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slide-title">Scaling Laws</h3>
+		<div style="float:right; font-size: 20px"> Kaplan, McCandlish, Henighan, Brown, Chess, Child, Gray, Radford, Wu, Amodei (2020) <a href="https://arxiv.org/abs/2001.08361"><img src="https://img.shields.io/badge/cs.LG-arXiv%3A2001.08361-B31B1B.svg" class="plain" style="height:25px; vertical-align:middle;" /></a></div>
+
+		<br>
+		<img class="plain" data-src="/talks/assets/kaplan_scaling_laws.png" style="width:1000px; background:white; padding:12px; border-radius:8px;" />
+		<div class="container" style="margin-top: 20px;">
+			<div class="col">
+				<ul>
+					<li class="fragment"> Test loss falls as a <b class="alert">power law</b> in each of:
+						<ul>
+							<li> the number of <b>parameters</b> $N$ </li>
+							<li> the <b>dataset</b> size $D$ </li>
+							<li> the <b>compute</b> budget $C$ </li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div class="col">
+				<ul>
+					<li class="fragment"> These trends are <b>smooth</b> and hold over <b class="alert">many orders of magnitude</b>. </li>
+					<br>
+					<li class="fragment"> Improvement is <b class="alert">predictable</b>: you can forecast the gain from scaling up <b>before</b> training the model. </li>
+					<br>
+					<li class="fragment"> $\Rightarrow$ the empirical bet behind investing in <b>ever-larger</b> models and datasets. </li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<h3>Distributed Training</h3>
+	</section>
+
 
 			<section>
 				<iframe src="https://giphy.com/embed/xUPOqo6E1XvWXwlCyQ" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/spacejam-space-jam-movie-xUPOqo6E1XvWXwlCyQ">via GIPHY</a></p>
