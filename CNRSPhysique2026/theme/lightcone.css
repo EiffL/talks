@@ -1,0 +1,696 @@
+/*
+ * ==========================================================================
+ * LIGHTCONE -- Reveal.js Theme
+ * Editorial style aligned to the Lightcone Research brand pack.
+ * See template.html for usage.
+ * ==========================================================================
+ *
+ * BRAND PALETTE  (per Branding.pdf)
+ * ---------------------------------------------------------------------------
+ *   --lc-bg            #f8f7f3    "Parchment"      page background
+ *   --lc-surface       #f0eee8    derived          inset surfaces, code blocks
+ *   --lc-primary       #4e5a70    "Blue Ink"       authoritative UI, headings
+ *   --lc-secondary     #426b78    "Slate Blue"     decisions, links, structure
+ *   --lc-accent        #18401c    "Pine Green"     success, highlights
+ *   --lc-warm          #a67c3c    "Antique Gold"   brand mark, emphasis, hero
+ *   --lc-sage          #a6ba99    "Sage"           soft accent / tint
+ *   --lc-text          #221f20    "Charcoal"       primary text
+ *   --lc-muted         #6b7585    graphite         secondary text, captions
+ *   --lc-highlight     #8e3a1c    "Wax Red"        attention, alerts
+ *
+ * TYPOGRAPHY  (Branding.pdf — Font Options 2)
+ * ---------------------------------------------------------------------------
+ *   Headings:  "Quattrocento"     humanist serif — warmth + authority
+ *   Body:      "Newsreader"       editorial serif — readability
+ *   Interface: "Alegreya Sans"    labels, buttons, micro-copy
+ *   Mono:      "JetBrains Mono"   code, data, technical callouts
+ *
+ * ==========================================================================
+ */
+
+/* ---------------------------------------------------------------------------
+   Google Fonts Import
+   --------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Quattrocento:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Alegreya+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---------------------------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   --------------------------------------------------------------------------- */
+:root {
+    /* Palette — Lightcone brand (Branding.pdf p.2) */
+    --lc-bg:          #f8f7f3;          /* Parchment                    */
+    --lc-surface:     #f0eee8;          /* derived warm parchment       */
+    --lc-primary:     #4e5a70;          /* Blue Ink                     */
+    --lc-secondary:   #426b78;          /* Slate Blue                   */
+    --lc-accent:      #18401c;          /* Pine Green                   */
+    --lc-warm:        #a67c3c;          /* Antique Gold — brand mark    */
+    --lc-sage:        #a6ba99;          /* Sage — soft accent           */
+    --lc-text:        #221f20;          /* Charcoal                     */
+    --lc-muted:       #6b7585;          /* graphite                     */
+    --lc-highlight:   #8e3a1c;          /* Wax Red                      */
+    --lc-glow:        rgba(78, 90, 112, 0.03);
+
+    /* RGB triplets — for use in rgba() with variable opacity:
+       e.g. background: rgba(var(--lc-primary-rgb), 0.12);              */
+    --lc-primary-rgb:   78, 90, 112;
+    --lc-secondary-rgb: 66, 107, 120;
+    --lc-accent-rgb:    24, 64, 28;
+    --lc-warm-rgb:      166, 124, 60;
+    --lc-sage-rgb:      166, 186, 153;
+    --lc-highlight-rgb: 142, 58, 28;
+
+    /* Surface tiers */
+    --lc-surface-lowest:  #ffffff;
+    --lc-surface-low:     #f0eee8;
+    --lc-surface-high:    #e6e3db;
+    --lc-outline-variant: rgba(78, 90, 112, 0.15);
+
+    /* Component tokens (sage-tinted secondary container) */
+    --lc-secondary-container: #d6e0cc;
+    --lc-on-secondary-container: #1f3a25;
+
+    /* Typography — Branding.pdf Font Options 2 */
+    --lc-font-heading: 'Quattrocento', Georgia, serif;
+    --lc-font-body:    'Newsreader', Georgia, serif;
+    --lc-font-ui:      'Alegreya Sans', system-ui, sans-serif;
+    --lc-font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+    /* No decorative gradients — editorial palette uses solid colour. */
+
+    /* Ambient shadow — blue-ink tinted */
+    --lc-shadow-ambient: 0 24px 48px -12px rgba(78, 90, 112, 0.08);
+}
+
+/* ---------------------------------------------------------------------------
+   Base / Reveal Overrides
+   --------------------------------------------------------------------------- */
+.reveal-viewport {
+    background: var(--lc-bg);
+}
+
+.reveal {
+    font-family: var(--lc-font-body);
+    font-size: 18pt;
+    font-weight: 400;
+    color: var(--lc-text);
+    letter-spacing: -0.01em;
+}
+
+::selection {
+    background: rgba(78, 90, 112, 0.15);
+    color: var(--lc-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   Typography Scale — Quattrocento headings, Newsreader body
+   Quattrocento is a humanist serif; ease off negative letter-spacing.
+   --------------------------------------------------------------------------- */
+.reveal h1 {
+    font-family: var(--lc-font-heading);
+    font-size: 42pt;
+    font-weight: 400;
+    color: var(--lc-warm);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 18pt;
+}
+
+.reveal h2 {
+    font-family: var(--lc-font-heading);
+    font-size: 30pt;
+    font-weight: 400;
+    color: var(--lc-warm);
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    margin-bottom: 14pt;
+}
+
+.reveal h3 {
+    font-family: var(--lc-font-heading);
+    font-size: 22pt;
+    font-weight: 400;
+    color: var(--lc-secondary);
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin-bottom: 10pt;
+}
+
+.reveal h4 {
+    font-family: var(--lc-font-heading);
+    font-size: 18pt;
+    font-weight: 400;
+    color: var(--lc-secondary);
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin-bottom: 8pt;
+}
+
+.reveal p {
+    font-family: var(--lc-font-body);
+    font-size: 16pt;
+    line-height: 1.65;
+    margin-bottom: 10pt;
+    color: var(--lc-text);
+}
+
+.reveal small,
+.reveal .muted {
+    font-family: var(--lc-font-ui);
+    font-size: 12pt;
+    color: var(--lc-muted);
+}
+
+.reveal strong {
+    font-weight: 600;
+    color: var(--lc-primary);
+}
+
+.reveal em {
+    color: var(--lc-secondary);
+    font-style: italic;
+}
+
+/* ---------------------------------------------------------------------------
+   Links
+   --------------------------------------------------------------------------- */
+.reveal a {
+    color: var(--lc-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(66, 107, 120, 0.3);
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.reveal a:hover {
+    color: var(--lc-primary);
+    border-bottom-color: var(--lc-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   Lists
+   --------------------------------------------------------------------------- */
+.reveal ul,
+.reveal ol {
+    font-family: var(--lc-font-body);
+    font-size: 16pt;
+    line-height: 1.7;
+    margin-left: 18pt;
+    text-align: left;
+}
+
+.reveal li {
+    margin-bottom: 6pt;
+}
+
+.reveal ul li::marker {
+    color: var(--lc-secondary);
+}
+
+.reveal ol li::marker {
+    color: var(--lc-primary);
+    font-weight: 600;
+    font-family: var(--lc-font-heading);
+}
+
+/* ---------------------------------------------------------------------------
+   Code — surface-container-low background, no borders (No-Line Rule)
+   --------------------------------------------------------------------------- */
+.reveal code {
+    font-family: var(--lc-font-mono);
+    font-size: 13pt;
+    background: var(--lc-surface);
+    color: var(--lc-primary);
+    padding: 2pt 6pt;
+    border-radius: 0.25rem;
+    border: none;
+}
+
+.reveal pre {
+    width: 100%;
+    font-size: 12pt;
+    box-shadow: none;
+    text-align: left;
+}
+
+.reveal pre code {
+    display: block;
+    padding: 14pt 18pt;
+    line-height: 1.55;
+    max-height: 420pt;
+    background: var(--lc-surface);
+    border: none;
+    border-radius: 0.25rem;
+    color: var(--lc-text);
+    text-align: left;
+    white-space: pre;
+    overflow: auto;
+    word-wrap: normal;
+}
+
+/* ---------------------------------------------------------------------------
+   Blockquotes
+   --------------------------------------------------------------------------- */
+.reveal blockquote {
+    background: var(--lc-surface);
+    border-left: 3px solid var(--lc-secondary);
+    padding: 14pt 20pt;
+    margin: 14pt 0;
+    border-radius: 0 0.25rem 0.25rem 0;
+    font-style: normal;
+    font-family: var(--lc-font-body);
+    font-size: 15pt;
+    color: var(--lc-text);
+    box-shadow: none;
+}
+
+.reveal blockquote p {
+    margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Tables — no divider lines per DESIGN.md §5.4
+   --------------------------------------------------------------------------- */
+.reveal table {
+    font-size: 14pt;
+    border-collapse: collapse;
+    margin: 14pt auto;
+}
+
+.reveal table th {
+    font-family: var(--lc-font-heading);
+    font-weight: 600;
+    font-size: 13pt;
+    color: var(--lc-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8pt 14pt;
+    border-bottom: 2px solid rgba(78, 90, 112, 0.12);
+    text-align: left;
+}
+
+.reveal table td {
+    padding: 8pt 14pt;
+    border-bottom: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Images
+   --------------------------------------------------------------------------- */
+.reveal section img {
+    border: none;
+    box-shadow: none;
+    background: none;
+    max-width: 100%;
+    border-radius: 0.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+   UTILITY CLASSES
+   --------------------------------------------------------------------------- */
+
+/* -- Text Colors ---------------------------------------------------------- */
+.text-primary   { color: var(--lc-primary)   !important; }
+.text-secondary { color: var(--lc-secondary) !important; }
+.text-accent    { color: var(--lc-accent)    !important; }
+.text-warm      { color: var(--lc-warm)      !important; }
+.text-highlight { color: var(--lc-highlight) !important; }
+.text-muted     { color: var(--lc-muted)     !important; }
+.text-white     { color: var(--lc-primary)   !important; }
+
+/* -- Gradient Text -------------------------------------------------------- */
+.gradient-text {
+    color: var(--lc-primary);
+}
+
+/* -- Hero Title ----------------------------------------------------------- */
+.hero-title {
+    font-family: var(--lc-font-heading);
+    font-size: 56pt;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    color: var(--lc-warm);
+    margin-bottom: 14pt;
+}
+
+/* -- Subtitle ------------------------------------------------------------- */
+.subtitle {
+    font-family: var(--lc-font-body);
+    font-size: 18pt;
+    font-weight: 300;
+    color: var(--lc-muted);
+    letter-spacing: 0.02em;
+    margin-top: 0;
+}
+
+/* -- Section Label (small caps above headings) ---------------------------- */
+.section-label {
+    display: inline-block;
+    align-self: center;        /* keep natural width when section is flex */
+    font-family: var(--lc-font-ui);
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--lc-primary);
+    margin-bottom: 8pt;
+    padding: 3pt 10pt;
+    border: none;
+    border-radius: 0.25rem;
+    background: rgba(78, 90, 112, 0.08);
+}
+
+/* -- Stat / KPI Block ----------------------------------------------------- */
+.stat {
+    text-align: center;
+    padding: 14pt 0;
+}
+
+.stat-number {
+    font-family: var(--lc-font-heading);
+    font-size: 48pt;
+    font-weight: 400;
+    color: var(--lc-primary);
+    line-height: 1;
+    margin-bottom: 4pt;
+}
+
+.stat-label {
+    font-family: var(--lc-font-ui);
+    font-size: 12pt;
+    font-weight: 500;
+    color: var(--lc-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* -- Card / Panel  --------------------------------------------------------
+   DESIGN.md §5.2: No solid borders, tonal layering, 24px padding,
+   ambient shadow with blue tint
+   --------------------------------------------------------------------------- */
+.card {
+    background: var(--lc-surface-lowest);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 20pt 24pt;
+    box-shadow: var(--lc-shadow-ambient);
+}
+
+.card-glow {
+    background: var(--lc-surface-lowest);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 20pt 24pt;
+    box-shadow: 0 24px 48px -12px rgba(78, 90, 112, 0.10);
+}
+
+/* Square left corners when a card has a left-border accent */
+.card[style*="border-left"],
+.card-glow[style*="border-left"] {
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+/* -- Pill / Tag ----------------------------------------------------------- */
+.pill {
+    display: inline-block;
+    font-family: var(--lc-font-ui);
+    font-size: 9pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3pt 10pt;
+    border-radius: 100px;
+    color: #ffffff;
+}
+
+.pill-primary   { background: var(--lc-primary);   }
+.pill-secondary { background: var(--lc-secondary); }
+.pill-accent    { background: var(--lc-accent);     }
+.pill-warm      { background: var(--lc-warm);       }
+.pill-highlight { background: var(--lc-highlight);  }
+.pill-muted     { background: var(--lc-muted);      }
+
+/* -- CTA Button -----------------------------------------------------------
+   DESIGN.md §5.1: Solid primary with gradient depth
+   --------------------------------------------------------------------------- */
+.reveal a.cta,
+.cta {
+    display: inline-block;
+    font-family: var(--lc-font-heading);
+    font-size: 14pt;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 10pt 28pt;
+    border-radius: 0.25rem;
+    background: var(--lc-primary);
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    border-bottom: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 4px 20px rgba(78, 90, 112, 0.15);
+}
+
+.reveal a.cta:hover,
+.cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 28px rgba(78, 90, 112, 0.25);
+    color: #ffffff;
+    border-bottom: none;
+}
+
+.reveal a.cta-outline,
+.cta-outline {
+    display: inline-block;
+    font-family: var(--lc-font-heading);
+    font-size: 14pt;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 10pt 28pt;
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--lc-primary);
+    text-decoration: none;
+    border: 1.5px solid var(--lc-primary);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.reveal a.cta-outline:hover,
+.cta-outline:hover {
+    background: rgba(78, 90, 112, 0.06);
+    color: var(--lc-primary);
+}
+
+/* -- Architecture Layer --------------------------------------------------- */
+.arch-layer {
+    padding: 8pt 14pt;
+    background: var(--lc-surface-lowest);
+    border-radius: 0 0.25rem 0.25rem 0;
+    transition: transform 0.2s ease;
+}
+
+/* -- Divider / Horizontal Rule -------------------------------------------- */
+.reveal hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(166, 124, 60, 0.35) 50%,
+        transparent 100%
+    );
+    margin: 20pt 0;
+}
+
+/* -- Flex Layout Helpers -------------------------------------------------- */
+.flex-row {
+    display: flex;
+    gap: 20pt;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.flex-col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* -- Fragment Overrides --------------------------------------------------- */
+.reveal .fragment {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal .fragment.fade-up {
+    transform: translateY(14pt);
+    opacity: 0;
+}
+
+.reveal .fragment.fade-up.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Dim-then-bright: code spans start at low opacity, become full when active.
+   Used for progressive code highlighting alongside fragment cards. */
+.reveal .fragment.fade-semi {
+    opacity: 0.22;
+    visibility: visible;
+}
+
+.reveal .fragment.fade-semi.visible {
+    opacity: 1;
+}
+
+/* -- Slide Backgrounds ---------------------------------------------------- */
+
+/* Subtle radial glow — antique-gold tint for title slides */
+.reveal section[data-background-glow]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 60% 50% at 50% 45%,
+        rgba(166, 124, 60, 0.06) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Fine dot grid — opt-in "graph paper" feel for sections that add
+   class="grid-bg". Not used by default in template.html. */
+.grid-bg {
+    background-image:
+        radial-gradient(circle, rgba(78, 90, 112, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+/* ---------------------------------------------------------------------------
+   Slide Number
+   --------------------------------------------------------------------------- */
+.reveal .slide-number {
+    font-family: var(--lc-font-mono);
+    font-size: 9pt;
+    color: var(--lc-muted);
+    background: transparent;
+    left: 16pt;
+    right: auto;
+    bottom: 12pt;
+}
+
+/* ---------------------------------------------------------------------------
+   Persistent corner brand mark
+   Lightcone wordmark in the top-left of every content slide. Lives on
+   each section so it travels with the slide on transitions (rather than
+   sitting fixed above the canvas).
+
+   Sections are forced to fill the full slide canvas; content is re-
+   centered via flex, replicating Reveal's `center: true` look while
+   giving the brand mark a stable anchor at the slide's actual top-left.
+
+   Auto-hides on hero / divider slides ([data-background-glow]) and on
+   any section explicitly marked with .no-brand-mark. Override
+   --lc-brand-mark to swap the asset (e.g. blue / gold square).
+   --------------------------------------------------------------------------- */
+:root {
+    --lc-brand-mark: url('Primary%20Logo.svg');
+}
+
+.reveal .slides > section.present,
+.reveal .slides > section.past,
+.reveal .slides > section.future {
+    min-height: 100%;
+    box-sizing: border-box;
+    /* !important needed because Reveal sets section.style.display inline. */
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reveal .slides > section:not([data-background-glow]):not(.no-brand-mark)::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 200px;
+    height: 32px;
+    background-image: var(--lc-brand-mark);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ---------------------------------------------------------------------------
+   Progress Bar
+   --------------------------------------------------------------------------- */
+.reveal .progress {
+    height: 3px;
+    background: rgba(78, 90, 112, 0.06);
+}
+
+.reveal .progress span {
+    background: var(--lc-primary);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Controls (arrows)
+   --------------------------------------------------------------------------- */
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-right,
+.reveal .controls .navigate-up,
+.reveal .controls .navigate-down {
+    color: var(--lc-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Print Overrides
+   --------------------------------------------------------------------------- */
+@media print {
+    .reveal,
+    .reveal-viewport {
+        background: #FFFFFF;
+        color: #221f20;
+    }
+
+    .reveal h1, .reveal h2 {
+        color: #a67c3c;
+    }
+
+    .reveal h3 {
+        color: #426b78;
+    }
+
+    .hero-title,
+    .gradient-text {
+        color: #a67c3c;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbars — thin, matching light theme
+   --------------------------------------------------------------------------- */
+.reveal ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.reveal ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.reveal ::-webkit-scrollbar-thumb {
+    background: rgba(78, 90, 112, 0.12);
+    border-radius: 3px;
+}
+
+.reveal ::-webkit-scrollbar-thumb:hover {
+    background: rgba(78, 90, 112, 0.20);
+}
+
+.reveal * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(78, 90, 112, 0.12) transparent;
+}
