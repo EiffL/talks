@@ -1236,6 +1236,2049 @@
       color: var(--lc-muted);
       opacity: 0.6;
     }
+
+    /* ==================================================================
+       ASTRA paper-vision sequence (ported from AstraPaperVision.html).
+
+       Its own visual system: the flat paper, the publication boundary, the
+       evidence graph, the two linked surfaces, and the provenance
+       inspector. Shares the Lightcone theme; the deck's own `#title` is
+       untouched (the vision cover is `#vision-title`).
+       ================================================================== */
+    /* ------------------------------------------------------------------
+       ASTRA paper-vision concept deck
+
+       The deck intentionally keeps its visual system local. It shares the
+       Lightcone theme with Pittsburgh2026.html, but the graph, publication
+       boundary, MyST surface, and provenance inspector are specific to this
+       narrative.
+       ------------------------------------------------------------------ */
+    :root {
+      --vision-paper: #fffefb;
+      --vision-line: rgba(var(--lc-primary-rgb), 0.20);
+      --vision-line-strong: rgba(var(--lc-primary-rgb), 0.48);
+      --vision-gold-soft: rgba(var(--lc-warm-rgb), 0.12);
+      --vision-blue-soft: rgba(var(--lc-primary-rgb), 0.09);
+      --vision-slate-soft: rgba(var(--lc-secondary-rgb), 0.10);
+      --vision-green-soft: rgba(var(--lc-accent-rgb), 0.09);
+      --vision-red-soft: rgba(var(--lc-highlight-rgb), 0.09);
+      --vision-shadow: 0 18px 42px -18px rgba(43, 49, 60, 0.24);
+    }
+
+    .reveal .slides > section.vision-slide {
+      justify-content: flex-start;
+      box-sizing: border-box;
+      padding: 54px 56px 30px;
+      overflow: hidden;
+      top: 0 !important;
+    }
+
+    .reveal .slides > section#future-paper { top: 0 !important; }
+
+    .vision-slide .slide-head {
+      flex: 0 0 auto;
+      text-align: center;
+      margin: 6px auto 8px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .vision-slide .slide-head .section-label {
+      margin: 0 0 5px;
+    }
+
+    .vision-slide .slide-head h2 {
+      font-size: 27pt;
+      margin: 0;
+      color: var(--lc-warm);
+      letter-spacing: -0.012em;
+      line-height: 1.13;
+    }
+
+    .vision-slide .slide-head p {
+      font-family: var(--lc-font-body);
+      font-size: 12.5pt;
+      color: var(--lc-muted);
+      margin: 5px 0 0;
+      line-height: 1.42;
+    }
+
+    .vision-stage {
+      position: relative;
+      flex: 1 1 auto;
+      width: 1120px;
+      min-height: 0;
+      margin: 0 auto;
+      font-family: var(--lc-font-ui);
+    }
+
+    .story-step {
+      position: absolute;
+      width: 0;
+      height: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .vision-kicker {
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      font-weight: 700;
+    }
+
+    .vision-glyph {
+      display: inline-grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      font-family: var(--lc-font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .glyph-analysis { color: var(--lc-secondary); }
+    .glyph-input,
+    .glyph-output { color: var(--lc-primary); }
+    .glyph-decision { color: var(--lc-warm); }
+    .glyph-insight { color: var(--lc-highlight); }
+    .glyph-finding { color: #3b7a73; }
+
+    .paper-boundary {
+      position: absolute;
+      border: 1.5px dashed rgba(var(--lc-warm-rgb), 0.62);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    }
+
+    .paper-boundary__label {
+      position: absolute;
+      left: 24px;
+      top: -10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--lc-bg);
+      color: var(--lc-warm);
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .paper-boundary__label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lc-warm);
+      box-shadow: 0 0 0 4px rgba(var(--lc-warm-rgb), 0.10);
+    }
+
+    .kg-node {
+      position: absolute;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(var(--lc-primary-rgb), 0.12);
+      border-radius: 7px;
+      box-shadow: var(--vision-shadow);
+      color: var(--lc-text);
+      text-align: left;
+      transition:
+        opacity 0.45s ease,
+        transform 0.45s cubic-bezier(.2,.75,.2,1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease,
+        filter 0.35s ease;
+    }
+
+    .kg-node__top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+
+    .kg-node__kind {
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+    }
+
+    .kg-node__title {
+      display: block;
+      font-family: var(--lc-font-ui);
+      font-size: 12px;
+      line-height: 1.16;
+      font-weight: 700;
+      color: var(--lc-text);
+    }
+
+    .kg-node__meta {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--lc-font-ui);
+      font-size: 9.5px;
+      line-height: 1.25;
+      color: var(--lc-muted);
+    }
+
+    .kg-node--analysis {
+      border-left: 3px solid var(--lc-secondary);
+      background: linear-gradient(90deg, var(--vision-slate-soft), rgba(255,255,255,.97) 32%);
+    }
+
+    .kg-node--output { border-left: 3px solid var(--lc-primary); }
+    .kg-node--decision { border-left: 3px solid var(--lc-warm); }
+    .kg-node--insight { border-left: 3px solid var(--lc-highlight); }
+    .kg-node--finding { border-left: 3px solid #3b7a73; }
+    .kg-node--literature {
+      border-top: 3px solid var(--lc-warm);
+      background: var(--vision-paper);
+    }
+
+    .kg-node--selected {
+      border-color: rgba(var(--lc-warm-rgb), 0.64);
+      box-shadow:
+        0 0 0 5px rgba(var(--lc-warm-rgb), 0.08),
+        0 18px 42px -16px rgba(var(--lc-warm-rgb), 0.38);
+    }
+
+    .kg-node--selected::after {
+      content: '';
+      position: absolute;
+      inset: -9px;
+      border: 1.5px solid rgba(var(--lc-warm-rgb), 0.42);
+      border-radius: 12px;
+      opacity: 0;
+      animation: result-pulse 2.4s ease-out infinite;
+      pointer-events: none;
+    }
+
+    .edge-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .edge {
+      fill: none;
+      stroke: var(--vision-line-strong);
+      stroke-width: 1.35;
+      vector-effect: non-scaling-stroke;
+      transition: opacity 0.45s ease, stroke 0.45s ease, stroke-width 0.45s ease;
+    }
+
+    .edge--gold { stroke: rgba(var(--lc-warm-rgb), 0.62); }
+    .edge--green { stroke: rgba(var(--lc-accent-rgb), 0.58); }
+    .edge--red { stroke: rgba(var(--lc-highlight-rgb), 0.56); }
+    .edge--dash { stroke-dasharray: 5 5; }
+
+    .edge-label {
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      letter-spacing: 0.04em;
+      fill: var(--lc-muted);
+      paint-order: stroke;
+      stroke: var(--lc-bg);
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+
+    .mini-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-family: var(--lc-font-ui);
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--vision-blue-soft);
+      color: var(--lc-primary);
+    }
+
+    .mini-pill--gold { background: var(--vision-gold-soft); color: var(--lc-warm); }
+    .mini-pill--green { background: var(--vision-green-soft); color: var(--lc-accent); }
+    .mini-pill--red { background: var(--vision-red-soft); color: var(--lc-highlight); }
+
+    .story-caption {
+      position: absolute;
+      left: 50%;
+      bottom: 3px;
+      transform: translateX(-50%);
+      width: 940px;
+      text-align: center;
+      font-family: var(--lc-font-heading);
+      font-size: 15px;
+      line-height: 1.35;
+      color: var(--lc-primary);
+    }
+
+    .story-caption > span {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    /* ------------------------------------------------------------------
+       Cover
+       ------------------------------------------------------------------ */
+    #vision-title {
+      /* Absolute like every other slide: `relative` would drop this section
+         into normal flow and push every slide after it down by a full frame. */
+      position: absolute;
+      box-sizing: border-box;
+      padding: 58px 76px 40px;
+      overflow: hidden;
+    }
+
+    #vision-title .title-rule {
+      position: absolute;
+      left: 76px;
+      right: 76px;
+      top: 54px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(var(--lc-warm-rgb), .55) 14%, rgba(var(--lc-warm-rgb), .55) 86%, transparent);
+    }
+
+    #vision-title .title-eyebrow {
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+      margin-top: 26px;
+    }
+
+    #vision-title h1 {
+      width: 920px;
+      margin: 12px auto 7px;
+      font-family: var(--lc-font-heading);
+      font-size: 45pt;
+      line-height: 1.04;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      color: var(--lc-warm);
+      text-wrap: balance;
+    }
+
+    #vision-title .title-subtitle {
+      margin: 0 auto;
+      font-family: var(--lc-font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--lc-muted);
+    }
+
+    .title-vision {
+      position: relative;
+      width: 930px;
+      height: 315px;
+      margin: 25px auto 0;
+    }
+
+    .title-article {
+      position: absolute;
+      left: 48px;
+      top: 22px;
+      width: 330px;
+      height: 246px;
+      box-sizing: border-box;
+      padding: 28px 30px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--vision-shadow);
+      text-align: left;
+      z-index: 3;
+    }
+
+    .title-article::before {
+      content: 'MyST + MySTRA';
+      position: absolute;
+      left: 30px;
+      top: 15px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lc-secondary);
+    }
+
+    .title-article__headline {
+      width: 72%;
+      height: 8px;
+      margin: 17px 0 14px;
+      border-radius: 8px;
+      background: rgba(var(--lc-primary-rgb), 0.78);
+    }
+
+    .title-article__line {
+      height: 5px;
+      margin: 8px 0;
+      border-radius: 6px;
+      background: rgba(var(--lc-primary-rgb), 0.13);
+    }
+
+    .title-article__line:nth-of-type(3) { width: 92%; }
+    .title-article__line:nth-of-type(4) { width: 78%; }
+    .title-article__line:nth-of-type(6) { width: 86%; }
+
+    .title-inline-ref {
+      display: inline-block;
+      padding: 3px 8px;
+      margin: 5px 3px 4px 0;
+      border-radius: 3px;
+      border-bottom: 1px dotted var(--lc-secondary);
+      background: var(--vision-slate-soft);
+      color: var(--lc-secondary);
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .title-graph {
+      position: absolute;
+      left: 365px;
+      top: 0;
+      width: 530px;
+      height: 290px;
+    }
+
+    .title-orbit {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--lc-primary-rgb), 0.09);
+      animation: title-orbit 13s linear infinite;
+    }
+
+    .title-orbit--1 { width: 330px; height: 210px; left: 110px; top: 32px; }
+    .title-orbit--2 { width: 455px; height: 270px; left: 42px; top: 5px; animation-direction: reverse; animation-duration: 18s; }
+
+    .title-node {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-sizing: border-box;
+      padding: 9px 11px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.95);
+      border: 1px solid rgba(var(--lc-primary-rgb), .14);
+      box-shadow: 0 12px 26px -18px rgba(43,49,60,.55);
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--lc-text);
+      text-align: left;
+      z-index: 2;
+      animation: title-node-in .75s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .title-node:nth-of-type(1) { animation-delay: .10s; }
+    .title-node:nth-of-type(2) { animation-delay: .23s; }
+    .title-node:nth-of-type(3) { animation-delay: .36s; }
+    .title-node:nth-of-type(4) { animation-delay: .49s; }
+    .title-node:nth-of-type(5) { animation-delay: .62s; }
+    .title-node:nth-of-type(6) { animation-delay: .75s; }
+
+    .title-node--analysis { left: 170px; top: 105px; width: 170px; border-left: 3px solid var(--lc-secondary); }
+    .title-node--input { left: 22px; top: 182px; width: 132px; border-left: 3px solid var(--lc-primary); }
+    .title-node--decision { left: 150px; top: 220px; width: 150px; border-left: 3px solid var(--lc-warm); }
+    .title-node--insight { left: 35px; top: 45px; width: 155px; border-left: 3px solid var(--lc-highlight); }
+    .title-node--output { left: 350px; top: 50px; width: 140px; border-left: 3px solid var(--lc-primary); }
+    .title-node--finding { left: 360px; top: 180px; width: 150px; border-left: 3px solid #3b7a73; }
+
+    .title-bridge-label {
+      position: absolute;
+      left: 357px;
+      top: 145px;
+      z-index: 4;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--lc-bg);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+    }
+
+    .title-tagline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      font-family: var(--lc-font-ui);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--lc-primary);
+    }
+
+    .title-tagline span::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      margin: 0 8px 1px 0;
+      border-radius: 50%;
+      background: var(--lc-warm);
+    }
+
+    /* ------------------------------------------------------------------
+       Slide 1: flat paper -> publication package
+       ------------------------------------------------------------------ */
+    #paper-package .vision-stage { height: 470px; }
+
+    .flat-paper {
+      position: absolute;
+      left: 388px;
+      top: 9px;
+      width: 344px;
+      height: 402px;
+      box-sizing: border-box;
+      padding: 34px 38px;
+      background: var(--vision-paper);
+      border: 1px solid rgba(var(--lc-primary-rgb), .13);
+      border-radius: 5px;
+      box-shadow: 0 26px 58px -25px rgba(43,49,60,.38);
+      text-align: left;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity .55s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+      z-index: 6;
+    }
+
+    .flat-paper__file {
+      font-family: var(--lc-font-mono);
+      font-size: 9px;
+      color: var(--lc-muted);
+      margin-bottom: 17px;
+    }
+
+    .flat-paper h3 {
+      font-family: var(--lc-font-heading);
+      font-size: 24px;
+      line-height: 1.14;
+      color: var(--lc-primary);
+      margin: 0 0 9px;
+    }
+
+    .flat-paper .paper-author {
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      color: var(--lc-muted);
+      margin-bottom: 22px;
+    }
+
+    .flat-paper__section {
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+      margin: 15px 0 7px;
+    }
+
+    .flat-paper__line {
+      height: 5px;
+      margin: 7px 0;
+      border-radius: 5px;
+      background: rgba(var(--lc-primary-rgb), .12);
+    }
+
+    .flat-paper__line--short { width: 68%; }
+
+    .flat-paper__figure {
+      position: relative;
+      height: 62px;
+      margin-top: 10px;
+      border-radius: 4px;
+      background:
+        linear-gradient(180deg, transparent 49%, rgba(var(--lc-primary-rgb), .12) 50%, transparent 51%),
+        linear-gradient(90deg, transparent 49%, rgba(var(--lc-primary-rgb), .08) 50%, transparent 51%),
+        var(--lc-surface);
+      overflow: hidden;
+    }
+
+    .flat-paper__figure svg { width: 100%; height: 100%; }
+
+    .flat-paper__dead-end {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      opacity: .7;
+    }
+
+    .package-world {
+      position: absolute;
+      inset: 0 0 25px;
+      opacity: 0;
+      transform: scale(.96) translateY(10px);
+      transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .package-boundary {
+      left: 115px;
+      top: 18px;
+      width: 888px;
+      height: 374px;
+      opacity: .32;
+      transition: opacity .45s ease, box-shadow .45s ease;
+    }
+
+    .package-layer {
+      position: absolute;
+      box-sizing: border-box;
+      top: 64px;
+      height: 286px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(var(--lc-primary-rgb), .10);
+    }
+
+    .package-layer__label {
+      position: absolute;
+      left: 17px;
+      top: 14px;
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+    }
+
+    .package-record {
+      left: 145px;
+      width: 524px;
+      background: rgba(var(--lc-primary-rgb), .035);
+    }
+
+    .package-narrative {
+      left: 695px;
+      width: 278px;
+      padding: 45px 23px 20px;
+      background: rgba(255,255,255,.90);
+      box-shadow: 0 17px 36px -24px rgba(43,49,60,.38);
+      text-align: left;
+    }
+
+    .package-record .kg-node { padding: 10px 11px; }
+    .package-record .kg-node__title { font-size: 11px; }
+    .package-record .kg-node__meta { font-size: 8.5px; }
+
+    .package-node--prep { left: 22px; top: 63px; width: 137px; height: 58px; }
+    .package-node--fit { left: 194px; top: 63px; width: 137px; height: 58px; }
+    .package-node--synthesis { left: 366px; top: 63px; width: 137px; height: 58px; }
+    .package-node--decision { left: 205px; top: 160px; width: 160px; height: 61px; }
+    .package-node--output { left: 373px; top: 170px; width: 129px; height: 58px; }
+    .package-node--finding { left: 28px; top: 170px; width: 142px; height: 58px; }
+
+    .package-narrative__title {
+      font-family: var(--lc-font-heading);
+      font-size: 17px;
+      line-height: 1.15;
+      color: var(--lc-primary);
+      margin: 0 0 12px;
+    }
+
+    .package-narrative p {
+      font-family: var(--lc-font-body);
+      font-size: 11px;
+      line-height: 1.52;
+      color: var(--lc-text);
+      margin: 0 0 10px;
+    }
+
+    .package-ref {
+      padding: 1px 3px;
+      border-bottom: 1px dotted var(--lc-secondary);
+      background: var(--vision-slate-soft);
+      color: var(--lc-secondary);
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .package-narrative__footer {
+      position: absolute;
+      left: 23px;
+      right: 23px;
+      bottom: 17px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--lc-muted);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .package-external {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .45s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .package-literature { left: 0; top: 95px; width: 104px; height: 89px; padding: 12px 10px; }
+    .package-upstream { left: 8px; top: 245px; width: 104px; height: 82px; padding: 12px 10px; }
+    .package-next { right: 0; top: 161px; width: 105px; height: 92px; padding: 12px 10px; }
+    .package-external .kg-node__title { font-size: 10px; }
+    .package-external .kg-node__meta { font-size: 8px; }
+
+    #paper-package.has-package .flat-paper {
+      opacity: 0;
+      transform: scale(.72) translateY(-12px);
+      pointer-events: none;
+    }
+
+    #paper-package.has-package .package-world {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    #paper-package.has-connections .package-boundary {
+      opacity: 1;
+      box-shadow: 0 0 0 8px rgba(var(--lc-warm-rgb), .045);
+    }
+
+    #paper-package.has-connections .package-external {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #paper-package.has-connections .package-external:nth-of-type(1) { transition-delay: .04s; }
+    #paper-package.has-connections .package-external:nth-of-type(2) { transition-delay: .14s; }
+    #paper-package.has-connections .package-external:nth-of-type(3) { transition-delay: .24s; }
+
+    #paper-package .package-edge--external { opacity: 0; }
+    #paper-package.has-connections .package-edge--external { opacity: 1; }
+
+    #paper-package.is-flat .story-caption [data-caption="flat"],
+    #paper-package.is-package .story-caption [data-caption="package"],
+    #paper-package.is-connections .story-caption [data-caption="connections"] {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ------------------------------------------------------------------
+       Slide 2: decisions and evidence
+       ------------------------------------------------------------------ */
+    #decision-support .vision-stage { height: 472px; }
+
+    .support-zone {
+      position: absolute;
+      top: 10px;
+      bottom: 51px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.34);
+      border: 1px solid rgba(var(--lc-primary-rgb), .07);
+    }
+
+    .support-zone--evidence { left: 0; width: 382px; }
+    .support-zone--decisions { left: 400px; width: 333px; background: rgba(var(--lc-warm-rgb), .035); }
+    .support-zone--results { left: 751px; right: 0; background: rgba(var(--lc-accent-rgb), .025); }
+
+    .support-zone__label {
+      position: absolute;
+      left: 18px;
+      top: 13px;
+      font-family: var(--lc-font-ui);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+    }
+
+    #decision-support .kg-node { padding: 11px 12px; }
+
+    .support-paper { left: 19px; top: 58px; width: 140px; height: 91px; }
+    .support-lit-insight { left: 202px; top: 58px; width: 158px; height: 91px; }
+    .support-artifact { left: 19px; top: 250px; width: 140px; height: 92px; }
+    .support-local-insight { left: 202px; top: 250px; width: 158px; height: 92px; }
+
+    .support-decision {
+      width: 293px;
+      height: 135px;
+      padding: 12px 15px !important;
+    }
+    .support-decision--prior { left: 420px; top: 48px; }
+    .support-decision--systematics { left: 420px; top: 238px; }
+
+    .decision-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 4px;
+      background: rgba(var(--lc-primary-rgb), .04);
+      color: var(--lc-muted);
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .decision-option::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid rgba(var(--lc-primary-rgb), .35);
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .decision-option--selected {
+      color: var(--lc-text);
+      background: var(--vision-gold-soft);
+      font-weight: 700;
+    }
+
+    .decision-option--selected::before {
+      border-color: var(--lc-warm);
+      box-shadow: inset 0 0 0 2px var(--vision-paper);
+      background: var(--lc-warm);
+    }
+
+    .support-output { left: 775px; top: 104px; width: 164px; height: 98px; }
+    .support-finding { left: 956px; top: 104px; width: 144px; height: 98px; }
+    .support-universe { left: 821px; top: 273px; width: 230px; height: 66px; padding: 12px 14px; }
+
+    #decision-support .support-node,
+    #decision-support .support-edge,
+    #decision-support .support-edge-label {
+      opacity: .22;
+      filter: saturate(.55);
+    }
+
+    #decision-support .support-node,
+    #decision-support .support-edge,
+    #decision-support .support-edge-label {
+      transition: opacity .42s ease, filter .42s ease, transform .42s ease, stroke .42s ease;
+    }
+
+    #decision-support.has-literature .support-node[data-chain="literature"],
+    #decision-support.has-literature .support-edge[data-chain="literature"],
+    #decision-support.has-literature .support-edge-label[data-chain="literature"],
+    #decision-support.has-artifact .support-node[data-chain="artifact"],
+    #decision-support.has-artifact .support-edge[data-chain="artifact"],
+    #decision-support.has-artifact .support-edge-label[data-chain="artifact"],
+    #decision-support.has-result .support-node[data-chain="result"],
+    #decision-support.has-result .support-edge[data-chain="result"],
+    #decision-support.has-result .support-edge-label[data-chain="result"] {
+      opacity: 1;
+      filter: saturate(1);
+    }
+
+    #decision-support.has-literature .support-decision--prior,
+    #decision-support.has-artifact .support-decision--systematics,
+    #decision-support.has-result .support-output,
+    #decision-support.has-result .support-finding {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 5px rgba(var(--lc-warm-rgb), .06), var(--vision-shadow);
+    }
+
+    #decision-support.is-structure .story-caption [data-caption="structure"],
+    #decision-support.is-literature .story-caption [data-caption="literature"],
+    #decision-support.is-artifact .story-caption [data-caption="artifact"],
+    #decision-support.is-result .story-caption [data-caption="result"] {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ------------------------------------------------------------------
+       Slide 3: authored narrative + navigable record
+       ------------------------------------------------------------------ */
+    #linked-surfaces .vision-stage { height: 472px; }
+
+    .surface-window {
+      position: absolute;
+      top: 14px;
+      height: 398px;
+      box-sizing: border-box;
+      border-radius: 9px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(var(--lc-primary-rgb), .12);
+      box-shadow: var(--vision-shadow);
+      overflow: hidden;
+      transition: opacity .45s ease, filter .45s ease, transform .45s ease;
+    }
+
+    .surface-window--article { left: 0; width: 506px; }
+    .surface-window--explorer { right: 0; width: 506px; }
+
+    .surface-chrome {
+      height: 34px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 13px;
+      background: var(--lc-surface);
+      border-bottom: 1px solid rgba(var(--lc-primary-rgb), .10);
+    }
+
+    .surface-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(var(--lc-primary-rgb), .28);
+    }
+
+    .surface-url {
+      margin-left: 8px;
+      font-family: var(--lc-font-mono);
+      font-size: 8px;
+      color: var(--lc-muted);
+    }
+
+    .surface-mode {
+      margin-left: auto;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+    }
+
+    .article-body {
+      padding: 25px 35px 22px;
+      text-align: left;
+    }
+
+    .article-body .article-section {
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+      margin-bottom: 7px;
+    }
+
+    .article-body h3 {
+      font-family: var(--lc-font-heading);
+      font-size: 22px;
+      line-height: 1.13;
+      color: var(--lc-primary);
+      margin: 0 0 12px;
+    }
+
+    .article-body p {
+      font-family: var(--lc-font-body);
+      font-size: 12.5px;
+      line-height: 1.58;
+      color: var(--lc-text);
+      margin: 0 0 12px;
+    }
+
+    .astra-ref {
+      position: relative;
+      display: inline;
+      appearance: none;
+      border: 0;
+      padding: 1px 3px;
+      border-bottom: 1px dotted var(--lc-secondary);
+      border-radius: 2px;
+      background: rgba(var(--lc-secondary-rgb), .07);
+      color: var(--lc-secondary);
+      font-family: var(--lc-font-ui);
+      font-size: .91em;
+      font-weight: 700;
+      cursor: default;
+      transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+    }
+
+    .astra-ref[data-surface-jump] { cursor: pointer; }
+
+    .astra-ref::before {
+      display: inline-block;
+      margin-right: 3px;
+      font-weight: 700;
+    }
+
+    .astra-ref--decision::before { content: '◇'; color: var(--lc-warm); }
+    .astra-ref--output::before { content: '◆'; color: var(--lc-primary); }
+    .astra-ref--finding::before { content: '●'; color: #3b7a73; }
+
+    .astra-live {
+      display: inline-block;
+      appearance: none;
+      border: 0;
+      padding: 0 3px;
+      border-bottom: 1.5px dotted var(--lc-secondary);
+      color: var(--lc-secondary);
+      font-family: var(--lc-font-ui);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+    }
+
+    .article-figure {
+      position: relative;
+      height: 102px;
+      margin-top: 17px;
+      border-radius: 5px;
+      background: #fff;
+      border: 1px solid rgba(var(--lc-primary-rgb), .10);
+      overflow: hidden;
+    }
+
+    .article-figure img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 10%;
+      opacity: .83;
+      filter: saturate(.55) contrast(.92);
+    }
+
+    .article-figure__label {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      padding: 4px 7px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.90);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--lc-primary);
+    }
+
+    .article-source-code {
+      position: absolute;
+      left: 17px;
+      bottom: 12px;
+      font-family: var(--lc-font-mono);
+      font-size: 7.5px;
+      color: var(--lc-muted);
+      opacity: .72;
+    }
+
+    .explorer-body {
+      position: relative;
+      height: 364px;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(var(--lc-primary-rgb), .085) 1px, transparent 1.2px);
+      background-size: 18px 18px;
+    }
+
+    .explorer-label {
+      position: absolute;
+      left: 18px;
+      top: 15px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+      z-index: 3;
+    }
+
+    .explore-node {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 9px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(var(--lc-primary-rgb), .13);
+      box-shadow: 0 11px 24px -17px rgba(43,49,60,.48);
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      line-height: 1.22;
+      font-weight: 700;
+      color: var(--lc-text);
+      text-align: left;
+      cursor: default;
+      transition: opacity .35s ease, transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+      z-index: 2;
+    }
+
+    .explore-node[data-surface-jump] { cursor: pointer; }
+
+    .astra-ref[data-surface-jump]:focus-visible,
+    .astra-live:focus-visible,
+    .explore-node[data-surface-jump]:focus-visible,
+    .prov-node[data-inspect-step]:focus-visible {
+      outline: 2px solid var(--lc-warm);
+      outline-offset: 3px;
+    }
+
+    .explore-node small {
+      display: block;
+      margin-top: 3px;
+      font-family: var(--lc-font-ui);
+      font-size: 7.5px;
+      line-height: 1.2;
+      font-weight: 500;
+      color: var(--lc-muted);
+    }
+
+    .explore-node--analysis { left: 173px; top: 58px; width: 159px; border-left: 3px solid var(--lc-secondary); }
+    .explore-node--input { left: 32px; top: 165px; width: 127px; border-left: 3px solid var(--lc-primary); }
+    .explore-node--decision { left: 179px; top: 171px; width: 151px; border-left: 3px solid var(--lc-warm); }
+    .explore-node--output { left: 352px; top: 159px; width: 128px; border-left: 3px solid var(--lc-primary); }
+    .explore-node--insight { left: 48px; top: 270px; width: 147px; border-left: 3px solid var(--lc-highlight); }
+    .explore-node--finding { left: 325px; top: 276px; width: 149px; border-left: 3px solid #3b7a73; }
+
+    .surface-bridge {
+      position: absolute;
+      left: 509px;
+      top: 55px;
+      width: 102px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .surface-bridge__line {
+      width: 1px;
+      flex: 1;
+      background: linear-gradient(180deg, transparent, rgba(var(--lc-warm-rgb), .38), transparent);
+    }
+
+    .surface-bridge__label {
+      padding: 7px 9px;
+      margin: 7px 0;
+      border-radius: 999px;
+      background: var(--vision-gold-soft);
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    .linked-popover {
+      position: absolute;
+      right: 19px;
+      top: 78px;
+      width: 242px;
+      min-height: 126px;
+      box-sizing: border-box;
+      padding: 15px 16px;
+      border-radius: 7px;
+      background: rgba(255,255,255,.98);
+      border: 1px solid rgba(var(--lc-primary-rgb), .14);
+      border-top: 3px solid var(--lc-warm);
+      box-shadow: 0 20px 42px -20px rgba(43,49,60,.48);
+      text-align: left;
+      opacity: 0;
+      transform: translateY(7px) scale(.98);
+      transition: opacity .35s ease, transform .4s cubic-bezier(.2,.8,.2,1);
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    .linked-popover__panel { display: none; }
+    .linked-popover .vision-kicker { margin-bottom: 7px; }
+    .linked-popover h4 {
+      font-family: var(--lc-font-ui);
+      font-size: 13px;
+      line-height: 1.18;
+      color: var(--lc-primary);
+      margin: 0 0 7px;
+    }
+    .linked-popover p {
+      font-family: var(--lc-font-ui);
+      font-size: 9.5px;
+      line-height: 1.35;
+      color: var(--lc-muted);
+      margin: 0;
+    }
+
+    #linked-surfaces.has-decision .astra-ref--decision,
+    #linked-surfaces.has-decision .explore-node--decision,
+    #linked-surfaces.has-value .astra-live,
+    #linked-surfaces.has-value .explore-node--output {
+      color: var(--lc-primary);
+      background: var(--vision-gold-soft);
+      box-shadow: 0 0 0 4px rgba(var(--lc-warm-rgb), .075);
+    }
+
+    #linked-surfaces.has-decision .explore-node--decision,
+    #linked-surfaces.has-value .explore-node--output {
+      transform: translateY(-3px);
+      border-color: rgba(var(--lc-warm-rgb), .62);
+    }
+
+    #linked-surfaces.has-decision .linked-popover,
+    #linked-surfaces.has-value .linked-popover {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    #linked-surfaces.is-decision .linked-popover__panel[data-panel="decision"],
+    #linked-surfaces.is-value .linked-popover__panel[data-panel="value"] {
+      display: block;
+    }
+
+    .result-entry {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 430px;
+      height: 178px;
+      transform: translate(-50%, -40%) scale(.92);
+      box-sizing: border-box;
+      padding: 27px 32px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.98);
+      border: 1px solid rgba(var(--lc-warm-rgb), .34);
+      box-shadow:
+        0 0 0 11px rgba(var(--lc-warm-rgb), .055),
+        0 30px 75px -28px rgba(43,49,60,.55);
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+      z-index: 15;
+    }
+
+    .result-entry__value {
+      margin: 9px 0 5px;
+      font-family: var(--lc-font-heading);
+      font-size: 35px;
+      line-height: 1;
+      color: var(--lc-warm);
+    }
+
+    .result-entry__path {
+      font-family: var(--lc-font-mono);
+      font-size: 9px;
+      color: var(--lc-primary);
+    }
+
+    .result-entry__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 17px;
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+    }
+
+    .result-entry__cta span {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--lc-primary);
+      color: #fff;
+      animation: arrow-nudge 1.6s ease-in-out infinite;
+    }
+
+    #linked-surfaces.has-trace .surface-window {
+      opacity: .18;
+      filter: blur(1.4px) saturate(.45);
+      transform: scale(.985);
+    }
+
+    #linked-surfaces.has-trace .surface-bridge { opacity: .15; }
+    #linked-surfaces.has-trace .linked-popover { opacity: 0; }
+    #linked-surfaces.has-trace .result-entry {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    #linked-surfaces.is-overview .story-caption [data-caption="overview"],
+    #linked-surfaces.is-decision .story-caption [data-caption="decision"],
+    #linked-surfaces.is-value .story-caption [data-caption="value"],
+    #linked-surfaces.is-trace .story-caption [data-caption="trace"] {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ------------------------------------------------------------------
+       Slide 4: full provenance traversal
+       ------------------------------------------------------------------ */
+    #provenance .slide-head { margin-bottom: 3px; }
+    #provenance .vision-stage { height: 507px; }
+
+    .trace-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 780px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .trace-progress__step {
+      display: flex;
+      align-items: center;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      opacity: .36;
+      transition: opacity .3s ease, color .3s ease;
+    }
+
+    .trace-progress__step::after {
+      content: '';
+      width: 28px;
+      height: 1px;
+      margin: 0 8px;
+      background: rgba(var(--lc-primary-rgb), .20);
+    }
+
+    .trace-progress__step:last-child::after { display: none; }
+    .trace-progress__step.is-passed { opacity: 1; color: var(--lc-primary); }
+    .trace-progress__step.is-current { opacity: 1; color: var(--lc-warm); }
+
+    .provenance-graph {
+      position: absolute;
+      left: 0;
+      top: 38px;
+      width: 790px;
+      height: 442px;
+      border-radius: 13px;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(var(--lc-primary-rgb), .075) 1px, transparent 1.2px);
+      background-size: 19px 19px;
+      border: 1px solid rgba(var(--lc-primary-rgb), .07);
+      overflow: hidden;
+    }
+
+    .provenance-graph::after {
+      content: 'nodes marked ↗ reopen their layer';
+      position: absolute;
+      left: 14px;
+      bottom: 10px;
+      font-family: var(--lc-font-ui);
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      opacity: .55;
+    }
+
+    .prov-node {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 9px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.97);
+      border: 1px solid rgba(var(--lc-primary-rgb), .13);
+      box-shadow: 0 10px 24px -18px rgba(43,49,60,.45);
+      font-family: var(--lc-font-ui);
+      text-align: left;
+      opacity: .11;
+      filter: saturate(.35);
+      transform: translateY(3px);
+      cursor: default;
+      transition:
+        opacity .45s ease,
+        filter .45s ease,
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        border-color .35s ease,
+        box-shadow .35s ease;
+      z-index: 3;
+    }
+
+    .prov-node.is-in-path {
+      opacity: 1;
+      filter: saturate(1);
+      transform: translateY(0);
+      cursor: default;
+    }
+
+    .prov-node[data-inspect-step].is-in-path { cursor: pointer; }
+
+    .prov-node[data-inspect-step].is-in-path::after {
+      content: '↗';
+      position: absolute;
+      right: 6px;
+      top: 4px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      color: var(--lc-warm);
+      opacity: .52;
+    }
+
+    .prov-node[data-inspect-step].is-in-path:hover {
+      border-color: rgba(var(--lc-warm-rgb), .62);
+      box-shadow: 0 0 0 4px rgba(var(--lc-warm-rgb), .06), 0 11px 24px -17px rgba(43,49,60,.48);
+    }
+
+    .prov-node.is-current {
+      border-color: rgba(var(--lc-warm-rgb), .70);
+      box-shadow:
+        0 0 0 5px rgba(var(--lc-warm-rgb), .075),
+        0 16px 32px -20px rgba(var(--lc-warm-rgb), .50);
+    }
+
+    .prov-node__kind {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+      font-family: var(--lc-font-ui);
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+    }
+
+    .prov-node__title {
+      display: block;
+      font-family: var(--lc-font-ui);
+      font-size: 9.5px;
+      line-height: 1.16;
+      font-weight: 700;
+      color: var(--lc-text);
+    }
+
+    .prov-node__meta {
+      display: block;
+      margin-top: 3px;
+      font-family: var(--lc-font-ui);
+      font-size: 7.5px;
+      line-height: 1.25;
+      color: var(--lc-muted);
+    }
+
+    .prov-node--result {
+      left: 298px;
+      top: 13px;
+      width: 194px;
+      height: 64px;
+      border-top: 3px solid var(--lc-warm);
+      text-align: center;
+    }
+
+    .prov-node--result .prov-node__title {
+      font-family: var(--lc-font-heading);
+      font-size: 17px;
+      color: var(--lc-warm);
+    }
+
+    .prov-node--output {
+      left: 296px;
+      top: 100px;
+      width: 198px;
+      height: 70px;
+      border-left: 3px solid var(--lc-primary);
+    }
+
+    .prov-node--fits {
+      left: 94px;
+      top: 203px;
+      width: 166px;
+      height: 66px;
+      border-left: 3px solid var(--lc-primary);
+    }
+
+    .prov-node--recipe {
+      left: 305px;
+      top: 209px;
+      width: 172px;
+      height: 57px;
+      border-left: 3px solid var(--lc-accent);
+    }
+
+    .prov-node--systematics {
+      left: 541px;
+      top: 194px;
+      width: 184px;
+      height: 79px;
+      border-left: 3px solid var(--lc-warm);
+    }
+
+    .prov-node--selected-fit {
+      left: 91px;
+      top: 310px;
+      width: 183px;
+      height: 61px;
+      border-left: 3px solid var(--lc-primary);
+    }
+
+    .prov-node--xi {
+      left: 10px;
+      top: 393px;
+      width: 144px;
+      height: 50px;
+      border-left: 3px solid var(--lc-primary);
+    }
+
+    .prov-node--catalog {
+      left: 177px;
+      top: 393px;
+      width: 145px;
+      height: 50px;
+      border-left: 3px solid var(--lc-primary);
+    }
+
+    .prov-node--fit-decisions {
+      left: 318px;
+      top: 303px;
+      width: 186px;
+      height: 77px;
+      border-left: 3px solid var(--lc-warm);
+    }
+
+    .prov-node--universe {
+      left: 542px;
+      top: 99px;
+      width: 176px;
+      height: 65px;
+      border-left: 3px solid var(--lc-secondary);
+    }
+
+    .prov-node--sys-insight {
+      left: 548px;
+      top: 311px;
+      width: 178px;
+      height: 66px;
+      border-left: 3px solid var(--lc-highlight);
+    }
+
+    .prov-node--damping-insight {
+      left: 350px;
+      top: 393px;
+      width: 184px;
+      height: 50px;
+      border-left: 3px solid var(--lc-highlight);
+    }
+
+    .prov-node--paper {
+      left: 563px;
+      top: 393px;
+      width: 169px;
+      height: 50px;
+      border-top: 3px solid var(--lc-warm);
+    }
+
+    .trace-edge {
+      fill: none;
+      stroke: rgba(var(--lc-primary-rgb), .50);
+      stroke-width: 1.3;
+      vector-effect: non-scaling-stroke;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      opacity: .10;
+      transition: stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1), opacity .35s ease, stroke .35s ease;
+    }
+
+    .trace-edge.is-in-path {
+      stroke-dashoffset: 0;
+      opacity: .82;
+    }
+
+    .trace-edge--gold { stroke: rgba(var(--lc-warm-rgb), .72); }
+    .trace-edge--red { stroke: rgba(var(--lc-highlight-rgb), .62); }
+    .trace-edge--green { stroke: rgba(var(--lc-accent-rgb), .64); }
+
+    .trace-edge-label {
+      font-family: var(--lc-font-ui);
+      font-size: 7px;
+      font-weight: 600;
+      fill: var(--lc-muted);
+      paint-order: stroke;
+      stroke: var(--lc-bg);
+      stroke-width: 3.5px;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+
+    .trace-edge-label.is-in-path { opacity: .84; }
+
+    #provenance.has-complete .provenance-graph {
+      box-shadow: inset 0 0 0 1px rgba(var(--lc-warm-rgb), .15);
+    }
+
+    #provenance.has-complete .prov-node.is-in-path {
+      box-shadow: 0 11px 25px -18px rgba(43,49,60,.48);
+    }
+
+    .provenance-inspector {
+      position: absolute;
+      right: 0;
+      top: 38px;
+      width: 303px;
+      height: 442px;
+      box-sizing: border-box;
+      padding: 19px 20px 17px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(var(--lc-primary-rgb), .13);
+      box-shadow: var(--vision-shadow);
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .inspector-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(var(--lc-primary-rgb), .10);
+    }
+
+    .inspector-chrome__title {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+    }
+
+    .inspector-chrome__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      color: var(--lc-accent);
+    }
+
+    .inspector-chrome__status::before {
+      content: '✓';
+      display: inline-grid;
+      place-items: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--lc-accent);
+      color: white;
+      font-size: 8px;
+    }
+
+    .inspector-panel {
+      display: none;
+      padding-top: 18px;
+      animation: inspector-in .38s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .inspector-panel.is-active { display: block; }
+
+    .inspector-panel .vision-kicker { margin-bottom: 8px; }
+
+    .inspector-panel h3 {
+      font-family: var(--lc-font-heading);
+      font-size: 19px;
+      line-height: 1.14;
+      color: var(--lc-primary);
+      margin: 0 0 7px;
+    }
+
+    .inspector-panel .inspector-value {
+      font-family: var(--lc-font-heading);
+      font-size: 28px;
+      line-height: 1;
+      color: var(--lc-warm);
+      margin: 7px 0 10px;
+    }
+
+    .inspector-panel p {
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      line-height: 1.42;
+      color: var(--lc-muted);
+      margin: 0 0 10px;
+    }
+
+    .inspector-path {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 8px 9px;
+      border-radius: 4px;
+      background: var(--lc-surface);
+      font-family: var(--lc-font-mono);
+      font-size: 8px;
+      line-height: 1.4;
+      color: var(--lc-primary);
+      overflow-wrap: anywhere;
+    }
+
+    .inspector-rows {
+      margin-top: 13px;
+      border-top: 1px solid rgba(var(--lc-primary-rgb), .09);
+    }
+
+    .inspector-row {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 9px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(var(--lc-primary-rgb), .08);
+    }
+
+    .inspector-row__label {
+      font-family: var(--lc-font-ui);
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+    }
+
+    .inspector-row__value {
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      line-height: 1.3;
+      color: var(--lc-text);
+    }
+
+    .inspector-choice {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 5px;
+      background: var(--vision-gold-soft);
+      border-left: 3px solid var(--lc-warm);
+    }
+
+    .inspector-choice__label {
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+    }
+
+    .inspector-choice__name {
+      margin-top: 3px;
+      font-family: var(--lc-font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--lc-text);
+    }
+
+    .inspector-alt {
+      margin-top: 7px;
+      font-family: var(--lc-font-ui);
+      font-size: 8.5px;
+      color: var(--lc-muted);
+    }
+
+    .inspector-quote {
+      position: relative;
+      margin-top: 11px;
+      padding: 13px 13px 11px 22px;
+      border-radius: 5px;
+      background: var(--lc-surface);
+      font-family: var(--lc-font-body);
+      font-size: 11px;
+      line-height: 1.42;
+      color: var(--lc-text);
+    }
+
+    .inspector-quote::before {
+      content: '“';
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-family: var(--lc-font-heading);
+      font-size: 23px;
+      color: var(--lc-warm);
+    }
+
+    .inspector-citation {
+      margin-top: 8px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      line-height: 1.35;
+      color: var(--lc-muted);
+    }
+
+    .trace-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .trace-summary__item {
+      padding: 9px 8px;
+      border-radius: 5px;
+      background: rgba(var(--lc-primary-rgb), .045);
+    }
+
+    .trace-summary__num {
+      display: block;
+      font-family: var(--lc-font-heading);
+      font-size: 18px;
+      line-height: 1;
+      color: var(--lc-primary);
+    }
+
+    .trace-summary__label {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--lc-font-ui);
+      font-size: 7px;
+      line-height: 1.2;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+    }
+
+    /* ------------------------------------------------------------------
+       Closing slide
+       ------------------------------------------------------------------ */
+    #future-paper {
+      box-sizing: border-box;
+      padding: 70px 90px 44px;
+      overflow: hidden;
+    }
+
+    #future-paper .closing-eyebrow {
+      font-family: var(--lc-font-ui);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+      margin-bottom: 9px;
+    }
+
+    #future-paper h2 {
+      width: 930px;
+      margin: 0 auto;
+      font-family: var(--lc-font-heading);
+      font-size: 43px;
+      line-height: 1.07;
+      letter-spacing: -.02em;
+      color: var(--lc-warm);
+    }
+
+    .future-equation {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 72px 1fr;
+      align-items: center;
+      width: 920px;
+      margin: 36px auto 0;
+    }
+
+    .future-equation::before {
+      content: 'CONCEPTUAL PUBLICATION BOUNDARY';
+      position: absolute;
+      left: -25px;
+      right: -25px;
+      top: -23px;
+      height: 220px;
+      box-sizing: border-box;
+      padding: 8px 18px;
+      border: 1.5px dashed rgba(var(--lc-warm-rgb), .55);
+      border-radius: 18px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-align: left;
+      color: var(--lc-warm);
+      z-index: -1;
+    }
+
+    .future-card {
+      height: 166px;
+      box-sizing: border-box;
+      padding: 22px 24px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.93);
+      border: 1px solid rgba(var(--lc-primary-rgb), .11);
+      box-shadow: var(--vision-shadow);
+      text-align: left;
+    }
+
+    .future-card__icon {
+      font-family: var(--lc-font-ui);
+      font-size: 20px;
+      line-height: 1;
+      margin-bottom: 9px;
+    }
+
+    .future-card h3 {
+      font-family: var(--lc-font-heading);
+      font-size: 20px;
+      color: var(--lc-primary);
+      margin: 0 0 6px;
+    }
+
+    .future-card p {
+      font-family: var(--lc-font-ui);
+      font-size: 10px;
+      line-height: 1.42;
+      color: var(--lc-muted);
+      margin: 0;
+    }
+
+    .future-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 12px;
+    }
+
+    .future-bridge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--lc-font-ui);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--lc-warm);
+    }
+
+    .future-bridge__arrow {
+      font-size: 28px;
+      line-height: 1;
+      color: var(--lc-warm);
+    }
+
+    .future-promise {
+      width: 930px;
+      margin: 34px auto 0;
+      font-family: var(--lc-font-heading);
+      font-size: 22px;
+      line-height: 1.35;
+      color: var(--lc-primary);
+    }
+
+    .future-promise strong { color: var(--lc-warm); font-weight: 400; }
+
+    .future-links {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      font-family: var(--lc-font-ui);
+      font-size: 8.5px;
+      color: var(--lc-muted);
+    }
+
+    .future-links a {
+      color: var(--lc-secondary);
+      border-bottom: none;
+    }
+
+    /* ------------------------------------------------------------------
+       Animation and reduced-motion behavior
+       ------------------------------------------------------------------ */
+    @keyframes result-pulse {
+      0% { opacity: .70; transform: scale(.96); }
+      70%, 100% { opacity: 0; transform: scale(1.06); }
+    }
+
+    @keyframes title-orbit {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes title-node-in {
+      from { opacity: 0; transform: translateY(9px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes arrow-nudge {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(4px); }
+    }
+
+    @keyframes inspector-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media print {
+      .story-step { display: none !important; }
+      .kg-node,
+      .prov-node,
+      .trace-edge,
+      .trace-edge-label,
+      .package-world,
+      .package-external {
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        stroke-dashoffset: 0 !important;
+      }
+    }
+  
   </style>
 </head>
 
@@ -3217,6 +5260,716 @@ we measure &alpha; = <span style="color: var(--lc-primary);">{astra:value}</span
       </section>
 
       <!-- ================================================================== -->
+      <!-- A VISION FOR SCIENTIFIC COMMUNICATION — the paper as a window        -->
+      <!-- ==================================================================== -->
+      <section id="vision-title" data-background-glow>
+              <div class="title-rule" aria-hidden="true"></div>
+              <div class="title-eyebrow">A vision for scientific communication</div>
+              <h1>The paper becomes a window into the work.</h1>
+              <p class="title-subtitle">A human-authored argument beside a navigable ASTRA research record.</p>
+
+              <div class="title-vision" aria-label="A MyST article linked into a navigable ASTRA graph">
+                <div class="title-article">
+                  <div class="title-article__headline"></div>
+                  <div class="title-article__line"></div>
+                  <div class="title-article__line"></div>
+                  <span class="title-inline-ref">◇ damping prior</span>
+                  <span class="title-inline-ref">19.88 &plusmn; 0.17</span>
+                  <div class="title-article__line"></div>
+                  <div class="title-article__line"></div>
+                  <div class="title-article__line"></div>
+                </div>
+
+                <div class="title-bridge-label">single-sourced · never copy-pasted</div>
+
+                <div class="title-graph">
+                  <div class="title-orbit title-orbit--1" aria-hidden="true"></div>
+                  <div class="title-orbit title-orbit--2" aria-hidden="true"></div>
+
+                  <svg class="edge-layer" viewBox="0 0 530 290" aria-hidden="true">
+                    <defs>
+                      <marker id="title-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.48)"></path>
+                      </marker>
+                    </defs>
+                    <path class="edge" d="M190 75 C235 82 226 110 250 122" marker-end="url(#title-arrow)"></path>
+                    <path class="edge" d="M152 204 C185 187 204 160 233 142" marker-end="url(#title-arrow)"></path>
+                    <path class="edge edge--gold" d="M264 220 C272 194 275 164 275 143" marker-end="url(#title-arrow)"></path>
+                    <path class="edge" d="M324 130 C366 113 378 86 400 73" marker-end="url(#title-arrow)"></path>
+                    <path class="edge edge--green" d="M409 83 C424 117 426 151 430 181" marker-end="url(#title-arrow)"></path>
+                    <path class="edge edge--gold edge--dash" d="M0 157 C97 158 138 146 171 136"></path>
+                  </svg>
+
+                  <div class="title-node title-node--insight"><span class="vision-glyph glyph-insight">◈</span>prior insight</div>
+                  <div class="title-node title-node--analysis"><span class="vision-glyph glyph-analysis">◐</span>BAO analysis</div>
+                  <div class="title-node title-node--input"><span class="vision-glyph glyph-input">▤</span>catalogs</div>
+                  <div class="title-node title-node--decision"><span class="vision-glyph glyph-decision">◇</span>assumption</div>
+                  <div class="title-node title-node--output"><span class="vision-glyph glyph-output">◆</span>result table</div>
+                  <div class="title-node title-node--finding"><span class="vision-glyph glyph-finding">●</span>finding</div>
+                </div>
+
+                <div class="title-tagline">
+                  <span>Pick any result</span>
+                  <span>Follow every choice</span>
+                  <span>Inspect every source</span>
+                </div>
+              </div>
+            </section>
+
+      <section id="paper-package" class="vision-slide" data-story-default="flat">
+              <div class="slide-head">
+                <span class="section-label">The publication boundary</span>
+                <h2>A paper is no longer a single file.</h2>
+                <p>It is a bounded contribution inside a research graph that keeps going.</p>
+              </div>
+
+              <div class="vision-stage">
+                <div class="flat-paper" aria-label="A conventional flattened PDF">
+                  <div class="flat-paper__file">paper_final_v7.pdf</div>
+                  <h3>Measuring the BAO distance scale</h3>
+                  <div class="paper-author">A. Researcher, B. Scientist, et al.</div>
+                  <div class="flat-paper__section">Methods</div>
+                  <div class="flat-paper__line"></div>
+                  <div class="flat-paper__line"></div>
+                  <div class="flat-paper__line flat-paper__line--short"></div>
+                  <div class="flat-paper__section">Results</div>
+                  <div class="flat-paper__figure">
+                    <svg viewBox="0 0 260 62" aria-hidden="true">
+                      <path d="M8 49 C35 46 43 41 62 43 S92 32 111 35 S142 16 166 26 S202 19 250 12" fill="none" stroke="#4e5a70" stroke-width="1.6"></path>
+                      <g fill="#a67c3c">
+                        <circle cx="43" cy="42" r="2.5"></circle><circle cx="92" cy="34" r="2.5"></circle><circle cx="142" cy="22" r="2.5"></circle><circle cx="202" cy="19" r="2.5"></circle>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="flat-paper__line"></div>
+                  <div class="flat-paper__line flat-paper__line--short"></div>
+                  <div class="flat-paper__dead-end">the trail stops here</div>
+                </div>
+
+                <div class="package-world" aria-label="Future publication package with ASTRA record and MyST narrative">
+                  <div class="paper-boundary package-boundary">
+                    <div class="paper-boundary__label">future paper · conceptual publication boundary</div>
+                  </div>
+
+                  <svg class="edge-layer" viewBox="0 0 1120 435" aria-hidden="true">
+                    <defs>
+                      <marker id="package-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.54)"></path>
+                      </marker>
+                      <marker id="package-arrow-gold" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(166,124,60,.70)"></path>
+                      </marker>
+                      <marker id="package-arrow-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(151,63,43,.68)"></path>
+                      </marker>
+                      <marker id="package-arrow-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(59,122,115,.68)"></path>
+                      </marker>
+                    </defs>
+
+                    <!-- Internal analysis tree -->
+                    <path class="edge" d="M305 126 C317 126 328 126 340 126" marker-end="url(#package-arrow)"></path>
+                    <path class="edge" d="M477 126 C489 126 500 126 512 126" marker-end="url(#package-arrow)"></path>
+                    <path class="edge edge--gold" d="M431 194 C429 179 421 166 409 155" marker-end="url(#package-arrow-gold)"></path>
+                    <path class="edge" d="M581 155 C582 169 583 189 584 204" marker-end="url(#package-arrow)"></path>
+                    <path class="edge edge--green" d="M519 246 C468 276 375 276 316 246" marker-end="url(#package-arrow-green)"></path>
+
+                    <!-- MySTRA references -->
+                    <path class="edge edge--gold edge--dash" d="M695 146 C635 160 584 179 511 207" marker-end="url(#package-arrow-gold)"></path>
+                    <path class="edge edge--gold edge--dash" d="M695 181 C678 188 664 208 648 226" marker-end="url(#package-arrow-gold)"></path>
+                    <text class="edge-label" x="616" y="178">MySTRA references</text>
+
+                    <!-- Across the publication boundary -->
+                    <path class="edge edge--red package-edge--external" d="M104 86 C158 70 246 70 318 82 C322 132 327 181 351 210" marker-end="url(#package-arrow-red)"></path>
+                    <path class="edge package-edge--external" d="M112 255 C132 255 153 239 174 233" marker-end="url(#package-arrow)"></path>
+                    <path class="edge edge--green package-edge--external" d="M584 262 C680 380 890 360 1015 210" marker-end="url(#package-arrow-green)"></path>
+                    <text class="edge-label package-edge--external" x="107" y="63">supports</text>
+                    <text class="edge-label package-edge--external" x="114" y="278">supports finding</text>
+                    <text class="edge-label package-edge--external" x="862" y="345">becomes an input</text>
+                  </svg>
+
+                  <div class="package-layer package-record">
+                    <div class="package-layer__label">ASTRA · structured research record</div>
+
+                    <div class="kg-node kg-node--analysis package-node--prep">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◐</span><span class="kg-node__kind">sub-analysis</span></div>
+                      <span class="kg-node__title">Catalog preparation</span>
+                    </div>
+
+                    <div class="kg-node kg-node--analysis package-node--fit">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◐</span><span class="kg-node__kind">sub-analysis</span></div>
+                      <span class="kg-node__title">BAO fitting</span>
+                    </div>
+
+                    <div class="kg-node kg-node--analysis package-node--synthesis">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◐</span><span class="kg-node__kind">sub-analysis</span></div>
+                      <span class="kg-node__title">Distance synthesis</span>
+                    </div>
+
+                    <div class="kg-node kg-node--decision package-node--decision">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-decision">◇</span><span class="kg-node__kind">assumption · decision</span></div>
+                      <span class="kg-node__title">damping_prior</span>
+                      <span class="kg-node__meta">baseline → gaussian</span>
+                    </div>
+
+                    <div class="kg-node kg-node--output kg-node--selected package-node--output">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-output">◆</span><span class="kg-node__kind">output</span></div>
+                      <span class="kg-node__title">distance table</span>
+                      <span class="kg-node__meta">CSV · materialized</span>
+                    </div>
+
+                    <div class="kg-node kg-node--finding package-node--finding">
+                      <div class="kg-node__top"><span class="vision-glyph glyph-finding">●</span><span class="kg-node__kind">finding</span></div>
+                      <span class="kg-node__title">null tests stable</span>
+                      <span class="kg-node__meta">artifact-backed</span>
+                    </div>
+                  </div>
+
+                  <div class="package-layer package-narrative">
+                    <div class="package-layer__label">MyST · authored narrative</div>
+                    <div class="package-narrative__title">Measuring the BAO distance scale</div>
+                    <p>We adopt a <span class="package-ref">◇ Gaussian damping prior</span>, supported by prior work.</p>
+                    <p>The combined tracer gives <span class="package-ref">19.88 &plusmn; 0.17</span>, resolved from the active output at build time.</p>
+                    <p>Every reference opens the record behind the statement.</p>
+                    <div class="package-narrative__footer"><span>human authored</span><span>single sourced</span></div>
+                  </div>
+
+                  <div class="kg-node kg-node--literature package-external package-literature">
+                    <div class="kg-node__top"><span class="vision-glyph glyph-insight">◈</span><span class="kg-node__kind">literature</span></div>
+                    <span class="kg-node__title">Chen et al. 2024</span>
+                    <span class="kg-node__meta">DOI · p. 22</span>
+                  </div>
+
+                  <div class="kg-node kg-node--analysis package-external package-upstream">
+                    <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◐</span><span class="kg-node__kind">prior work</span></div>
+                    <span class="kg-node__title">Covariance validation</span>
+                    <span class="kg-node__meta">ASTRA v1.2</span>
+                  </div>
+
+                  <div class="kg-node kg-node--analysis package-external package-next">
+                    <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◐</span><span class="kg-node__kind">next work</span></div>
+                    <span class="kg-node__title">Cosmology inference</span>
+                    <span class="kg-node__meta">consumes output</span>
+                  </div>
+                </div>
+
+                <span class="fragment story-step" data-story-step="package" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="connections" aria-hidden="true"></span>
+
+                <div class="story-caption" aria-live="polite">
+                  <span data-caption="flat">Today, the scientific record is flattened into one frozen projection.</span>
+                  <span data-caption="package" hidden aria-hidden="true">The future paper packages an ASTRA analysis tree with a human-authored MyST view.</span>
+                  <span data-caption="connections" hidden aria-hidden="true">The conceptual boundary says what this contribution contains&mdash;not where its provenance stops.</span>
+                </div>
+              </div>
+            </section>
+
+      <section id="decision-support" class="vision-slide" data-story-default="structure">
+              <div class="slide-head">
+                <span class="section-label">The evidence graph</span>
+                <h2>Assumptions become inspectable choices.</h2>
+                <p>A decision can be grounded in literature or in an artifact already produced by the work.</p>
+              </div>
+
+              <div class="vision-stage">
+                <div class="support-zone support-zone--evidence"><div class="support-zone__label">evidence already known</div></div>
+                <div class="support-zone support-zone--decisions"><div class="support-zone__label">methodological choices</div></div>
+                <div class="support-zone support-zone--results"><div class="support-zone__label">results produced</div></div>
+
+                <svg class="edge-layer" viewBox="0 0 1120 472" aria-hidden="true">
+                  <defs>
+                    <marker id="support-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                      <path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.55)"></path>
+                    </marker>
+                    <marker id="support-arrow-gold" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                      <path d="M0,0 L8,4 L0,8 z" fill="rgba(166,124,60,.72)"></path>
+                    </marker>
+                    <marker id="support-arrow-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                      <path d="M0,0 L8,4 L0,8 z" fill="rgba(151,63,43,.68)"></path>
+                    </marker>
+                    <marker id="support-arrow-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                      <path d="M0,0 L8,4 L0,8 z" fill="rgba(59,122,115,.68)"></path>
+                    </marker>
+                  </defs>
+
+                  <path class="edge edge--red support-edge" data-chain="literature" d="M159 104 C178 104 183 104 202 104" marker-end="url(#support-arrow-red)"></path>
+                  <path class="edge edge--gold support-edge" data-chain="literature" d="M360 104 C389 104 395 111 420 116" marker-end="url(#support-arrow-gold)"></path>
+                  <text class="edge-label support-edge-label" data-chain="literature" x="180.5" y="94" text-anchor="middle">grounds</text>
+                  <text class="edge-label support-edge-label" data-chain="literature" x="390" y="95" text-anchor="middle">supports</text>
+
+                  <path class="edge edge--green support-edge" data-chain="artifact" d="M159 296 C178 296 183 296 202 296" marker-end="url(#support-arrow-green)"></path>
+                  <path class="edge edge--gold support-edge" data-chain="artifact" d="M360 296 C388 296 395 305 420 307" marker-end="url(#support-arrow-gold)"></path>
+                  <text class="edge-label support-edge-label" data-chain="artifact" x="180.5" y="286" text-anchor="middle">grounds</text>
+                  <text class="edge-label support-edge-label" data-chain="artifact" x="390" y="287" text-anchor="middle">supports</text>
+
+                  <path class="edge support-edge" data-chain="result" d="M713 104 C738 104 750 112 775 116" marker-end="url(#support-arrow)"></path>
+                  <path class="edge support-edge" data-chain="result" d="M713 305 C746 292 755 205 775 166" marker-end="url(#support-arrow)"></path>
+                  <path class="edge edge--green support-edge" data-chain="result" d="M939 126 C946 126 949 126 956 126" marker-end="url(#support-arrow-green)"></path>
+                  <path class="edge edge--gold support-edge" data-chain="result" d="M850 248 C810 222 760 151 697 89" marker-end="url(#support-arrow-gold)"></path>
+                  <path class="edge edge--gold support-edge" data-chain="result" d="M821 281 C779 281 742 279 697 279" marker-end="url(#support-arrow-gold)"></path>
+                  <text class="edge-label support-edge-label" data-chain="result" x="722" y="92">shapes fits</text>
+                  <text class="edge-label support-edge-label" data-chain="result" x="722" y="273">parameterizes</text>
+                  <text class="edge-label support-edge-label" data-chain="result" x="746" y="188">selects gaussian</text>
+                  <text class="edge-label support-edge-label" data-chain="result" x="731" y="299">selects include</text>
+                </svg>
+
+                <div class="kg-node kg-node--literature support-node support-paper" data-chain="literature">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-insight">◈</span><span class="kg-node__kind">literature evidence</span></div>
+                  <span class="kg-node__title">Chen et al. 2024</span>
+                  <span class="kg-node__meta">exact quote · p. 22</span>
+                </div>
+
+                <div class="kg-node kg-node--insight support-node support-lit-insight" data-chain="literature">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-insight">◈</span><span class="kg-node__kind">prior insight</span></div>
+                  <span class="kg-node__title">Tight priors reduce bias</span>
+                  <span class="kg-node__meta">evidence: DOI</span>
+                </div>
+
+                <div class="kg-node kg-node--output support-node support-artifact" data-chain="artifact">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-output">◆</span><span class="kg-node__kind">current artifact</span></div>
+                  <span class="kg-node__title">null_tests.csv</span>
+                  <span class="kg-node__meta">materialized output</span>
+                </div>
+
+                <div class="kg-node kg-node--insight support-node support-local-insight" data-chain="artifact">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-insight">◈</span><span class="kg-node__kind">prior insight</span></div>
+                  <span class="kg-node__title">Covariance tests are stable</span>
+                  <span class="kg-node__meta">evidence: artifact</span>
+                </div>
+
+                <div class="kg-node kg-node--decision support-node support-decision support-decision--prior" data-chain="literature">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-decision">◇</span><span class="kg-node__kind">assumption · decision</span></div>
+                  <span class="kg-node__title">BAO damping parameter prior</span>
+                  <div class="decision-option decision-option--selected">Gaussian · selected</div>
+                  <div class="decision-option">Flat · alternative</div>
+                </div>
+
+                <div class="kg-node kg-node--decision support-node support-decision support-decision--systematics" data-chain="artifact">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-decision">◇</span><span class="kg-node__kind">decision</span></div>
+                  <span class="kg-node__title">Systematic error treatment</span>
+                  <div class="decision-option decision-option--selected">Include budget · selected</div>
+                  <div class="decision-option">Statistical only · alternative</div>
+                </div>
+
+                <div class="kg-node kg-node--output kg-node--selected support-node support-output" data-chain="result">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-output">◆</span><span class="kg-node__kind">output</span></div>
+                  <span class="kg-node__title">bao_distance_table</span>
+                  <span class="kg-node__meta">8 inputs · 1 direct decision</span>
+                </div>
+
+                <div class="kg-node kg-node--finding support-node support-finding" data-chain="result">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-finding">●</span><span class="kg-node__kind">finding</span></div>
+                  <span class="kg-node__title">Distance consistency</span>
+                  <span class="kg-node__meta">backed by output</span>
+                </div>
+
+                <div class="kg-node kg-node--analysis support-node support-universe" data-chain="result">
+                  <div class="kg-node__top"><span class="vision-glyph glyph-analysis">◎</span><span class="kg-node__kind">universe</span></div>
+                  <span class="kg-node__title">baseline</span>
+                  <span class="kg-node__meta">one selected option for every active decision</span>
+                </div>
+
+                <span class="fragment story-step" data-story-step="literature" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="artifact" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="result" aria-hidden="true"></span>
+
+                <div class="story-caption" aria-live="polite">
+                  <span data-caption="structure">The graph records the choices&mdash;including alternatives that were not selected.</span>
+                  <span data-caption="literature" hidden aria-hidden="true">A literature passage becomes verifiable evidence for a prior insight and a selected option.</span>
+                  <span data-caption="artifact" hidden aria-hidden="true">A result from the current body of work can ground a later choice through artifact evidence.</span>
+                  <span data-caption="result" hidden aria-hidden="true">The selected universe carries both choices into the output and the finding it supports.</span>
+                </div>
+              </div>
+            </section>
+
+      <section id="linked-surfaces" class="vision-slide" data-story-default="overview">
+              <div class="slide-head">
+                <span class="section-label">One record · two ways in</span>
+                <h2>Read the argument. Navigate the work.</h2>
+                <p>MyST owns the human story; MySTRA keeps every reference tied to the ASTRA source of truth.</p>
+              </div>
+
+              <div class="vision-stage">
+                <div class="surface-window surface-window--article">
+                  <div class="surface-chrome">
+                    <span class="surface-dot"></span><span class="surface-dot"></span><span class="surface-dot"></span>
+                    <span class="surface-url">paper.example.org/results</span>
+                    <span class="surface-mode">MyST article</span>
+                  </div>
+                  <article class="article-body">
+                    <div class="article-section">4 · Cosmological distances</div>
+                    <h3>The combined-tracer distance scale</h3>
+                    <p>
+                      We use the <button type="button" class="astra-ref astra-ref--decision" data-surface-jump="decision">Gaussian damping prior</button>
+                      in the baseline universe. This assumption is supported by the verified methodology record.
+                    </p>
+                    <p>
+                      For the LRG3+ELG1 bin, the angle-averaged distance is
+                      <button type="button" class="astra-live" data-surface-jump="value">D<sub>V</sub>/r<sub>d</sub> = 19.88 &plusmn; 0.17</button>.
+                      The complete result lives in <button type="button" class="astra-ref astra-ref--output" data-surface-jump="value">bao_distance_table</button>.
+                    </p>
+                    <div class="article-figure">
+                      <img src="../assets/lc_hubble_diagram.png" alt="Reproduced Hubble diagram output">
+                      <span class="article-figure__label">◆ output · hubble_diagram</span>
+                    </div>
+                  </article>
+                  <div class="article-source-code">{astra:value col=DV_over_rd where="tracer=lrg3_elg1" pm=true}`outputs.bao_distance_table`</div>
+                </div>
+
+                <div class="surface-bridge" aria-label="MySTRA publication adapter">
+                  <span class="surface-bridge__line"></span>
+                    <span class="surface-bridge__label">MySTRA · ASTRA→MyST adapter</span>
+                  <span class="surface-bridge__line"></span>
+                </div>
+
+                <div class="surface-window surface-window--explorer">
+                  <div class="surface-chrome">
+                    <span class="surface-dot"></span><span class="surface-dot"></span><span class="surface-dot"></span>
+                    <span class="surface-url">record.example.org/desi-dr1</span>
+                    <span class="surface-mode">astra-viewer</span>
+                  </div>
+                  <div class="explorer-body">
+                    <div class="explorer-label">navigable scientific record</div>
+
+                    <svg class="edge-layer" viewBox="0 0 506 364" aria-hidden="true">
+                      <defs>
+                        <marker id="surface-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                          <path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.52)"></path>
+                        </marker>
+                        <marker id="surface-arrow-gold" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                          <path d="M0,0 L8,4 L0,8 z" fill="rgba(166,124,60,.70)"></path>
+                        </marker>
+                        <marker id="surface-arrow-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                          <path d="M0,0 L8,4 L0,8 z" fill="rgba(151,63,43,.68)"></path>
+                        </marker>
+                        <marker id="surface-arrow-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                          <path d="M0,0 L8,4 L0,8 z" fill="rgba(59,122,115,.68)"></path>
+                        </marker>
+                      </defs>
+                      <path class="edge" d="M159 191 C173 172 187 133 221 101" marker-end="url(#surface-arrow)"></path>
+                      <path class="edge edge--gold" d="M254 171 C255 145 255 124 254 101" marker-end="url(#surface-arrow-gold)"></path>
+                      <path class="edge" d="M332 85 C382 103 405 128 415 158" marker-end="url(#surface-arrow)"></path>
+                      <path class="edge edge--red" d="M165 270 C190 246 208 223 225 209" marker-end="url(#surface-arrow-red)"></path>
+                      <path class="edge edge--green" d="M417 199 C417 232 407 255 401 276" marker-end="url(#surface-arrow-green)"></path>
+                    </svg>
+
+                    <div class="explore-node explore-node--analysis">◐ DESI DR1 BAO analysis<small>self-similar analysis tree</small></div>
+                    <div class="explore-node explore-node--input">▤ catalogs<small>versioned input</small></div>
+                    <button type="button" class="explore-node explore-node--decision" data-surface-jump="decision">◇ damping_prior<small>gaussian · selected</small></button>
+                    <button type="button" class="explore-node explore-node--output" data-surface-jump="value">◆ bao_distance_table<small>CSV · materialized</small></button>
+                    <div class="explore-node explore-node--insight">◈ prior insight<small>DOI · verified quote</small></div>
+                    <div class="explore-node explore-node--finding">● distance consistency<small>artifact evidence</small></div>
+
+                    <div class="linked-popover">
+                      <div class="linked-popover__panel" data-panel="decision">
+                        <div class="vision-kicker">◇ Decision preview</div>
+                        <h4>BAO damping parameter prior</h4>
+                        <p><strong>Selected:</strong> Gaussian. Alternative: flat. Five prior insights support the selected option.</p>
+                      </div>
+                      <div class="linked-popover__panel" data-panel="value">
+                        <div class="vision-kicker">Live value context</div>
+                        <h4>19.88 &plusmn; 0.17</h4>
+                        <p><strong>Source:</strong> outputs.bao_distance_table<br><strong>Cell:</strong> DV_over_rd · tracer=lrg3_elg1</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="result-entry" aria-live="polite">
+                  <div class="vision-kicker">Selected result · MySTRA projection</div>
+                  <div class="result-entry__value">D<sub>V</sub>/r<sub>d</sub> = 19.88 &plusmn; 0.17</div>
+                  <div class="result-entry__path">outputs.bao_distance_table · tracer=lrg3_elg1</div>
+                  <div class="result-entry__cta">trace its provenance <span>&rarr;</span></div>
+                </div>
+
+                <span class="fragment story-step" data-story-step="decision" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="value" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="trace" aria-hidden="true"></span>
+
+                <div class="story-caption" aria-live="polite">
+                  <span data-caption="overview">The article is authored in prose; the records it names remain canonical ASTRA objects.</span>
+                  <span data-caption="decision" hidden aria-hidden="true">A decision reference can open its rationale, selected option, alternatives, and support.</span>
+                  <span data-caption="value" hidden aria-hidden="true">A measured number is resolved from the materialized output at publication build&mdash;never manually retyped.</span>
+                  <span data-caption="trace" hidden aria-hidden="true">And that one number is an entry point into the declared record behind it.</span>
+                </div>
+              </div>
+            </section>
+
+      <section id="provenance" class="vision-slide" data-story-default="result">
+              <div class="slide-head">
+                <span class="section-label">Select one result</span>
+                <h2>Then follow every declared dependency back.</h2>
+                <p>Every edge answers a review question: what produced this, what shaped it, and what supports that choice?</p>
+              </div>
+
+              <div class="vision-stage">
+                <div class="trace-progress" aria-label="Provenance traversal progress">
+                  <span class="trace-progress__step" data-progress-step="result">result</span>
+                  <span class="trace-progress__step" data-progress-step="output">output</span>
+                  <span class="trace-progress__step" data-progress-step="inputs">dependencies</span>
+                  <span class="trace-progress__step" data-progress-step="decision">decisions</span>
+                  <span class="trace-progress__step" data-progress-step="evidence">evidence</span>
+                </div>
+
+                <div class="provenance-graph" aria-label="Provenance view for the selected BAO distance value, with one of eight upstream branches expanded">
+                  <svg class="edge-layer" viewBox="0 0 790 442" aria-hidden="true">
+                    <defs>
+                      <marker id="trace-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.68)"></path>
+                      </marker>
+                      <marker id="trace-arrow-gold" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(166,124,60,.76)"></path>
+                      </marker>
+                      <marker id="trace-arrow-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(151,63,43,.70)"></path>
+                      </marker>
+                      <marker id="trace-arrow-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto">
+                        <path d="M0,0 L8,4 L0,8 z" fill="rgba(59,122,115,.72)"></path>
+                      </marker>
+                    </defs>
+
+                    <!-- value -> output -->
+                    <path class="trace-edge" data-depth="1" d="M395 77 C395 86 395 91 395 100" marker-end="url(#trace-arrow)"></path>
+                    <text class="trace-edge-label" data-depth="1" x="405" y="91">reads from</text>
+
+                    <!-- output -> dependencies -->
+                    <path class="trace-edge" data-depth="2" d="M355 170 C310 185 246 195 178 203" marker-end="url(#trace-arrow)"></path>
+                    <path class="trace-edge trace-edge--green" data-depth="2" d="M395 170 C395 184 393 195 391 209" marker-end="url(#trace-arrow-green)"></path>
+                    <text class="trace-edge-label" data-depth="2" x="245" y="184">depends on 8 outputs</text>
+                    <text class="trace-edge-label" data-depth="2" x="402" y="191">execution recorded by</text>
+
+                    <!-- fit stack -> selected branch and upstream -->
+                    <path class="trace-edge" data-depth="2" d="M178 269 C178 284 180 294 181 310" marker-end="url(#trace-arrow)"></path>
+                    <path class="trace-edge" data-depth="2" d="M143 371 C125 381 105 386 83 393" marker-end="url(#trace-arrow)"></path>
+                    <path class="trace-edge" data-depth="2" d="M154 418 C162 418 169 418 177 418" marker-end="url(#trace-arrow)"></path>
+                    <text class="trace-edge-label" data-depth="2" x="188" y="292">one of 8 · expanded</text>
+
+                    <!-- output and fit -> decisions / universe -->
+                    <path class="trace-edge trace-edge--gold" data-depth="3" d="M494 139 C532 153 557 170 594 194" marker-end="url(#trace-arrow-gold)"></path>
+                    <path class="trace-edge trace-edge--gold" data-depth="3" d="M274 337 C290 337 302 338 318 340" marker-end="url(#trace-arrow-gold)"></path>
+                    <path class="trace-edge trace-edge--gold" data-depth="3" d="M630 164 C631 174 632 183 633 194" marker-end="url(#trace-arrow-gold)"></path>
+                    <path class="trace-edge trace-edge--gold" data-depth="3" d="M584 164 C542 200 493 250 455 303" marker-end="url(#trace-arrow-gold)"></path>
+                    <text class="trace-edge-label" data-depth="3" x="501" y="150">parameterized by</text>
+                    <text class="trace-edge-label" data-depth="3" x="278" y="328">parameterized by</text>
+                    <text class="trace-edge-label" data-depth="3" x="640" y="180">selects include</text>
+                    <text class="trace-edge-label" data-depth="3" x="515" y="228">selects gaussian</text>
+
+                    <!-- decisions -> insights -> paper -->
+                    <path class="trace-edge trace-edge--red" data-depth="4" d="M634 273 C632 290 629 300 625 311" marker-end="url(#trace-arrow-red)"></path>
+                    <path class="trace-edge trace-edge--red" data-depth="4" d="M458 380 C453 385 449 388 445 393" marker-end="url(#trace-arrow-red)"></path>
+                    <path class="trace-edge trace-edge--red" data-depth="4" d="M534 418 C545 418 551 418 563 418" marker-end="url(#trace-arrow-red)"></path>
+                    <text class="trace-edge-label" data-depth="4" x="639" y="294">supported by</text>
+                    <text class="trace-edge-label" data-depth="4" x="462" y="389">supported by</text>
+                    <text class="trace-edge-label" data-depth="4" x="538" y="409">cites</text>
+                  </svg>
+
+                  <button type="button" class="prov-node prov-node--result" data-depth="0" data-inspect-step="result">
+                    <span class="prov-node__kind">selected value · projection</span>
+                    <span class="prov-node__title">19.88 &plusmn; 0.17</span>
+                    <span class="prov-node__meta">D<sub>V</sub>/r<sub>d</sub> · lrg3_elg1</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--output" data-depth="1" data-inspect-step="output">
+                    <span class="prov-node__kind"><span class="glyph-output">◆</span> output · table</span>
+                    <span class="prov-node__title">bao_distance_table</span>
+                    <span class="prov-node__meta">CSV · executor manifest attached</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--fits" data-depth="2" data-inspect-step="inputs">
+                    <span class="prov-node__kind"><span class="glyph-output">◆</span> upstream outputs</span>
+                    <span class="prov-node__title">8 post-reconstruction fits</span>
+                    <span class="prov-node__meta">one per tracer / redshift bin · 1 expanded</span>
+                  </button>
+
+                  <div class="prov-node prov-node--recipe" data-depth="2">
+                    <span class="prov-node__kind"><span class="glyph-finding">⚙</span> executor · Lightcone CLI</span>
+                    <span class="prov-node__title">materialization manifest</span>
+                    <span class="prov-node__meta">recipe · commit 8069d11 · sha256…</span>
+                  </div>
+
+                  <div class="prov-node prov-node--systematics" data-depth="3">
+                    <span class="prov-node__kind"><span class="glyph-decision">◇</span> decision</span>
+                    <span class="prov-node__title">systematic_error_treatment</span>
+                    <span class="prov-node__meta">include · selected</span>
+                  </div>
+
+                  <button type="button" class="prov-node prov-node--selected-fit" data-depth="2" data-inspect-step="inputs">
+                    <span class="prov-node__kind"><span class="glyph-output">◆</span> representative branch · output</span>
+                    <span class="prov-node__title">bao_fit_post_iso_ap_lrg3_elg1</span>
+                    <span class="prov-node__meta">combined tracer · post-recon</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--xi" data-depth="2" data-inspect-step="inputs">
+                    <span class="prov-node__kind"><span class="glyph-output">◆</span> input artifact</span>
+                    <span class="prov-node__title">&xi;<sub>&ell;</sub>(s) post-recon</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--catalog" data-depth="2" data-inspect-step="inputs">
+                    <span class="prov-node__kind"><span class="glyph-input">▤</span> source input</span>
+                    <span class="prov-node__title">DESI DR1 catalogs</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--fit-decisions" data-depth="3" data-inspect-step="decision">
+                    <span class="prov-node__kind"><span class="glyph-decision">◇</span> selected assumption · decision</span>
+                    <span class="prov-node__title">damping_prior → gaussian</span>
+                    <span class="prov-node__meta">fit_range · template · … also inspectable</span>
+                  </button>
+
+                  <div class="prov-node prov-node--universe" data-depth="3">
+                    <span class="prov-node__kind"><span class="glyph-analysis">◎</span> universe</span>
+                    <span class="prov-node__title">baseline</span>
+                    <span class="prov-node__meta">complete option selection</span>
+                  </div>
+
+                  <div class="prov-node prov-node--sys-insight" data-depth="4">
+                    <span class="prov-node__kind"><span class="glyph-insight">◈</span> prior insight · artifact evidence</span>
+                    <span class="prov-node__title">Null-test suite stable</span>
+                    <span class="prov-node__meta">null_tests.csv · materialized</span>
+                  </div>
+
+                  <button type="button" class="prov-node prov-node--damping-insight" data-depth="4" data-inspect-step="evidence">
+                    <span class="prov-node__kind"><span class="glyph-insight">◈</span> prior insight</span>
+                    <span class="prov-node__title">Tight Gaussian priors recommended</span>
+                  </button>
+
+                  <button type="button" class="prov-node prov-node--paper" data-depth="4" data-inspect-step="evidence">
+                    <span class="prov-node__kind"><span class="glyph-insight">▤</span> literature evidence</span>
+                    <span class="prov-node__title">Chen et al. 2024 · p. 22</span>
+                  </button>
+                </div>
+
+                <aside class="provenance-inspector" aria-live="polite">
+                  <div class="inspector-chrome">
+                    <span class="inspector-chrome__title">Provenance inspector</span>
+                    <span class="inspector-chrome__status">record resolved</span>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="result">
+                    <div class="vision-kicker">Selected value · MySTRA projection</div>
+                    <div class="inspector-value">19.88 &plusmn; 0.17</div>
+                    <p>This number is a cell selected from a materialized ASTRA table output. It is not a separate copied value.</p>
+                    <span class="inspector-path">outputs.bao_distance_table<br>col=DV_over_rd<br>where=tracer:lrg3_elg1</span>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">active universe</span><span class="inspector-row__value">baseline</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">next question</span><span class="inspector-row__value">Which output owns this value?</span></div>
+                    </div>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="output">
+                    <div class="vision-kicker">◆ Output · table</div>
+                    <h3>bao_distance_table</h3>
+                    <p>Final BAO distance constraints by tracer and effective redshift.</p>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">format</span><span class="inspector-row__value">CSV</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">inputs</span><span class="inspector-row__value">8 post-reconstruction fit outputs</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">decision</span><span class="inspector-row__value">systematic_error_treatment</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">recipe</span><span class="inspector-row__value">make_distance_table.py</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">execution layer</span><span class="inspector-row__value">Lightcone CLI manifest · commit 8069d11 · content hash</span></div>
+                    </div>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="inputs">
+                    <div class="vision-kicker">Representative dependency · 1 of 8</div>
+                    <h3>LRG3 + ELG1 fit</h3>
+                    <p>The table output declares eight upstream fits. One branch is expanded here; current ASTRA does not yet encode cell-to-input lineage.</p>
+                    <span class="inspector-path">bao_fit_post_iso_ap_lrg3_elg1<br>← xi_post_recon<br>← inputs.desi_dr1_lss_catalogs</span>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">shown branch</span><span class="inspector-row__value">combined tracer · z=0.8–1.1</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">ASTRA today</span><span class="inspector-row__value">the whole table owns all 8 declared dependencies</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">still behind it</span><span class="inspector-row__value">fit assumptions, selected options, recipes</span></div>
+                    </div>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="decision">
+                    <div class="vision-kicker">◇ Assumption · modelled as a decision</div>
+                    <h3>damping_prior</h3>
+                    <p>Gaussian priors on the BAO damping parameters, centred on fiducial values.</p>
+                    <div class="inspector-choice">
+                      <div class="inspector-choice__label">baseline selects</div>
+                      <div class="inspector-choice__name">Gaussian · fiducial</div>
+                    </div>
+                    <div class="inspector-alt">Alternative retained in the record: <strong>flat</strong></div>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">rationale</span><span class="inspector-row__value">More robust than flat priors on noisy data.</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">support</span><span class="inspector-row__value">5 prior insights · exact evidence paths</span></div>
+                    </div>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="evidence">
+                    <div class="vision-kicker">◈ Prior insight · evidence 1 of 2</div>
+                    <h3>Tight Gaussian priors are recommended.</h3>
+                    <div class="inspector-quote">We recommend choosing the BAO damping parameters based on theoretical calculations and allowing these to vary within reasonably tight priors (1&ndash;2 h<sup>&minus;1</sup> Mpc).</div>
+                    <div class="inspector-citation">Chen et al. 2024 · page 22<br>DOI: 10.48550/arXiv.2402.14070 · quote verified</div>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">inspect next</span><span class="inspector-row__value">source page, alternate evidence, scope</span></div>
+                    </div>
+                  </div>
+
+                  <div class="inspector-panel" data-inspector-panel="complete">
+                    <div class="vision-kicker">Selected provenance view</div>
+                    <h3>No opaque endpoints.</h3>
+                    <p>The result stays connected to every declared dependency; collapsed branches can be expanded in the viewer.</p>
+                    <div class="trace-summary">
+                      <div class="trace-summary__item"><span class="trace-summary__num">8</span><span class="trace-summary__label">upstream fit outputs</span></div>
+                      <div class="trace-summary__item"><span class="trace-summary__num">2+</span><span class="trace-summary__label">revealed decisions</span></div>
+                      <div class="trace-summary__item"><span class="trace-summary__num">5</span><span class="trace-summary__label">supporting insights</span></div>
+                      <div class="trace-summary__item"><span class="trace-summary__num">1</span><span class="trace-summary__label">versioned universe</span></div>
+                    </div>
+                    <div class="inspector-rows">
+                      <div class="inspector-row"><span class="inspector-row__label">ASTRA + executor</span><span class="inspector-row__value">recipes · alternatives · exact passages · commits · hashes</span></div>
+                      <div class="inspector-row"><span class="inspector-row__label">review becomes</span><span class="inspector-row__value">a traversal, not an archaeology project</span></div>
+                    </div>
+                  </div>
+                </aside>
+
+                <span class="fragment story-step" data-story-step="output" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="inputs" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="decision" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="evidence" aria-hidden="true"></span>
+                <span class="fragment story-step" data-story-step="complete" aria-hidden="true"></span>
+              </div>
+            </section>
+
+      <section id="future-paper" data-background-glow>
+              <div class="closing-eyebrow">The future paper</div>
+              <h2>A verifiable interface to a body of work.</h2>
+
+              <div class="future-equation">
+                <div class="future-card">
+                  <div class="future-card__icon glyph-analysis">◐ ◇ ◆ ◈ ●</div>
+                  <h3>ASTRA research record</h3>
+                  <p>Machine-readable analyses, artifact references, decisions, alternatives, findings, and evidence&mdash;composable across projects.</p>
+                  <div class="future-card__tags">
+                    <span class="mini-pill">navigable</span><span class="mini-pill">inspectable</span><span class="mini-pill">reusable</span>
+                  </div>
+                </div>
+
+                <div class="future-bridge">
+                  <span>MySTRA adapter</span>
+                  <span class="future-bridge__arrow">↔</span>
+                  <span>references</span>
+                </div>
+
+                <div class="future-card">
+                  <div class="future-card__icon" style="color: var(--lc-warm);">¶</div>
+                  <h3>MyST narrative</h3>
+                  <p>Human-authored argument, context, mathematics, citations, and composition&mdash;without duplicating the scientific record.</p>
+                  <div class="future-card__tags">
+                    <span class="mini-pill mini-pill--gold">authored</span><span class="mini-pill mini-pill--gold">portable</span><span class="mini-pill mini-pill--gold">in sync</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="future-promise">Select <strong>any result</strong> &rarr; inspect every declared input, decision, assumption, alternative, and evidence source behind it.</p>
+
+              <div class="future-links">
+                <span>Concept grounded in the current alpha architecture</span>
+                <a href="https://astra-spec.org/latest/">astra-spec.org</a>
+                <a href="https://github.com/LightconeResearch/MySTRA">LightconeResearch/MySTRA</a>
+              </div>
+            </section>
+
+      <!-- ================================================================== -->
       <!-- TECHNICAL DEEP DIVE — Lightcone-CLI divider                          -->
       <!-- ================================================================== -->
       <section id="divider-lc-cli" data-background-glow>
@@ -4246,6 +6999,125 @@ we measure &alpha; = <span style="color: var(--lc-primary);">{astra:value}</span
        `.is-active` on the matching tab and panel (with a reflow on the
        panel so its keyframe animations replay each time it's shown).
        ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------
+       Story-state slides (the ASTRA paper-vision sequence).
+
+       Each slide declares `data-story-default`; invisible `.story-step`
+       markers advance it. The last visible marker names the current state,
+       applied as `is-<state>` (only the active one) and `has-<state>`
+       (everything up to it, so earlier layers can persist).
+       ------------------------------------------------------------------ */
+    (function () {
+      var stateOrders = {
+        'paper-package': ['flat', 'package', 'connections'],
+        'decision-support': ['structure', 'literature', 'artifact', 'result'],
+        'linked-surfaces': ['overview', 'decision', 'value', 'trace'],
+        'provenance': ['result', 'output', 'inputs', 'decision', 'evidence', 'complete']
+      };
+
+      function currentState(slide) {
+        if (!slide) return null;
+        var state = slide.getAttribute('data-story-default');
+        var markers = slide.querySelectorAll('.story-step[data-story-step]');
+        for (var i = 0; i < markers.length; i++) {
+          if (markers[i].classList.contains('visible')) {
+            state = markers[i].getAttribute('data-story-step');
+          }
+        }
+        return state;
+      }
+
+      function applyState(slide, state) {
+        if (!slide || !state || !stateOrders[slide.id]) return;
+        var order = stateOrders[slide.id];
+        var activeIndex = order.indexOf(state);
+        if (activeIndex < 0) return;
+
+        for (var i = 0; i < order.length; i++) {
+          slide.classList.toggle('is-' + order[i], i === activeIndex);
+          slide.classList.toggle('has-' + order[i], i <= activeIndex);
+        }
+        slide.setAttribute('data-story-state', state);
+
+        var captions = slide.querySelectorAll('.story-caption [data-caption]');
+        for (var c = 0; c < captions.length; c++) {
+          var captionIsActive = captions[c].getAttribute('data-caption') === state;
+          captions[c].hidden = !captionIsActive;
+          captions[c].setAttribute('aria-hidden', captionIsActive ? 'false' : 'true');
+        }
+
+        if (slide.id === 'provenance') applyProvenanceState(slide, state, activeIndex);
+      }
+
+      function applyProvenanceState(slide, state, activeIndex) {
+        var depth = Math.min(activeIndex, 4);
+        var nodes = slide.querySelectorAll('.prov-node[data-depth]');
+        for (var i = 0; i < nodes.length; i++) {
+          var nodeDepth = Number(nodes[i].getAttribute('data-depth'));
+          nodes[i].classList.toggle('is-in-path', nodeDepth <= depth);
+          nodes[i].classList.toggle('is-current', nodes[i].getAttribute('data-inspect-step') === state);
+          nodes[i].disabled = nodeDepth > depth;
+        }
+
+        var edges = slide.querySelectorAll('.trace-edge[data-depth], .trace-edge-label[data-depth]');
+        for (var j = 0; j < edges.length; j++) {
+          edges[j].classList.toggle('is-in-path', Number(edges[j].getAttribute('data-depth')) <= depth);
+        }
+
+        var panels = slide.querySelectorAll('.inspector-panel[data-inspector-panel]');
+        for (var k = 0; k < panels.length; k++) {
+          panels[k].classList.toggle('is-active', panels[k].getAttribute('data-inspector-panel') === state);
+        }
+
+        var progress = slide.querySelectorAll('.trace-progress__step[data-progress-step]');
+        for (var p = 0; p < progress.length; p++) {
+          var progressIndex = stateOrders.provenance.indexOf(progress[p].getAttribute('data-progress-step'));
+          progress[p].classList.toggle('is-passed', progressIndex <= Math.min(activeIndex, 4));
+          progress[p].classList.toggle('is-current', progress[p].getAttribute('data-progress-step') === state || (state === 'complete' && progress[p].getAttribute('data-progress-step') === 'evidence'));
+        }
+      }
+
+      function sync(slide) {
+        if (!slide || !stateOrders[slide.id]) return;
+        applyState(slide, currentState(slide));
+      }
+
+      function navigateToState(slide, state) {
+        if (!slide || !stateOrders[slide.id]) return;
+        var stateIndex = stateOrders[slide.id].indexOf(state);
+        if (stateIndex < 0) return;
+        var indices = Reveal.getIndices(slide);
+        Reveal.slide(indices.h, indices.v, stateIndex - 1);
+        sync(slide);
+      }
+
+      Reveal.on('ready', function (event) { sync(event.currentSlide); });
+      Reveal.on('slidechanged', function (event) { sync(event.currentSlide); });
+      Reveal.on('fragmentshown', function (event) { sync(event.fragment && event.fragment.closest('section')); });
+      Reveal.on('fragmenthidden', function (event) { sync(event.fragment && event.fragment.closest('section')); });
+
+      /* The inline MyST references and graph nodes are clickable during a
+         live demo. Arrow-key fragment state remains the canonical sequence. */
+      document.addEventListener('click', function (event) {
+        var surfaceTrigger = event.target.closest && event.target.closest('[data-surface-jump]');
+        if (surfaceTrigger) {
+          var surfaceSlide = document.getElementById('linked-surfaces');
+          if (surfaceSlide && surfaceSlide.classList.contains('present')) {
+            navigateToState(surfaceSlide, surfaceTrigger.getAttribute('data-surface-jump'));
+          }
+          return;
+        }
+
+        var provenanceTrigger = event.target.closest && event.target.closest('.prov-node[data-inspect-step]');
+        if (provenanceTrigger && !provenanceTrigger.disabled) {
+          var provenanceSlide = document.getElementById('provenance');
+          if (provenanceSlide && provenanceSlide.classList.contains('present')) {
+            navigateToState(provenanceSlide, provenanceTrigger.getAttribute('data-inspect-step'));
+          }
+        }
+      });
+    })();
+
     /* ------------------------------------------------------------------
        Crisp embedded frames (imported with the ASTRA / Lightcone-CLI slides).
 
