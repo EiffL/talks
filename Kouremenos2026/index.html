@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Machine Learning and Physical Modelling for Cosmological Surveys &mdash; PIML Workshop 2026</title>
+
+  <!-- Reveal.js core -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Lightcone theme -->
+  <link rel="stylesheet" href="theme/lightcone.css">
+
+  <!-- Per-deck overrides -->
+  <style>
+    /* Fond blanc pour toute la pr&eacute;sentation (captures Partie II pleine page). */
+    :root { --lc-bg: #ffffff; --lc-brand-mark: none; }
+
+    /* This deck is not a Lightcone Research deck: disable the persistent
+       corner brand mark that the theme stamps on every content slide. */
+    .reveal .slides > section:not([data-background-glow]):not(.no-brand-mark)::after {
+      content: none;
+    }
+
+    /* Headings in Blue Ink — the antique-gold identity is reserved for the
+       Lightcone Research section (mark those slides with class="lcr"). */
+    .reveal h1,
+    .reveal h2 {
+      color: var(--lc-primary);
+    }
+    .reveal section.lcr h1,
+    .reveal section.lcr h2 {
+      color: var(--lc-warm);
+    }
+
+    /* Title headline — Quattrocento in blue ink, on plain parchment. */
+    #title .title-display {
+      font-family: var(--lc-font-heading);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.04;
+      color: var(--lc-primary);
+      text-wrap: balance;
+    }
+
+    /* Thin gold masthead rule across the top of the title slide. */
+    #title .masthead-rule {
+      position: absolute;
+      top: 56pt;
+      left: 56pt;
+      right: 56pt;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        var(--lc-warm) 12%,
+        var(--lc-warm) 88%,
+        transparent 100%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    /* Section dividers — shared layout for the part-transition slides. */
+    .divider-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+    .divider-eyebrow {
+      font-family: var(--lc-font-ui);
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      margin-bottom: 18pt;
+    }
+    .divider-title {
+      font-family: var(--lc-font-heading);
+      font-size: 40pt;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      color: var(--lc-primary);
+      max-width: 880px;
+      margin: 0 0 10pt 0;
+      text-wrap: balance;
+    }
+    /* Lightcone Research divider keeps the gold identity. */
+    #divider-agents .divider-title {
+      color: var(--lc-warm);
+    }
+    .divider-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14pt;
+      margin-top: 26pt;
+    }
+    .divider-logo img {
+      object-fit: contain;
+    }
+    .divider-logo-caption {
+      font-family: var(--lc-font-ui);
+      font-size: 10.5pt;
+      color: var(--lc-muted);
+      margin-top: 10pt;
+    }
+
+    /* Vertical stacks holding full-canvas (.ink) slides: keep the stack
+       wrapper a plain block and give nested slides the full slide height,
+       so absolutely-positioned titles/boxes/credits anchor correctly. */
+    .reveal .slides > section.stack:has(> section.ink) {
+      display: block !important;
+      padding: 0;
+    }
+    .reveal .slides section > section.ink {
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    /* ------------------------------------------------------------------
+       "Observatory" slides — dark charcoal slides used in Partie I for
+       astronomy imagery and figures originally designed on black.
+       ------------------------------------------------------------------ */
+    .reveal section.ink h2,
+    .reveal section.ink h3 {
+      color: var(--lc-bg);
+    }
+    .reveal section.ink p,
+    .reveal section.ink li,
+    .reveal section.ink ul,
+    .reveal section.ink ol {
+      color: #e8e5de;
+    }
+    .reveal section.ink strong {
+      color: #a3b8d6;
+    }
+    .reveal section.ink em {
+      color: var(--lc-sage);
+      font-style: italic;
+    }
+    .reveal .alert {
+      color: #d9764f;
+      font-weight: 600;
+    }
+    /* Slide heading pinned to the top of full-canvas slides. */
+    .slide-top-title {
+      position: absolute;
+      top: 30pt;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 25pt;
+      margin: 0;
+    }
+    /* Heading laid over a photographic background. */
+    .photo-title {
+      color: #ffffff !important;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+    /* Image / video credit chip. */
+    .credit {
+      position: absolute;
+      bottom: 14pt;
+      right: 18pt;
+      font-family: var(--lc-font-ui);
+      font-size: 10pt;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(0, 0, 0, 0.45);
+      padding: 3pt 9pt;
+      border-radius: 0.25rem;
+      text-align: right;
+    }
+    /* Survey-stage caption on the full-bleed galaxy field slides. */
+    .stage-caption {
+      position: absolute;
+      bottom: 40pt;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: var(--lc-font-ui);
+      font-size: 17pt;
+      color: #ffffff;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+      margin: 0;
+    }
+    /* Dark-slide equivalent of the theme's .card / Cagliari's .block. */
+    .ink-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-left: 3px solid var(--lc-sage);
+      border-radius: 0 0.25rem 0.25rem 0;
+      padding: 12pt 20pt;
+      text-align: left;
+    }
+    .ink-card-title {
+      font-family: var(--lc-font-heading);
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--lc-bg);
+      margin: 0 0 8pt 0;
+    }
+    .ink-card p, .ink-card li {
+      font-size: 14pt;
+      line-height: 1.55;
+    }
+    /* Part I — explicit Bayesian inference section helpers. */
+    .ebi-person {
+      display: flex; align-items: center; justify-content: center; gap: 16pt;
+      text-align: left;
+    }
+    .reveal section .ebi-person img {
+      width: 74pt; height: 74pt; border-radius: 50%; object-fit: cover; margin: 0;
+      box-shadow: 0 0 0 2pt var(--lc-bg), 0 0 0 3pt var(--lc-warm), 0 2pt 6pt rgba(0,0,0,0.12);
+    }
+    .reveal section p.ebi-person-name {
+      font-size: 15pt; font-weight: 600; color: var(--lc-text); margin: 0; line-height: 1.2;
+    }
+    .reveal section p.ebi-person-sub {
+      font-size: 10.5pt; color: var(--lc-muted); margin: 3pt 0 0 0; line-height: 1.25;
+    }
+    .ebi-stack-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; margin: 0;
+    }
+    .ebi-note {
+      font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-text); text-align: left;
+      border-left: 3px solid var(--lc-muted); padding: 3pt 8pt; margin: 4pt 0;
+      background: var(--lc-surface-lowest); border-radius: 0 0.25rem 0.25rem 0;
+    }
+    .ebi-note i { margin-right: 4pt; color: var(--lc-muted); }
+    .ebi-pill {
+      display: inline-block; padding: 2pt 9pt; border-radius: 999px;
+      background: var(--lc-surface-high); color: var(--lc-text); font-weight: 600;
+    }
+    .ebi-ode-pair { font-size: 12pt; }
+    .ebi-ode-pair .katex-display { margin: 4pt 0; }
+    /* Legend under the DESC chord diagram. */
+    .reveal section p.desc-chord-legend {
+      font-family: var(--lc-font-ui);
+      font-size: 10.5pt;
+      line-height: 1.2;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      gap: 12pt;
+      white-space: nowrap;
+      color: var(--lc-muted);
+    }
+    .desc-chord-legend i {
+      display: inline-block;
+      width: 9pt; height: 9pt;
+      border-radius: 2pt;
+      margin-right: 4pt;
+      vertical-align: -1pt;
+    }
+    /* Arxiv badge chip next to citations. */
+    .cite-line {
+      font-family: var(--lc-font-ui);
+      font-size: 12pt;
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .cite-line img {
+      height: 22px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- ================================================================== -->
+      <!-- 1. TITLE                                                            -->
+      <!-- ================================================================== -->
+      <section id="title" data-background-color="var(--lc-bg)">
+
+        <span class="masthead-rule" aria-hidden="true"></span>
+
+        <!-- Title cluster: centered, sitting in the upper-middle. -->
+        <div style="position: absolute; left: 56pt; right: 56pt; top: 38%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center;">
+
+          <div class="title-display" style="font-size: 40pt; max-width: 1060px; text-align: center; margin: 0;">
+            Machine Learning and Physical Modelling<br>for Cosmological Surveys
+          </div>
+
+          <hr style="width: 80px; margin: 26pt auto 22pt;">
+
+          <p style="font-family: var(--lc-font-ui); margin: 0; text-align: center; line-height: 1.5; max-width: 760px;">
+            <span style="display: block; font-size: 13.5pt; font-weight: 600; color: var(--lc-primary); letter-spacing: 0.01em;">Physics-Informed Machine Learning Workshop &mdash; EU TITAN project, FORTH &amp; IEEE GRSS</span>
+            <span style="display: block; margin-top: 5pt; font-size: 12pt; color: var(--lc-muted);">FORTH, Heraklion, Crete &middot; September 16&ndash;18, 2026</span>
+          </p>
+
+        </div>
+
+        <!-- Presenter: anchored lower-left, between the title block and the bottom. -->
+        <div style="position: absolute; left: 56pt; bottom: 92pt; display: flex; align-items: center; gap: 13pt;">
+          <img src="https://avatars.githubusercontent.com/u/861591?v=4" alt="Fran&ccedil;ois"
+               style="width: 62pt; height: 62pt; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2pt var(--lc-bg), 0 0 0 3pt var(--lc-warm), 0 2pt 6pt rgba(0,0,0,0.12);">
+          <div style="text-align: left;">
+            <p style="font-size: 15pt; color: var(--lc-text); margin: 0; font-weight: 600; line-height: 1.2;">Fran&ccedil;ois Lanusse</p>
+            <p style="font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 0 0; line-height: 1.25;">
+              CNRS Terre et Univers &middot; UMR AIM &middot;
+              <a href="https://flanusse.net" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none;"><i class="fa-solid fa-globe"></i></a>
+              <a href="https://scholar.google.com/citations?user=fRDCooIAAAAJ" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none; margin-left: 5pt;"><i class="fa-solid fa-graduation-cap"></i></a>
+              <a href="https://linkedin.com/in/flanusse" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none; margin-left: 5pt;"><i class="fa-brands fa-linkedin"></i></a>
+            </p>
+            <p style="font-size: 10.5pt; color: var(--lc-muted); margin: 3pt 0 0 0; line-height: 1.25;">CosmoStat &middot; Polymathic AI &middot; Lightcone Research</p>
+          </div>
+        </div>
+
+        <!-- Affiliation: anchored lower-right, balancing the presenter card. -->
+        <div style="position: absolute; right: 56pt; bottom: 96pt; display: flex; align-items: center; gap: 30pt;">
+          <img src="../assets/cnrs-blue.png" alt="CNRS" style="height: 52pt; width: auto; object-fit: contain;">
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- INTRO — Cosmologie & apprentissage machine (no part number)          -->
+      <!-- (adapt&eacute; de l'intro de ../Cagliari2025 ; la partie DETF /       -->
+      <!--  contraintes Stage IV sur l'&eacute;nergie noire est omise)           -->
+      <!-- ================================================================== -->
+
+      <!-- I.1 — Que cherche-t-on avec les grands relev&eacute;s ? -->
+      <section id="intro-surveys" class="ink no-brand-mark"
+               data-background-image="../assets/WMAP_timeline_large.jpg"
+               data-background-size="cover">
+        <h2 class="slide-top-title photo-title" style="top: 0pt; left: 30pt; right: auto; text-align: left; width: max-content; font-size: 22pt; background: rgba(0,0,0,0.5); padding: 8pt 18pt; border-radius: 0.25rem;">A new generation of large cosmological surveys</h2>
+        <div class="fragment" style="position: absolute; right: 30pt; top: 130pt; display: flex; flex-direction: column; gap: 10pt; align-items: center;">
+          <img src="../assets/Euclid.png" style="width: 200px;" alt="Euclid">
+          <img src="../assets/roman_logo_black_w200px.png" style="width: 200px;" alt="Nancy Grace Roman Space Telescope">
+          <img src="../assets/vrro.png" style="width: 200px;" alt="Vera C. Rubin Observatory">
+        </div>
+      </section>
+
+      <!-- I.7 — Rubin / LSST d&eacute;marre -->
+      <section>
+      <section id="intro-rubin" class="ink no-brand-mark"
+               data-background-video="../assets/lsst_survey_2026.mp4"
+               data-background-video-muted data-background-video-loop
+               data-background-size="cover">
+        <h2 class="slide-top-title photo-title" style="font-size: 23pt;">The Vera C. Rubin Observatory&nbsp;</h2>
+        <div class="fragment" style="position: absolute; top: 110pt; left: 40pt; width: 460pt;">
+          <div style="background: rgba(0,0,0,0.55); border-radius: 0.25rem; padding: 14pt 18pt;">
+            <ul style="font-size: 15pt; color: #fff;">
+              <li class="fade-up" style="color:#fff;">1000 images each night, 15&nbsp;TB of data per night, for 10 years</li>
+              <br>
+              <li class="fragment fade-up" style="color:#fff;">18,000 square degrees, re-observed every 3&ndash;4 days</li>
+              <br>
+              <li class="fragment fade-up" style="color:#fff;">Tens of billions of objects, each observed \(\sim\)1000 times</li>
+            </ul>
+            <p class="fragment" style="font-size: 14pt; color: #fff; margin-top: 6pt;">
+              <span class="alert">The 10-year survey starts this week!</span>
+            </p>
+          </div>
+        </div>
+        <div class="credit">Video: RubinObs / NOIRLab / NSF / AURA</div>
+      </section>
+
+      <!-- I.3-5 — La profondeur des images, de Stage II &agrave; Stage IV -->
+      <section id="intro-stage2" class="ink no-brand-mark" data-transition="fade-in fade-out"
+               data-background-image="../assets/gal_sdss.png" data-background-size="cover">
+        <p class="stage-caption"><strong style="color:#fff;">Stage II:</strong> SDSS</p>
+        <div class="credit">Image: Peter Melchior</div>
+      </section>
+      <section id="intro-stage3" class="ink no-brand-mark" data-transition="fade-in fade-out"
+               data-background-image="../assets/gal_des.png" data-background-size="cover">
+        <p class="stage-caption"><strong style="color:#fff;">Stage III:</strong> DES</p>
+        <div class="credit">Image: Peter Melchior</div>
+      </section>
+      <section id="intro-stage4" class="ink no-brand-mark" data-transition="fade-in fade-out"
+               data-background-image="../assets/gal_hsc.png" data-background-size="cover">
+        <p class="stage-caption"><strong style="color:#fff;">Stage IV:</strong> Rubin LSST (HSC image)</p>
+        <div class="credit">Image: Peter Melchior</div>
+      </section>
+
+      </section>
+
+      <!-- I.7 — AI/ML across the DESC science cases (white paper arXiv:2601.14235) -->
+      <section id="intro-ai-desc" data-background-color="var(--lc-bg)">
+        <h2 style="font-size: 23pt; margin-bottom: 0;">AI/ML is already reshaping how we analyse survey data</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 4pt 0 0 0;">
+          <a href="https://arxiv.org/abs/2601.14235" target="_blank"><img src="https://img.shields.io/badge/arXiv-2601.14235-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div class="flex-row" style="align-items: flex-start; gap: 14pt;">
+          <div style="flex: 0 0 640px; text-align: center;">
+            <div id="desc-chord" style="width: 640px; height: 400px; margin-top: 6pt;"></div>
+            <p class="desc-chord-legend">
+              <span><i style="background: #a10034;"></i>Science cases</span>
+              <span><i style="background: #426b78;"></i>Methodologies</span>
+              <span><i style="background: #a67c3c;"></i>Challenges</span>
+              <span style="color: var(--lc-muted); opacity: 0.7;">&mdash; hover a node to explore</span>
+            </p>
+          </div>
+          <div class="flex-col" style="display: flex; flex-direction: column; gap: 10pt; padding-top: 10pt;">
+            <div class="card-glow fragment" style="text-align: left; padding: 10pt 14pt; border-left: 3px solid #a10034;">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: #a10034;">&ldquo;Not a future aspiration&rdquo;</h4>
+              <p style="font-size: 12pt; line-height: 1.45; margin: 0; color: var(--lc-muted);">ML is already embedded in every DESC science workflow: photo-z, transient classification, deblending, lensing, simulations&hellip;</p>
+            </div>
+            <div class="card-glow fragment" style="text-align: left; padding: 10pt 14pt; border-left: 3px solid var(--lc-secondary);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-secondary);">The same methods recur</h4>
+              <p style="font-size: 12pt; line-height: 1.45; margin: 0; color: var(--lc-muted);">Simulation-based inference, generative models, emulators, differentiable programming, hierarchical Bayesian models.</p>
+            </div>
+            <div class="card-glow fragment" style="text-align: left; padding: 10pt 14pt; border-left: 3px solid var(--lc-warm);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-warm);">&hellip;and so do the challenges</h4>
+              <p style="font-size: 12pt; line-height: 1.45; margin: 0; color: var(--lc-muted);">Uncertainty quantification, covariate shift, scalability, rare events.
+                <br>\(\Longrightarrow\) Priorities: <strong style="color: var(--lc-text);">Bayesian inference at scale</strong>, <strong style="color: var(--lc-text);">physics-informed methods</strong>, <strong style="color: var(--lc-text);">validation</strong>, <strong style="color: var(--lc-text);">foundation models &amp; agents</strong>.</p>
+            </div>
+          </div>
+        </div>
+        <img src="../assets/desc-logo.png" alt="LSST Dark Energy Science Collaboration" class="plain"
+             style="position: absolute; top: 0; left: 0; height: 54pt; width: auto; margin: 0;">
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- PART I — Scaling up Explicit Bayesian Inference                     -->
+      <!-- (rebuilt from slides.com/eiffl/vienna2025 in the deck's own style)  -->
+      <!-- ================================================================== -->
+      <section id="divider-ebi" data-background-glow>
+        <div class="divider-inner">
+          <p class="divider-eyebrow">
+            <i class="fa-solid fa-dice-d20" style="margin-right: 6pt; color: var(--lc-primary);"></i>
+            Part I
+          </p>
+          <div class="divider-title">Scaling up<br>Explicit Bayesian Inference</div>
+          <hr style="width: 80px; margin: 22pt auto 0;">
+          <div class="divider-logo">
+            <img src="../assets/vienna2025/11158943_Google_JAX_logo.svg.png" alt="JAX" style="height: 40pt;">
+          </div>
+          <p class="divider-logo-caption">Field-level inference &middot; distributed differentiable simulations &middot; hybrid physical-neural models</p>
+        </div>
+      </section>
+
+      <!-- I.0 — Vertical stack: limits of traditional inference → full-field SBI -->
+      <section>
+      <!-- I.0b — The limits of traditional cosmological inference -->
+      <section id="ebi-limits">
+        <span class="section-label">Beyond conventional analyses</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">The limits of traditional cosmological inference</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 20pt; align-items: start;">
+          <div>
+            <div style="position: relative; height: 22pt; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-text);">
+              <div class="fragment current-visible" data-fragment-index="1" style="position: absolute; left: 0; right: 0; top: 0;">HSC cosmic shear power spectrum</div>
+              <div class="fragment" data-fragment-index="2" style="position: absolute; left: 0; right: 0; top: 0;">HSC Y1 constraints on \((S_8, \Omega_m)\)</div>
+            </div>
+            <div style="position: relative; height: 300px;">
+              <div class="fragment current-visible" data-fragment-index="0" style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;">
+                <img src="../assets/alonso_g1_light.png" alt="Shear map, component 1" class="plain" style="width: 100%; height: 50%; object-fit: contain; margin: 0;">
+                <img src="../assets/alonso_g2_light.png" alt="Shear map, component 2" class="plain" style="width: 100%; height: 50%; object-fit: contain; margin: 0;">
+              </div>
+              <img src="../assets/hsc_correlation_function_light.png" alt="HSC cosmic shear power spectrum" class="fragment current-visible plain" data-fragment-index="1"
+                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; margin: 0;">
+              <img src="../assets/hsc_constraints_light.png" alt="HSC Y1 constraints on S8 and Omega_m" class="fragment plain" data-fragment-index="2"
+                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; margin: 0;">
+            </div>
+            <p class="fragment" data-fragment-index="1" style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 0 0; text-align: right;">Hikage et al. 2018</p>
+          </div>
+          <div style="text-align: left;">
+            <ul style="font-size: 13pt; line-height: 1.5; margin: 0;">
+              <li class="fragment" data-fragment-index="0" style="margin-bottom: 10pt;">Measure the ellipticity \(\epsilon = \epsilon_i + \gamma\) of all galaxies<br>
+                \(\Longrightarrow\) Noisy tracer of the weak lensing shear \(\gamma\)</li>
+              <li class="fragment" data-fragment-index="1" style="margin-bottom: 10pt;">Compute <strong class="alert">summary statistics</strong> based on 2pt functions,<br>e.g. the <strong>power spectrum</strong></li>
+              <li class="fragment" data-fragment-index="2">Run an MCMC to recover a posterior on model parameters, using an <strong class="alert">analytic likelihood</strong>
+                $$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; margin-top: 10pt; border-left: 3px solid var(--lc-highlight);">
+          <h4 style="margin: 0 0 4pt 0; font-size: 14pt; color: var(--lc-highlight);">Main limitation: the need for an explicit likelihood</h4>
+          <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+            We can only compute <strong>from theory</strong> the likelihood for <strong class="alert">simple summary statistics</strong> and on <strong class="alert">large scales</strong>
+            <span class="fragment" style="display: block; margin-top: 4pt;">\(\Longrightarrow\) We are dismissing a significant fraction of the information!</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- I.0c — Full-field simulation-based inference -->
+      <section id="ebi-fullfield">
+        <span class="section-label">Beyond conventional analyses</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">Full-field simulation-based inference</h2>
+        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20pt; align-items: start;">
+          <div style="text-align: left;">
+            <ul style="font-size: 13pt; line-height: 1.5; margin: 0;">
+              <li style="margin-bottom: 10pt;">Instead of trying to analytically evaluate the likelihood of sub-optimal summary statistics, let us build a forward model of the full observables.<br>
+                \(\Longrightarrow\) <strong class="alert">The simulator becomes the physical model</strong>.</li>
+              <li class="fragment" data-fragment-index="1">Each component of the model is now tractable, but at the cost of a <strong>large number of latent variables</strong>.</li>
+            </ul>
+            <div class="card-glow fragment" data-fragment-index="2" style="padding: 10pt 16pt; margin-top: 14pt; border-left: 3px solid var(--lc-accent);">
+              <h4 style="margin: 0 0 6pt 0; font-size: 14pt; color: var(--lc-accent);">Benefits of a forward modeling approach</h4>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li>Fully exploits the information content of the data (aka &ldquo;full field inference&rdquo;).</li>
+                <li>Easy to incorporate systematic effects.</li>
+                <li>Easy to combine multiple cosmological probes by joint simulations.</li>
+              </ul>
+            </div>
+            <div class="card-glow fragment" data-fragment-index="3" style="padding: 10pt 16pt; margin-top: 12pt; border-left: 3px solid var(--lc-highlight);">
+              <p style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                \(\Longrightarrow\) These methods <strong class="alert">demonstrably give access to more information</strong>.
+              </p>
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 6pt 0 0 0;">
+                Omori, Zeghal, Chang, Lanusse, Perreault-Levasseur 2026 <a href="https://arxiv.org/abs/2606.12255" target="_blank"><img src="https://img.shields.io/badge/arXiv-2606.12255-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+              </p>
+            </div>
+          </div>
+          <div>
+            <div style="position: relative; height: 440px;">
+              <img src="../assets/forward_model_light.png" alt="Forward model: simulation volume, lensing map, galaxy image" class="plain"
+                   style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; margin: 0;">
+              <img src="../assets/porqueres_hbm_light.png" alt="Hierarchical Bayesian model of Porqueres et al. 2021" class="fragment plain" data-fragment-index="1"
+                   style="position: absolute; top: 0; left: 0; height: 100%; width: auto; margin: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-radius: 0.25rem; padding: 6pt; box-shadow: var(--lc-shadow-ambient);">
+              <div class="fragment fade-in" data-fragment-index="3" style="position: absolute; inset: 0; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <img src="../assets/omori2026_fig4_pm_l1000.png" alt="Constraints on Omega_m and S8: power spectrum vs field-level inference, PM model, lmax=1000" class="plain" style="width: 100%; height: 100%; object-fit: contain; margin: 0;">
+              </div>
+            </div>
+            <div style="position: relative; height: 16pt;">
+              <p class="fragment current-visible" data-fragment-index="1" style="position: absolute; right: 0; top: 0; font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 0;">Porqueres et al. 2021</p>
+              <p class="fragment" data-fragment-index="3" style="position: absolute; right: 0; top: 0; font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 0;">PM forward model, \(\ell_{\max} = 1000\) &mdash; Omori et al. 2026, Fig. 4</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      </section>
+      <!-- end: vertical stack -->
+
+      <!-- I.1 — Vertical stack: SBI flavours -->
+      <section>
+      <!-- I.1a — Implicit vs explicit simulation-based inference -->
+      <section id="ebi-sbi">
+        <span class="section-label">More than one road to the posterior</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">It&rsquo;s all about <strong>simulation-based inference</strong></h2>
+        <img src="../assets/vienna2025/12387947_image.png" alt="Parameters θ → simulator with latent z → observables x" class="plain"
+             style="width: 720px; display: block; margin: 0 auto 14pt;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: stretch;">
+          <div class="card-glow fragment" data-fragment-index="1" style="text-align: left; padding: 12pt 16pt; margin-right: 10pt; border-left: 3px solid var(--lc-secondary);">
+            <h4 style="margin: 0 0 6pt 0; font-size: 14.5pt; color: var(--lc-secondary);">Implicit simulation-based inference</h4>
+            <p style="font-size: 15pt; margin: 0 0 6pt 0; text-align: center;">\((x, \theta) \sim p(x, \theta)\)</p>
+            <p style="font-size: 11.5pt; color: var(--lc-muted); margin: 0 0 2pt 0;">a.k.a.</p>
+            <ul style="font-size: 12pt; line-height: 1.45; margin: 0;">
+              <li>Implicit Likelihood Inference (ILI)</li>
+              <li>Simulation-Based Inference (SBI)</li>
+              <li>Likelihood-Free Inference (LFI)</li>
+              <li>Approximate Bayesian Computation (ABC)</li>
+            </ul>
+          </div>
+          <div class="card-glow fragment" data-fragment-index="2" style="text-align: left; padding: 12pt 16pt; margin-left: 10pt; border-left: 3px solid var(--lc-highlight);">
+            <h4 style="margin: 0 0 6pt 0; font-size: 14.5pt; color: var(--lc-highlight);">Explicit simulation-based inference</h4>
+            <p style="font-size: 15pt; margin: 0 0 6pt 0; text-align: center;">\(p(\theta, z \mid x) \propto p(x \mid z, \theta)\, p(z \mid \theta)\, p(\theta)\)</p>
+            <p style="font-size: 11.5pt; color: var(--lc-muted); margin: 0 0 2pt 0;">a.k.a.</p>
+            <ul style="font-size: 12pt; line-height: 1.45; margin: 0;">
+              <li>Bayesian Hierarchical Modeling (BHM)</li>
+              <li>Field-level inference</li>
+            </ul>
+            <p class="fragment" data-fragment-index="3" style="font-size: 12pt; margin: 10pt 0 0 0; color: var(--lc-muted);">
+              Requires evaluating <strong style="color: var(--lc-text);">and differentiating</strong> the simulator inside the sampler.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.2 — Which one is better? -->
+      <section id="ebi-which">
+        <span class="section-label">Explicit Bayesian Inference</span>
+        <h2 style="font-size: 23pt; margin-bottom: 4pt;">Which one is better?</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 8pt 0;">
+          <a href="https://arxiv.org/abs/2409.17975" target="_blank"><img src="https://img.shields.io/badge/arXiv-2409.17975-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 20pt; align-items: start;">
+          <div style="text-align: left; display: flex; flex-direction: column; gap: 10pt;">
+            <div class="card-glow" style="padding: 10pt 14pt; border-left: 3px solid var(--lc-secondary);">
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0;">
+                <strong>Both methods give exactly the same result</strong>, <em>given the same simulation model</em>.
+              </p>
+            </div>
+            <div class="card-glow fragment" style="padding: 10pt 14pt; border-left: 3px solid var(--lc-highlight);">
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0;">
+                <strong>Implicit inference is vastly more simulation-efficient</strong> than naive HMC sampling.
+              </p>
+            </div>
+            <div class="fragment" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; margin-top: 4pt;">
+              <img src="../assets/vienna2025/12389492_image.png" alt="HMC convergence: C2ST vs number of simulations" class="plain" style="width: 100%;">
+              <img src="../assets/vienna2025/12389495_image.png" alt="NLE with and without gradients" class="plain" style="width: 100%;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 10pt; margin-top: 2pt;">
+              <img src="../assets/vienna2025/12389476_image.png" alt="Justine Zeghal" class="plain"
+                   style="width: 40pt; height: 40pt; border-radius: 50%; object-fit: cover; object-position: 30% 20%; box-shadow: 0 0 0 2pt var(--lc-warm);">
+              <p style="font-size: 11pt; line-height: 1.3; margin: 0; color: var(--lc-muted);">
+                <strong style="color: var(--lc-text);">Dr. Justine Zeghal</strong><br>now at U. of Montreal
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389489_image.png" alt="Explicit vs implicit inference posteriors" class="plain" style="height: 440px;">
+          </div>
+        </div>
+      </section>
+
+      <!-- II.3 — Explicit inference is cooler -->
+      <section id="ebi-cooler">
+        <span class="section-label">Explicit Bayesian Inference</span>
+        <h2 style="font-size: 22pt; margin-bottom: 10pt;">Implicit inference is easier and cheaper&hellip; but <span class="alert">explicit inference is cooler</span></h2>
+        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20pt; align-items: center;">
+          <div>
+            <video data-autoplay loop muted playsinline style="width: 100%; border-radius: 0.25rem; display: block; box-shadow: var(--lc-shadow-ambient);">
+              <source src="../assets/yuuki_sampling.mp4" type="video/mp4">
+            </video>
+            <p style="font-family: var(--lc-font-ui); font-size: 10pt; color: var(--lc-muted); margin: 4pt 0 0 0; text-align: right;">
+              Field-level weak lensing sampling &mdash; credit: Yuuki Omori, Chihway Chang, Justine Zeghal, EiffL &middot;
+              <a href="https://github.com/EiffL/LPTLensingComparison" target="_blank" style="color: var(--lc-secondary); text-decoration: none;"><i class="fa-brands fa-github"></i> LPTLensingComparison</a>
+            </p>
+          </div>
+          <div style="text-align: left;">
+            <p style="font-size: 13.5pt; margin: 0 0 10pt 0;">More seriously, explicit inference has real advantages:</p>
+            <div style="display: flex; flex-direction: column; gap: 9pt;">
+              <div class="card-glow" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-primary);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">More introspectable results to <strong>identify systematics</strong></p>
+              </div>
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-secondary);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Allows <strong>fitting parametric corrections / nuisances</strong> from the data</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-warm);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Provides <strong>validation of statistical inference</strong> with an independent method</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      </section>
+      <!-- end: SBI stack -->
+
+      <!-- II.4 — The three challenges -->
+      <section id="ebi-challenges">
+        <span class="section-label">Explicit Bayesian Inference</span>
+        <h2 style="font-size: 23pt; margin-bottom: 22pt;">Three challenges to scale up explicit inference</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16pt; align-items: stretch;">
+          <div class="card-glow fragment" style="padding: 18pt 16pt; border-left: 3px solid var(--lc-primary); text-align: left;">
+            <i class="fa-solid fa-shuffle" style="font-size: 22pt; color: var(--lc-primary);"></i>
+            <h4 style="margin: 10pt 0 6pt 0; font-size: 15pt; color: var(--lc-primary);">Efficient posterior sampling</h4>
+            <p style="font-size: 12pt; line-height: 1.5; margin: 0; color: var(--lc-muted);">Billions of latent variables, one expensive gradient per step: which sampler, which parametrization?</p>
+          </div>
+          <div class="card-glow fragment" style="padding: 18pt 16pt; border-left: 3px solid var(--lc-warm); text-align: left;">
+            <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 22pt; color: var(--lc-warm);"></i>
+            <h4 style="margin: 10pt 0 6pt 0; font-size: 15pt; color: var(--lc-warm);">Fast effective modeling of small scales and baryons</h4>
+            <p style="font-size: 12pt; line-height: 1.5; margin: 0; color: var(--lc-muted);">Cheap approximate physics on a mesh, corrected by neural networks trained on full simulations.</p>
+          </div>
+          <div class="card-glow fragment" style="padding: 18pt 16pt; border-left: 3px solid var(--lc-secondary); text-align: left;">
+            <i class="fa-solid fa-server" style="font-size: 22pt; color: var(--lc-secondary);"></i>
+            <h4 style="margin: 10pt 0 6pt 0; font-size: 15pt; color: var(--lc-secondary);">Distributed and differentiable forward models</h4>
+            <p style="font-size: 12pt; line-height: 1.5; margin: 0; color: var(--lc-muted);">Survey-scale volumes and resolutions do not fit on one GPU, and the model must stay differentiable.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------ -->
+      <!-- II.A — Benchmarking field-level inference (Hugo Simon)              -->
+      <!-- ------------------------------------------------------------------ -->
+      <section id="ebi-simon">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 26pt; margin: 20pt 0 6pt 0; line-height: 1.2;">Benchmarking field-level explicit inference<br>for galaxy redshift surveys</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 26pt 0;">
+          <a href="https://arxiv.org/abs/2504.20130" target="_blank"><img src="https://img.shields.io/badge/arXiv-2504.20130-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          <a href="https://github.com/hsimonfroy/benchmark-field-level" target="_blank" style="margin-left: 6pt;"><img src="https://img.shields.io/badge/GitHub-hsimonfroy%2Fbenchmark--field--level-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div class="ebi-person">
+          <img src="../assets/vienna2025/12386523_image.png" alt="Hugo Simon">
+          <div>
+            <p class="ebi-person-name">Work led by Hugo Simon</p>
+            <p class="ebi-person-sub">CEA Paris-Saclay &middot; in collaboration with Arnaud de Mattia</p>
+            <p class="ebi-person-sub" style="font-style: italic;">Moving to the Berkeley Center for Cosmological Physics in Fall 2026</p>
+          </div>
+        </div>
+        <hr style="width: 80px; margin: 26pt auto 0;">
+      </section>
+
+      <!-- II.A.1 — Cosmological modeling and inference -->
+      <section id="ebi-model">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 14pt;">Cosmological modeling and inference</h2>
+        <img src="../assets/vienna2025/12237715_logo_DESI_extended_flip.png" alt="DESI" class="plain"
+             style="position: absolute; top: 0; right: 0; height: 42pt; width: auto; margin: 0;">
+        <div style="display: grid; grid-template-columns: 250px 40px 1fr 40px 1fr; gap: 10pt; align-items: center;">
+          <div class="card-glow" style="padding: 12pt 10pt; text-align: center;">
+            <p style="font-size: 12pt; color: var(--lc-muted); margin: 0 0 4pt 0; font-family: var(--lc-font-ui);">Cosmology</p>
+            <p style="font-size: 14pt; margin: 0;">\(\Omega := \{ \Omega_m, \Omega_\Lambda, H_0, \sigma_8, f_\mathrm{NL},\dots\}\)</p>
+          </div>
+          <div style="text-align: center;"><i class="fa-solid fa-arrow-right-long" style="font-size: 22pt; color: var(--lc-primary);"></i></div>
+          <div style="text-align: center;">
+            <p style="font-size: 11.5pt; color: var(--lc-muted); margin: 0 0 4pt 0; font-family: var(--lc-font-ui);">Linear matter spectrum</p>
+            <img src="../assets/vienna2025/11385300_cube_ms256_b1b2_02_dkth0_viridis_0.png" alt="Initial field" class="plain" style="height: 210px;">
+            <p style="font-size: 14pt; margin: 2pt 0 0 0;">Initial field \(\delta_L\)</p>
+          </div>
+          <div style="text-align: center;"><i class="fa-solid fa-arrow-right-long" style="font-size: 22pt; color: var(--lc-primary);"></i></div>
+          <div style="text-align: center;">
+            <p style="font-size: 11.5pt; color: var(--lc-muted); margin: 0 0 4pt 0; font-family: var(--lc-font-ui);">Structure growth</p>
+            <img src="../assets/vienna2025/11385302_cube_ms256_b1b2_02_dkth0_viridis_2.png" alt="Galaxy field" class="plain" style="height: 210px;">
+            <p style="font-size: 14pt; margin: 2pt 0 0 0;">Galaxy field \(\delta_g\)</p>
+          </div>
+        </div>
+        <div class="fragment" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16pt; align-items: center; margin-top: 14pt;">
+          <div style="text-align: right;">
+            <img src="../assets/vienna2025/12154853_lpt_64_fnl_triangle3.png" alt="Posterior on cosmological parameters" class="plain" style="height: 170px;">
+          </div>
+          <div style="text-align: center;">
+            <p style="font-size: 12pt; color: var(--lc-highlight); font-weight: 600; margin: 0; font-family: var(--lc-font-ui);">
+              <i class="fa-solid fa-arrow-left-long"></i>&nbsp; inference &nbsp;<i class="fa-solid fa-arrow-left-long"></i>
+            </p>
+            <p style="font-size: 12.5pt; margin: 8pt 0 0 0; line-height: 1.4;">
+              \(128^3\) PM on 8 GPUs:<br><strong>4h MCLMC vs. \(\geq\) 80h HMC</strong>
+            </p>
+          </div>
+          <div style="text-align: left;">
+            <img src="../assets/vienna2025/12152086_chains_compressed.gif" alt="MCMC chains" class="plain" style="height: 170px;">
+          </div>
+        </div>
+      </section>
+
+      <!-- II.A.3 — What inference looks like -->
+      <section id="ebi-inference-looks">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">What inference looks like</h2>
+        <div style="display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 16pt; align-items: center;">
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12152084_sampler_m64_1lpt_triangle1.png" alt="Posterior contours" class="plain" style="height: 440px;">
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12152086_chains_compressed.gif" alt="Chains for cosmology, bias and field parameters" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 0 0;">
+              Joint sampling of cosmology, bias parameters and the \(64^3\) initial field &mdash; Simon et al. 2025
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.A.4 — Samplers comparison -->
+      <section id="ebi-samplers">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">Samplers comparison</h2>
+        <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18pt; align-items: center;">
+          <div style="text-align: left;">
+            <div class="card-glow" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-secondary); margin-bottom: 9pt;">
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+                Different samplers and strategies are used for field-level inference (e.g. <a href="https://arxiv.org/abs/1909.06396" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">Lavaux+2018</a>, <a href="https://arxiv.org/abs/2307.09504" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">Bayer+2023</a>) \(\Rightarrow\) consistent comparisons are needed.
+              </p>
+            </div>
+            <div class="card-glow" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-primary); margin-bottom: 9pt;">
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+                We provide a <strong>consistent benchmark</strong> for field-level inference from galaxy surveys, built on \(\texttt{NumPyro}\) and \(\texttt{BlackJAX}\).
+              </p>
+            </div>
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); line-height: 1.5; margin: 0 0 9pt 4pt;">
+              NUTSwG = NUTS within Gibbs &middot; NUTS = auto-tuned HMC<br>
+              MAMS = adjusted MCHMC &middot; MCLMC = unadjusted Langevin MCHMC
+            </p>
+            <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-highlight);">
+              <p style="font-size: 13pt; line-height: 1.45; margin: 0;">
+                <strong>Unadjusted microcanonical</strong> sampling outperforms any <strong>adjusted</strong> sampler: <span class="alert">10&times; fewer evaluations</span>.
+              </p>
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 6pt 0 0 0; color: var(--lc-muted);">\(128^3\) PM on 8 GPUs: <strong style="color: var(--lc-text);">4h MCLMC vs. \(\geq\) 80h NUTS</strong></p>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12151947_sampler_m64_1lpt_fin_metrics1.png" alt="Number of evaluations per effective sample for each sampler" class="plain" style="width: 100%;">
+          </div>
+        </div>
+      </section>
+
+      <!-- II.A.5 — Canonical vs microcanonical (vertical stack with the two recipes) -->
+      <section>
+        <section id="ebi-canonical">
+          <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Canonical vs. microcanonical MCMC samplers</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; align-items: start;">
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12152063_canonical3.gif" alt="Hamiltonian Monte Carlo trajectory" class="plain" style="height: 250px;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 8pt 0;">
+                Hamiltonian Monte Carlo (e.g. <a href="https://arxiv.org/abs/1206.1901" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">Neal 2011</a>)
+              </p>
+              <div class="card-glow" style="padding: 8pt 12pt; border-left: 3px solid var(--lc-secondary); text-align: left;">
+                <p style="font-size: 12.5pt; margin: 0 0 4pt 0;">\(\mathcal H(\boldsymbol q, \boldsymbol p) = U(\boldsymbol q) + \tfrac 1 2 \boldsymbol p^\top M^{-1} \boldsymbol p\)</p>
+                <p style="font-size: 12pt; margin: 0; color: var(--lc-muted);">samples the <strong style="color: var(--lc-text);">canonical ensemble</strong></p>
+                <p style="font-size: 12.5pt; margin: 2pt 0 0 0;">\(\mathrm p_\text{C}(\boldsymbol q, \boldsymbol p) \propto e^{-\mathcal H(\boldsymbol q, \boldsymbol p)} \propto \mathrm p(\boldsymbol q)\,\mathcal N(\boldsymbol 0, M)\)</p>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12152064_microcanonical3.gif" alt="Microcanonical HMC trajectory" class="plain" style="height: 250px;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 8pt 0;">
+                Microcanonical HMC (<a href="https://arxiv.org/abs/2212.08549" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">Robnik+2022</a>)
+              </p>
+              <div class="card-glow" style="padding: 8pt 12pt; border-left: 3px solid var(--lc-highlight); text-align: left;">
+                <p style="font-size: 12.5pt; margin: 0 0 4pt 0;">\(\mathcal H(\boldsymbol q, \boldsymbol p) = \frac {\boldsymbol p^\top M^{-1} \boldsymbol p} {2 m(\boldsymbol q)} - \frac{m(\boldsymbol q)}{2}\,,\quad m=e^{-U/(d-1)}\)</p>
+                <p style="font-size: 12pt; margin: 0; color: var(--lc-muted);">samples the <strong style="color: var(--lc-text);">microcanonical / isokinetic ensemble</strong></p>
+                <p style="font-size: 12.5pt; margin: 2pt 0 0 0;">\(\mathrm p_\text{C}(\boldsymbol q, \boldsymbol u) \propto \delta(\mathcal H(\boldsymbol q, \boldsymbol u)) \propto \mathrm p (\boldsymbol q)\, \delta(|\boldsymbol u| - 1)\)</p>
+              </div>
+            </div>
+          </div>
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 8pt 0 0 0;">
+            <i class="fa-solid fa-arrow-down" style="margin-right: 4pt;"></i> the two recipes step by step
+          </p>
+        </section>
+
+        <section id="ebi-canonical-recipe">
+          <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Canonical MCMC samplers</h2>
+          <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20pt; align-items: center;">
+            <div style="text-align: left;">
+              <p style="font-size: 13.5pt; margin: 0 0 8pt 0;"><strong>Recipe</strong> to sample from \(\mathrm p \propto e^{-U}\):</p>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li class="fragment">take a <strong>particle</strong> with position \(\boldsymbol q\), momentum \(\boldsymbol p\), mass matrix \(M\), and Hamiltonian
+                  $$\mathcal H(\boldsymbol q, \boldsymbol p) = U(\boldsymbol q) + \tfrac 1 2 \boldsymbol p^\top M^{-1} \boldsymbol p$$</li>
+                <li class="fragment">follow <strong>Hamiltonian dynamics</strong> during time \(L\)
+                  $$\begin{cases} \dot {\boldsymbol q} = \partial_{\boldsymbol p}\mathcal H = M^{-1}\boldsymbol p\\ \dot {\boldsymbol p} = -\partial_{\boldsymbol q}\mathcal H = - \nabla U(\boldsymbol q) \end{cases}$$
+                  and <strong>refresh momentum</strong> \(\boldsymbol p \sim \mathcal N(\boldsymbol 0,M)\)</li>
+                <li class="fragment">usually, perform a <strong>Metropolis adjustment</strong></li>
+                <li class="fragment">this samples the <strong>canonical ensemble</strong>
+                  $$\mathrm p_\text{C}(\boldsymbol q, \boldsymbol p) \propto e^{-\mathcal H(\boldsymbol q, \boldsymbol p)} \propto \mathrm p(\boldsymbol q)\,\mathcal N(\boldsymbol 0, M)$$</li>
+              </ul>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12152063_canonical3.gif" alt="Hamiltonian Monte Carlo trajectory" class="plain" style="height: 300px;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 8pt 0;">Hamiltonian Monte Carlo (e.g. Neal 2011)</p>
+              <div class="ebi-note" style="border-left-color: var(--lc-accent);"><i class="fa-solid fa-plus"></i> gradient guides the particle toward high-density sets</div>
+              <div class="ebi-note" style="border-left-color: var(--lc-highlight);"><i class="fa-solid fa-minus"></i> must average over all energy levels</div>
+              <div class="ebi-note" style="border-left-color: var(--lc-highlight);"><i class="fa-solid fa-minus"></i> scales poorly with dimension</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="ebi-microcanonical-recipe">
+          <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Microcanonical MCMC samplers</h2>
+          <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20pt; align-items: center;">
+            <div style="text-align: left;">
+              <p style="font-size: 13.5pt; margin: 0 0 8pt 0;"><strong>Recipe</strong> to sample from \(\mathrm p \propto e^{-U}\):</p>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li>take a <strong>particle</strong> with position \(\boldsymbol q\), momentum \(\boldsymbol p\), mass matrix \(M\), and Hamiltonian
+                  $$\mathcal H(\boldsymbol q, \boldsymbol p) = \frac {\boldsymbol p^\top M^{-1} \boldsymbol p} {2 m(\boldsymbol q)} - \frac{m(\boldsymbol q)}{2}\,,\quad m=e^{-U/(d-1)}$$</li>
+                <li>follow <strong>Hamiltonian dynamics</strong> during time \(L\)
+                  $$\begin{cases} \dot{\boldsymbol q} = M^{-1/2} \boldsymbol u\\ \dot{\boldsymbol u} = -(I - \boldsymbol u \boldsymbol u^\top) M^{-1/2} \nabla U(\boldsymbol q) / (d-1) \end{cases}$$
+                  and <strong>refresh</strong> \(\boldsymbol u \leftarrow \boldsymbol z/ \lvert \boldsymbol z \rvert\,,\ \boldsymbol z \sim \mathcal N(\boldsymbol 0,I)\)</li>
+                <li>usually, perform a <strong>Metropolis adjustment</strong> <span style="color: var(--lc-highlight);">&mdash; let&rsquo;s try avoiding that</span></li>
+                <li>this samples the <strong>microcanonical / isokinetic ensemble</strong>
+                  $$\mathrm p_\text{C}(\boldsymbol q, \boldsymbol u) \propto \delta(\mathcal H(\boldsymbol q, \boldsymbol u)) \propto \mathrm p (\boldsymbol q)\, \delta(|\boldsymbol u| - 1)$$</li>
+              </ul>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12152064_microcanonical3.gif" alt="Microcanonical HMC trajectory" class="plain" style="height: 300px;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 8pt 0;">Microcanonical HMC (Robnik+2022)</p>
+              <div class="ebi-note" style="border-left-color: var(--lc-accent);"><i class="fa-solid fa-plus"></i> gradient guides the particle toward high-density sets</div>
+              <div class="ebi-note" style="border-left-color: var(--lc-accent);"><i class="fa-solid fa-plus"></i> single energy / speed level</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- II.A.6 — Unadjusted MCMC -->
+      <section id="ebi-jail">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">Will I go to jail for using unadjusted MCMC?</h2>
+        <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18pt; align-items: center;">
+          <div style="text-align: left;">
+            <ol style="font-size: 13pt; line-height: 1.5; margin: 0; padding-left: 22pt;">
+              <li style="margin-bottom: 8pt;"><strong>Microcanonical dynamics</strong> \(\implies\) the energy should not vary</li>
+              <li style="margin-bottom: 8pt;">Numerical integration yields <strong>quantifiable errors</strong> that can be <strong>linked to bias</strong></li>
+              <li style="margin-bottom: 8pt;">The step size can be tuned to ensure a <strong>controlled bias</strong>, see <a href="http://arxiv.org/abs/2412.08876" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">Robnik+2024</a></li>
+            </ol>
+            <div class="card-glow" style="padding: 10pt 14pt; border-left: 3px solid var(--lc-highlight); margin-top: 12pt;">
+              <p style="font-size: 13pt; line-height: 1.45; margin: 0;">
+                <strong>Reducing the step size</strong> rapidly brings the <strong>bias</strong> under the <strong>Monte Carlo error</strong>.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12154872_bias_mclmc0.png" alt="Bias of MCLMC vs NUTS as a function of step size" class="plain" style="width: 100%;">
+          </div>
+        </div>
+      </section>
+
+      <!-- II.A.7 — Preconditioning (vertical stack with the ablation table) -->
+      <section>
+        <section id="ebi-precond">
+          <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Impact of preconditioning</h2>
+          <div style="display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 18pt; align-items: center;">
+            <div style="text-align: left;">
+              <img src="../assets/vienna2025/12229766_precond_illustr.png" alt="Real space, Fourier space, Fourier space + Kaiser" class="plain" style="width: 100%;">
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-secondary); margin: 12pt 0 9pt 0;">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Sampling is easier when the target density is an <strong>isotropic Gaussian</strong>.</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-primary);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">The model is <strong>reparametrized</strong> assuming a tractable Kaiser model:<br>
+                  <em>linear growth + linear Eulerian bias + flat-sky RSD + Gaussian noise</em></p>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/11964659_precond_m64_1lpt_fin_metrics_simple.png" alt="Evaluations per effective sample for each parametrization" class="plain" style="height: 330px;">
+              <p class="fragment" style="font-size: 13pt; margin: 6pt 0 0 0;"><span class="alert">10&times; fewer evaluations</span> required</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="ebi-precond-ablation">
+          <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 14pt;">Every conditioning strategy matters</h2>
+          <img src="../assets/vienna2025/12389516_image.png" alt="Cumulative ablation of conditioning strategies" class="plain" style="width: 900px;">
+          <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 10pt 0 0 0;">
+            Removing conditioning strategies consistently and cumulatively degrades performance &mdash; Simon et al. 2025
+          </p>
+        </section>
+      </section>
+
+      <!-- II.A.8 — Resolution and scale -->
+      <section id="ebi-resolution">
+        <span class="section-label">Challenge 1 &middot; Efficient posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">Impact of resolution and scale</h2>
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 24pt; align-items: center; justify-content: center;">
+          <div style="display: flex; align-items: center; gap: 6pt;">
+            <div style="width: 26pt; height: 440px; display: flex; align-items: center; justify-content: center;">
+              <p style="transform: rotate(-90deg); white-space: nowrap; font-size: 14pt; margin: 0; color: var(--lc-text);">\(N_{\mathrm{eval}} / N_{\mathrm{eff}}\)</p>
+            </div>
+            <img src="../assets/vienna2025/scaling_metrics_resolution.png" alt="Evaluations per effective sample vs simulation cell size" class="plain" style="height: 440px;">
+          </div>
+          <div style="text-align: left; display: flex; flex-direction: column; gap: 10pt; max-width: 520px;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11.5pt; color: var(--lc-muted); margin: 0 0 4pt 4pt;">
+              <span style="color: #6fc9a8; font-weight: 700;">&#9670;</span> cosmology &nbsp;&nbsp;
+              <span style="color: #d9601a; font-weight: 700;">&#9632;</span> galaxy bias &nbsp;&nbsp;
+              <span style="color: #8e9ccf; font-weight: 700;">&#9679;</span> linear field
+            </p>
+            <div class="card-glow" style="padding: 10pt 14pt; border-left: 3px solid var(--lc-highlight);">
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0;">Sampling cost is <strong>mildly dependent</strong> on the <strong>volume</strong>, but grows steeply with <strong>resolution</strong>: probing <strong>smaller scales</strong> could be <strong>harder</strong>&hellip;</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------ -->
+      <!-- II.C — Hybrid physical-neural simulators (Arne Thomsen)             -->
+      <!-- ------------------------------------------------------------------ -->
+      <section id="ebi-thomsen">
+        <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+        <h2 style="font-size: 26pt; margin: 20pt 0 6pt 0; line-height: 1.2;">Hybrid physical-neural simulator<br>for fast cosmological hydrodynamics</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 26pt 0;">
+          <a href="https://arxiv.org/abs/2510.26593" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.26593-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          <span style="margin-left: 8pt;"><em>NeurIPS 2025 Workshop on Machine Learning for the Physical Sciences</em></span>
+        </p>
+        <div class="ebi-person">
+          <img src="../assets/vienna2025/12386292_image.png" alt="Arne Thomsen" style="object-position: 50% 20%;">
+          <div>
+            <p class="ebi-person-name">Work led by Arne Thomsen</p>
+            <p class="ebi-person-sub">ETH Zurich &middot; in collaboration with Tilman Tr&ouml;ster</p>
+          </div>
+        </div>
+        <hr style="width: 80px; margin: 26pt auto 0;">
+      </section>
+
+      <!-- II.C.1 — Hybrid physical-neural simulations (Lanzieri) -->
+      <section id="ebi-hybrid">
+        <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+        <h2 style="font-size: 23pt; margin-bottom: 4pt;">Hybrid physical-neural simulations</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 8pt 0;">
+          <a href="https://arxiv.org/abs/2207.05509" target="_blank"><img src="https://img.shields.io/badge/arXiv-2207.05509-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          <span style="margin-left: 6pt;"><a href="https://arxiv.org/abs/2305.07531" target="_blank"><img src="https://img.shields.io/badge/arXiv-2305.07531-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a></span>
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14pt; width: 1000px; margin: 0 auto;">
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12388081_cluster_2D_Camels.png" alt="CAMELS N-body" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">CAMELS N-body</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12388082_cluster_2D_PM.png" alt="Particle-mesh" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">PM</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12388086_cluster_2D_PM_NN.png" alt="Particle-mesh with neural correction" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">PM + NN</p>
+          </div>
+        </div>
+        <div style="margin-top: 10pt; text-align: center;">
+          <p style="font-size: 13pt; margin: 0;">
+            $$\left\{ \begin{array}{ll}
+              \frac{d \mathbf{x}}{d a} &amp;= \frac{1}{a^3 E(a)} \mathbf{v} \\[2pt]
+              \frac{d \mathbf{v}}{d a} &amp;= \frac{1}{a^2 E(a)} F_\theta(\mathbf{x}, a), \\[2pt]
+              F_\theta(\mathbf{x}, a) &amp;= \frac{3 \Omega_m}{2} \nabla \left[ \phi_{PM} (\mathbf{x}) \ast \mathcal{F}^{-1} \big(1 + \color{#8e3a1c}{f_\theta(a,|\mathbf{k}|)}\big) \right]
+            \end{array} \right.$$
+          </p>
+          <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0;">A learned Fourier-space filter \(f_\theta\) corrects the PM force; the ODE stays differentiable end to end.</p>
+        </div>
+        <div style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 8pt;">
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; line-height: 1.3; margin: 0; color: var(--lc-muted); text-align: right;">
+            <strong style="color: var(--lc-text);">Dr. Denise Lanzieri</strong><br>now at Sony CSL
+          </p>
+          <img src="../assets/vienna2025/12388069_image.png" alt="Denise Lanzieri" class="plain"
+               style="width: 36pt; height: 36pt; border-radius: 50%; object-fit: cover; object-position: 50% 25%; margin: 0; box-shadow: 0 0 0 2pt var(--lc-warm);">
+        </div>
+      </section>
+
+      <!-- II.C.1b — The impact of hydrodynamics (local copy of youtube.com/watch?v=tSUFEIEPB3U) -->
+      <section id="ebi-hydro-video">
+        <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+        <h2 style="font-size: 23pt; margin-bottom: 12pt;">Baryons reshape the matter distribution on small scales</h2>
+        <video data-autoplay controls muted playsinline style="width: 880px; height: 495px; display: block; margin: 0 auto; border-radius: 0.25rem; box-shadow: var(--lc-shadow-ambient); background: #000;">
+          <source src="../assets/hydro_impact_tSUFEIEPB3U.mp4" type="video/mp4">
+        </video>
+        <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 6pt 0 0 0;">
+          Dark-matter-only vs. hydrodynamical simulation &mdash; <a href="https://www.youtube.com/watch?v=tSUFEIEPB3U" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">youtube.com/watch?v=tSUFEIEPB3U</a>
+        </p>
+      </section>
+
+      <!-- II.C.2 — HYPER (vertical stack with the dm/gas illustration) -->
+      <section>
+        <section id="ebi-hyper">
+          <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+          <h2 style="font-size: 23pt; margin-bottom: 4pt;">HYPER: a hydro-particle-mesh code</h2>
+          <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 8pt 0;">
+            <a href="https://iopscience.iop.org/article/10.3847/1538-4357/ac3bcb" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">He, Trac &amp; Gnedin (2022)</a>
+          </p>
+          <div class="ebi-ode-pair">
+            $$\left\{ \begin{aligned}
+              \frac{d \mathbf{x}_{\mathrm{dm}}}{da} &amp;= \frac{1}{a^{3} E(a)} \, \mathbf{v}_{\mathrm{dm}} \\
+              \frac{d \mathbf{v}_{\mathrm{dm}}}{da} &amp;= -\frac{1}{a^{2} E(a)} \, \nabla \Phi_{\mathrm{tot}}
+            \end{aligned} \right.
+            \qquad
+            \left\{ \begin{aligned}
+              \frac{d \mathbf{x}_{\mathrm{gas}}}{da} &amp;= \frac{1}{a^{3} E(a)} \, \mathbf{v}_{\mathrm{gas}} \\
+              \frac{d \mathbf{v}_{\mathrm{gas}}}{da} &amp;= -\frac{1}{a^{2} E(a)} \left( \nabla \Phi_{\mathrm{tot}} + \color{#8e3a1c}{\frac{\nabla P}{\rho_{\mathrm{gas}}}} \right)
+            \end{aligned} \right.$$
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; align-items: center; margin-top: 6pt;">
+            <div style="text-align: left; display: flex; flex-direction: column; gap: 9pt;">
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-secondary);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">HYPER uses a <strong>halo model</strong> to compute the gas pressure \(P(M, r)\) analytically</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-highlight);">
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">\(M\) and \(r\) are not available without halos, so HYPER uses a <strong>reparameterisation</strong> \((M, r) \rightarrow (\rho, f_{\mathrm{scalar}})\), trivially computed on a mesh</p>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12388103_image.png" alt="Temperature and pressure as a function of density and f_scalar" class="plain" style="width: 100%;">
+            </div>
+          </div>
+        </section>
+
+        <section id="ebi-hyper-fields">
+          <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+          <h2 style="font-size: 23pt; margin-bottom: 12pt;">Dark matter and gas on a shared mesh</h2>
+          <img src="../assets/vienna2025/12388108_image.png" alt="Dark matter and gas density fields" class="plain" style="width: 940px;">
+          <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 8pt 0 0 0;">Two coupled particle species evolved with the same particle-mesh machinery</p>
+        </section>
+      </section>
+
+      <!-- II.C.3 — Neural parameterization and training -->
+      <section id="ebi-neural-param">
+        <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">Neural parameterization and training</h2>
+        <img src="../assets/vienna2025/12388110_image.png" alt="Input fields: gas density, f_scalar, velocity dispersion, velocity divergence" class="plain" style="width: 780px;">
+        <div class="ebi-ode-pair" style="margin-top: 4pt;">
+          $$\left\{ \begin{aligned}
+            \frac{d \mathbf{x}_{\mathrm{dm}}}{da} &amp;= \frac{1}{a^{3} E(a)} \, \mathbf{v}_{\mathrm{dm}} \\
+            \frac{d \mathbf{v}_{\mathrm{dm}}}{da} &amp;= -\frac{1}{a^{2} E(a)} \, \nabla \Phi_{\mathrm{tot}}
+          \end{aligned} \right.
+          \qquad
+          \left\{ \begin{aligned}
+            \frac{d \mathbf{x}_{\mathrm{gas}}}{da} &amp;= \frac{1}{a^{3} E(a)} \, \mathbf{v}_{\mathrm{gas}} \\
+            \frac{d \mathbf{v}_{\mathrm{gas}}}{da} &amp;= -\frac{1}{a^{2} E(a)} \left( \nabla \Phi_{\mathrm{tot}} + \color{#8e3a1c}{\frac{\nabla P_\theta}{\rho_{\mathrm{gas}}}} \right)
+          \end{aligned} \right.$$
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; align-items: stretch; margin-top: 6pt;">
+          <div class="card-glow" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-highlight); text-align: left;">
+            <p style="font-size: 12.5pt; margin: 0 0 2pt 0;">\(P_\theta (\mathbf{x}, a) = \rho_{\mathrm{gas}} (\mathbf{x})\; U_\theta (a, \rho, f_{\mathrm{scalar}}, \sigma_v, \nabla \cdot \mathbf{v})\)</p>
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0;">\(U_\theta\): a <strong style="color: var(--lc-text);">particle-wise multilayer perceptron</strong> replacing the halo-model pressure</p>
+          </div>
+          <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-primary); text-align: left;">
+            <p style="font-size: 12pt; margin: 0 0 2pt 0;">\(\mathcal{L} = \sum_{s} \Big[ H(\mathbf{x}_{s} - \mathbf{x}_{s}^{\mathrm{ref}}) + \lambda\, H(\mathbf{v}_{s} - \mathbf{v}_{s}^{\mathrm{ref}}) + \mu \big\| \tfrac{P_{s}(|\mathbf{k}|)}{P_{s}^{\mathrm{ref}}(|\mathbf{k}|)} - 1 \big\|_{2}^{2} \Big]\)</p>
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0;">Trained end to end through the ODE solver against CAMELS snapshots: particle positions, velocities and power spectra</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.C.4 — Results -->
+      <section id="ebi-hybrid-results">
+        <span class="section-label">Challenge 2 &middot; Fast effective modeling of small scales and baryons</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">A fast, differentiable hydrodynamical emulator</h2>
+        <div style="width: 880px; margin: 0 auto; text-align: center;">
+          <img src="../assets/vienna2025/12388117_image.png" alt="Gas density: CAMELS, ours, JaxPM, JaxPM + EGD" class="plain" style="width: 100%;">
+          <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Gas density \(\rho_{\mathrm{gas}}\): the hybrid simulator recovers the smooth gas distribution that dark-matter-only PM misses</p>
+        </div>
+        <div class="fragment" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; align-items: center; width: 700px; margin: 12pt auto 0;">
+          <img src="../assets/vienna2025/12388119_image.png" alt="Gas power spectrum" class="plain" style="width: 100%;">
+          <img src="../assets/vienna2025/12388120_image.png" alt="Cross-correlation coefficient with CAMELS" class="plain" style="width: 100%;">
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------ -->
+      <!-- II.B — Distributed and differentiable simulations (Wassim Kabalan)  -->
+      <!-- ------------------------------------------------------------------ -->
+      <section id="ebi-kabalan">
+        <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+        <h2 style="font-size: 26pt; margin: 20pt 0 6pt 0; line-height: 1.2;">Distributed <em>and</em> differentiable<br>cosmological simulations</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 26pt 0;">
+          <a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp" target="_blank"><img src="https://img.shields.io/badge/GitHub-DifferentiableUniverseInitiative%2FjaxDecomp-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          <a href="https://github.com/DifferentiableUniverseInitiative/JaxPM" target="_blank" style="margin-left: 6pt;"><img src="https://img.shields.io/badge/GitHub-DifferentiableUniverseInitiative%2FJaxPM-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div class="ebi-person">
+          <img src="../assets/vienna2025/12386534_image.png" alt="Wassim Kabalan" style="object-position: 50% 75%;">
+          <div>
+            <p class="ebi-person-name">Work led by Wassim Kabalan</p>
+            <p class="ebi-person-sub">IN2P3 / APC &middot; in collaboration with Alexandre Boucaud</p>
+            <p class="ebi-person-sub" style="font-style: italic;">Moving to the Alan Turing Institute in Fall 2026</p>
+          </div>
+        </div>
+        <hr style="width: 80px; margin: 26pt auto 0;">
+      </section>
+
+      <!-- II.B.1 — Weak lensing requires resolution -->
+      <section id="ebi-wl-resolution">
+        <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+        <h2 style="font-size: 23pt; margin-bottom: 4pt;">Weak lensing requires significant resolution</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 8pt 0;">
+          <a href="https://arxiv.org/abs/2305.07531" target="_blank"><img src="https://img.shields.io/badge/arXiv-2305.07531-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20pt; align-items: center;">
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389623_image.png" alt="Convergence power spectra: DLL vs κTNG" class="plain" style="width: 100%;">
+          </div>
+          <div style="text-align: left;">
+            <div class="card-glow" style="padding: 12pt 16pt; border-left: 3px solid var(--lc-secondary);">
+              <h4 style="margin: 0 0 6pt 0; font-size: 14pt; color: var(--lc-secondary);">Differentiable Lensing Lightcone (DLL) &mdash; FlowPM</h4>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li>5 &times; 5 sq. deg. lensing field</li>
+                <li>\(205^3\) \((h^{-1}\,\mathrm{Mpc})^3\) volume</li>
+                <li>\(128^3\) particles / voxels</li>
+              </ul>
+              <img src="../assets/vienna2025/12389643_images.png" alt="TensorFlow" class="plain" style="height: 26pt; margin: 8pt 0 0 0; display: block;">
+            </div>
+            <div class="card-glow fragment" style="padding: 10pt 14pt; border-left: 3px solid var(--lc-highlight); margin-top: 12pt;">
+              <p style="font-size: 13pt; line-height: 1.45; margin: 0;">\(\Rightarrow\) the limit of what fits on a <strong>single conventional GPU</strong>, circa 2022.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.B.2 — Vertical stack: JAX HPC + building blocks -->
+      <section>
+      <section id="ebi-jaxhpc">
+        <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+        <h2 style="font-size: 23pt; margin-bottom: 4pt;">Towards JAX-based differentiable HPC</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 10pt 0;">
+          <a href="https://github.com/DifferentiableUniverseInitiative/jaxDecomp" target="_blank"><img src="https://img.shields.io/badge/GitHub-DifferentiableUniverseInitiative%2FjaxDecomp-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20pt; align-items: center;">
+          <div style="text-align: left;">
+            <ul style="font-size: 13pt; line-height: 1.5; margin: 0 0 12pt 0;">
+              <li style="margin-bottom: 8pt;">JAX now offers <strong>automated parallelization</strong> across multi-host GPU clusters</li>
+              <li class="fragment" data-fragment-index="1">Scientific HPC still most likely requires <strong>dedicated high-performance ops</strong></li>
+            </ul>
+            <div class="card-glow fragment" data-fragment-index="2" style="padding: 12pt 16pt; border-left: 3px solid var(--lc-warm);">
+              <h4 style="margin: 0 0 6pt 0; font-size: 15pt; color: var(--lc-warm);"><i class="fa-solid fa-cubes" style="margin-right: 6pt;"></i>\(\texttt{jaxDecomp}\)</h4>
+              <p style="font-size: 12.5pt; line-height: 1.5; margin: 0 0 6pt 0;">JAX bindings to the high-performance <a href="https://nvidia.github.io/cuDecomp/" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">cuDecomp</a> (Romero et al. 2022) adaptive domain-decomposition library.</p>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li>Provides <strong>parallel FFTs</strong> and <strong>halo-exchange</strong> operations</li>
+                <li>Supports a variety of backends: CUDA-aware MPI, NVIDIA NCCL, NVIDIA NVSHMEM</li>
+              </ul>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389656_jax_logo_250px.png" alt="JAX" class="plain" style="height: 70pt; margin-bottom: 18pt;">
+            <img src="../assets/vienna2025/12389659_decomposition.png" alt="Slab and pencil domain decompositions" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 0 0;">Slab and pencil decompositions of a 3D mesh across devices</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.B.3 — Distributed operations -->
+      <section id="ebi-ops">
+        <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+        <h2 style="font-size: 23pt; margin-bottom: 14pt;">The distributed building blocks of a particle-mesh simulation</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 20pt; align-items: center;">
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389686_depict_split.png" alt="A simulation volume split into slabs across GPUs" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Domain decomposition: one slab per device</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389671_fft.svg" alt="Distributed 3D FFT" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Distributed 3D FFT (pencil transposes)</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/vienna2025/12389672_Halo_Exchange.svg" alt="Halo exchange" class="plain" style="width: 100%;">
+            <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Halo exchange between neighbouring domains</p>
+          </div>
+        </div>
+      </section>
+
+      </section>
+      <!-- end: JAX HPC stack -->
+
+      <!-- II.B.6 — JaxPM -->
+      <section id="ebi-jaxpm">
+          <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+          <h2 style="font-size: 23pt; margin-bottom: 4pt;">JaxPM: differentiable and scalable simulations</h2>
+          <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 12pt 0;">
+            <a href="https://github.com/DifferentiableUniverseInitiative/JaxPM" target="_blank"><img src="https://img.shields.io/badge/GitHub-DifferentiableUniverseInitiative%2FJaxPM-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          </p>
+          <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 24pt; align-items: center;">
+            <div class="card-glow" style="text-align: left; padding: 14pt 18pt; border-left: 3px solid var(--lc-warm);">
+              <h4 style="margin: 0 0 8pt 0; font-size: 15pt; color: var(--lc-warm);"><i class="fa-solid fa-cube" style="margin-right: 6pt;"></i>\(\texttt{JaxPM}\) &mdash; a particle-mesh N-body code in JAX</h4>
+              <pre style="font-family: var(--lc-font-mono); font-size: 12pt; background: var(--lc-surface-high); color: var(--lc-text); padding: 7pt 12pt; border-radius: 0.25rem; margin: 0 0 10pt 0; box-shadow: none; width: auto;"><code style="font-family: inherit; background: none; padding: 0;">pip install jaxpm</code></pre>
+              <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+                <li class="fragment" style="margin-bottom: 6pt;"><strong>Multi-GPU and multi-node</strong> simulations with distributed domain decomposition, built on \(\texttt{jaxDecomp}\) &mdash; successfully ran \(2048^3\) on 256 GPUs</li>
+                <li class="fragment" style="margin-bottom: 6pt;"><strong>End-to-end differentiable</strong>, including force computation and interpolation</li>
+                <li class="fragment">Custom reverse <strong>adjoint solver</strong> for memory-efficient gradients (including Diffrax)</li>
+              </ul>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/vienna2025/12389690_LPT_density_field_z0_1024.png" alt="Distributed 1024³ density field" class="plain" style="height: 330px;">
+              <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 0 0;">\(1024^3\) LPT density field at \(z=0\), computed across GPUs</p>
+            </div>
+          </div>
+        </section>
+
+      <!-- II.B.7 — Vertical stack: how the lensing simulations are built -->
+      <section>
+        <section id="ebi-lightcone">
+          <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+          <h2 style="font-size: 23pt; margin-bottom: 12pt;">From a simulation box to a lensing lightcone</h2>
+          <img src="../assets/glass_spheres.png" alt="Nested spherical shells around the observer, one shell, and a zoom on its matter field" class="plain" style="width: 1000px; align-self: center;">
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 4pt 0 14pt 0;">
+            Figure from the <a href="https://glass.readthedocs.io" target="_blank" style="color: var(--lc-secondary); text-decoration: none;">GLASS</a> documentation &mdash; Tessore et al. 2023 <a href="https://arxiv.org/abs/2302.01942" target="_blank"><img src="https://img.shields.io/badge/arXiv-2302.01942-B31B1B.svg" class="plain" style="height:16px;vertical-align:middle;" /></a>
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14pt;">
+            <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-primary); text-align: left;">
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">The distributed PM simulation evolves the matter field; the observer sits inside the box.</p>
+            </div>
+            <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-secondary); text-align: left;">
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Particles are projected onto <strong>concentric spherical shells</strong> as they cross them, one HEALPix map per redshift slice.</p>
+            </div>
+            <div class="card-glow fragment" style="padding: 9pt 14pt; border-left: 3px solid var(--lc-warm); text-align: left;">
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Shells are integrated along the line of sight (Born approximation) into <strong>convergence maps</strong>, differentiably.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="ebi-lightcone-validation">
+          <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Shell by shell, the forward model matches a reference N-body</h2>
+          <img src="../assets/kabalan_thesis_fig6_25_rows12.png" alt="Shell overdensity maps: this forward model vs CosmoGrid at z=0.07 and z=0.41" class="plain" style="height: 440px; align-self: center;">
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 6pt 0 0 0;">
+            \(\log_{10}(1+\delta)\) on two shells, forward model (left) vs. CosmoGrid (right), independent initial conditions &mdash; W. Kabalan, PhD thesis (2026), Fig. 6.25
+          </p>
+        </section>
+
+        <section id="ebi-lightcone-maps">
+          <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Reduced shear on the full DES Y3 footprint</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; align-items: center;">
+            <img src="../assets/kabalan_desy3_gamma1.png" alt="Reduced shear g1 on the DES Y3 footprint" class="plain" style="width: 100%;">
+            <img src="../assets/kabalan_desy3_gamma2.png" alt="Reduced shear g2 on the DES Y3 footprint" class="plain" style="width: 100%;">
+          </div>
+          <p style="font-family: var(--lc-font-ui); font-size: 12pt; margin: 12pt 0 0 0; display: flex; justify-content: center; gap: 10pt; flex-wrap: wrap;">
+            <span class="ebi-pill">\(2560^3\) mesh</span>
+            <span class="ebi-pill">\(5\,\mathrm{Gpc}/h\) box</span>
+            <span class="ebi-pill">\(N_{\mathrm{side}} = 2048\)</span>
+            <span class="ebi-pill">DES Y3 footprint</span>
+          </p>
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 8pt 0 0 0;">
+            \(g_i = \gamma_i / (1 - \kappa)\) from one distributed, differentiable forward model &mdash; W. Kabalan, PhD thesis (2026)
+          </p>
+        </section>
+
+        <section id="ebi-lightcone-stats">
+          <span class="section-label">Challenge 3 &middot; Distributed and differentiable forward models</span>
+          <h2 style="font-size: 23pt; margin-bottom: 10pt;">Lensing statistics against a reference N-body</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; align-items: center; width: 1000px; margin: 0 auto;">
+            <div style="text-align: center;">
+              <img src="../assets/kabalan_thesis_fig6_26_top.png" alt="Tomographic convergence power spectra vs CosmoGrid" class="plain" style="width: 100%;">
+              <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Tomographic \(C_\ell^{\kappa\kappa}\) vs. CosmoGrid (Fig. 6.26)</p>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/kabalan_thesis_fig6_28.png" alt="Starlet l1 norm vs CosmoGrid" class="plain" style="width: 100%;">
+              <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Starlet \(\ell_1\) norm, five scales (Fig. 6.28)</p>
+            </div>
+          </div>
+          <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 8pt 0 0 0;">W. Kabalan, PhD thesis (2026); reference: CosmoGrid (Kacprzak et al. 2023)</p>
+        </section>
+      </section>
+
+
+
+
+      <!-- ================================================================== -->
+      <!-- MERCI — cl&ocirc;ture / contact (landing)                                -->
+      <!-- ================================================================== -->
+      <section id="merci" data-background-glow>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+
+          <div class="hero-title" style="font-size: 80pt; letter-spacing: -0.02em; line-height: 1; margin: 0 0 6pt 0;">Thank you</div>
+          <p style="font-family: var(--lc-font-body); font-size: 22pt; font-weight: 300; color: var(--lc-warm); margin: 0 0 24pt 0; text-align: center;">for your attention</p>
+
+          <hr style="width: 80px; margin: 0 auto 18pt auto;">
+
+          <p style="font-family: var(--lc-font-ui); font-size: 9.5pt; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lc-muted); margin: 0 0 8pt 0;">
+            <i class="fa-solid fa-address-card" style="margin-right: 6pt; color: var(--lc-primary);"></i>Contact
+          </p>
+
+          <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-text); letter-spacing: 0.03em; margin: 0; text-align: center; line-height: 2;">
+            <i class="fa-solid fa-envelope" style="color: var(--lc-primary); margin-right: 5pt;"></i><a href="mailto:francois.lanusse@cnrs.fr" style="color: var(--lc-text); text-decoration: none;">francois.lanusse@cnrs.fr</a>
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+            <i class="fa-solid fa-globe" style="color: var(--lc-primary); margin-right: 5pt;"></i><a href="https://lightconeresearch.org" style="color: var(--lc-text); text-decoration: none;">lightconeresearch.org</a>
+            <br>
+            <i class="fa-brands fa-github" style="color: var(--lc-primary); margin-right: 5pt;"></i><a href="https://github.com/LightconeResearch" style="color: var(--lc-text); text-decoration: none;">github.com/LightconeResearch</a>
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+            <i class="fa-solid fa-book" style="color: var(--lc-primary); margin-right: 5pt;"></i><a href="https://astra-spec.org" style="color: var(--lc-text); text-decoration: none;">astra&#8209;spec.org</a>
+          </p>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/math/math.js"></script>
+  <script src="chord-diagram.js"></script>
+  <script>
+    renderDescChord('#desc-chord');
+
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+      margin: 0.08,
+      controls: true,
+      progress: true,
+      slideNumber: 'c/t',
+      hash: true,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      center: false,
+      plugins: [ RevealMath.KaTeX ]
+    });
+
+    // DESC chord diagram (slide intro-ai-desc): fit the SVG to its labels
+    // once the slide is actually laid out.
+    Reveal.on('ready', function () { window.fitDescChord && window.fitDescChord(); });
+    Reveal.on('slidechanged', function () { window.fitDescChord && window.fitDescChord(); });
+
+  </script>
+</body>
+</html>
