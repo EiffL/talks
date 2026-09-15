@@ -1293,6 +1293,376 @@
 
 
 
+
+
+      <!-- ================================================================== -->
+      <!-- PART II — Diffusion priors for inverse problems (DiEM, Rozet+2024)  -->
+      <!-- ================================================================== -->
+      <section id="divider-ip" data-background-glow>
+        <div class="divider-inner">
+          <p class="divider-eyebrow">
+            <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 6pt; color: var(--lc-primary);"></i>
+            Part II
+          </p>
+          <div class="divider-title">Learning data-driven priors<br>from corrupted observations</div>
+          <hr style="width: 80px; margin: 22pt auto 0;">
+          <p class="divider-logo-caption" style="margin-top: 22pt;">Inverse problems &middot; diffusion posterior sampling &middot; expectation-maximization</p>
+        </div>
+      </section>
+
+      <!-- II.1 — Linear inverse problems -->
+      <section id="ip-linear">
+        <span class="section-label">Inverse problems 101</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">Linear inverse problems</h2>
+        <p style="font-size: 18pt; margin: 0 0 10pt 0;">\(\boxed{\,y = \mathbf{A}x + n\,}\)</p>
+        <p style="font-size: 13.5pt; line-height: 1.5; margin: 0 auto 14pt; max-width: 900px;">
+          \(\mathbf{A}\) is known and <strong>encodes our physical understanding</strong> of the measurement process.
+          <span class="fragment" style="display: block; margin-top: 4pt;">\(\Longrightarrow\) When \(\mathbf{A}\) is non-invertible or ill-conditioned, the problem is <strong class="alert">ill-posed</strong>: there is no unique solution \(x\).</span>
+        </p>
+        <div class="fragment" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24pt; width: 860px; margin: 0 auto;">
+          <div style="text-align: center;">
+            <img src="../assets/pluto_smooth.png" alt="Blurred Pluto" class="plain" style="width: 100%; margin: 0; border-radius: 0.25rem;">
+            <p style="font-family: var(--lc-font-ui); font-size: 12pt; margin: 6pt 0 0 0;">Deconvolution</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/pluto_missing.png" alt="Pluto with missing pixels" class="plain" style="width: 100%; margin: 0; border-radius: 0.25rem;">
+            <p style="font-family: var(--lc-font-ui); font-size: 12pt; margin: 6pt 0 0 0;">Inpainting</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="../assets/plutoNoise.png" alt="Noisy Pluto" class="plain" style="width: 100%; margin: 0; border-radius: 0.25rem;">
+            <p style="font-family: var(--lc-font-ui); font-size: 12pt; margin: 6pt 0 0 0;">Denoising</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.2 — Bayesian view -->
+      <section id="ip-bayes">
+        <span class="section-label">Inverse problems 101</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">A Bayesian view of the problem</h2>
+        <p style="font-size: 17pt; margin: 0 0 6pt 0;">\(y = \mathbf{A}x + n \qquad\Longrightarrow\qquad p(x \mid y) \propto p(y \mid x)\, p(x)\)</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; align-items: stretch; width: 940px; margin: 0 auto 10pt;">
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-secondary);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 14pt; color: var(--lc-secondary);">The likelihood \(p(y \mid x)\)</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Contains <strong>the physics</strong>: the instrument, the noise model, the forward operator \(\mathbf{A}\).</p>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-highlight);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 14pt; color: var(--lc-highlight);">The prior \(p(x)\)</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Our knowledge about plausible solutions, <strong>before</strong> looking at the data.</p>
+          </div>
+        </div>
+        <div class="fragment" style="text-align: left; width: 940px; margin: 0 auto; font-size: 13pt; line-height: 1.5;">
+          <p style="margin: 0 0 2pt 0;">With these in hand we can estimate the <strong class="alert">maximum a posteriori</strong> solution,</p>
+          <p style="font-size: 13.5pt; margin: 0 0 6pt 0; text-align: center;">\(\hat{x} = \arg\max_x\ \log p(y \mid x) + \log p(x)
+            \;=\; \arg\max_x\ -\tfrac{1}{2}\lVert y - \mathbf{A}x\rVert^2_{\Sigma} + \log p(x)\ \text{ for Gaussian noise,}\)</p>
+          <p style="margin: 0;">or aim to <strong class="alert">sample the full posterior</strong> \(p(x \mid y)\), e.g. with MCMC.</p>
+        </div>
+        <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; margin: 14pt auto 0; width: 940px; border-left: 3px solid var(--lc-primary);">
+          <h4 style="margin: 0 0 4pt 0; font-size: 14pt; color: var(--lc-primary);">How do you choose the prior?</h4>
+          <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+            For images, fields, or spectra, \(p(x)\) is only known <strong>implicitly</strong> through examples.
+            \(\Longrightarrow\) <strong>Learn it from data</strong> with a deep generative model \(p_\theta(x)\), and use it as a prior.
+          </p>
+        </div>
+      </section>
+
+      <!-- II.3 — Diffusion models reminder -->
+      <section id="ip-diffusion">
+        <span class="section-label">Inverse problems 101</span>
+        <h2 style="font-size: 23pt; margin-bottom: 6pt;">Reminder: diffusion models as data-driven priors</h2>
+        <div style="width: 820px; margin: 0 auto 4pt;">
+          <div style="display: grid; grid-template-columns: 0.55fr 3.7fr 0.55fr 3.7fr 0.55fr; font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); text-align: center; margin-bottom: 2pt;">
+            <span>Data</span><span>Forward SDE</span><span>Prior</span><span>Reverse SDE</span><span>Data</span>
+          </div>
+          <img src="../assets/diem2024/diffusion_sde.png" alt="Forward and reverse SDE of a diffusion model" class="plain" style="width: 100%; margin: 0;">
+          <p style="font-family: var(--lc-font-ui); font-size: 10pt; color: var(--lc-muted); margin: 2pt 0 0 0; text-align: right;">Song et al. 2021</p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; width: 940px; margin: 0 auto;">
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-secondary);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-secondary);">Training = denoising</h4>
+            <p style="font-size: 12pt; line-height: 1.45; margin: 0;">Noising the data, \(x_t = x + \sigma_t z\), defines a family of smoothed distributions \(p_t(x_t)\).
+              A denoiser \(d_\theta(x_t, t) \approx \mathbb{E}[x \mid x_t]\) is trained with a simple loss:</p>
+            <p style="font-size: 12pt; margin: 4pt 0 0 0; text-align: center;">\(\mathcal{L} = \mathbb{E}_{x, t, z}\, \lambda_t \lVert d_\theta(x + \sigma_t z, t) - x\rVert^2\)</p>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-highlight);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-highlight);">The denoiser gives the score (Tweedie)</h4>
+            <p style="font-size: 12pt; margin: 4pt 0 6pt 0; text-align: center;">\(\nabla_{x_t} \log p_t(x_t) = \dfrac{d_\theta(x_t, t) - x_t}{\sigma_t^2}\)</p>
+            <p style="font-size: 12pt; line-height: 1.45; margin: 0;">Plugging this score into the <strong>reverse SDE</strong> generates samples from \(p(x)\): the prior is defined by a neural network.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.4 — The score we need vs. the score we have -->
+      <section id="ip-score">
+        <span class="section-label">Diffusion posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 10pt;">The score we need vs. the score we have</h2>
+        <p style="font-size: 13.5pt; line-height: 1.5; margin: 0 auto 4pt; max-width: 940px;">Sampling the posterior of an inverse problem with the reverse SDE would look like this:</p>
+        <p style="font-size: 15pt; margin: 0 0 12pt 0;">\(\mathrm{d}x_t = \big[f(x_t, t) - g^2(t)\, \underbrace{\nabla_{x_t} \log p_t(x_t \mid y)}_{\text{annealed posterior score}}\big]\mathrm{d}t + g(t)\, \mathrm{d}w\)</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; width: 940px; margin: 0 auto;">
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-secondary);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-secondary);">Bayes helps&hellip;</h4>
+            <p style="font-size: 12.5pt; margin: 4pt 0 0 0; text-align: center;">\(\nabla_{x_t} \log p_t(x_t \mid y) =\)</p>
+            <p style="font-size: 12.5pt; margin: 2pt 0 0 0; text-align: center; white-space: nowrap;">\(\underbrace{\nabla_{x_t} \log p_t(x_t)}_{\text{denoiser}} + \underbrace{\nabla_{x_t} \log p_t(y \mid x_t)}_{?}\)</p>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-highlight);">
+            <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-highlight);">&hellip;but only half-way</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">The likelihood of the <em>noisy</em> \(x_t\) is a marginal over all clean \(x\) compatible with it:</p>
+            <p style="font-size: 12.5pt; margin: 4pt 0 0 0; text-align: center;">\(p_t(y \mid x_t) = \displaystyle\int p(y \mid x)\, p(x \mid x_t)\, \mathrm{d}x\)</p>
+          </div>
+        </div>
+        <div class="card-glow fragment" style="text-align: left; padding: 10pt 16pt; margin: 14pt auto 0; width: 940px; border-left: 3px solid var(--lc-primary);">
+          <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+            \(p(x \mid x_t)\) is <strong class="alert">intractable</strong> in general. Every diffusion posterior sampler is an <strong>approximation of this integral</strong>,
+            and the quality of that approximation decides the quality of the posterior samples.
+          </p>
+        </div>
+      </section>
+
+      <!-- II.5 — DPS and its problem -->
+      <section id="ip-dps">
+        <span class="section-label">Diffusion posterior sampling</span>
+        <h2 style="font-size: 23pt; margin-bottom: 4pt;">The standard approximation: DPS</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0 0 8pt 0;">
+          Chung et al. 2023 <a href="https://arxiv.org/abs/2209.14687" target="_blank"><img src="https://img.shields.io/badge/arXiv-2209.14687-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <div style="display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 20pt; align-items: center; width: 1060px; margin: 0 auto;">
+          <div style="text-align: center;">
+            <img src="../assets/diem2024/dps_1_light.png" alt="Graphical model linking y, x0 and xt" class="plain" style="width: 310px; margin: 0 0 6pt 0;">
+            <img src="../assets/diem2024/dps_2_light.png" alt="DPS moves along the noisy manifolds toward the measurement subspace" class="plain" style="width: 100%; margin: 0;">
+            <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin: 2pt 0 0 0;">Figures from Chung et al. 2023</p>
+          </div>
+          <div style="text-align: left; font-size: 12.5pt; line-height: 1.45;">
+            <p style="margin: 0;">Replace the intractable marginal by the likelihood evaluated at the <strong>denoiser prediction</strong> \(\hat{x} = \mathbb{E}[x \mid x_t] \approx d_\theta(x_t, t)\):</p>
+            <p style="font-size: 13pt; margin: 6pt 0 8pt 0; text-align: center;">\(p_t(y \mid x_t) = \displaystyle\int p(y \mid x)\, p(x \mid x_t)\, \mathrm{d}x \;\approx\; \mathcal{N}\big(y \mid \mathbf{A}\hat{x},\, \Sigma_y\big)\)</p>
+            <p class="fragment" style="margin: 0;">For a Gaussian likelihood, the posterior score becomes a <strong>gradient through the denoiser</strong>:</p>
+            <p class="fragment" style="font-size: 12.5pt; margin: 6pt 0 10pt 0; text-align: center;">\(\nabla_{x_t} \log p_t(x_t \mid y) \;\approx\; \nabla_{x_t} \log p_t(x_t) \;-\; \nabla_{x_t}\, \tfrac{1}{2}\big(y - \mathbf{A}\hat{x}\big)^\top \Sigma_y^{-1} \big(y - \mathbf{A}\hat{x}\big)\)</p>
+            <div class="card-glow fragment" style="padding: 8pt 14pt; border-left: 3px solid var(--lc-highlight);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-highlight);">Problem: it ignores the posterior uncertainty</h4>
+              <p style="font-size: 12pt; line-height: 1.45; margin: 0 0 4pt 0;">DPS treats \(\hat{x}\) as <strong class="alert">deterministic</strong>: it assumes \(p(x \mid x_t)\) concentrates at its mean, which only holds when \(\sigma_t\) is small.
+                The <strong class="alert">posterior covariance</strong> \(\mathbb{V}[x \mid x_t]\) is dropped entirely.</p>
+              <ul style="font-size: 12pt; line-height: 1.45; margin: 0;">
+                <li>Unstable at early (high-noise) diffusion steps</li>
+                <li>Poor coverage of the posterior, samples inconsistent with the observation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.6 — Paper intro -->
+      <section id="ip-rozet">
+        <span class="section-label">Better posterior samples, and priors learned from observations</span>
+        <h2 style="font-size: 26pt; margin: 20pt 0 6pt 0; line-height: 1.2;">Learning diffusion priors from observations<br>by expectation-maximization</h2>
+        <p style="font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 0 0 6pt 0;">
+          Rozet, Andry, Lanusse, Louppe &middot; NeurIPS 2024
+          <a href="https://arxiv.org/abs/2405.13712" target="_blank" style="margin-left: 6pt;"><img src="https://img.shields.io/badge/arXiv-2405.13712-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" /></a>
+          <a href="https://github.com/francois-rozet/diem" target="_blank" style="margin-left: 6pt;"><img src="https://img.shields.io/badge/GitHub-francois--rozet%2Fdiem-181717.svg?logo=github" class="plain" style="height:18px;vertical-align:middle;" /></a>
+        </p>
+        <p style="font-size: 13pt; color: var(--lc-muted); margin: 0 0 22pt 0;">Two contributions: an improved posterior sampler (<strong style="color: var(--lc-text);">MMPS</strong>) and a recipe to train diffusion priors from corrupted data only (<strong style="color: var(--lc-text);">DiEM</strong>).</p>
+        <div class="ebi-person">
+          <img src="../assets/rozet_avatar.jpg" alt="François Rozet">
+          <div>
+            <p class="ebi-person-name">Work led by Fran&ccedil;ois Rozet</p>
+            <p class="ebi-person-sub">University of Li&egrave;ge &middot; with G&eacute;r&ocirc;me Andry and Gilles Louppe</p>
+          </div>
+        </div>
+        <hr style="width: 80px; margin: 26pt auto 0;">
+      </section>
+
+      <!-- II.7 — MMPS: vertical stack (idea, Tweedie + CG, results) -->
+      <section>
+        <section id="ip-mmps">
+          <span class="section-label">Contribution 1 &middot; Moment Matching Posterior Sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Keep the covariance: moment matching posterior sampling</h2>
+          <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 20pt; align-items: start; width: 1000px; margin: 0 auto;">
+            <div style="text-align: left;">
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0 0 6pt 0;">Approximate \(p(x \mid x_t)\) by the Gaussian with the <strong>right first two moments</strong> (closest in KL):</p>
+              <p style="font-size: 13.5pt; margin: 0 0 8pt 0; text-align: center;">\(q(x \mid x_t) = \mathcal{N}\big(x \mid \mathbb{E}[x \mid x_t],\, \mathbb{V}[x \mid x_t]\big)\)</p>
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0 0 6pt 0;">For a linear Gaussian forward model, the marginal is then <strong>exact and closed-form</strong>:</p>
+              <div class="card-glow fragment" style="padding: 8pt 14pt; margin-bottom: 8pt; border-left: 3px solid var(--lc-highlight);">
+                <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-highlight); font-weight: 600; margin: 0 0 2pt 0; letter-spacing: 0.05em; text-transform: uppercase;">DPS &middot; wrong</p>
+                <p style="font-size: 13pt; margin: 0; text-align: center;">\(\mathcal{N}\big(y \mid \mathbf{A}\mathbb{E}[x \mid x_t],\ \Sigma_y\big)\)</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 8pt 14pt; border-left: 3px solid var(--lc-accent);">
+                <p style="font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-accent); font-weight: 600; margin: 0 0 2pt 0; letter-spacing: 0.05em; text-transform: uppercase;">MMPS &middot; less wrong</p>
+                <p style="font-size: 13pt; margin: 0; text-align: center;">\(\mathcal{N}\big(y \mid \mathbf{A}\mathbb{E}[x \mid x_t],\ \Sigma_y + {\color{#d9764f}\mathbf{A}\,\mathbb{V}[x \mid x_t]\,\mathbf{A}^\top}\big)\)</p>
+              </div>
+              <p class="fragment" style="font-size: 12.5pt; line-height: 1.45; margin: 8pt 0 0 0; color: var(--lc-muted);">
+                Earlier works used <strong style="color: var(--lc-text);">heuristics</strong> for \(\mathbb{V}[x \mid x_t]\), such as \(\Sigma_t\) or \((\Sigma_t^{-1} + \Sigma_x^{-1})^{-1}\). They ignore the <strong style="color: var(--lc-text);">local</strong> covariance of the data manifold.
+              </p>
+            </div>
+            <div style="text-align: center;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0 0 2pt 0;">Prior on a 1-d manifold; ellipses: 95% regions of \(q(x \mid x_t)\)</p>
+              <img src="../assets/diem2024/manifold_a.png" alt="Heuristic covariance" class="plain" style="width: 100%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-highlight); margin: 0 0 6pt 0;"><strong>A</strong> &middot; heuristic \(\Sigma_t\): any \(x_t\) whose mean is near the plane \(y = \mathbf{A}x\) looks likely</p>
+              <img src="../assets/diem2024/manifold_b.png" alt="True covariance" class="plain" style="width: 100%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-accent); margin: 0 0 6pt 0;"><strong>B</strong> &middot; with \(\mathbb{V}[x \mid x_t]\): inconsistent regions are correctly pruned</p>
+              <img src="../assets/diem2024/manifold_c.png" alt="Ground truth" class="plain" style="width: 100%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 0;"><strong>C</strong> &middot; ground-truth \(p(x_t \mid y)\) and \(p(x \mid x_t)\)</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="ip-tweedie">
+          <span class="section-label">Contribution 1 &middot; Moment Matching Posterior Sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Where does the covariance come from? Tweedie, again</h2>
+          <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20pt; align-items: center; width: 1000px; margin: 0 auto;">
+            <div style="text-align: left;">
+              <p style="font-size: 13pt; line-height: 1.5; margin: 0 0 6pt 0;">For Gaussian corruption \(x_t = x + \epsilon\), \(\epsilon \sim \mathcal{N}(0, \Sigma_t)\), the second-order Tweedie formula gives the posterior covariance <strong>from the same denoiser</strong>:</p>
+              <p style="font-size: 15pt; margin: 4pt 0 10pt 0; text-align: center;">\(\boxed{\ \mathbb{V}[x \mid x_t] = \Sigma_t\, \nabla_{x_t} d_\theta(x_t, t)^\top\ }\)</p>
+              <div class="card-glow fragment" style="padding: 10pt 16pt; margin-bottom: 10pt; border-left: 3px solid var(--lc-highlight);">
+                <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-highlight);">Challenge</h4>
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">The Jacobian \(\nabla_{x_t} d_\theta \in \mathbb{R}^{N \times N}\) is <strong class="alert">intractable</strong> to materialize in high dimension (\(N \sim 10^5\!-\!10^6\) pixels).</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 10pt 16pt; border-left: 3px solid var(--lc-accent);">
+                <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-accent);">Solution: never build the matrix</h4>
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0 0 4pt 0;">The likelihood score only needs the solution of one linear system,</p>
+                <p style="font-size: 12.5pt; margin: 0 0 4pt 0; text-align: center;">\(\big(\Sigma_y + \mathbf{A}\,\mathbb{V}[x \mid x_t]\,\mathbf{A}^\top\big)\, u = y - \mathbf{A}\hat{x}\)</p>
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">solved by <strong>conjugate gradient</strong> using only <strong class="alert">vector-Jacobian products</strong> from automatic differentiation. In practice <strong>1&ndash;5 iterations</strong> suffice.</p>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/diem2024/divergence.png" alt="Sinkhorn divergence between true and approximate posteriors" class="plain" style="width: 82%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); line-height: 1.35; margin: 4pt 0 0 0;">
+                Divergence between \(p(x_t \mid y)\) and \(q(x_t \mid y)\) for 1-d manifolds in \(\mathbb{R}^3\):<br>
+                Tweedie's covariance is <strong style="color: var(--lc-text);">orders of magnitude</strong> more accurate than heuristics.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="ip-mmps-results">
+          <span class="section-label">Contribution 1 &middot; Moment Matching Posterior Sampling</span>
+          <h2 style="font-size: 23pt; margin-bottom: 6pt;">Fewer steps, better samples</h2>
+          <img src="../assets/dps_comparison.png" alt="DPS vs MMPS on FFHQ inverse problems" class="plain" style="width: 790px; margin: 0 auto; display: block;">
+          <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 4pt 0 8pt 0;">FFHQ 256&times;256 &middot; MMPS (5) uses 5 conjugate-gradient iterations per step</p>
+          <div class="card-glow fragment" style="text-align: left; padding: 8pt 16pt; margin: 0 auto; width: 960px; border-left: 3px solid var(--lc-accent);">
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+              With the posterior covariance, the sampler is <strong>stable from the very first noisy steps</strong>: 10 MMPS steps already give consistent reconstructions where DPS needs 1000.
+              Cost: about 16 ms per solver iteration on this task, and 10% more memory than DPS.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <!-- II.8 — Crisis: we assumed clean training data -->
+      <section id="ip-crisis">
+        <span class="section-label">Contribution 2 &middot; Learning the prior from observations</span>
+        <h2 style="font-size: 23pt; margin-bottom: 12pt;">A critical assumption we have been making</h2>
+        <div class="card-glow" style="text-align: left; padding: 12pt 18pt; margin: 0 auto 14pt; width: 900px; border-left: 3px solid var(--lc-secondary);">
+          <h4 style="margin: 0 0 4pt 0; font-size: 14.5pt; color: var(--lc-secondary);">Assumption so far</h4>
+          <p style="font-size: 13.5pt; line-height: 1.45; margin: 0;">We have access to <strong class="alert">clean training data</strong> \(x \sim p(x)\) to learn the diffusion prior.</p>
+        </div>
+        <div class="card-glow fragment" style="text-align: left; padding: 12pt 18pt; margin: 0 auto 14pt; width: 900px; border-left: 3px solid var(--lc-highlight);">
+          <h4 style="margin: 0 0 4pt 0; font-size: 14.5pt; color: var(--lc-highlight);">Reality in scientific applications</h4>
+          <p style="font-size: 13.5pt; line-height: 1.45; margin: 0 0 6pt 0;">We often only have <strong class="alert">noisy, incomplete observations</strong> \(y = \mathbf{A}x + n\), and the corruption may differ for each observation.</p>
+          <ul style="font-size: 12.5pt; line-height: 1.5; margin: 0;">
+            <li><strong>Astronomy</strong>: PSF blur, detector noise, masked or missing pixels, incomplete \(uv\) coverage</li>
+            <li><strong>Medical imaging</strong>: sub-sampled MRI \(k\)-space, CT projections</li>
+            <li><strong>Earth sciences</strong>: satellite measurements with gaps and noise</li>
+          </ul>
+        </div>
+        <p class="fragment" style="font-size: 20pt; font-weight: 600; color: var(--lc-primary); margin: 18pt 0 0 0;">Can we learn a diffusion prior directly from corrupted data?</p>
+      </section>
+
+      <!-- II.10 — DiEM algorithm -->
+      <section id="ip-diem">
+        <span class="section-label">Contribution 2 &middot; Learning the prior from observations</span>
+        <h2 style="font-size: 23pt; margin-bottom: 8pt;">DiEM: diffusion models trained by expectation-maximization</h2>
+        <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 20pt; align-items: start; width: 1000px; margin: 0 auto;">
+          <div style="text-align: left;">
+            <ol style="font-size: 13pt; line-height: 1.5; margin: 0; padding-left: 20pt;">
+              <li style="margin-bottom: 8pt;"><strong>Initialize</strong> with a conservative prior \(q_0(x) = \mathcal{N}(\mu_x, \Sigma_x)\), itself fitted to the observations by (closed-form) EM.</li>
+              <li class="fragment" data-fragment-index="1" style="margin-bottom: 8pt;"><strong class="alert">E-step</strong>: for each observation \((y_i, \mathbf{A}_i)\), sample \(x_i \sim q_{\theta_k}(x \mid y_i, \mathbf{A}_i)\) with <strong>MMPS</strong>.</li>
+              <li class="fragment" data-fragment-index="2" style="margin-bottom: 8pt;"><strong class="alert">M-step</strong>: train the denoiser \(d_\theta\) on the samples \(\{x_i\}\) with the <strong>standard denoising loss</strong>, warm-started from \(\theta_k\):
+                <p style="font-size: 12.5pt; margin: 4pt 0 0 0; text-align: center;">\(\ell = \lambda_t \lVert d_\theta(x_i + \sigma_t z, t) - x_i\rVert^2\)</p></li>
+              <li class="fragment" data-fragment-index="3"><strong>Repeat</strong> until the prior stops changing (typically 10&ndash;30 iterations).</li>
+            </ol>
+          </div>
+          <div>
+            <div class="card-glow fragment" data-fragment-index="1" style="text-align: left; padding: 10pt 16pt; margin-bottom: 12pt; border-left: 3px solid var(--lc-secondary);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-secondary);">Why MMPS in the E-step?</h4>
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">EM only converges if the posterior samples are <strong class="alert">accurate</strong>. Biased samples give a biased prior, and the bias is <strong>amplified at every iteration</strong>. With heuristic covariances, the MRI prior collapses after a few rounds.</p>
+            </div>
+            <div class="card-glow fragment" data-fragment-index="2" style="text-align: left; padding: 10pt 16pt; margin-bottom: 12pt; border-left: 3px solid var(--lc-highlight);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-highlight);">The M-step is plain diffusion training</h4>
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">No modified loss, any architecture, existing infrastructure. The result is a <strong>proper diffusion model</strong>, usable for any downstream task.</p>
+            </div>
+            <div class="card-glow fragment" data-fragment-index="3" style="text-align: left; padding: 10pt 16pt; border-left: 3px solid var(--lc-accent);">
+              <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-accent);">Physics stays explicit</h4>
+              <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">The forward model \(p(y \mid x, \mathbf{A})\) is never learned: the network only ever sees <strong>clean latents</strong> it sampled itself.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- II.11 — Results: vertical stack -->
+      <section>
+        <section id="ip-diem-cifar">
+          <span class="section-label">Contribution 2 &middot; Learning the prior from observations</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Corrupted CIFAR-10: a prior from images with 75% of pixels missing</h2>
+          <div style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 20pt; align-items: center; width: 1040px; margin: 0 auto;">
+            <div style="text-align: center;">
+              <img src="../assets/diem2024/cifar_prior_tweedie.png" alt="Samples from the learned prior along the EM iterations" class="plain" style="width: 100%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 4pt 0 0 0;">Samples from \(q_{\theta_k}(x)\) along the EM iterations (\(\rho = 0.75\), fixed noise for comparison)</p>
+            </div>
+            <div style="text-align: center;">
+              <img src="../assets/diem2024/cifar_fid.png" alt="FID along EM iterations" class="plain" style="width: 88%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 2pt 0 0 0;">FID of \(q_{\theta_k}\) vs. iteration \(k\)</p>
+            </div>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 8pt 16pt; margin: 10pt auto 0; width: 1040px; border-left: 3px solid var(--lc-highlight);">
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">
+              Samples become sharper and cleaner with \(k\). <strong>The sampler matters</strong>: with heuristic covariances the FID plateaus far above the Tweedie-based MMPS, and DiEM outperforms AmbientDiffusion at the same corruption level.
+            </p>
+          </div>
+        </section>
+
+        <section id="ip-diem-mri">
+          <span class="section-label">Contribution 2 &middot; Learning the prior from observations</span>
+          <h2 style="font-size: 23pt; margin-bottom: 8pt;">Accelerated MRI: a prior learned from \(k\)-space measurements only</h2>
+          <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20pt; align-items: center; width: 1000px; margin: 0 auto;">
+            <div style="text-align: center;">
+              <img src="../assets/diem2024/fastmri_accelerated.png" alt="Posterior samples for accelerated MRI" class="plain" style="width: 100%; margin: 0;">
+              <p style="font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-muted); margin: 4pt 0 0 0;">fastMRI knee scans, acceleration factor \(R\); \(\mathcal{F}^{-1}(m \odot y)\) is the zero-filled baseline</p>
+            </div>
+            <div style="text-align: left;">
+              <div class="card-glow" style="padding: 10pt 16pt; margin-bottom: 12pt; border-left: 3px solid var(--lc-secondary);">
+                <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-secondary);">Setup</h4>
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">No clean scan is ever seen. Each observation is a sub-sampled Fourier plane with its own mask \(m\): the forward operator \(\mathbf{A}\) changes from one observation to the next.</p>
+              </div>
+              <div class="card-glow fragment" style="padding: 10pt 16pt; border-left: 3px solid var(--lc-accent);">
+                <h4 style="margin: 0 0 4pt 0; font-size: 13.5pt; color: var(--lc-accent);">Result</h4>
+                <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Posterior samples are detailed, show <strong>plausible variations</strong> between draws, and remain <strong>consistent with the measured frequencies</strong>, even at \(R = 32\).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- II.12 — Take-home -->
+      <section id="ip-takehome">
+        <span class="section-label">Part II &middot; Take-home</span>
+        <h2 style="font-size: 23pt; margin-bottom: 14pt;">Physics in the likelihood, data in the prior</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16pt; width: 1000px; margin: 0 auto;">
+          <div class="card-glow" style="text-align: left; padding: 12pt 16pt; border-left: 3px solid var(--lc-secondary);">
+            <h4 style="margin: 0 0 6pt 0; font-size: 14pt; color: var(--lc-secondary);">Diffusion priors</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">A learned denoiser is a prior: its score plugs into the reverse SDE, next to an explicit physical likelihood.</p>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 12pt 16pt; border-left: 3px solid var(--lc-highlight);">
+            <h4 style="margin: 0 0 6pt 0; font-size: 14pt; color: var(--lc-highlight);">MMPS</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Keep the posterior covariance, get it from Tweedie's formula, solve with conjugate gradient. Stable, accurate, cheap.</p>
+          </div>
+          <div class="card-glow fragment" style="text-align: left; padding: 12pt 16pt; border-left: 3px solid var(--lc-accent);">
+            <h4 style="margin: 0 0 6pt 0; font-size: 14pt; color: var(--lc-accent);">DiEM</h4>
+            <p style="font-size: 12.5pt; line-height: 1.45; margin: 0;">Sample the posterior, retrain the prior, repeat. A proper diffusion model from corrupted observations only.</p>
+          </div>
+        </div>
+        <p class="fragment" style="font-size: 14pt; line-height: 1.5; margin: 22pt auto 0; max-width: 900px;">
+          For surveys, this is a recipe for <strong class="alert">priors learned directly from the data we actually have</strong>, with the instrument model kept explicit and never learned.
+        </p>
+      </section>
+
+
       <!-- ================================================================== -->
       <!-- MERCI — cl&ocirc;ture / contact (landing)                                -->
       <!-- ================================================================== -->
