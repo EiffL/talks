@@ -375,19 +375,3 @@ body.reveal-viewport .reveal section { line-height: 1.38; }
 .reveal .slides .follow-links p { margin: 0 0 0.55em 0; font-size: 1.05em; letter-spacing: 0.01em; }
 .reveal .slides .follow-links a { color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.45); }
 .reveal .slides .follow-links a:hover { color: #f2789e; border-bottom-color: #f2789e; }
-
-/* ==========================================================================
-   Euclid Q1 slide: slow multi-location zoom on the background (from Cagliari2025).
-   Scoped to .present so the zoom restarts each time the slide is shown.
-   ========================================================================== */
-.slide-background.gliding-background.present .slide-background-content {
-  animation: glideBackground 50s ease-in-out infinite;
-  animation-fill-mode: both;
-}
-@keyframes glideBackground {
-  0%   { transform: scale(1.0) translate(0%, 0%); }
-  30%  { transform: scale(3.0) translate(15%, 15%); }   /* zoom into upper-left */
-  60%  { transform: scale(2.6) translate(15%, 0%); }    /* zoom out */
-  90%  { transform: scale(3.0) translate(-15%, -15%); } /* zoom into upper-right */
-  100% { transform: scale(1.0) translate(0%, 0%); }
-}
