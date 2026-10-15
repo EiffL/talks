@@ -1,0 +1,393 @@
+/* ==========================================================================
+   AION-1 — GENCI webinar deck · editorial restyle
+   Fonts: EB Garamond (headings) + Lato (body). Accent: #CA0E4C.
+   Layout is the slides.com export (absolutely positioned .sl-block); this
+   sheet only changes typography, colour and chrome — never the content.
+   ========================================================================== */
+
+:root {
+  --ai-bg:          #ffffff;
+  --ai-surface:     #f6f5f2;
+  --ai-text:        #2b3440;
+  --ai-heading:     #1d2530;
+  --ai-muted:       #6f7782;
+  --ai-accent:      #CA0E4C;
+  --ai-accent-rgb:  202, 14, 76;
+  --ai-font-heading: "EB Garamond", Georgia, "Times New Roman", serif;
+  --ai-font-body:    "Lato", "Helvetica Neue", Arial, sans-serif;
+  --ai-shadow:       0 18px 40px -16px rgba(29, 37, 48, 0.22);
+}
+
+/* ---------------------------------------------------------------- base */
+body.reveal-viewport { background: var(--ai-bg); }
+
+body.reveal-viewport .reveal {
+  font-family: var(--ai-font-body);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--ai-text);
+  letter-spacing: -0.004em;
+}
+.reveal .slides { color: var(--ai-text); }
+body.reveal-viewport .reveal section { line-height: 1.38; }
+
+::selection { background: rgba(var(--ai-accent-rgb), 0.16); }
+
+/* ------------------------------------------------------------ headings */
+.reveal .slides h1,
+.reveal .slides h2,
+.reveal .slides h3,
+.reveal .slides h4 {
+  font-family: var(--ai-font-heading);
+  font-weight: 400;
+  color: var(--ai-heading);
+  letter-spacing: -0.012em;
+  line-height: 1.14;
+  text-transform: none;
+}
+.reveal .slides h1 { font-size: 2.35em; margin-bottom: 0.15em; }
+.reveal .slides h2 { font-size: 1.65em; margin-bottom: 0.2em; }
+
+/* Slide titles: a quiet hairline in the accent colour instead of the
+   two-tone bar of the original. */
+.reveal .slides h3 {
+  font-family: var(--ai-font-body);   /* slide titles in Lato */
+  font-size: 1.2em;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  color: var(--ai-heading);
+}
+.reveal .slides h3 strong { font-weight: 700; color: var(--ai-heading); }
+
+/* ------------------------------------------------------ inline styling */
+.reveal .slides strong { font-weight: 700; color: var(--ai-heading); }
+/* Blocks the author coloured white (over photos/video): keep bold text white too. */
+.reveal .slides .sl-block-content[style*="color: rgb(255, 255, 255)"] strong,
+.reveal .slides .sl-block-content[style*="color: rgb(255, 255, 255)"] h1,
+.reveal .slides .sl-block-content[style*="color: rgb(255, 255, 255)"] h2 { color: inherit; }
+.reveal .slides em { font-style: italic; }
+.reveal .slides p { margin-bottom: 0.3em; }
+
+.reveal .slides a {
+  color: var(--ai-accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--ai-accent-rgb), 0.28);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.reveal .slides a:hover { color: #9c0a3a; border-bottom-color: rgba(var(--ai-accent-rgb), 0.7); }
+.reveal .slides h1 a, .reveal .slides h2 a, .reveal .slides h3 a { border-bottom: none; }
+
+/* Small captions and credits (the deck marks them with 0.5em spans). */
+.reveal .slides span[style*="font-size:0.5em"] {
+  color: var(--ai-muted);
+  letter-spacing: 0.01em;
+}
+.reveal .slides span[style*="font-size:0.5em"] a { color: var(--ai-muted); border-bottom-color: rgba(111, 119, 130, 0.35); }
+
+/* ---------------------------------------------------------------- lists */
+.reveal .slides ul { margin: 0.2em 0 0.2em 1.15em; }
+.reveal .slides ul ul { margin-top: 0.15em; margin-left: 1.1em; font-size: 0.94em; }
+.reveal .slides li { margin-bottom: 0.22em; }
+.reveal .slides ul > li { list-style-type: disc; }
+.reveal .slides ul > li::marker { color: rgba(var(--ai-accent-rgb), 0.85); font-size: 0.85em; }
+.reveal .slides ul ul > li { list-style-type: "\2013\00a0\00a0"; }
+.reveal .slides ul ul > li::marker { color: rgba(var(--ai-accent-rgb), 0.6); font-size: 1em; }
+
+/* ----------------------------------------------------- special blocks */
+/* Boxed note (Francois' first paper): tonal surface + accent edge, no outline. */
+.reveal .slides .sl-block-content[style*="border-style: solid"] {
+  border: none !important;
+  border-left: 2px solid rgba(var(--ai-accent-rgb), 0.6) !important;
+  border-radius: 0 3px 3px 0;
+  background: var(--ai-surface);
+  padding: 6px 12px;
+}
+/* White overlay list (science cases): ambient shadow instead of a hard edge. */
+.reveal .slides .sl-block-content[style*="background-color: rgb(255, 255, 255)"] {
+  border-radius: 3px;
+  box-shadow: var(--ai-shadow);
+  padding: 8px 10px 6px 6px;
+  font-size: 75% !important; /* keeps the box tall enough to cover the artwork behind it */
+}
+/* Translucent caption over the opening video. */
+.reveal .slides .sl-block-content[style*="background-color: rgba(34, 34, 34, 0.65)"] {
+  border-radius: 3px;
+  padding: 10px 20px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font-weight: 300;
+}
+/* Colour-coded text in the foundation-model workflow slide: keep the
+   author's colours but soften the greyed-out steps slightly. */
+.reveal .slides span[style*="color:#A9A9A9"] { color: #b3b8bf !important; }
+
+/* Axis labels on the architecture spectrum: small caps, muted. */
+.reveal .slides .axis-label strong {
+  font-family: var(--ai-font-body);
+  font-weight: 700;
+  font-size: 0.6em;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ai-muted);
+}
+
+/* -------------------------------------------------------- title slides */
+.reveal .slides section.title-slide h1,
+.reveal .slides section.title-slide h2 {
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.reveal .slides section.title-slide p { color: #ffffff; }
+.reveal .slides section.title-slide strong { color: #ffffff; font-weight: 700; }
+.reveal .slides section.title-slide span[style*="font-size:0.7em"] strong {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.92;
+}
+.reveal .slides section.title-slide span[style*="font-size:0.6em"] {
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ------------------------------------------------------- part dividers
+   Dark full-bleed slide (same artwork as the title): small accent eyebrow,
+   Garamond display line, short rule, and a large faint part numeral. */
+.reveal .slides section.divider .divider-eyebrow p {
+  font-family: var(--ai-font-body);
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f2789e;
+  margin: 0;
+}
+.reveal .slides section.divider h1 {
+  font-family: var(--ai-font-heading);
+  font-size: 4em;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+}
+.reveal .slides section.divider .divider-rule {
+  left: 84px; top: 442px; width: 120px; height: 2px;
+  background: var(--ai-accent); opacity: 0.9;
+}
+.reveal .slides section.divider .deco-numeral {
+  position: absolute;
+  right: 72px;
+  top: 96px;
+  font-family: var(--ai-font-heading);
+  font-size: 460px;
+  line-height: 1;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: -0.04em;
+  pointer-events: none;
+}
+.theme-color-white-blue .reveal .slides section.divider ~ .slide-number { color: rgba(255,255,255,0.5); }
+
+/* -------------------------------------------------------------- chrome */
+.reveal .slide-number {
+  display: block !important;
+  left: 64px;
+  right: auto;
+  bottom: 20px;
+  padding: 0;
+  background: transparent;
+  color: var(--ai-muted);
+  font-family: var(--ai-font-body);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+.reveal .slide-number a { color: inherit; border: none; }
+
+.reveal .progress { height: 3px; background: rgba(29, 37, 48, 0.06); color: var(--ai-accent); }
+.reveal .progress span { background: var(--ai-accent); opacity: 0.8; }
+
+.theme-color-white-blue .reveal .controls { color: rgba(var(--ai-accent-rgb), 0.5); font-size: clamp(8px, 2vmin, 30px); }
+.theme-color-white-blue .reveal .controls button { color: currentColor; }
+.theme-color-white-blue .reveal.has-dark-background .controls { color: rgba(255, 255, 255, 0.55); }
+.theme-color-white-blue .reveal .slide-number { color: var(--ai-muted); background: transparent; }
+.theme-color-white-blue .reveal.has-dark-background .slide-number { color: rgba(255, 255, 255, 0.55); }
+
+/* Fragments: a slightly softer reveal. */
+.reveal .slides .fragment { transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* ==========================================================================
+   Slide-by-slide polish
+   ========================================================================== */
+/* Figures: barely-rounded corners, no frames. */
+.reveal .slides .sl-block[data-block-type="image"] img { border-radius: 3px; }
+
+/* Decorative hairlines / surfaces injected next to the content blocks. */
+.reveal .slides .deco-rule { position: absolute; background: rgba(29, 37, 48, 0.13); pointer-events: none; }
+
+/* Small uppercase eyebrow label (e.g. "Projet mené par"). */
+.reveal .slides .eyebrow span {
+  font-family: var(--ai-font-body) !important;
+  font-size: 0.56em !important;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ai-muted) !important;
+}
+
+/* Workflow slides: the heading line becomes an accent kicker above the steps. */
+.reveal .slides .kicker p:first-child { text-align: left; margin: 0 0 0.55em 0; }
+.reveal .slides .kicker p:first-child strong {
+  display: inline-block;
+  font-family: var(--ai-font-body);
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ai-accent);
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid rgba(var(--ai-accent-rgb), 0.35);
+}
+
+/* "Intérêt pour les scientifiques": each top-level point becomes a card. */
+.reveal .slides section.cards ul { margin-left: 0; }
+.reveal .slides section.cards ul > li {
+  list-style: none;
+  background: var(--ai-surface);
+  border-left: 2px solid rgba(var(--ai-accent-rgb), 0.6);
+  border-radius: 0 4px 4px 0;
+  padding: 14px 26px 14px 24px;
+  margin: 0 0 18px 0;
+}
+.reveal .slides section.cards ul > li > ul { margin: 0.35em 0 0 1.1em; }
+.reveal .slides section.cards ul > li > ul > li {
+  list-style-type: "\2013\00a0\00a0";
+  background: none; border: none; padding: 0; margin: 0 0 0.15em 0;
+}
+
+/* ==========================================================================
+   Page grid for content slides
+   Title band 44..104 (title left, small mark right, hairline rule with a
+   short accent), content area 89..1191 x 118..686.
+   ========================================================================== */
+.reveal .slides section.content::before {
+  content: ""; position: absolute; left: 64px; right: 64px; top: 104px; height: 1px;
+  background: rgba(29, 37, 48, 0.13); pointer-events: none;
+}
+.reveal .slides section.content::after {
+  content: ""; position: absolute; left: 64px; width: 36px; top: 103px; height: 2px;
+  background: var(--ai-accent); pointer-events: none;
+}
+/* Polymathic mark: quiet, right-aligned in the title band. */
+.reveal .slides .sl-block[data-name="image-3dbaf3"] .sl-block-style { opacity: 1 !important; }
+/* Cards slide: keep the cards inside the content area. */
+.reveal .slides section.cards ul > li { padding: 12px 22px 12px 22px; margin-bottom: 14px; }
+.reveal .slides section.tall-title h3 { font-size: 1.12em; line-height: 1.12; }
+.reveal .slides section.tall-title::before, .reveal .slides section.tall-title::after { top: 114px; }
+
+/* ==========================================================================
+   Photo / video intro slides (surveys, Rubin)
+   ========================================================================== */
+.reveal .slides section.photo .photo-title h3 {
+  display: inline-block;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 4px;
+  margin: 0;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+}
+.reveal .slides section.photo .ink-card {
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 4px;
+  padding: 18px 26px 16px 24px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.reveal .slides section.photo .ink-card,
+.reveal .slides section.photo .ink-card li,
+.reveal .slides section.photo .ink-card p,
+.reveal .slides section.photo .ink-card strong { color: #ffffff; }
+.reveal .slides section.photo .ink-card ul { font-size: 0.92em; margin: 0 0 0 1em; }
+.reveal .slides section.photo .ink-card li { margin-bottom: 0.65em; }
+.reveal .slides section.photo .ink-card ul > li::marker { color: rgba(255, 255, 255, 0.7); }
+.reveal .slides section.photo .ink-card p { margin: 0.4em 0 0 0; font-size: 0.92em; }
+.reveal .slides section.photo .alert { color: #f2789e; font-weight: 700; }
+.reveal .slides section.photo .credit {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  font-family: var(--ai-font-body);
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* Inset photo in a corner of a video slide (e.g. the DESI telescope). */
+.reveal .slides section.photo .photo-inset img {
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 14px 32px rgba(0, 0, 0, 0.55);
+}
+.reveal .slides section.photo .photo-inset-caption p {
+  font-family: var(--ai-font-body);
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+/* Tiny credit note under an inset image on a video slide. */
+.reveal .slides section.photo .photo-note p {
+  font-family: var(--ai-font-body);
+  font-size: 0.46em;
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+/* "Pourquoi un effort dédié" column: breathing room between the points without blank lines. */
+.reveal .slides .sl-block[data-name="text-1cbbea"] ul > li { margin-bottom: 0.7em; }
+.reveal .slides .sl-block[data-name="text-1cbbea"] ul ul > li { margin-bottom: 0.15em; }
+.reveal .slides .sl-block[data-name="text-1cbbea"] > .sl-block-content > p { margin-bottom: 0.8em; }
+/* Paper title-page screengrab shown as a card. */
+.reveal .slides .paper-card img {
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(29, 37, 48, 0.08), 0 24px 48px -16px rgba(29, 37, 48, 0.35);
+}
+/* White backing panel (used behind the MIMIC card on the closing slide). */
+.reveal .slides .deco-panel { position: absolute; z-index: 17; background: var(--ai-bg); pointer-events: none; }
+/* Closing slide: spelled-out links instead of icons. */
+.reveal .slides .follow-links p { margin: 0 0 0.55em 0; font-size: 1.05em; letter-spacing: 0.01em; }
+.reveal .slides .follow-links a { color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.45); }
+.reveal .slides .follow-links a:hover { color: #f2789e; border-bottom-color: #f2789e; }
+
+/* ==========================================================================
+   Euclid Q1 slide: slow multi-location zoom on the background (from Cagliari2025).
+   Scoped to .present so the zoom restarts each time the slide is shown.
+   ========================================================================== */
+.slide-background.gliding-background.present .slide-background-content {
+  animation: glideBackground 50s ease-in-out infinite;
+  animation-fill-mode: both;
+}
+@keyframes glideBackground {
+  0%   { transform: scale(1.0) translate(0%, 0%); }
+  30%  { transform: scale(3.0) translate(15%, 15%); }   /* zoom into upper-left */
+  60%  { transform: scale(2.6) translate(15%, 0%); }    /* zoom out */
+  90%  { transform: scale(3.0) translate(-15%, -15%); } /* zoom into upper-right */
+  100% { transform: scale(1.0) translate(0%, 0%); }
+}
