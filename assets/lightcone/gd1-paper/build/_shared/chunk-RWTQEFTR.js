@@ -1,0 +1,1 @@
+import{a as t}from"/talks/assets/lightcone/gd1-paper/build/_shared/chunk-GW5AG52Z.js";var s=class{constructor(i){this.init=i,this.records=this.init()}static{t(this,"ImperativeState")}reset(){this.records=this.init()}};export{s as a};

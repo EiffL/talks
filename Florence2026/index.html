@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI as Scientific Infrastructure: From Foundation Models to Research Agents &mdash; Schmidt Observatory System Symposium 2026</title>
+
+  <!-- Reveal.js core -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Interactive ASTRA record graph (built by widgets/astra-graph) -->
+  <link rel="stylesheet" href="../assets/lightcone/astra-graph/astra-graph-style.css">
+
+  <!-- Lightcone theme -->
+  <link rel="stylesheet" href="theme/lightcone.css">
+
+  <!-- Per-deck overrides -->
+  <style>
+    /* Title headline — Quattrocento in antique gold, on plain parchment. */
+    #title .title-display {
+      font-family: var(--lc-font-heading);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.04;
+      color: var(--lc-warm);
+      text-wrap: balance;
+    }
+
+    /* Thin gold masthead rule across the top of the title slide. */
+    #title .masthead-rule {
+      position: absolute;
+      top: 56pt;
+      left: 56pt;
+      right: 56pt;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        var(--lc-warm) 12%,
+        var(--lc-warm) 88%,
+        transparent 100%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    /* Evidence cards — eyebrow, stat cells, source line. */
+    .reveal .evidence-card {
+      display: flex;
+      flex-direction: column;
+      padding: 16pt 20pt 14pt;
+    }
+    .reveal .evidence-eyebrow {
+      font-family: var(--lc-font-ui);
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0 0 8pt 0;
+    }
+    .reveal .evidence-source {
+      font-family: var(--lc-font-ui);
+      font-size: 8pt;
+      color: var(--lc-muted);
+      opacity: 0.8;
+      margin: 8pt 0 0 0;
+    }
+    .reveal .scale-cell {
+      background: var(--lc-surface-low);
+      border-radius: 0.25rem;
+      padding: 7pt 9pt;
+    }
+    .reveal .scale-cell b {
+      display: block;
+      font-family: var(--lc-font-ui);
+      font-size: 15pt;
+      font-weight: 600;
+      color: var(--lc-text);
+      line-height: 1.1;
+    }
+    .reveal .scale-cell span {
+      font-family: var(--lc-font-ui);
+      font-size: 9.5pt;
+      color: var(--lc-muted);
+      line-height: 1.25;
+    }
+
+    /* Navier–Stokes case slide — the announcement figure on the left, two
+       takeaways (substrate, connection to human science) stacked on the right. */
+    #ns-case .ns-layout {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 26pt;
+      align-items: center;
+      text-align: left;
+    }
+    #ns-case .ns-figure { margin: 0; display: flex; flex-direction: column; align-items: center; }
+    #ns-case .ns-figure img {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      height: auto;   /* the file's white plate is pre-multiplied to the parchment tone */
+    }
+    #ns-case .ns-figure figcaption { width: 100%; max-width: 420px; margin-top: 4pt; }
+    #ns-case .ns-figure__headline {
+      font-family: var(--lc-font-heading);
+      font-size: 14pt;
+      line-height: 1.3;
+      color: var(--lc-text);
+      margin: 0 0 6pt 0;
+    }
+    #ns-case .lessons { display: flex; flex-direction: column; gap: 11pt; }
+    #ns-case .lesson { display: flex; flex-direction: column; padding: 11pt 20pt 10pt; }
+    #ns-case .lesson__title {
+      font-family: var(--lc-font-heading);
+      font-size: 15pt;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--lc-text);
+      margin: 0 0 9pt 0;
+    }
+    #ns-case .crystal-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 10pt;
+    }
+    #ns-case .crystal-row > i { color: var(--lc-accent); font-size: 14pt; }
+    #ns-case .lesson__quote {
+      font-family: var(--lc-font-heading);
+      font-style: italic;
+      font-size: 14pt;
+      line-height: 1.4;
+      color: var(--lc-primary);
+      margin: 0;
+      padding-left: 10pt;
+      border-left: 2px solid rgba(var(--lc-primary-rgb), 0.25);
+    }
+    #ns-case .lesson__quote cite {
+      display: block;
+      margin-top: 4pt;
+      font-family: var(--lc-font-ui);
+      font-style: normal;
+      font-size: 11pt;
+      color: var(--lc-muted);
+    }
+    #ns-case .lesson__implication {
+      display: flex;
+      align-items: baseline;
+      gap: 8pt;
+      margin: 9pt 0 0 0;
+      padding-top: 8pt;
+      border-top: 1px solid rgba(var(--lc-primary-rgb), 0.18);
+      font-family: var(--lc-font-heading);
+      font-size: 13pt;
+      line-height: 1.3;
+      color: var(--lc-highlight);
+      text-wrap: balance;
+    }
+
+    /* Corpus slide — machine-scale layer and human layer, joined by the
+       distillation / impulse loop (from the whiteboard). */
+    .corpus-slide .corpus-diagram {
+      display: grid;
+      grid-template-columns: 1fr 230pt 1fr;
+      align-items: stretch;
+      text-align: left;
+    }
+    .corpus-slide .layer {
+      display: flex;
+      flex-direction: column;
+      background: var(--lc-surface-lowest);
+      border-radius: 0;
+      padding: 11pt 20pt 10pt;
+      box-shadow: var(--lc-shadow-ambient);
+    }
+    .corpus-slide .layer--machine { border: 2px solid var(--lc-secondary); }
+    .corpus-slide .layer--human { border: 2px solid var(--lc-warm); }
+    .corpus-slide .layer__head { display: flex; align-items: center; gap: 12pt; margin-bottom: 7pt; }
+    .corpus-slide .layer__icon { flex-shrink: 0; min-width: 46pt; height: 56pt; display: flex; align-items: center; justify-content: center; }
+    .corpus-slide .layer__title {
+      font-family: var(--lc-font-heading);
+      font-size: 17pt;
+      line-height: 1.15;
+      color: var(--lc-text);
+      margin: 0;
+    }
+    .corpus-slide .layer__tag {
+      font-family: var(--lc-font-ui);
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 3pt 0 0 0;
+    }
+    .corpus-slide .layer__label {
+      font-family: var(--lc-font-ui);
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lc-muted);
+      margin: 0 0 5pt 0;
+    }
+    .corpus-slide .props { list-style: none; margin: 0; padding: 0; }
+    .corpus-slide .props li {
+      display: grid;
+      grid-template-columns: 14pt 1fr;
+      align-items: baseline;
+      gap: 0 6pt;
+      margin: 0 0 5pt 0;
+      font-family: var(--lc-font-ui);
+      font-size: 12.5pt;
+      line-height: 1.25;
+      color: var(--lc-text);
+    }
+    .corpus-slide .props li i { font-size: 10pt; }
+    .corpus-slide .props li small {
+      grid-column: 2;
+      font-size: 10pt;
+      color: var(--lc-muted);
+    }
+    .corpus-slide .layer--machine .props li i { color: var(--lc-secondary); }
+    .corpus-slide .layer--human .props li i { color: var(--lc-warm); }
+    .corpus-slide .loop { position: relative; display: flex; align-items: center; justify-content: center; }
+    .corpus-slide .loop svg { width: 100%; height: auto; max-height: 300px; overflow: visible; }
+    .corpus-slide .loop__name {
+      font-family: var(--lc-font-heading);
+      font-size: 22px;
+      fill: var(--lc-text);
+    }
+    .corpus-slide .layer__takeaway {
+      display: flex;
+      align-items: baseline;
+      gap: 8pt;
+      margin: 8pt 0 0 0;
+      padding-top: 7pt;
+      border-top: 1px solid rgba(var(--lc-primary-rgb), 0.18);
+      font-family: var(--lc-font-heading);
+      font-size: 13pt;
+      line-height: 1.3;
+      color: var(--lc-highlight);
+      text-wrap: balance;
+    }
+
+    /* Slide 3: the bet line and the three building blocks. */
+    #corpus .bet {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 9pt;
+      margin: 12pt 0 10pt;
+      font-family: var(--lc-font-heading);
+      font-size: 16pt;
+      color: var(--lc-highlight);
+    }
+    #corpus .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16pt; text-align: left; }
+    #corpus .pillar { padding: 8pt 14pt 9pt; border-radius: 0; background: var(--lc-surface-lowest); box-shadow: var(--lc-shadow-ambient); }
+    #corpus .pillar__head { display: flex; align-items: center; gap: 9pt; margin: 0 0 6pt 0; }
+    #corpus .pillar__name { font-family: var(--lc-font-heading); font-size: 17pt; line-height: 1.1; color: var(--lc-text); margin: 0; }
+    #corpus .pillar__what { font-size: 11pt; line-height: 1.45; color: var(--lc-text); margin: 0; }
+    #corpus .pillar { position: relative; transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease; }
+    #corpus .pillar__icon { font-size: 14pt; width: 20pt; text-align: center; }
+    #corpus .pillar__logo { height: 18px; width: auto; margin-left: auto; max-width: none; }
+    #corpus .bet__em { color: inherit; font-weight: 700; }
+    /* ---------------------------------------------------------------
+       Part 1: foundation models served by the data system (Polymathic).
+       --------------------------------------------------------------- */
+    .reveal .collab-logo {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      height: 22px;
+      width: auto;
+      max-width: none;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      z-index: 10;
+    }
+    .reveal .cite-line {
+      font-family: var(--lc-font-ui);
+      font-size: 11pt;
+      color: var(--lc-muted);
+      margin: 0 0 12pt 0;
+    }
+    .reveal .cite-line img { margin: 0 0 0 4pt; box-shadow: none; border-radius: 0; }
+    /* Part 1 opening (from AAS247): foundation model paradigm + workflows. */
+    .reveal .fp-fig { margin: 0; display: flex; flex-direction: column; }
+    .reveal .fp-fig img { display: block; width: 100%; height: auto; margin: 0; background: #fff; border: 6px solid #fff; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    .reveal .fp-fig figcaption { display: flex; align-items: center; justify-content: flex-end; gap: 6pt; margin-top: 6pt; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
+    .reveal .wf-credit a.wf-badge { border-bottom: none; }
+    .reveal .wf-credit a.wf-badge img, .reveal .fp-fig figcaption a img { display: block; }
+    .reveal .fp-fig figcaption a, .reveal .wf-credit a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    .reveal .fp-fig figcaption img, .reveal .wf-credit img { height: 16pt; width: auto; border: none; background: none; box-shadow: none; margin: 0; }
+    .reveal .fp-list, .reveal .wf-list { list-style: none; margin: 0; padding: 0; }
+    .reveal .fp-list li, .reveal .wf-list li { position: relative; padding-left: 18pt; font-size: 17pt; line-height: 1.4; color: var(--lc-text); }
+    .reveal .fp-list li::before, .reveal .wf-list li::before { content: ''; position: absolute; left: 2pt; top: 0.6em; width: 7pt; height: 7pt; background: var(--lc-warm); }
+    .reveal .fp-list li + li { margin-top: 12pt; }
+    .reveal .wf-list li + li { margin-top: 2pt; }
+    .reveal .wf-list li { line-height: 1.3; }
+    .reveal .fp-card h4, .reveal .wf-card h4 { margin: 0 0 10pt 0; font-family: var(--lc-font-heading); font-weight: 400; font-size: 21pt; line-height: 1.2; color: var(--lc-text); }
+    #fm-paradigm .fp-layout { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 26pt; align-items: start; text-align: left; }
+    #fm-paradigm .fp-left { display: flex; flex-direction: column; gap: 14pt; }
+    #fm-paradigm .fp-card { padding: 4pt 0 0 0; }
+    #fm-paradigm .fp-adapt { display: grid; grid-template-columns: 250px 1fr; gap: 14pt; align-items: start; }
+    #fm-paradigm .fp-archcard { display: flex; flex-direction: column; align-items: stretch; padding: 8pt 8pt 10pt; background: #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    #fm-paradigm .fp-arch figcaption { justify-content: center; white-space: nowrap; }
+    #fm-paradigm .fp-archcard img { display: block; width: 100%; height: auto; margin: 0; border: none; box-shadow: none; border-radius: 0; }
+    #fm-paradigm .fp-arrow { display: block; width: 17%; margin-left: 74%; text-align: center; color: var(--lc-muted); font-size: 13pt; line-height: 1.3; }
+    #fm-paradigm .fp-head { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 6pt; padding: 6pt 8pt; background: rgba(var(--lc-warm-rgb), 0.14); border: 1.5px solid var(--lc-warm); font-family: var(--lc-font-ui); font-size: 14pt; font-weight: 600; line-height: 1.2; color: var(--lc-text); text-align: center; }
+    #fm-paradigm .fp-head i { color: var(--lc-highlight); font-size: 12pt; }
+    #fm-paradigm .fp-head span { flex-basis: 100%; font-size: 12pt; font-weight: 400; color: var(--lc-muted); }
+    #fm-paradigm .fp-plotwrap { position: relative; align-self: center; }
+    #fm-paradigm .fp-plotwrap > img { height: 305px; width: auto; }
+    #fm-paradigm .fp-legend { position: absolute; right: 5%; bottom: 16%; display: flex; flex-direction: column; gap: 1pt; padding: 3pt 7pt; background: rgba(255, 255, 255, 0.9); font-family: var(--lc-font-ui); font-size: 11.5pt; line-height: 1.25; color: var(--lc-text); }
+    #fm-paradigm .fp-legend span { display: flex; align-items: center; gap: 5pt; white-space: nowrap; }
+    #fm-paradigm .fp-legend i { display: inline-block; width: 9pt; height: 9pt; border-radius: 50%; }
+    .reveal .wf-layout { display: grid; grid-template-columns: 1fr 470px; gap: 26pt; align-items: start; text-align: left; }
+    /* The two workflow slides share one top-aligned layout, so the auto-animated card keeps its place. */
+    .reveal .slides > section#fm-workflow-conv,
+    .reveal .slides > section#fm-workflow-fm { justify-content: flex-start; padding-top: 20px; }
+    .reveal .wf-card { padding: 10pt 20pt 11pt; }
+    .reveal .wf-card h4 { margin-bottom: 6pt; }
+    .reveal .wf-list li.wf-done { color: rgba(107, 117, 133, 0.6); }
+    .reveal .wf-list li.wf-done::before { background: rgba(107, 117, 133, 0.35); }
+    .reveal .wf-hl { color: var(--lc-highlight); font-weight: 700; }
+    #fm-workflow-conv .wf-layout > .fp-fig { width: 330px; justify-self: center; }
+    #fm-workflow-conv .fp-fig img { aspect-ratio: 1.22; object-fit: cover; object-position: 50% 100%; }
+    #fm-workflow-conv .fp-fig figcaption { justify-content: center; text-align: center; line-height: 1.3; }
+    #fm-workflow-conv .wf-figs { display: flex; justify-content: center; align-items: center; gap: 22pt; margin-top: 10pt; }
+    #fm-workflow-conv .wf-figs img { display: block; height: 160px; width: auto; max-width: none; margin: 0; background: #fff; border: 5px solid #fff; border-radius: 0; box-shadow: 0 14px 30px -20px rgba(20, 30, 50, 0.55); }
+    #fm-workflow-conv .wf-credit { display: flex; justify-content: center; align-items: center; gap: 6pt; margin: 4pt 0 0 0; text-align: center; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
+    #fm-workflow-fm .wf-figwrap { position: relative; }
+    #fm-workflow-fm .wf-box { position: absolute; left: 2%; top: 26%; width: 54%; height: 59%; border: 3px solid var(--lc-highlight); pointer-events: none; }
+    #fm-workflow-fm .wf-box span { position: absolute; left: -3px; bottom: 100%; margin-bottom: 4pt; white-space: nowrap; font-family: var(--lc-font-ui); font-size: 14pt; font-weight: 600; color: var(--lc-highlight); }
+    /* Part 1, slide 2: models as research infrastructure. */
+    #fm-service .fi-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt 18pt; align-items: stretch; text-align: left; }
+    #fm-service .fi-card { padding: 12pt 18pt 13pt; }
+    #fm-service .fi-card h4 { display: flex; align-items: center; gap: 9pt; margin: 0 0 6pt 0; font-family: var(--lc-font-heading); font-weight: 400; font-size: 20pt; line-height: 1.2; color: var(--lc-text); }
+    #fm-service .fi-card h4 i { font-size: 15pt; width: 18pt; text-align: center; }
+    #fm-service .fi-card p { margin: 0; font-size: 16pt; line-height: 1.4; color: #4a505c; }
+    #fm-service .fi-eyebrow { font-family: var(--lc-font-ui); font-size: 12.5pt; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lc-muted); margin: 0 0 2pt 0 !important; }
+    #fm-service .fi-quote { margin: 7pt 0 0 0 !important; font-family: var(--lc-font-heading); font-style: italic; color: var(--lc-text) !important; }
+    #fm-service .fi-quote span { white-space: nowrap; font-family: var(--lc-font-ui); font-style: normal; font-size: 13pt; color: var(--lc-muted); }
+    #fm-service .fi-eyebrow a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+    #fm-service .fi-quote a, #fm-service .fi-cite a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    #fm-service .fi-cite { display: flex; align-items: center; justify-content: space-between; font-family: var(--lc-font-ui); font-size: 13pt !important; color: var(--lc-muted) !important; margin-top: 8pt !important; }
+    #fm-service .fi-cite img { height: 17pt; vertical-align: middle; margin: 0 0 0 4pt; box-shadow: none; border-radius: 0; }
+    #fm-service .fi-cite img.fi-logo { height: 19pt; width: auto; max-width: none; margin: 0; }
+    .reveal .fm-bet strong { color: inherit; }
+    .reveal .fm-bet {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 9pt;
+      margin: 16pt 0 0 0;
+      font-family: var(--lc-font-heading);
+      font-size: 18pt;
+      color: var(--lc-highlight);
+      text-wrap: balance;
+    }
+    #fm-search .fs-layout { display: grid; grid-template-columns: 1.25fr 1fr; gap: 26pt; align-items: center; text-align: left; }
+    #fm-search .fs-video { margin: 0; display: flex; flex-direction: column; }
+    #fm-search .fs-video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 6px solid #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    #fm-search .fs-video figcaption { font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin-top: 8pt; }
+    #fm-search .fs-video figcaption a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    #fm-search .fs-steps { display: flex; flex-direction: column; gap: 9pt; }
+    #fm-search .fs-step { display: grid; grid-template-columns: 30pt 1fr; gap: 12pt; align-items: center; padding: 8pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-primary); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
+    #fm-search .fs-step__icon { display: inline-flex; align-items: center; justify-content: center; width: 30pt; height: 30pt; border-radius: 50%; background: rgba(var(--lc-primary-rgb), 0.1); color: var(--lc-primary); font-size: 12pt; }
+    #fm-search .fs-step__name { font-family: var(--lc-font-ui); font-size: 13pt; font-weight: 600; line-height: 1.2; color: var(--lc-text); margin: 0 0 2pt 0; }
+    #fm-search .fs-step__desc { font-size: 11.5pt; line-height: 1.35; color: #4a505c; margin: 0; }
+    #fm-search .fs-result { padding: 9pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-warm); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
+    #fm-search .fs-result p { margin: 0; font-size: 11.5pt; line-height: 1.4; color: #4a505c; }
+    #fm-search .fs-result b { display: block; font-family: var(--lc-font-heading); font-weight: 400; font-size: 15pt; color: var(--lc-text); margin-bottom: 2pt; }
+    /* ASTRA schema slide: a slice of the GD-1 record as a dependency graph, one node per ASTRA
+       type, decisions showing their options, outputs showing the recipe that made them. astra-ui kind colours; square corners (house rule). */
+    #astra-schema .as-stage { position: relative; width: 1160px; height: 420px; margin: 0 auto; text-align: left; }
+    #astra-schema .as-edges { position: absolute; inset: 0; overflow: visible; }
+    #astra-schema .as-edge { fill: none; stroke: rgba(78, 90, 112, 0.55); stroke-width: 1.8; }
+    #astra-schema .as-edge--decision { stroke: #a67c3c; }
+    #astra-schema .as-edge--insight { stroke: #8b7d70; stroke-dasharray: 5 4; }
+    #astra-schema .as-edge--finding { stroke: rgba(164, 90, 67, 0.75); }
+    #astra-schema .as-rel { position: absolute; font-family: var(--lc-font-ui); font-size: 9.5pt; letter-spacing: 0.04em; color: var(--lc-muted); white-space: nowrap; }
+    #astra-schema .as-node { position: absolute; width: 250px; box-sizing: border-box; padding: 8px 12px 9px; background: #fff; border: 1px solid rgba(var(--lc-primary-rgb), 0.14); border-left: 4px solid var(--k); border-radius: 0; box-shadow: 0 12px 26px -18px rgba(43, 49, 60, 0.55); z-index: 2; }
+    #astra-schema .as-type { display: flex; align-items: center; gap: 6px; margin: 0 0 2px 0; font-family: var(--lc-font-ui); font-size: 9pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--k); }
+    #astra-schema .as-type span { font-size: 12pt; letter-spacing: 0; font-weight: 400; }
+    #astra-schema .as-title { margin: 0; font-family: var(--lc-font-ui); font-size: 13.5pt; font-weight: 600; line-height: 1.25; color: var(--lc-text); }
+    #astra-schema .as-meta { margin: 4px 0 0 0; font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); }
+    #astra-schema .as-node--decision { background: color-mix(in srgb, var(--k) 6%, #fff); height: 146px; }
+    #astra-schema .as-opts { list-style: none; margin: 8px 0 0 0; padding: 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
+    #astra-schema .as-opts li { position: relative; margin: 0 0 4px 0; padding: 3px 8px 3px 24px; border: 1px dashed rgba(166, 124, 60, 0.45); background: #fff; }
+    #astra-schema .as-opts li::before { content: ''; position: absolute; left: 8px; top: 50%; width: 8px; height: 8px; margin-top: -5px; border: 1.5px solid #a67c3c; border-radius: 50%; }
+    #astra-schema .as-opts li.is-on { border-style: solid; border-color: #a67c3c; color: var(--lc-text); font-weight: 600; }
+    #astra-schema .as-opts li.is-on::before { background: #a67c3c; }
+    #astra-schema .as-backed { color: #8b7d70; margin-left: 4px; font-weight: 400; }
+    #astra-schema .as-node--figure { padding-bottom: 7px; }
+    #astra-schema .as-node--figure img { display: block; width: 100%; height: 70px; object-fit: cover; object-position: center 30%; margin: 4px 0 4px; max-width: none; border-radius: 0; box-shadow: none; }
+    #astra-schema .as-node--figure .as-title { font-size: 12pt; }
+    #astra-schema .as-recipe { display: block; margin: 6px -4px 0 0; padding: 4px 6px; background: #f4f1ea; font-family: var(--lc-font-mono); font-size: 8pt; letter-spacing: -0.01em; line-height: 1.45; color: var(--lc-text); border-radius: 0; white-space: nowrap; overflow: hidden; }
+    #astra-schema .as-recipe > span { display: block; }
+    #astra-schema .as-recipe__cmd::before { content: '$ '; color: var(--lc-muted); }
+    #astra-schema .as-recipe i { font-style: normal; }
+    #astra-schema .as-recipe__d { color: #8a6530; }
+    #astra-schema .as-recipe__i { color: #4e5a70; }
+    #astra-schema .as-props { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: start; width: 1160px; margin: 8pt auto 0; padding-top: 10pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.18); text-align: left; }
+    #astra-schema .as-props p { display: flex; align-items: flex-start; gap: 10pt; margin: 0; font-size: 11.5pt; line-height: 1.32; color: #4a505c; }
+    #astra-schema .as-props p i { flex: none; width: 26pt; height: 26pt; display: inline-flex; align-items: center; justify-content: center; background: var(--lc-primary); color: #fff; font-size: 12pt; border-radius: 0; }
+    #astra-schema .as-props b { display: block; font-family: var(--lc-font-heading); font-weight: 400; font-size: 14pt; color: var(--lc-text); margin-bottom: 1pt; }
+    #astra-schema .as-links { display: flex; flex-direction: column; align-items: flex-start; gap: 7pt; }
+    #astra-schema .as-link { display: inline-flex; align-items: center; gap: 6pt; font-family: var(--lc-font-ui); font-size: 12.5pt; font-weight: 600; color: var(--lc-secondary); text-decoration: none; border-bottom: 1.5px solid var(--lc-secondary); white-space: nowrap; }
+    /* Slide 5: how we build it — describe / execute & record / explain, in one repository. */
+    #approach .ar { position: relative; border: 2px dashed rgba(var(--lc-primary-rgb), 0.35); padding: 18pt 14pt 12pt; text-align: left; }
+    #approach .ar__repo {
+      position: absolute;
+      top: -11pt;
+      left: 16pt;
+      margin: 0;
+      padding: 1pt 10pt;
+      background: var(--lc-bg);
+      font-family: var(--lc-font-ui);
+      font-size: 9.5pt;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--lc-primary);
+    }
+    #approach .ar__repo i { margin-right: 6pt; }
+    #approach .ar__cols { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 14pt; align-items: stretch; }
+    #approach .ar__col {
+      display: flex;
+      flex-direction: column;
+      gap: 8pt;
+      padding: 11pt 14pt 12pt;
+      background: var(--lc-surface-lowest);
+      border-top: 3px solid var(--lc-secondary);
+      border-radius: 0;
+      box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35);
+    }
+    #approach .ar__col--mid { border-top-color: var(--lc-primary); }
+    #approach .ar__col:last-child { border-top-color: var(--lc-warm); }
+    #approach .ar__head { display: flex; align-items: center; gap: 10pt; }
+    #approach .ar__logo { height: 34px; width: auto; max-width: none; margin: 0; border-radius: 0; }
+    #approach .ar__logo--wide { height: 26px; }
+    #approach .ar__step { font-family: var(--lc-font-ui); font-size: 8.5pt; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lc-muted); margin: 0; }
+    #approach .ar__name { font-family: var(--lc-font-heading); font-size: 17pt; line-height: 1.15; color: var(--lc-text); margin: 0; }
+    #approach .ar__name code { font-family: var(--lc-font-mono); font-size: 0.6em; background: rgba(var(--lc-primary-rgb), 0.08); color: var(--lc-primary); padding: 1pt 5pt; margin-left: 4pt; vertical-align: 2pt; }
+    #approach .ar__code {
+      margin: 0;
+      padding: 8pt 10pt;
+      background: #f4f1ea;
+      border-radius: 0;
+      box-shadow: none;
+      font-family: var(--lc-font-mono);
+      font-size: 10.5px;
+      line-height: 1.36;
+      color: var(--lc-text);
+      white-space: pre;
+      overflow: hidden;
+      width: auto;
+    }
+    #approach .ar__code .k { color: var(--lc-secondary); }
+    #approach .ar__code .s { color: #3d4250; }
+    #approach .ar__code .p { color: #9aa1ad; }
+    #approach .ar__code .b { color: var(--lc-highlight); font-weight: 600; }
+    #approach .ar__code .ref { color: var(--lc-accent); font-weight: 600; }
+    #approach .ar__code .id { color: var(--lc-text); font-weight: 600; }
+    #approach .ar__code .ph { color: var(--lc-warm); font-weight: 600; }
+    #approach .ar__code--yaml .k { color: var(--lc-secondary); font-weight: 600; }
+    #approach .ar__code--myst { color: #3d4250; font-size: 12.5px; line-height: 1.6; padding: 12pt 14pt; }
+    #approach .ar__code--myst .role { color: #d4612a; font-weight: 600; }
+    #approach .ar__code--myst .tgt { color: var(--lc-secondary); font-weight: 600; }
+    #approach .ar__code--myst .dir { color: var(--lc-highlight); font-weight: 600; }
+    #approach .ar__file b { color: var(--lc-text); font-weight: 600; }
+    #approach .ar__file { font-size: 11pt; line-height: 1.35; color: #4a505c; margin: 0; }
+    #approach .ar__file code { display: inline-block; font-family: var(--lc-font-mono); font-size: 10pt; background: rgba(var(--lc-secondary-rgb), 0.1); color: var(--lc-secondary); padding: 0 5pt; margin-right: 5pt; }
+    #approach .ar__layer { display: grid; grid-template-columns: 92px 1fr; gap: 10pt; align-items: center; padding: 5pt 0; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.12); }
+    #approach .ar__layer p { margin: 0; font-size: 11pt; line-height: 1.35; color: #4a505c; }
+    #approach .ar__layer p b { display: block; font-family: var(--lc-font-ui); font-size: 12pt; font-weight: 600; color: var(--lc-text); }
+    #approach .ar__logos { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+    #approach .ar__logos img { height: 30px; width: auto; max-width: none; margin: 0; border-radius: 0; }
+    #approach .ar__logos img.wide { height: 17px; }
+    #approach .ar__docker { font-size: 24px; color: #2496ed; line-height: 1; }
+    #approach .ar__logos img[alt="uv"] { height: 22px; }
+    #approach .ar__logos--grid { flex-direction: row; flex-wrap: wrap; gap: 5px 7px; }
+    #approach .ar__logos--grid img { height: 24px; }
+    #approach .ar__logos--grid img.slurm { height: 17px; }
+    #approach .ar__share {
+      display: flex;
+      align-items: center;
+      gap: 14pt;
+      margin: 12pt 0 0 0;
+      padding: 9pt 16pt;
+      background: var(--lc-surface-lowest);
+      border-left: 3px solid var(--lc-text);
+      border-radius: 0;
+      box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35);
+      text-align: left;
+    }
+    #approach .ar__share > i { font-size: 26pt; color: var(--lc-text); }
+    #approach .ar__share p { flex: 1; margin: 0; font-size: 12pt; line-height: 1.35; color: #4a505c; }
+    #approach .ar__share p b { color: var(--lc-text); font-weight: 600; }
+    #approach .ar__share code { font-family: var(--lc-font-mono); font-size: 10.5pt; background: rgba(var(--lc-secondary-rgb), 0.1); color: var(--lc-secondary); padding: 0 5pt; }
+    /* Slide 5b: the MySTRA paper, embedded live. */
+    #approach-paper .pp-pair { display: flex; gap: 18px; justify-content: center; align-items: flex-start; }
+    #approach-paper .pp-panel { margin: 0; display: flex; flex-direction: column; }
+    #approach-paper .pp-panel--original { width: 590px; }
+    #approach-paper .pp-panel--repro { width: 590px; }
+    #approach-paper .pp-panel figcaption { font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); text-align: left; margin: 0 0 5pt 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #approach-paper .pp-tag { display: inline-block; padding: 1pt 6pt; margin-right: 5pt; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: var(--lc-muted); }
+    #approach-paper .pp-panel--repro .pp-tag { background: var(--lc-warm); }
+    #approach-paper .pp-frame.pp-pdf { overflow-y: auto; background: #e9e6df; padding: 10px; box-sizing: content-box; height: 490px; width: auto; border-top-color: var(--lc-muted); scrollbar-width: thin; }
+    #approach-paper .pp-pdf img { display: block; width: 100%; height: auto; margin: 0 0 10px 0; background: #fff; box-shadow: 0 4px 12px -6px rgba(20, 30, 50, 0.35); }
+    #approach-paper .pp-frame { width: auto; margin: 0; height: 510px; overflow: hidden; background: #fff; border: 1px solid rgba(var(--lc-primary-rgb), 0.2); border-top: 3px solid var(--lc-warm); border-radius: 0; box-shadow: 0 16px 34px -20px rgba(20, 30, 50, 0.45); }
+    #approach-paper .pp-caption { font-family: var(--lc-font-ui); font-size: 10pt; color: var(--lc-muted); margin: 8pt 0 0 0; }
+    #approach-paper .pp-caption a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    /* Slides nested in a vertical stack: same centring and corner logo as top-level slides. */
+    .reveal .slides > section.stack > section.present,
+    .reveal .slides > section.stack > section.past,
+    .reveal .slides > section.stack > section.future {
+      min-height: 100%;
+      box-sizing: border-box;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .reveal .slides > section.stack > section:not([data-background-glow]):not(.no-brand-mark)::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 200px;
+      height: 32px;
+      background-image: url('theme/Primary%20Logo.svg');
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: contain;
+      pointer-events: none;
+      z-index: 10;
+    }
+    /* Ecosystem slide: the whiteboard photo, framed. */
+    #ecosystem .eco { margin: 0 auto; width: fit-content; }
+    #ecosystem .eco img { display: block; height: 515px; width: auto; max-width: none; margin: 0 auto; border: 8px solid #fff; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    #ecosystem .eco figcaption { max-width: 700px; margin: 10pt auto 0; font-family: var(--lc-font-ui); font-size: 11.5pt; line-height: 1.4; color: var(--lc-muted); text-align: center; }
+    /* Slide 6: open questions. The core question frames four equal questions. */
+    #open-questions .oq-core { max-width: 1060px; margin: 0 auto 14pt; font-family: var(--lc-font-heading); font-size: 17pt; line-height: 1.35; color: var(--lc-text); text-wrap: balance; }
+    #open-questions .oq { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 16px 20px; width: 1160px; margin: 0 auto; text-align: left; }
+    #open-questions .oq-card { box-sizing: border-box; padding: 14pt 20pt; background: var(--lc-surface-lowest); border-top: 4px solid var(--c); border-radius: 0; box-shadow: 0 12px 28px -18px rgba(20, 30, 50, 0.45); }
+    #open-questions .oq-kicker { display: flex; align-items: center; gap: 9pt; margin: 0 0 6pt 0; font-family: var(--lc-font-ui); font-size: 10pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c); }
+    #open-questions .oq-kicker i { display: inline-flex; align-items: center; justify-content: center; width: 22pt; height: 22pt; background: var(--c); color: #fff; font-size: 11pt; letter-spacing: 0; }
+    #open-questions .oq-q { font-family: var(--lc-font-heading); font-size: 19pt; line-height: 1.22; color: var(--lc-text); margin: 0 0 6pt 0; }
+    #open-questions .oq-p { font-size: 13.5pt; line-height: 1.38; color: #4a505c; margin: 0; }
+    #open-questions .oq-contact { font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); margin: 10pt 0 0 0; }
+    #open-questions .oq-contact b { font-family: var(--lc-font-heading); font-size: 19pt; font-weight: 400; color: var(--lc-highlight); }
+    /* Slide 5c: legend for the record graph. */
+    #approach-record .rg-legend { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4pt 18pt; margin: 0 0 6pt 0; padding-left: 250px; font-family: var(--lc-font-ui); font-size: 11pt; color: var(--lc-text); }
+    #approach-record .rg-legend span { display: inline-flex; align-items: center; gap: 6pt; }
+    #approach-record .rg-legend__hint { color: var(--lc-muted); margin-left: 14pt; }
+    #approach-record .rg-legend__hint i { color: var(--lc-warm); }
+    #approach-record .rg-key { display: inline-block; width: 22px; height: 14px; background: #fff; border: 1px solid rgb(0 0 0 / 0.08); }
+    #approach-record .rg-key--input { border-left: 4px solid #4e5a70; background: rgb(78 90 112 / 0.1); }
+    #approach-record .rg-key--output { border-left: 4px solid #3b7a73; }
+    #approach-record .rg-key--figure { border-top: 3px solid #3b7a73; height: 16px; background: linear-gradient(135deg, #cfd7e3, #f0e6d6); }
+    #approach-record .rg-key--finding { border: 1.5px solid #a45a43; border-left: 5px solid #a45a43; background: rgb(164 90 67 / 0.1); }
+    #approach-record .rg-key--decision { width: 11px; height: 11px; background: #a67c3c; transform: rotate(45deg); border: 0; margin: 0 4px; }
+    #approach-record .rg-key--supported { box-shadow: inset 0 0 0 2px #a67c3c, inset 0 0 0 4px #f8f7f3; }
+    #approach-record .rg-glyph { font-family: var(--lc-font-ui); font-style: normal; margin-left: -2pt; }
+    #approach-record .rg-legend .rg-link { display: inline-block; width: 22px; height: 0; border-top: 2px solid rgb(166 124 60 / 0.7); }
+    #approach-record .pp-caption { font-family: var(--lc-font-ui); font-size: 10pt; color: var(--lc-muted); margin: 4pt 0 0 0; }
+    #approach-record .arxiv-badge { display: inline-flex; vertical-align: -1pt; margin-right: 4pt; font: 600 8.5pt/1 var(--lc-font-ui); text-decoration: none; letter-spacing: 0.02em; }
+    #approach-record .arxiv-badge span { padding: 2pt 5pt; }
+    #approach-record .arxiv-badge span:first-child { background: #b31b1b; color: #fff; }
+    #approach-record .arxiv-badge span:last-child { background: #4e5a70; color: #fff; font-family: var(--lc-font-mono); font-weight: 500; }
+    #approach-record .pp-caption code { font-family: var(--lc-font-mono); font-size: 0.9em; background: none; padding: 0; color: var(--lc-secondary); }
+    /* House rule: boxes carrying a colour highlight (accent stripe or coloured
+       border) have square corners; overrides the theme's rounded card corners. */
+    .reveal .card[style*="border-left"],
+    .reveal .card-glow[style*="border-left"],
+    .reveal .card-glow[style*="border-top"] { border-radius: 0; }
+    /* PDF export (?print-pdf): reveal wraps each slide in a .pdf-page and lets
+       its height collapse to the content, and the theme's centring and corner
+       logo only target live slides. Restore both for printed pages. */
+    html.print-pdf .reveal .pdf-page > section {
+      height: 720px !important;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    html.print-pdf .reveal .pdf-page > section:not([data-background-glow]):not(.no-brand-mark)::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 200px;
+      height: 32px;
+      background-image: url('theme/Primary%20Logo.svg');   /* the theme's var() would resolve against this page */
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: contain;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- ================================================================== -->
+      <!-- 1. TITLE                                                            -->
+      <!-- ================================================================== -->
+      <section id="title" class="no-brand-mark" data-background-color="var(--lc-bg)">
+
+        <span class="masthead-rule" aria-hidden="true"></span>
+
+        <!-- Title cluster: centered, sitting in the upper-middle. -->
+        <div style="position: absolute; left: 56pt; right: 56pt; top: 38%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center;">
+
+          <div class="title-display" style="font-size: 50pt; max-width: 1120px; text-align: center; margin: 0;">
+            AI as Scientific Infrastructure
+          </div>
+
+          <p style="font-family: var(--lc-font-heading); font-size: 27pt; font-style: italic; color: var(--lc-primary); text-align: center; max-width: 1100px; line-height: 1.3; margin: 16pt 0 0 0;">
+            From Foundation Models to Research Agents
+          </p>
+
+          <hr style="width: 100px; margin: 26pt auto 22pt;">
+
+          <p style="font-family: var(--lc-font-ui); margin: 0; text-align: center; line-height: 1.5; max-width: 1120px;">
+            <span style="display: block; font-size: 18pt; font-weight: 600; color: var(--lc-primary); letter-spacing: 0.01em;">Inaugural Science Symposium &mdash; Eric &amp; Wendy Schmidt Observatory System</span>
+            <span style="display: block; margin-top: 6pt; font-size: 16pt; color: var(--lc-muted);">Florence, Italy &middot; November 3&ndash;5, 2026</span>
+          </p>
+
+        </div>
+
+        <!-- Presenter: anchored lower-left, between the title block and the bottom. -->
+        <div style="position: absolute; left: 56pt; bottom: 72pt; display: flex; align-items: center; gap: 18pt;">
+          <img src="https://avatars.githubusercontent.com/u/861591?v=4" alt="Fran&ccedil;ois"
+               style="width: 84pt; height: 84pt; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2pt var(--lc-bg), 0 0 0 3pt var(--lc-warm), 0 2pt 6pt rgba(0,0,0,0.12);">
+          <div style="text-align: left;">
+            <p style="font-size: 21pt; color: var(--lc-text); margin: 0; font-weight: 600; line-height: 1.2;">Fran&ccedil;ois Lanusse</p>
+            <p style="font-size: 15pt; color: var(--lc-muted); margin: 6pt 0 0 0; line-height: 1.25;">
+              CNRS &middot; UMR AIM &middot;
+              <a href="https://flanusse.net" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none;"><i class="fa-solid fa-globe"></i></a>
+              <a href="https://scholar.google.com/citations?user=fRDCooIAAAAJ" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none; margin-left: 5pt;"><i class="fa-solid fa-graduation-cap"></i></a>
+              <a href="https://linkedin.com/in/flanusse" target="_blank" style="color: var(--lc-secondary); text-decoration: none; border: none; margin-left: 5pt;"><i class="fa-brands fa-linkedin"></i></a>
+            </p>
+            <p style="font-size: 15pt; color: var(--lc-muted); margin: 4pt 0 0 0; line-height: 1.25;">Polymathic AI &middot; Lightcone Research</p>
+          </div>
+        </div>
+
+        <!-- Affiliation: anchored lower-right, balancing the presenter card. -->
+        <div style="position: absolute; right: 56pt; bottom: 72pt; display: flex; align-items: center; gap: 16pt;">
+          <img src="../assets/cnrs-blue.png" alt="CNRS" style="height: 76pt; display: block;">
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- PART 1 — Foundation models served by the data system (~2 min)       -->
+      <!-- ================================================================== -->
+      <section id="fm-paradigm" class="no-brand-mark">
+        <span class="section-label">Foundation models as research infrastructure</span>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">The Rise of The Foundation Model Paradigm</h2>
+
+        <div class="fp-layout">
+          <div class="fp-left">
+            <div class="fp-card">
+              <h4>Foundation Model approach</h4>
+              <ul class="fp-list">
+                <li><strong>Pretrain</strong> models on pretext tasks, without supervision, on very large scale datasets.</li>
+                <li class="fragment" data-fragment-index="0"><strong>Adapt</strong> pretrained models to downstream tasks.</li>
+              </ul>
+            </div>
+            <div class="fp-adapt">
+              <figure class="fp-fig fp-arch fragment" data-fragment-index="0">
+                <div class="fp-archcard">
+                  <img src="../assets/aion/aion_encoder_frozen.png" alt="Frozen AION-1 transformer encoder turning input tokens into embeddings">
+                  <span class="fp-arrow"><i class="fa-solid fa-arrow-down"></i></span>
+                  <div class="fp-head"><i class="fa-solid fa-fire"></i>Small trained head<span>2-layer MLP</span></div>
+                </div>
+                <figcaption>Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></figcaption>
+              </figure>
+              <figure class="fp-fig fp-plot fragment" data-fragment-index="1">
+                <div class="fp-plotwrap">
+                <img src="../assets/aion/aion1_gz10_training_size.png" alt="Galaxy Zoo 10 morphology accuracy against training set size: frozen AION-1 with a small head beats a supervised network trained from scratch at every size">
+                <div class="fp-legend">
+                  <span><i style="background:#ca0e4c"></i>AION-B</span>
+                  <span><i style="background:#06ce6f"></i>AION-L</span>
+                  <span><i style="background:#039add"></i>AION-XL</span>
+                  <span><i style="background:#431e48"></i>Supervised, from scratch</span>
+                </div>
+                </div>
+              </figure>
+            </div>
+          </div>
+          <figure class="fp-fig">
+            <img src="../assets/aion/73d32dde010c05c7da49a550d1d860da.png" alt="A foundation model trained on text, images, speech, structured data and 3D signals, then adapted to many tasks">
+            <figcaption>Bommasani et al. 2021 <a href="https://arxiv.org/abs/2108.07258" target="_blank"><img src="https://img.shields.io/badge/arXiv-2108.07258-B31B1B.svg" class="plain" alt="arXiv 2108.07258"></a></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="fm-workflow-conv" class="no-brand-mark" data-auto-animate>
+        <span class="section-label">Foundation models as research infrastructure</span>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
+
+        <div class="wf-layout">
+          <div class="card-glow wf-card" data-id="wf-card" style="border-left: 3px solid var(--lc-primary);">
+            <h4>Conventional scientific workflow with deep learning</h4>
+            <ul class="wf-list">
+              <li class="fragment" data-fragment-index="0" data-id="wf-1">Build a large training set of realistic data</li>
+              <li class="fragment" data-fragment-index="1" data-id="wf-2">Design a neural network architecture for your data</li>
+              <li class="fragment" data-fragment-index="2" data-id="wf-3">Deal with data preprocessing/normalization issues</li>
+              <li class="fragment" data-fragment-index="3" data-id="wf-4">Train your network on some GPUs for a day or so</li>
+              <li class="fragment" data-fragment-index="4" data-id="wf-5">Apply your network to your problem</li>
+              <li class="fragment" data-fragment-index="5" data-id="wf-6"><strong>Throw the network away...</strong><br>=&gt; Because it's completely specific to your data, and to the one task it's trained for.</li>
+            </ul>
+          </div>
+          <figure class="fp-fig">
+            <img src="../assets/aion/95eee603741f0b2993e7dc846b6e2082.png" alt="Researchers working on laptops around a long table">
+            <figcaption>Conventional researchers @ CMU<br>Circa 2016</figcaption>
+          </figure>
+        </div>
+
+        <div class="wf-figs">
+          <img class="fragment" data-fragment-index="0" src="../assets/candidates.png" alt="Simulated strong-lens candidate images">
+          <img class="fragment" data-fragment-index="1" src="../assets/aion/deeplens_architecture_rotated.png" alt="CMU DeepLens residual network architecture">
+          <img class="fragment" data-fragment-index="4" src="../assets/aion/74d087239620fc11a6c67614d9358f79.png" alt="CMU DeepLens completeness versus contamination curves for several signal-to-noise cuts">
+        </div>
+        <p class="wf-credit fragment" data-fragment-index="0"><span>CMU DeepLens (<a href="https://arxiv.org/abs/1703.02642" target="_blank">Lanusse et al 2017</a>)</span><a class="wf-badge" href="https://arxiv.org/abs/1703.02642" target="_blank"><img src="https://img.shields.io/badge/arXiv-1703.02642-B31B1B.svg" class="plain" alt="arXiv 1703.02642"></a></p>
+      </section>
+
+      <section id="fm-workflow-fm" class="no-brand-mark" data-auto-animate>
+        <span class="section-label">Foundation models as research infrastructure</span>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
+
+        <div class="wf-layout">
+          <div class="card-glow wf-card" data-id="wf-card" style="border-left: 3px solid var(--lc-warm);">
+            <h4>Foundation Model-based Scientific Workflow</h4>
+            <ul class="wf-list">
+              <li data-id="wf-1">Build a <span class="wf-hl">small</span> training set of realistic data</li>
+              <li class="wf-done" data-id="wf-2">Design a neural network architecture for your data</li>
+              <li class="wf-done" data-id="wf-3">Deal with data preprocessing/normalization issues</li>
+              <li data-id="wf-4"><span class="wf-hl">Adapt</span> a model in a <span class="wf-hl">matter of minutes</span></li>
+              <li data-id="wf-5">Apply your model to your problem</li>
+              <li class="wf-done" data-id="wf-6">Throw the network away...<br>=&gt; Because it's completely specific to your data, and to the one task it's trained for.</li>
+            </ul>
+          </div>
+          <figure class="fp-fig wf-fig">
+            <div class="wf-figwrap">
+              <img src="../assets/aion/73d32dde010c05c7da49a550d1d860da.png" alt="A foundation model trained on many data types, then adapted to many tasks">
+              <div class="wf-box"><span>Already taken care of</span></div>
+            </div>
+            <figcaption>Bommasani et al. 2021 <a href="https://arxiv.org/abs/2108.07258" target="_blank"><img src="https://img.shields.io/badge/arXiv-2108.07258-B31B1B.svg" class="plain" alt="arXiv 2108.07258"></a></figcaption>
+          </figure>
+        </div>
+
+        <p class="fm-bet fragment">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <span>Greatly reduces <strong>time to science</strong></span>
+        </p>
+      </section>
+
+      <section id="fm-service" class="no-brand-mark">
+        <span class="section-label">Foundation models as research infrastructure</span>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Models are now an infrastructure investment, like software</h2>
+
+        <div class="fi-layout">
+            <div class="card-glow fi-card" style="border-left: 3px solid var(--lc-primary);">
+              <h4><i class="fa-solid fa-microchip" style="color: var(--lc-primary);"></i>Costly to build</h4>
+              <p>Expertise in both machine learning and the science, large-scale compute, and curated multimodal training data.</p>
+            </div>
+            <div class="card-glow fi-card" style="border-left: 3px solid var(--lc-warm);">
+              <h4><i class="fa-solid fa-server" style="color: var(--lc-warm);"></i>Valuable once shared</h4>
+              <p>Served next to the data behind standard APIs, versioned and maintained like Astropy or NumPy, built into everyday scientific workflows.</p>
+            </div>
+            <div class="card-glow fi-card fragment fade-up" style="border-left: 3px solid var(--lc-secondary);">
+              <p class="fi-eyebrow">A recent precedent &middot; <a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/" target="_blank" rel="noopener">15 October 2026</a></p>
+              <h4><i class="fa-solid fa-atom" style="color: var(--lc-secondary);"></i>CERN &times; Mistral AI</h4>
+              <p>A long-term partnership to build a Large Physics Model for collider physics. CERN brings the physics, the data and the computing; Mistral brings large-scale training.</p>
+              <p class="fi-quote">&ldquo;&hellip;serve the whole physics community and be shared.&rdquo; <span>&mdash; Enrica Porcari, CERN</span></p>
+            </div>
+            <div class="card-glow fi-card fragment fade-up" style="border-left: 3px solid var(--lc-accent);">
+              <h4><i class="fa-solid fa-people-group" style="color: var(--lc-accent);"></i>Schmidt Sciences already has the team</h4>
+              <p>Polymathic AI builds open scientific foundation models, e.g. AION-1 for astronomy, trained on 200M+ observations from five surveys.</p>
+              <p class="fi-cite"><span>Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></span><img class="fi-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI"></p>
+            </div>
+        </div>
+
+        <p class="fm-bet fragment">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <span>Designing the data system for multimodal science is the moment to make these models a shared service.</span>
+        </p>
+      </section>
+
+      <section id="fm-search" class="no-brand-mark">
+        <img class="collab-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI">
+        <span class="section-label">Foundation models as research infrastructure</span>
+        <h2 style="font-size: 25pt; margin-bottom: 4pt;">Natural-language queries over 100M+ galaxy images</h2>
+        <p class="cite-line">Koblischke et al. 2025 <a href="https://arxiv.org/abs/2512.11982" target="_blank"><img src="https://img.shields.io/badge/arXiv-2512.11982-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;"></a></p>
+
+        <div class="fs-layout">
+          <figure class="fs-video">
+            <video data-autoplay muted loop playsinline preload="metadata" src="../assets/aionsearchlaunch.mp4"></video>
+            <figcaption>AION-Search on HSC and Legacy Survey images &middot; try it: <a href="https://astronolan-aion-search.hf.space/" target="_blank" rel="noopener">astronolan-aion-search.hf.space</a></figcaption>
+          </figure>
+
+          <div class="fs-steps">
+            <div class="fs-step">
+              <span class="fs-step__icon"><i class="fa-solid fa-pen-nib"></i></span>
+              <div><p class="fs-step__name">Describe</p><p class="fs-step__desc">A vision-language model writes descriptions for ~300k galaxy images.</p></div>
+            </div>
+            <div class="fs-step">
+              <span class="fs-step__icon"><i class="fa-solid fa-link"></i></span>
+              <div><p class="fs-step__name">Align</p><p class="fs-step__desc">Contrastive training links AION-1 image embeddings to text embeddings of those descriptions.</p></div>
+            </div>
+            <div class="fs-step">
+              <span class="fs-step__icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <div><p class="fs-step__name">Search</p><p class="fs-step__desc">Any free-form query ranks the whole archive, with no human labels and no bespoke classifier.</p></div>
+            </div>
+            <div class="fs-result fragment fade-up">
+              <p><b>Rare objects become searchable</b>Strong lenses: nDCG@10 of 0.18, against 0.015 for the best image-similarity baseline.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- PART 2 — Research agents (~10 min), adapted from slides-london     -->
+      <!-- 2. TAKEAWAYS — early machine-scale discovery (Navier–Stokes)        -->
+      <!-- ================================================================== -->
+      <section id="ns-case">
+        <span class="section-label">A motivating example</span>
+        <h2 style="font-size: 25pt; margin-bottom: 10pt;">Takeaways from early examples of machine-scale discovery</h2>
+
+        <div class="ns-layout">
+
+          <!-- The example: OpenAI's announcement figure -->
+          <figure class="ns-figure">
+            <img src="../assets/lightcone/openai_navier_stokes_spiral.jpg"
+                 alt="OpenAI's illustration of the blow-up mechanism: a swirling vortex with an inward spiral and axial stretching.">
+            <figcaption>
+              <p class="evidence-eyebrow" style="color: var(--lc-primary); margin-bottom: 4pt;">OpenAI &middot; 8 Sept 2026</p>
+              <p class="ns-figure__headline">&ldquo;An OpenAI model proposes a solution to the Navier&ndash;Stokes Millennium Prize Problem&rdquo;</p>
+              <p class="evidence-source">Image: OpenAI. Finite-time blow-up with forcing (Clay alternatives C &amp; D).</p>
+            </figcaption>
+          </figure>
+
+          <!-- Two realizations -->
+          <div class="lessons">
+
+            <div class="card-glow evidence-card lesson fragment fade-up" style="border-left: 3px solid var(--lc-accent);">
+              <p class="evidence-eyebrow" style="color: var(--lc-accent);">
+                <i class="fa-solid fa-layer-group" style="margin-right: 5pt;"></i>1 &middot; Substrate for machine research
+              </p>
+              <div class="crystal-row">
+                <div class="scale-cell"><b>~130B tokens</b><span>from ~10,000 agents</span></div>
+                <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
+                <div class="scale-cell"><b>Lean + Mathlib</b><span>the format to check and extend it</span></div>
+              </div>
+              <p class="lesson__implication">
+                <i class="fa-solid fa-arrow-right-long"></i>
+                <span>Machine-scale research requires a shared, verifiable, machine-native substrate</span>
+              </p>
+            </div>
+
+            <div class="card-glow evidence-card lesson fragment fade-up" style="border-left: 3px solid var(--lc-warm);">
+              <p class="evidence-eyebrow" style="color: var(--lc-warm);">
+                <i class="fa-solid fa-people-group" style="margin-right: 5pt;"></i>2 &middot; Connection to human science
+              </p>
+              <p class="lesson__quote">
+                &ldquo;Our ideas we disseminate in talks, private discussions and careful writeups, connecting them to the
+                previous ideas of others. These processes invariably take time and are based on human interaction.&rdquo;
+                <cite>&mdash; <em>A Severe Misalignment of AI in Mathematics</em>, signed by 28 Fields Medallists, 11 Sept 2026</cite>
+              </p>
+              <p class="lesson__implication">
+                <i class="fa-solid fa-arrow-right-long"></i>
+                <span>Staying connected to human scientific communities imposes fundamental boundary conditions</span>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- 3. THE CORPUS — machine layer, human layer, distillation/impulse     -->
+      <!-- ================================================================== -->
+      <section id="corpus" class="corpus-slide">
+        <span class="section-label">What we see emerging</span>
+        <h2 style="font-size: 25pt; margin-bottom: 18pt;">Machine-scale research that preserves human understanding and agency</h2>
+
+        <div class="corpus-diagram">
+
+          <!-- Machine-scale layer -->
+          <div class="layer layer--machine fragment fade-up" data-fragment-index="1">
+            <div class="layer__head">
+              <div class="layer__icon" aria-hidden="true" style="gap: 6pt; font-size: 29pt; color: var(--lc-secondary);">
+                <i class="fa-solid fa-robot"></i>
+                <svg viewBox="0 0 60 60" width="35pt" height="35pt">
+                  <g stroke="rgba(66, 107, 120, 0.55)" stroke-width="1.6">
+                    <line x1="12" y1="16" x2="32" y2="10"/><line x1="12" y1="16" x2="22" y2="38"/>
+                    <line x1="32" y1="10" x2="48" y2="26"/><line x1="22" y1="38" x2="48" y2="26"/>
+                    <line x1="22" y1="38" x2="36" y2="52"/><line x1="48" y1="26" x2="36" y2="52"/>
+                    <line x1="32" y1="10" x2="22" y2="38"/>
+                  </g>
+                  <g fill="#426b78" stroke="#ffffff" stroke-width="2">
+                    <circle cx="12" cy="16" r="5"/><circle cx="32" cy="10" r="5"/><circle cx="48" cy="26" r="5.5"/>
+                    <circle cx="22" cy="38" r="6"/><circle cx="36" cy="52" r="5"/>
+                  </g>
+                </svg>
+              </div>
+              <div>
+                <p class="layer__title">AI research system</p>
+                <p class="layer__tag" style="color: var(--lc-secondary);">Machine-scale</p>
+              </div>
+            </div>
+            <p class="layer__label">The record must be</p>
+            <ul class="props">
+              <li><i class="fa-solid fa-check"></i><span>Standardized</span><small>a common format that makes the work shareable with any person or agent</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Verifiable</span><small>every result can be checked and traced to how it was made</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Compounding</span><small>new work builds directly on prior results</small></li>
+            </ul>
+            <div style="flex: 1;"></div>
+            <p class="layer__takeaway fragment" data-fragment-index="5">
+              <i class="fa-solid fa-arrow-right-long"></i>
+              <span>Capture research at machine scale, without requiring human review of every intermediate step</span>
+            </p>
+          </div>
+
+          <!-- The loop -->
+          <div class="loop">
+<svg viewBox="0 0 280 336" role="img" aria-label="Distillation flows from the AI research system to the research community; impulse flows back from the community to the corpus.">
+              <defs>
+                <marker id="loop-arrow-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L10,5 L0,10 z" fill="#a67c3c"/>
+                </marker>
+                <marker id="loop-arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L10,5 L0,10 z" fill="#426b78"/>
+                </marker>
+              </defs>
+              <!-- distillation: corpus → people (labels sit above the arc's apex at y≈90) -->
+              <g class="fragment" data-fragment-index="2">
+                <text x="140" y="74" text-anchor="middle" class="loop__name">Distillation</text>
+                <path d="M 6,150 C 70,70 210,70 270,150" fill="none" stroke="#a67c3c" stroke-width="2.5" marker-end="url(#loop-arrow-warm)"/>
+              </g>
+              <!-- impulse: people → corpus (labels sit below the arc's apex at y≈246) -->
+              <g class="fragment" data-fragment-index="4">
+                <path d="M 274,186 C 210,266 70,266 10,186" fill="none" stroke="#426b78" stroke-width="2.5" marker-end="url(#loop-arrow-slate)"/>
+                <text x="140" y="280" text-anchor="middle" class="loop__name">Impulse</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Human-scale layer -->
+          <div class="layer layer--human fragment fade-up" data-fragment-index="3">
+            <div class="layer__head">
+              <div class="layer__icon" aria-hidden="true" style="gap: 6pt; font-size: 29pt; color: var(--lc-warm);">
+                <i class="fa-solid fa-user"></i><i class="fa-regular fa-file-lines" style="font-size: 25pt;"></i>
+              </div>
+              <div>
+                <p class="layer__title">Research community</p>
+                <p class="layer__tag" style="color: var(--lc-warm);">Human-scale</p>
+              </div>
+            </div>
+            <p class="layer__label">The record must support</p>
+            <ul class="props">
+              <li><i class="fa-solid fa-check"></i><span>Human understanding</span><small>people need to understand enough to assess, use, and redirect the work</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Human communication</span><small>insights travel through talks, discussions and careful writeups</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Human agency</span><small>people own the questions, out of curiosity or for social good</small></li>
+            </ul>
+            <div style="flex: 1;"></div>
+            <p class="layer__takeaway fragment" data-fragment-index="5">
+              <i class="fa-solid fa-arrow-right-long"></i>
+              <span>Its record is bounded by human scale, and may not look so different from today&rsquo;s papers</span>
+            </p>
+          </div>
+
+        </div>
+
+        <p class="bet fragment" data-fragment-index="6">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <span>Our bet: invest in shared, durable <strong class="bet__em">building blocks</strong> designed around these boundary conditions.</span>
+        </p>
+
+        <div class="pillars fragment fade-up" data-fragment-index="7">
+          <div class="pillar pillar--astra" style="border-top: 3px solid var(--lc-secondary);">
+            <div class="pillar__head"><i class="pillar__icon fa-solid fa-diagram-project" style="color: var(--lc-secondary);"></i><p class="pillar__name">ASTRA</p></div>
+            <p class="pillar__what">An open standard for <strong>AI-generated research</strong>, with trust, composition and reuse built in.</p>
+          </div>
+          <div class="pillar" style="border-top: 3px solid var(--lc-warm);">
+            <div class="pillar__head"><i class="pillar__icon fa-regular fa-file-lines" style="color: var(--lc-warm);"></i><p class="pillar__name">MySTRA</p><img class="pillar__logo" src="../assets/myst-logo.svg" alt="MyST"></div>
+            <p class="pillar__what">A bridge from the machine record to <strong>human&#8209;authored publications</strong>.</p>
+          </div>
+          <div class="pillar" style="border-top: 3px solid var(--lc-accent);">
+            <div class="pillar__head"><i class="pillar__icon fa-solid fa-flask" style="color: var(--lc-accent);"></i><p class="pillar__name">Lightcone Lab</p><img class="pillar__logo" src="../assets/lightcone/jupyter-logo.svg" alt="Jupyter"></div>
+            <p class="pillar__what">An open research workbench for ASTRA analyses, where <strong>people direct the work</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- 4b. THE ASTRA STANDARD — its node types, as a small schema diagram  -->
+      <!-- ================================================================== -->
+      <section id="astra-schema">
+        <span class="section-label">How Lightcone Research builds it</span>
+        <h2 style="font-size: 26pt; margin-bottom: 16pt;">ASTRA: Agentic Schema for Transparent Research Analysis</h2>
+
+        <div class="as-stage">
+          <svg class="as-edges" viewBox="0 0 1160 400" width="1160" height="400" aria-hidden="true">
+            <defs>
+              <marker id="as-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(78,90,112,.6)"/></marker>
+              <marker id="as-arrow-d" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#a67c3c"/></marker>
+            </defs>
+            <!-- 1 · data flow: inputs → outputs -->
+            <g class="fragment" data-fragment-index="1">
+              <path class="as-edge" d="M250,287 C274,287 274,325 298,325" marker-end="url(#as-arrow)"/>
+              <path class="as-edge" d="M250,365 C274,365 274,345 298,345" marker-end="url(#as-arrow)"/>
+              <path class="as-edge" d="M550,335 L598,335" marker-end="url(#as-arrow)"/>
+              <path class="as-edge" d="M850,325 C880,325 872,128 898,128" marker-end="url(#as-arrow)"/>
+            </g>
+            <!-- 2 · decisions → the outputs they parameterize -->
+            <g class="fragment" data-fragment-index="2">
+              <path class="as-edge as-edge--decision" d="M425,188 L425,296" marker-end="url(#as-arrow-d)"/>
+              <path class="as-edge as-edge--decision" d="M725,148 L725,296" marker-end="url(#as-arrow-d)"/>
+            </g>
+            <!-- 3 · prior insight → the option it backs; figure → finding -->
+            <g class="fragment" data-fragment-index="3">
+              <path class="as-edge as-edge--insight" d="M250,85 C276,85 272,164 298,164" marker-end="url(#as-arrow)"/>
+              <path class="as-edge as-edge--finding" d="M1030,192 L1030,296" marker-end="url(#as-arrow)"/>
+            </g>
+          </svg>
+          <span class="as-rel fragment" data-fragment-index="3" style="left: 254px; top: 54px;">informs</span>
+          <span class="as-rel fragment" data-fragment-index="2" style="left: 434px; top: 232px;">parameterizes</span>
+          <span class="as-rel fragment" data-fragment-index="2" style="left: 734px; top: 232px;">parameterizes</span>
+          <span class="as-rel fragment" data-fragment-index="1" style="left: 556px; top: 313px;">feeds</span>
+          <span class="as-rel fragment" data-fragment-index="3" style="left: 1040px; top: 236px;">evidences</span>
+
+          <div class="as-node fragment" data-fragment-index="3" style="left: 0; top: 14px; --k: #8b7d70;">
+            <p class="as-type"><span>&#9672;</span>Prior insight</p>
+            <p class="as-title">MWPotential2014: bulge, disk and NFW halo, 220&nbsp;km/s at the Sun</p>
+            <p class="as-meta">Bovy 2015 &middot; DOI + verbatim quote</p>
+          </div>
+          <div class="as-node fragment" data-fragment-index="1" style="left: 0; top: 252px; --k: #4e5a70;">
+            <p class="as-type"><span>&#9636;</span>Input</p>
+            <p class="as-title">Koposov et al. distances</p>
+          </div>
+          <div class="as-node fragment" data-fragment-index="1" style="left: 0; top: 330px; --k: #4e5a70;">
+            <p class="as-type"><span>&#9636;</span>Input</p>
+            <p class="as-title">Koposov et al. radial velocities</p>
+          </div>
+
+          <div class="as-node as-node--decision fragment" data-fragment-index="2" style="left: 300px; top: 0; height: 188px; --k: #a67c3c;">
+            <p class="as-type"><span>&#9671;</span>Decision</p>
+            <p class="as-title">Milky Way potential</p>
+            <ul class="as-opts">
+              <li class="is-on">Paper 2018 potential</li>
+              <li>Gala Milky Way v1</li>
+              <li>Gala Milky Way v2 <span class="as-backed">&#9672;</span></li>
+            </ul>
+          </div>
+          <div class="as-node as-node--decision fragment" data-fragment-index="2" style="left: 600px; top: 0; --k: #a67c3c;">
+            <p class="as-type"><span>&#9671;</span>Decision</p>
+            <p class="as-title">Progenitor mass</p>
+            <ul class="as-opts">
+              <li class="is-on">10&#8309; M&#9737;, losing mass</li>
+              <li>6 &times; 10&#8308; M&#9737;</li>
+            </ul>
+          </div>
+
+          <div class="as-node fragment" data-fragment-index="1" style="left: 300px; top: 298px; --k: #3b7a73;">
+            <p class="as-type"><span>&#9670;</span>Output &middot; data</p>
+            <p class="as-title">Orbit fit</p>
+            <code class="as-recipe"><span class="as-recipe__cmd">python fit_orbit.py</span><span>--potential <i class="as-recipe__d">{decisions.potential}</i></span></code>
+          </div>
+          <div class="as-node fragment" data-fragment-index="1" style="left: 600px; top: 298px; --k: #3b7a73;">
+            <p class="as-type"><span>&#9670;</span>Output &middot; data</p>
+            <p class="as-title">Particle-spray toy streams</p>
+            <code class="as-recipe"><span class="as-recipe__cmd">python spray_stream.py</span><span>--mass <i class="as-recipe__d">{decisions.progenitor_mass}</i></span></code>
+          </div>
+          <div class="as-node as-node--figure fragment" data-fragment-index="1" style="left: 900px; top: 0; --k: #3b7a73;">
+            <p class="as-type"><span>&#9670;</span>Output &middot; figure</p>
+            <img src="../assets/lightcone/astra-graph/figures/figure2_track_observables.jpg" alt="">
+            <p class="as-title">Figure 2: data vs toy streams</p>
+            <code class="as-recipe"><span class="as-recipe__cmd">python plot_density.py</span><span>--models <i class="as-recipe__i">{outputs.toy_streams}</i></span></code>
+          </div>
+          <div class="as-node fragment" data-fragment-index="3" style="left: 900px; top: 298px; --k: #a45a43;">
+            <p class="as-type"><span>&#9679;</span>Finding</p>
+            <p class="as-title">GD-1 is clumpier than smooth-potential models predict</p>
+            <p class="as-meta">density scatter 0.58, vs 0.31&ndash;0.44</p>
+          </div>
+        </div>
+
+        <div class="as-props fragment fade-up" data-fragment-index="4">
+          <p><i class="fa-solid fa-fingerprint"></i><span><b>Provenance&#8209;certified</b>Every plot, number and claim ties back to the data, code and decisions that produced it.</span></p>
+          <p><i class="fa-solid fa-magnifying-glass"></i><span><b>Fully observable</b>Code and artifacts, but also every consequential decision and the reasoning behind it, are inspectable.</span></p>
+          <p><i class="fa-solid fa-book-open"></i><span><b>Scientifically legible</b>Organized around the claims, decisions and insights that matter, with direct paths down into the evidence.</span></p>
+          <div class="as-links">
+            <a class="as-link" href="https://astra-spec.org" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i>astra&#8209;spec.org</a>
+            <a class="as-link" href="https://zenodo.org/records/20181269/preview/Lanusse_Parker_2026.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i>Position paper</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- 5. HOW WE BUILD IT (vertical stack: architecture, the record graph, then the paper)  -->
+      <!-- ================================================================== -->
+      <section class="no-brand-mark">
+
+      <section id="approach">
+        <span class="section-label">How Lightcone Research builds it</span>
+        <h2 style="font-size: 26pt; margin-bottom: 12pt;">Structure of an ASTRA project managed by an AI agent</h2>
+
+        <div class="ar">
+          <p class="ar__repo"><i class="fa-solid fa-folder-tree"></i>one ASTRA project &middot; one git repository</p>
+
+          <div class="ar__cols">
+            <!-- 1 · describe -->
+            <div class="ar__col fragment fade-up" data-fragment-index="1">
+              <div class="ar__head"><img src="../assets/lightcone/logos/astra.svg" alt="ASTRA" class="ar__logo"><div><p class="ar__step">1 &middot; Describe</p><p class="ar__name">ASTRA</p></div></div>
+              <pre class="ar__code ar__code--yaml"><span class="k">prior_insights:</span>
+  <span class="k">gaussian_noise:</span>
+    <span class="k">claim:</span> <span class="s">noise is Gaussian at this depth</span>
+<span class="k">decisions:</span>
+  <span class="k">noise_model:</span>
+    <span class="k">rationale:</span> <span class="s">drives the error budget</span>
+    <span class="k">options:</span>
+      <span class="k">gaussian:</span>
+        <span class="k">insights:</span> <span class="p">[</span><span class="ref">gaussian_noise</span><span class="p">]</span>
+      <span class="k">heavy_tailed:</span>
+        <span class="k">excluded:</span> <span class="b">true</span>
+<span class="k">outputs:</span>
+  <span class="p">-</span> <span class="k">id:</span> <span class="id">fit_results</span>
+    <span class="k">decisions:</span> <span class="p">[</span><span class="ref">noise_model</span><span class="p">]</span>
+    <span class="k">recipe:</span>
+      <span class="k">command:</span> <span class="s">python fit.py</span> <span class="ph">{decisions.noise_model}</span></pre>
+              <p class="ar__file"><code>astra.yaml</code> The analysis as structured data: <b>insights</b>, <b>decisions</b>, <b>rationale</b>, <b>recipes</b>, <b>outputs</b>, <b>findings</b>.</p>
+            </div>
+
+            <!-- 2 · execute and record -->
+            <div class="ar__col ar__col--mid fragment fade-up" data-fragment-index="2">
+              <div class="ar__head"><img src="../assets/lightcone/logos/lightcone-mark.svg" alt="Lightcone" class="ar__logo"><div><p class="ar__step">2 &middot; Execute &amp; record</p><p class="ar__name">Lightcone CLI</p></div></div>
+              <div class="ar__layer">
+                <span class="ar__logos"><img src="../assets/lightcone/logos/git.svg" alt="git"><img src="../assets/lightcone/logos/git-annex.svg" alt="git-annex"></span>
+                <p><b>Code and artifact versioning</b> Code and spec in git, data and results in git-annex: every output committed with a content-addressed run record.</p>
+              </div>
+              <div class="ar__layer">
+                <span class="ar__logos"><img src="../assets/lightcone/logos/uv.svg" alt="uv"><i class="fa-brands fa-docker ar__docker" aria-label="Docker"></i></span>
+                <p><b>Reusable environment</b> A uv lockfile, optionally in a container image, hashed on every output; recipes run sandboxed.</p>
+              </div>
+              <div class="ar__layer">
+                <span class="ar__logos ar__logos--grid"><img src="../assets/lightcone/logos/kubernetes.svg" alt="Kubernetes"><img src="../assets/lightcone/logos/dask.svg" alt="Dask"><img src="../assets/lightcone/logos/slurm.png" alt="Slurm" class="slurm"></span>
+                <p><b>Connection to compute</b> From a laptop to Dask, Kubernetes or Slurm clusters, under the same run record.</p>
+              </div>
+              <div style="flex: 1;"></div>
+              <p class="ar__file"><code>lc</code> An agentic CLI that any agent harness can drive. Every output it produces carries <b>certified provenance</b>: what ran, on which inputs, in which environment, under which sandbox.</p>
+            </div>
+
+            <!-- 3 · explain -->
+            <div class="ar__col fragment fade-up" data-fragment-index="3">
+              <div class="ar__head"><img src="../assets/myst-logo.svg" alt="MyST" class="ar__logo ar__logo--wide"><div><p class="ar__step">3 &middot; Explain</p><p class="ar__name">MySTRA</p></div></div>
+              <div style="flex: 1;"></div>
+              <pre class="ar__code ar__code--myst">We adopt the
+<span class="role">{astra}</span><span class="tgt">`decisions.noise_model`</span>
+and measure the amplitude at
+<span class="role">{astra:value}</span><span class="tgt">`outputs.fit_results`</span>.
+
+<span class="dir">:::</span><span class="role">{astra}</span> <span class="tgt">outputs.residual_check</span>
+<span class="dir">:::</span></pre>
+              <div style="flex: 1;"></div>
+              <p class="ar__file"><code>index.md</code> A human write-up that cites the record instead of copying it, so numbers and figures never drift.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ar__share fragment fade-up" data-fragment-index="4">
+          <i class="fa-brands fa-github"></i>
+          <p><b>Pushed to any git host, every output becomes citable.</b> Another analysis consumes <code>fit_results@released_v1</code> at a pinned commit, without re-running it.</p>
+        </div>
+      </section>
+
+      <!-- 5b. Below slide 5: an ASTRA record, as a live graph. -->
+      <section id="approach-record">
+        <div class="rg-legend">
+          <span><i class="rg-key rg-key--input"></i><i class="rg-glyph" style="color:#4e5a70">&#9636;</i>Input</span>
+          <span><i class="rg-key rg-key--decision"></i>Decision</span>
+          <span><i class="rg-key rg-key--decision rg-key--supported"></i>Decision backed by literature</span>
+          <span><i class="rg-key rg-key--output"></i><i class="rg-glyph" style="color:#3b7a73">&#9670;</i>Output</span>
+          <span><i class="rg-key rg-key--figure"></i>Figure</span>
+          <span><i class="rg-key rg-key--finding"></i><i class="rg-glyph" style="color:#a45a43">&#9679;</i>Finding</span>
+        </div>
+        <div id="astra-graph-root"></div>
+        <p class="pp-caption"><a class="arxiv-badge" href="https://arxiv.org/abs/1805.00425" target="_blank" rel="noopener"><span>arXiv</span><span>1805.00425</span></a> Price-Whelan &amp; Bonaca (2018), ApJL 863, L20 <span class="rg-legend__hint"><i class="fa-solid fa-hand-pointer"></i> hover: lineage, record, plot, execution · click: pin</span></p>
+      </section>
+
+      <!-- 5c. Below the graph: the MySTRA paper written from that record, live. -->
+      <section id="approach-paper">
+        <span class="section-label">MySTRA in practice</span>
+        <h2 style="font-size: 24pt; margin-bottom: 8pt;">A paper that references its analysis</h2>
+        <div class="pp-pair">
+          <figure class="pp-panel pp-panel--original">
+            <figcaption><span class="pp-tag">Original</span> arXiv:1805.00425v2 &middot; PDF</figcaption>
+            <div class="pp-frame pp-pdf">
+            <img src="../assets/lightcone/gd1-original/page-01.jpg" alt="Page 1" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-02.jpg" alt="Page 2" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-03.jpg" alt="Page 3" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-04.jpg" alt="Page 4" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-05.jpg" alt="Page 5" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-06.jpg" alt="Page 6" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-07.jpg" alt="Page 7" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-08.jpg" alt="Page 8" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-09.jpg" alt="Page 9" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-10.jpg" alt="Page 10" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-11.jpg" alt="Page 11" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-12.jpg" alt="Page 12" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-13.jpg" alt="Page 13" loading="lazy">
+            <img src="../assets/lightcone/gd1-original/page-14.jpg" alt="Page 14" loading="lazy">
+            </div>
+          </figure>
+          <figure class="pp-panel pp-panel--repro">
+            <figcaption><span class="pp-tag">Reproduced</span> MySTRA edition &middot; every figure and number re-executed from the record</figcaption>
+            <div class="pp-frame">
+              <iframe class="crisp-frame" data-frame-height="510"
+                      src="../assets/lightcone/gd1-paper/"
+                      title="GD-1 in Gaia DR2: an executable edition of Price-Whelan &amp; Bonaca (2018), written with MySTRA"
+                      style="width: 100%; height: 510px; border: 0; display: block; transform-origin: 0 0;"></iframe>
+            </div>
+          </figure>
+        </div>
+        <p class="pp-caption">An executable edition of Price-Whelan &amp; Bonaca (2018), <em>Off the beaten path: Gaia reveals GD-1 stars outside of the main stream</em>, rebuilt as a Lightcone project and written with MySTRA</p>
+      </section>
+
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- 5d. THE ECOSYSTEM — a whiteboard map of open, shareable components  -->
+      <!-- ================================================================== -->
+      <section id="ecosystem">
+        <span class="section-label">The bigger picture</span>
+        <h2 style="font-size: 26pt; margin-bottom: 12pt;">An ecosystem of open, shareable components</h2>
+        <figure class="eco">
+          <img src="../assets/lightcone/ecosystem-whiteboard.jpg" alt="Whiteboard sketch of the landscape of open components for AI-assisted science, from data and compute up to code, records and the literature">
+          <figcaption>An attempt at mapping the landscape: from data and compute, through code and research records, up to the literature that humans and agents read.</figcaption>
+        </figure>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- 6. OPEN QUESTIONS                                                   -->
+      <!-- ================================================================== -->
+      <section id="open-questions">
+        <span class="section-label">Looking ahead</span>
+        <h2 style="font-size: 26pt; margin-bottom: 10pt;">Open questions to work on together</h2>
+
+        <p class="oq-core">What is the necessary and sufficient set of properties for a scientific record to be <span style="color: #426b78;">navigable and certifiable</span> for agents, and <span style="color: #a67c3c;">digestible and understandable</span> for people?</p>
+
+        <div class="oq">
+          <div class="oq-card fragment fade-up" data-fragment-index="1" style="--c: var(--lc-secondary);">
+            <p class="oq-kicker"><i class="fa-solid fa-square-root-variable"></i>Formalization</p>
+            <p class="oq-q">How far should we formalize?</p>
+            <p class="oq-p">Enough structure for agents to navigate and check, without over-formalizing: leave room for science that does not fit a schema.</p>
+          </div>
+          <div class="oq-card fragment fade-up" data-fragment-index="2" style="--c: var(--lc-accent);">
+            <p class="oq-kicker"><i class="fa-solid fa-clipboard-check"></i>Verification</p>
+            <p class="oq-q">Beyond reproducibility, what should a standard certify?</p>
+            <p class="oq-p">Provenance is certified; robustness to analysis choices, replication and review each need their own evidence.</p>
+          </div>
+          <div class="oq-card fragment fade-up" data-fragment-index="3" style="--c: var(--lc-warm);">
+            <p class="oq-kicker"><i class="fa-solid fa-fingerprint"></i>Addressability</p>
+            <p class="oq-q">How do we make data and results universally addressable?</p>
+            <p class="oq-p">Which checkpoints to keep, and how another team finds and builds on them to continue or branch the work.</p>
+          </div>
+          <div class="oq-card fragment fade-up" data-fragment-index="4" style="--c: var(--lc-highlight);">
+            <p class="oq-kicker"><i class="fa-solid fa-people-group"></i>Adoption</p>
+            <p class="oq-q">What will make researchers adopt it?</p>
+            <p class="oq-p">Credit in hiring, funding and publication; which communities lead; a record easier to keep than to skip.</p>
+          </div>
+        </div>
+
+        <p class="oq-contact fragment" data-fragment-index="5"><b>Thank you for your attention!</b></p>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+      margin: 0.08,
+      controls: true,
+      progress: true,
+      slideNumber: 'c/t',
+      hash: true,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      center: false
+    });
+
+    /* Crisp embedded frames: reveal scales the whole deck with CSS, and a
+       cross-origin iframe is rasterized before that scale, so it goes soft on
+       large displays. Render each frame at `scale` times its box and shrink it
+       back by the same factor, so it rasterizes 1:1 with the screen.
+       (Inspired from the same helper in lcr_talks/UCOSPO2026.html.) */
+    (function () {
+      function fitFrames() {
+        var k = (Reveal.getScale && Reveal.getScale()) || 1;
+        document.querySelectorAll('.crisp-frame').forEach(function (f) {
+          var h = parseFloat(f.getAttribute('data-frame-height')) || f.clientHeight;
+          f.style.width = (100 * k) + '%';
+          f.style.height = (h * k) + 'px';
+          f.style.transform = 'scale(' + (1 / k) + ')';
+        });
+      }
+      Reveal.on('ready', fitFrames);
+      Reveal.on('resize', fitFrames);
+      window.addEventListener('resize', fitFrames);
+    })();
+  </script>
+  <script src="../assets/lightcone/astra-graph/astra-graph.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "message": "`ftol` termination condition is satisfied.",
+  "n_steps": 250,
+  "objective": 112.93658316449029,
+  "parameters": {
+    "distance_kpc": 10.883465598919619,
+    "phi2_deg": -2.116558812232645,
+    "pm_phi1_masyr": -7.275130468166,
+    "pm_phi2_masyr": -1.6475550133319654,
+    "radial_velocity_kms": -297.92559851502
+  },
+  "phi1_reference_deg": 10.0,
+  "potential": "paper_2018",
+  "solar_motion": "schonrich_2010",
+  "step_myr": 0.5,
+  "success": true
+}
