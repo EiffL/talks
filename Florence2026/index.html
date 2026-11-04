@@ -288,6 +288,32 @@
       margin: 0 0 12pt 0;
     }
     .reveal .cite-line img { margin: 0 0 0 4pt; box-shadow: none; border-radius: 0; }
+    /* Opening chart: the deep learning boom in astro-ph (arXiv API counts). */
+    #fm-boom .cite-line { margin-bottom: 4pt; }
+    #fm-boom .db-sub { margin: 0 0 4pt 0; font-family: var(--lc-font-ui); font-size: 15pt; color: var(--lc-muted); }
+    #fm-boom svg.db-chart { display: block; width: 1120px; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; }
+    #fm-boom .db-grid { stroke: #e4e0d7; stroke-width: 1; }
+    #fm-boom .db-axis { stroke: #b8b3a7; stroke-width: 1; }
+    #fm-boom .db-tick { font-family: var(--lc-font-ui); font-size: 14px; fill: var(--lc-muted); font-variant-numeric: tabular-nums; }
+    #fm-boom .db-year { font-family: var(--lc-font-ui); font-size: 15px; fill: var(--lc-text); }
+    #fm-boom .db-val { font-family: var(--lc-font-ui); font-size: 15px; font-weight: 600; fill: var(--lc-text); }
+    #fm-boom .db-proj { opacity: 0.25; }
+    #fm-boom .db-card { fill: #fff; filter: drop-shadow(0 12px 18px rgba(78, 90, 112, 0.16)); }
+    #fm-boom .db-inset-title { font-family: var(--lc-font-heading); font-size: 19px; fill: var(--lc-text); }
+    #fm-boom .db-inset-title .db-q { font-style: italic; fill: var(--lc-highlight); }
+    #fm-boom .fm-bet { margin-top: 10pt; }
+    #fm-boom .db-wrap { position: relative; width: 1120px; max-width: 100%; margin: 0 auto; }
+    #fm-boom .db-flash { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 5; width: 820px; margin: 0; padding: 8px 8px 10px; background: #fff; box-shadow: 0 26px 52px -18px rgba(20, 30, 50, 0.5); }
+    #fm-boom .db-flash img { display: block; width: 100%; aspect-ratio: 1285 / 550; object-fit: cover; object-position: top; margin: 0; border: none; border-radius: 0; box-shadow: none; }
+    #fm-boom .db-flash figcaption { display: flex; justify-content: space-between; align-items: center; gap: 14pt; margin-top: 8px; padding: 0 4px; font-family: var(--lc-font-ui); font-size: 14pt; line-height: 1.3; color: var(--lc-text); text-align: left; }
+    #fm-boom .db-flash figcaption b { font-weight: 700; }
+    #fm-boom .db-flash .db-cite { display: flex; align-items: center; gap: 6pt; flex-shrink: 0; font-size: 12pt; color: var(--lc-muted); }
+    #fm-boom .db-flash .db-cite img { display: block; height: 16pt; width: auto; aspect-ratio: auto; }
+    #fm-boom .db-col { transform-box: fill-box; transform-origin: 50% 100%; }
+    #fm-boom.present .db-main .db-col { animation: db-grow 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 45ms); }
+    #fm-boom .db-inset.visible .db-col { animation: db-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(0.2s + var(--i) * 60ms); }
+    @keyframes db-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @media (prefers-reduced-motion: reduce) { #fm-boom .db-col { animation: none !important; } }
     /* Part 1 opening (from AAS247): foundation model paradigm + workflows. */
     .reveal .fp-fig { margin: 0; display: flex; flex-direction: column; }
     .reveal .fp-fig img { display: block; width: 100%; height: auto; margin: 0; background: #fff; border: 6px solid #fff; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
@@ -308,21 +334,29 @@
     #fm-paradigm .fp-card { padding: 4pt 0 0 0; }
     #fm-paradigm .fp-adapt { display: grid; grid-template-columns: 250px 1fr; gap: 14pt; align-items: start; }
     #fm-paradigm .fp-archcard { display: flex; flex-direction: column; align-items: stretch; padding: 8pt 8pt 10pt; background: #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
-    #fm-paradigm .fp-arch figcaption { justify-content: center; white-space: nowrap; }
     #fm-paradigm .fp-archcard img { display: block; width: 100%; height: auto; margin: 0; border: none; box-shadow: none; border-radius: 0; }
     #fm-paradigm .fp-arrow { display: block; width: 17%; margin-left: 74%; text-align: center; color: var(--lc-muted); font-size: 13pt; line-height: 1.3; }
-    #fm-paradigm .fp-head { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 6pt; padding: 6pt 8pt; background: rgba(var(--lc-warm-rgb), 0.14); border: 1.5px solid var(--lc-warm); font-family: var(--lc-font-ui); font-size: 14pt; font-weight: 600; line-height: 1.2; color: var(--lc-text); text-align: center; }
-    #fm-paradigm .fp-head i { color: var(--lc-highlight); font-size: 12pt; }
-    #fm-paradigm .fp-head span { flex-basis: 100%; font-size: 12pt; font-weight: 400; color: var(--lc-muted); }
-    #fm-paradigm .fp-plotwrap { position: relative; align-self: center; }
-    #fm-paradigm .fp-plotwrap > img { height: 305px; width: auto; }
-    #fm-paradigm .fp-legend { position: absolute; right: 5%; bottom: 16%; display: flex; flex-direction: column; gap: 1pt; padding: 3pt 7pt; background: rgba(255, 255, 255, 0.9); font-family: var(--lc-font-ui); font-size: 11.5pt; line-height: 1.25; color: var(--lc-text); }
-    #fm-paradigm .fp-legend span { display: flex; align-items: center; gap: 5pt; white-space: nowrap; }
-    #fm-paradigm .fp-legend i { display: inline-block; width: 9pt; height: 9pt; border-radius: 50%; }
+    #fm-paradigm .fp-head { padding: 6pt 4pt 5pt; background: rgba(var(--lc-highlight-rgb), 0.05); border: 1.5px solid rgba(var(--lc-highlight-rgb), 0.55); }
+    #fm-paradigm .mm { display: flex; align-items: center; justify-content: center; gap: 4px; }
+    #fm-paradigm .mm-term { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    #fm-paradigm .mm-term em { font-family: var(--lc-font-heading); font-style: italic; font-size: 14pt; line-height: 18px; height: 18px; color: var(--lc-text); }
+    #fm-paradigm .mm-term em sub { font-size: 0.65em; }
+    #fm-paradigm .mm-term em.mm-w { color: var(--lc-highlight); }
+    #fm-paradigm .mm-op { padding-bottom: 21px; font-family: var(--lc-font-heading); font-size: 17pt; line-height: 1; color: var(--lc-text); }
+    #fm-paradigm .mm-mat { display: grid; grid-template-columns: repeat(var(--c), 10px); grid-auto-rows: 10px; gap: 1px; padding: 1px; background: #fff; border: 1px solid #4a505c; }
+    #fm-paradigm .mm-mat--w span { background: rgba(var(--lc-highlight-rgb), var(--a)); }
+    #fm-paradigm .mm-mat--z span { background: #8c939d; }
+    #fm-paradigm .mm-mat--out span { background: rgba(var(--lc-accent-rgb), calc(var(--a) * 0.8)); }
+    #fm-paradigm .mm-note { display: flex; justify-content: center; align-items: center; gap: 5pt; margin: 5pt 0 0 0 !important; font-family: var(--lc-font-ui); font-size: 12pt; line-height: 1.2; color: var(--lc-muted); }
+    #fm-paradigm .mm-note i { color: var(--lc-highlight); font-size: 11pt; }
+    #fm-paradigm .mm-note sub { font-size: 0.7em; }
+    #fm-paradigm .mm-note em { font-family: var(--lc-font-heading); font-style: italic; color: var(--lc-highlight); }
+    #fm-paradigm .fp-plot > img { height: 300px; width: auto; align-self: center; }
+    #fm-paradigm .fp-plot figcaption { justify-content: center; white-space: nowrap; }
     .reveal .wf-layout { display: grid; grid-template-columns: 1fr 470px; gap: 26pt; align-items: start; text-align: left; }
     /* The two workflow slides share one top-aligned layout, so the auto-animated card keeps its place. */
     .reveal .slides > section#fm-workflow-conv,
-    .reveal .slides > section#fm-workflow-fm { justify-content: flex-start; padding-top: 20px; }
+    .reveal .slides > section#fm-workflow-fm { justify-content: flex-start; padding-top: 46px; }
     .reveal .wf-card { padding: 10pt 20pt 11pt; }
     .reveal .wf-card h4 { margin-bottom: 6pt; }
     .reveal .wf-list li.wf-done { color: rgba(107, 117, 133, 0.6); }
@@ -661,8 +695,100 @@
       <!-- ================================================================== -->
       <!-- PART 1 — Foundation models served by the data system (~2 min)       -->
       <!-- ================================================================== -->
+      <section id="fm-boom" class="no-brand-mark">
+        <h2 style="font-size: 28pt; margin-bottom: 4pt;">The deep learning boom in astrophysics</h2>
+        <p class="cite-line">Huertas-Company &amp; Lanusse 2023 <a href="https://arxiv.org/abs/2210.01813" target="_blank"><img src="https://img.shields.io/badge/arXiv-2210.01813-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" alt="arXiv 2210.01813"></a></p>
+        <p class="db-sub">astro-ph papers per year whose abstract mentions deep learning, neural networks or CNNs</p>
+        <div class="db-wrap">
+        <svg class="db-chart" viewBox="0 0 1120 430" width="1120" height="430" role="img" aria-labelledby="db-title">
+          <title id="db-title">astro-ph papers per year mentioning deep learning, neural networks or CNNs, 2012–2026; inset: papers mentioning foundation models, 2021–2026</title>
+          <g class="db-main">
+<line class="db-grid" x1="64" x2="1112" y1="380.0" y2="380.0"/>
+<text class="db-tick" x="54" y="384.5" text-anchor="end">0</text>
+<line class="db-grid" x1="64" x2="1112" y1="292.5" y2="292.5"/>
+<text class="db-tick" x="54" y="297.0" text-anchor="end">200</text>
+<line class="db-grid" x1="64" x2="1112" y1="205.0" y2="205.0"/>
+<text class="db-tick" x="54" y="209.5" text-anchor="end">400</text>
+<line class="db-grid" x1="64" x2="1112" y1="117.5" y2="117.5"/>
+<text class="db-tick" x="54" y="122.0" text-anchor="end">600</text>
+<line class="db-grid" x1="64" x2="1112" y1="30.0" y2="30.0"/>
+<text class="db-tick" x="54" y="34.5" text-anchor="end">800</text>
+<g class="db-col" style="--i:0"><title>2012: 20 papers (0.1% of astro-ph)</title><path fill="#2b6cb0" d="M81.9,380.0V375.2Q81.9,371.2 85.9,371.2H111.9Q115.9,371.2 115.9,375.2V380.0Z"/></g>
+<text class="db-year" x="98.9" y="402" text-anchor="middle">2012</text>
+<g class="db-col" style="--i:1"><title>2013: 16 papers (0.1% of astro-ph)</title><path fill="#2b6cb0" d="M151.8,380.0V377.0Q151.8,373.0 155.8,373.0H181.8Q185.8,373.0 185.8,377.0V380.0Z"/></g>
+<text class="db-year" x="168.8" y="402" text-anchor="middle">2013</text>
+<g class="db-col" style="--i:2"><title>2014: 19 papers (0.1% of astro-ph)</title><path fill="#2b6cb0" d="M221.7,380.0V375.7Q221.7,371.7 225.7,371.7H251.7Q255.7,371.7 255.7,375.7V380.0Z"/></g>
+<text class="db-year" x="238.7" y="402" text-anchor="middle">2014</text>
+<g class="db-col" style="--i:3"><title>2015: 23 papers (0.2% of astro-ph)</title><path fill="#2b6cb0" d="M291.5,380.0V373.9Q291.5,369.9 295.5,369.9H321.5Q325.5,369.9 325.5,373.9V380.0Z"/></g>
+<text class="db-year" x="308.5" y="402" text-anchor="middle">2015</text>
+<g class="db-col" style="--i:4"><title>2016: 31 papers (0.2% of astro-ph)</title><path fill="#2b6cb0" d="M361.4,380.0V370.4Q361.4,366.4 365.4,366.4H391.4Q395.4,366.4 395.4,370.4V380.0Z"/></g>
+<text class="db-year" x="378.4" y="402" text-anchor="middle">2016</text>
+<text class="db-val" x="378.4" y="358.4" text-anchor="middle">31</text>
+<g class="db-col" style="--i:5"><title>2017: 83 papers (0.5% of astro-ph)</title><path fill="#2b6cb0" d="M431.3,380.0V347.7Q431.3,343.7 435.3,343.7H461.3Q465.3,343.7 465.3,347.7V380.0Z"/></g>
+<text class="db-year" x="448.3" y="402" text-anchor="middle">2017</text>
+<g class="db-col" style="--i:6"><title>2018: 131 papers (0.8% of astro-ph)</title><path fill="#2b6cb0" d="M501.1,380.0V326.7Q501.1,322.7 505.1,322.7H531.1Q535.1,322.7 535.1,326.7V380.0Z"/></g>
+<text class="db-year" x="518.1" y="402" text-anchor="middle">2018</text>
+<g class="db-col" style="--i:7"><title>2019: 249 papers (1.5% of astro-ph)</title><path fill="#2b6cb0" d="M571.0,380.0V275.1Q571.0,271.1 575.0,271.1H601.0Q605.0,271.1 605.0,275.1V380.0Z"/></g>
+<text class="db-year" x="588.0" y="402" text-anchor="middle">2019</text>
+<g class="db-col" style="--i:8"><title>2020: 337 papers (1.9% of astro-ph)</title><path fill="#2b6cb0" d="M640.9,380.0V236.6Q640.9,232.6 644.9,232.6H670.9Q674.9,232.6 674.9,236.6V380.0Z"/></g>
+<text class="db-year" x="657.9" y="402" text-anchor="middle">2020</text>
+<g class="db-col" style="--i:9"><title>2021: 398 papers (2.3% of astro-ph)</title><path fill="#2b6cb0" d="M710.7,380.0V209.9Q710.7,205.9 714.7,205.9H740.7Q744.7,205.9 744.7,209.9V380.0Z"/></g>
+<text class="db-year" x="727.7" y="402" text-anchor="middle">2021</text>
+<g class="db-col" style="--i:10"><title>2022: 428 papers (2.5% of astro-ph)</title><path fill="#2b6cb0" d="M780.6,380.0V196.8Q780.6,192.8 784.6,192.8H810.6Q814.6,192.8 814.6,196.8V380.0Z"/></g>
+<text class="db-year" x="797.6" y="402" text-anchor="middle">2022</text>
+<g class="db-col" style="--i:11"><title>2023: 518 papers (2.9% of astro-ph)</title><path fill="#2b6cb0" d="M850.5,380.0V157.4Q850.5,153.4 854.5,153.4H880.5Q884.5,153.4 884.5,157.4V380.0Z"/></g>
+<text class="db-year" x="867.5" y="402" text-anchor="middle">2023</text>
+<g class="db-col" style="--i:12"><title>2024: 596 papers (3.1% of astro-ph)</title><path fill="#2b6cb0" d="M920.3,380.0V123.2Q920.3,119.2 924.3,119.2H950.3Q954.3,119.2 954.3,123.2V380.0Z"/></g>
+<text class="db-year" x="937.3" y="402" text-anchor="middle">2024</text>
+<g class="db-col" style="--i:13"><title>2025: 720 papers (3.3% of astro-ph)</title><path fill="#2b6cb0" d="M990.2,380.0V69.0Q990.2,65.0 994.2,65.0H1020.2Q1024.2,65.0 1024.2,69.0V380.0Z"/></g>
+<text class="db-year" x="1007.2" y="402" text-anchor="middle">2025</text>
+<text class="db-val" x="1007.2" y="57.0" text-anchor="middle">720</text>
+<g class="db-col" style="--i:14"><title>2026: 576 papers (2.8% of astro-ph), to 4 Nov</title><path class="db-proj" fill="#2b6cb0" d="M1060.1,126.0V84.4Q1060.1,80.4 1064.1,80.4H1090.1Q1094.1,80.4 1094.1,84.4V126.0Z"/><path fill="#2b6cb0" d="M1060.1,380.0V128.0H1094.1V380.0Z"/></g>
+<text class="db-year" x="1077.1" y="402" text-anchor="middle">2026</text>
+<text class="db-val" x="1077.1" y="72.4" text-anchor="middle">576 so far</text>
+<line class="db-axis" x1="64" x2="1112" y1="380" y2="380"/>
+          </g>
+          <g class="db-inset fragment" data-fragment-index="2">
+            <rect class="db-card" x="80" y="22" width="480" height="218" rx="4"/>
+            <text class="db-inset-title" x="98" y="52">… mentioning <tspan class="db-q">“foundation model(s)”</tspan></text>
+<line class="db-grid" x1="132" x2="544" y1="200.0" y2="200.0"/>
+<text class="db-tick" x="122" y="204.5" text-anchor="end">0</text>
+<line class="db-grid" x1="132" x2="544" y1="159.3" y2="159.3"/>
+<text class="db-tick" x="122" y="163.8" text-anchor="end">20</text>
+<line class="db-grid" x1="132" x2="544" y1="118.7" y2="118.7"/>
+<text class="db-tick" x="122" y="123.2" text-anchor="end">40</text>
+<line class="db-grid" x1="132" x2="544" y1="78.0" y2="78.0"/>
+<text class="db-tick" x="122" y="82.5" text-anchor="end">60</text>
+<g class="db-col" style="--i:0"><title>2021: 1 papers (0.0% of astro-ph)</title><path fill="#8e3a1c" d="M151.3,200.0V200.0Q151.3,198.0 153.4,198.0H179.3Q181.3,198.0 181.3,200.0V200.0Z"/></g>
+<text class="db-year" x="166.3" y="222" text-anchor="middle">2021</text>
+<g class="db-col" style="--i:1"><title>2022: 1 papers (0.0% of astro-ph)</title><path fill="#8e3a1c" d="M220.0,200.0V200.0Q220.0,198.0 222.0,198.0H248.0Q250.0,198.0 250.0,200.0V200.0Z"/></g>
+<text class="db-year" x="235.0" y="222" text-anchor="middle">2022</text>
+<g class="db-col" style="--i:2"><title>2023: 4 papers (0.0% of astro-ph)</title><path fill="#8e3a1c" d="M288.7,200.0V195.9Q288.7,191.9 292.7,191.9H314.7Q318.7,191.9 318.7,195.9V200.0Z"/></g>
+<text class="db-year" x="303.7" y="222" text-anchor="middle">2023</text>
+<g class="db-col" style="--i:3"><title>2024: 18 papers (0.1% of astro-ph)</title><path fill="#8e3a1c" d="M357.3,200.0V167.4Q357.3,163.4 361.3,163.4H383.3Q387.3,163.4 387.3,167.4V200.0Z"/></g>
+<text class="db-year" x="372.3" y="222" text-anchor="middle">2024</text>
+<text class="db-val" x="372.3" y="155.4" text-anchor="middle">18</text>
+<g class="db-col" style="--i:4"><title>2025: 36 papers (0.2% of astro-ph)</title><path fill="#8e3a1c" d="M426.0,200.0V130.8Q426.0,126.8 430.0,126.8H452.0Q456.0,126.8 456.0,130.8V200.0Z"/></g>
+<text class="db-year" x="441.0" y="222" text-anchor="middle">2025</text>
+<text class="db-val" x="441.0" y="118.8" text-anchor="middle">36</text>
+<g class="db-col" style="--i:5"><title>2026: 46 papers (0.2% of astro-ph), to 4 Nov</title><path class="db-proj" fill="#8e3a1c" d="M494.7,104.5V92.8Q494.7,88.8 498.7,88.8H520.7Q524.7,88.8 524.7,92.8V104.5Z"/><path fill="#8e3a1c" d="M494.7,200.0V106.5H524.7V200.0Z"/></g>
+<text class="db-year" x="509.7" y="222" text-anchor="middle">2026</text>
+<text class="db-val" x="509.7" y="80.8" text-anchor="middle">46 so far</text>
+<line class="db-axis" x1="132" x2="544" y1="200" y2="200"/>
+          </g>
+        </svg>
+        <figure class="db-flash fragment fade-in-then-out" data-fragment-index="1">
+          <img src="../assets/huang2019.png" alt="Strong-lens candidates in the DESI Legacy Surveys, found by a convolutional network">
+          <figcaption><span><b>Supervised training data is fundamentally limited:</b> rare or novel objects have by definition few labeled examples</span><span class="db-cite">Huang et al. 2019 <a href="https://arxiv.org/abs/1906.00970" target="_blank"><img src="https://img.shields.io/badge/arXiv-1906.00970-B31B1B.svg" class="plain" alt="arXiv 1906.00970"></a></span></figcaption>
+        </figure>
+        </div>
+        <p class="fm-bet fragment" data-fragment-index="0">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <span>The vast majority of these results relied on <strong>supervised learning</strong> and networks <strong>trained from scratch</strong>.</span>
+        </p>
+      </section>
+
       <section id="fm-paradigm" class="no-brand-mark">
-        <span class="section-label">Foundation models as research infrastructure</span>
         <h2 style="font-size: 28pt; margin-bottom: 16pt;">The Rise of The Foundation Model Paradigm</h2>
 
         <div class="fp-layout">
@@ -670,29 +796,29 @@
             <div class="fp-card">
               <h4>Foundation Model approach</h4>
               <ul class="fp-list">
-                <li><strong>Pretrain</strong> models on pretext tasks, without supervision, on very large scale datasets.</li>
+                <li><strong>Pretrain</strong> models on pretext tasks, <span class="wf-hl">without supervision</span>, on very large scale datasets.</li>
                 <li class="fragment" data-fragment-index="0"><strong>Adapt</strong> pretrained models to downstream tasks.</li>
               </ul>
             </div>
             <div class="fp-adapt">
-              <figure class="fp-fig fp-arch fragment" data-fragment-index="0">
+              <figure class="fp-fig fp-arch fragment" data-fragment-index="1">
                 <div class="fp-archcard">
                   <img src="../assets/aion/aion_encoder_frozen.png" alt="Frozen AION-1 transformer encoder turning input tokens into embeddings">
                   <span class="fp-arrow"><i class="fa-solid fa-arrow-down"></i></span>
-                  <div class="fp-head"><i class="fa-solid fa-fire"></i>Small trained head<span>2-layer MLP</span></div>
+                  <div class="fp-head">
+                    <div class="mm">
+                      <div class="mm-term"><div class="mm-mat mm-mat--out" style="--c:1"><span style="--a:0.49"></span><span style="--a:0.36"></span><span style="--a:0.74"></span></div><em>&#375;</em></div>
+                      <span class="mm-op">=</span>
+                      <div class="mm-term"><div class="mm-mat mm-mat--w" style="--c:6"><span style="--a:0.59"></span><span style="--a:0.67"></span><span style="--a:0.94"></span><span style="--a:0.60"></span><span style="--a:0.63"></span><span style="--a:0.69"></span><span style="--a:0.39"></span><span style="--a:0.63"></span><span style="--a:0.72"></span><span style="--a:0.84"></span><span style="--a:0.32"></span><span style="--a:0.48"></span><span style="--a:0.32"></span><span style="--a:0.86"></span><span style="--a:0.77"></span><span style="--a:0.28"></span><span style="--a:0.99"></span><span style="--a:0.97"></span></div><em class="mm-w">W</em></div>
+                      <div class="mm-term"><div class="mm-mat mm-mat--z" style="--c:1"><span style="--a:0.69"></span><span style="--a:0.59"></span><span style="--a:0.47"></span><span style="--a:0.85"></span><span style="--a:0.77"></span><span style="--a:0.43"></span></div><em>z&#772;</em></div>
+                    </div>
+                    <p class="mm-note"><i class="fa-solid fa-fire"></i><span>only <em>W</em> is trained</span></p>
+                  </div>
                 </div>
-                <figcaption>Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></figcaption>
               </figure>
-              <figure class="fp-fig fp-plot fragment" data-fragment-index="1">
-                <div class="fp-plotwrap">
-                <img src="../assets/aion/aion1_gz10_training_size.png" alt="Galaxy Zoo 10 morphology accuracy against training set size: frozen AION-1 with a small head beats a supervised network trained from scratch at every size">
-                <div class="fp-legend">
-                  <span><i style="background:#ca0e4c"></i>AION-B</span>
-                  <span><i style="background:#06ce6f"></i>AION-L</span>
-                  <span><i style="background:#039add"></i>AION-XL</span>
-                  <span><i style="background:#431e48"></i>Supervised, from scratch</span>
-                </div>
-                </div>
+              <figure class="fp-fig fp-plot fragment" data-fragment-index="2">
+                <img src="../assets/aion/aion1_gz10_xl_vs_supervised.png" alt="Galaxy Zoo 10 morphology accuracy against training set size: frozen AION-XL beats a supervised network trained from scratch at every size">
+                <figcaption>Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></figcaption>
               </figure>
             </div>
           </div>
@@ -704,7 +830,6 @@
       </section>
 
       <section id="fm-workflow-conv" class="no-brand-mark" data-auto-animate>
-        <span class="section-label">Foundation models as research infrastructure</span>
         <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
 
         <div class="wf-layout">
@@ -734,7 +859,6 @@
       </section>
 
       <section id="fm-workflow-fm" class="no-brand-mark" data-auto-animate>
-        <span class="section-label">Foundation models as research infrastructure</span>
         <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
 
         <div class="wf-layout">
@@ -765,7 +889,6 @@
       </section>
 
       <section id="fm-service" class="no-brand-mark">
-        <span class="section-label">Foundation models as research infrastructure</span>
         <h2 style="font-size: 28pt; margin-bottom: 16pt;">Models are now an infrastructure investment, like software</h2>
 
         <div class="fi-layout">
@@ -798,7 +921,6 @@
 
       <section id="fm-search" class="no-brand-mark">
         <img class="collab-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI">
-        <span class="section-label">Foundation models as research infrastructure</span>
         <h2 style="font-size: 25pt; margin-bottom: 4pt;">Natural-language queries over 100M+ galaxy images</h2>
         <p class="cite-line">Koblischke et al. 2025 <a href="https://arxiv.org/abs/2512.11982" target="_blank"><img src="https://img.shields.io/badge/arXiv-2512.11982-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;"></a></p>
 
@@ -833,7 +955,6 @@
       <!-- 2. TAKEAWAYS — early machine-scale discovery (Navier–Stokes)        -->
       <!-- ================================================================== -->
       <section id="ns-case">
-        <span class="section-label">A motivating example</span>
         <h2 style="font-size: 25pt; margin-bottom: 10pt;">Takeaways from early examples of machine-scale discovery</h2>
 
         <div class="ns-layout">
@@ -890,7 +1011,6 @@
       <!-- 3. THE CORPUS — machine layer, human layer, distillation/impulse     -->
       <!-- ================================================================== -->
       <section id="corpus" class="corpus-slide">
-        <span class="section-label">What we see emerging</span>
         <h2 style="font-size: 25pt; margin-bottom: 18pt;">Machine-scale research that preserves human understanding and agency</h2>
 
         <div class="corpus-diagram">
@@ -1006,7 +1126,6 @@
       <!-- 4b. THE ASTRA STANDARD — its node types, as a small schema diagram  -->
       <!-- ================================================================== -->
       <section id="astra-schema">
-        <span class="section-label">How Lightcone Research builds it</span>
         <h2 style="font-size: 26pt; margin-bottom: 16pt;">ASTRA: Agentic Schema for Transparent Research Analysis</h2>
 
         <div class="as-stage">
@@ -1111,7 +1230,6 @@
       <section class="no-brand-mark">
 
       <section id="approach">
-        <span class="section-label">How Lightcone Research builds it</span>
         <h2 style="font-size: 26pt; margin-bottom: 12pt;">Structure of an ASTRA project managed by an AI agent</h2>
 
         <div class="ar">
@@ -1198,7 +1316,6 @@ and measure the amplitude at
 
       <!-- 5c. Below the graph: the MySTRA paper written from that record, live. -->
       <section id="approach-paper">
-        <span class="section-label">MySTRA in practice</span>
         <h2 style="font-size: 24pt; margin-bottom: 8pt;">A paper that references its analysis</h2>
         <div class="pp-pair">
           <figure class="pp-panel pp-panel--original">
@@ -1239,7 +1356,6 @@ and measure the amplitude at
       <!-- 5d. THE ECOSYSTEM — a whiteboard map of open, shareable components  -->
       <!-- ================================================================== -->
       <section id="ecosystem">
-        <span class="section-label">The bigger picture</span>
         <h2 style="font-size: 26pt; margin-bottom: 12pt;">An ecosystem of open, shareable components</h2>
         <figure class="eco">
           <img src="../assets/lightcone/ecosystem-whiteboard.jpg" alt="Whiteboard sketch of the landscape of open components for AI-assisted science, from data and compute up to code, records and the literature">
@@ -1251,7 +1367,6 @@ and measure the amplitude at
       <!-- 6. OPEN QUESTIONS                                                   -->
       <!-- ================================================================== -->
       <section id="open-questions">
-        <span class="section-label">Looking ahead</span>
         <h2 style="font-size: 26pt; margin-bottom: 10pt;">Open questions to work on together</h2>
 
         <p class="oq-core">What is the necessary and sufficient set of properties for a scientific record to be <span style="color: #426b78;">navigable and certifiable</span> for agents, and <span style="color: #a67c3c;">digestible and understandable</span> for people?</p>
