@@ -20,7 +20,11 @@
 
   <!-- Per-deck overrides -->
   <style>
-    /* Title headline — Quattrocento in antique gold, on plain parchment. */
+    /* White slides for this deck (the theme default is parchment #f8f7f3). */
+    :root { --lc-bg: #ffffff; }
+    .astra-ui:not([data-astra-color-scheme=dark]) { --astra-color-canvas: #ffffff; --astra-color-header: #ffffff; --astra-color-artifact-paper: #ffffff; }
+
+    /* Title headline — Quattrocento in antique gold, on white. */
     #title .title-display {
       font-family: var(--lc-font-heading);
       font-weight: 400;
@@ -102,7 +106,7 @@
       display: block;
       width: 100%;
       max-width: 400px;
-      height: auto;   /* the file's white plate is pre-multiplied to the parchment tone */
+      height: auto;   /* white-balanced copy: the original plate was tinted to parchment */
     }
     #ns-case .ns-figure figcaption { width: 100%; max-width: 420px; margin-top: 4pt; }
     #ns-case .ns-figure__headline {
@@ -314,6 +318,11 @@
     #fm-boom .db-inset.visible .db-col { animation: db-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(0.2s + var(--i) * 60ms); }
     @keyframes db-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
     @media (prefers-reduced-motion: reduce) { #fm-boom .db-col { animation: none !important; } }
+    /* Part transition divider. */
+    #divider-agents .divider-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+    #divider-agents .divider-icon { font-size: 30pt; color: var(--lc-warm); opacity: 0.8; margin-bottom: 18pt; }
+    #divider-agents .divider-title { max-width: 980px; margin: 0; font-family: var(--lc-font-heading); font-size: 44pt; font-weight: 400; letter-spacing: -0.02em; line-height: 1.12; color: var(--lc-warm); text-wrap: balance; }
+    #divider-agents .divider-sub { margin: 18pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 20pt; color: var(--lc-primary); }
     /* Part 1 opening (from AAS247): foundation model paradigm + workflows. */
     .reveal .fp-fig { margin: 0; display: flex; flex-direction: column; }
     .reveal .fp-fig img { display: block; width: 100%; height: auto; margin: 0; background: #fff; border: 6px solid #fff; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
@@ -368,23 +377,47 @@
     #fm-workflow-conv .wf-figs { display: flex; justify-content: center; align-items: center; gap: 22pt; margin-top: 10pt; }
     #fm-workflow-conv .wf-figs img { display: block; height: 160px; width: auto; max-width: none; margin: 0; background: #fff; border: 5px solid #fff; border-radius: 0; box-shadow: 0 14px 30px -20px rgba(20, 30, 50, 0.55); }
     #fm-workflow-conv .wf-credit { display: flex; justify-content: center; align-items: center; gap: 6pt; margin: 4pt 0 0 0; text-align: center; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
+    #fm-workflow-fm .wf-takes { width: fit-content; margin: 18pt auto 0; }
+    #fm-workflow-fm .wf-take { justify-content: flex-start; margin: 8pt 0 0 0; font-size: 16.5pt; text-wrap: wrap; text-align: left; }
     #fm-workflow-fm .wf-figwrap { position: relative; }
     #fm-workflow-fm .wf-box { position: absolute; left: 2%; top: 26%; width: 54%; height: 59%; border: 3px solid var(--lc-highlight); pointer-events: none; }
     #fm-workflow-fm .wf-box span { position: absolute; left: -3px; bottom: 100%; margin-bottom: 4pt; white-space: nowrap; font-family: var(--lc-font-ui); font-size: 14pt; font-weight: 600; color: var(--lc-highlight); }
-    /* Part 1, slide 2: models as research infrastructure. */
-    #fm-service .fi-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt 18pt; align-items: stretch; text-align: left; }
-    #fm-service .fi-card { padding: 12pt 18pt 13pt; }
-    #fm-service .fi-card h4 { display: flex; align-items: center; gap: 9pt; margin: 0 0 6pt 0; font-family: var(--lc-font-heading); font-weight: 400; font-size: 20pt; line-height: 1.2; color: var(--lc-text); }
-    #fm-service .fi-card h4 i { font-size: 15pt; width: 18pt; text-align: center; }
-    #fm-service .fi-card p { margin: 0; font-size: 16pt; line-height: 1.4; color: #4a505c; }
-    #fm-service .fi-eyebrow { font-family: var(--lc-font-ui); font-size: 12.5pt; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lc-muted); margin: 0 0 2pt 0 !important; }
-    #fm-service .fi-quote { margin: 7pt 0 0 0 !important; font-family: var(--lc-font-heading); font-style: italic; color: var(--lc-text) !important; }
-    #fm-service .fi-quote span { white-space: nowrap; font-family: var(--lc-font-ui); font-style: normal; font-size: 13pt; color: var(--lc-muted); }
-    #fm-service .fi-eyebrow a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
-    #fm-service .fi-quote a, #fm-service .fi-cite a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
-    #fm-service .fi-cite { display: flex; align-items: center; justify-content: space-between; font-family: var(--lc-font-ui); font-size: 13pt !important; color: var(--lc-muted) !important; margin-top: 8pt !important; }
-    #fm-service .fi-cite img { height: 17pt; vertical-align: middle; margin: 0 0 0 4pt; box-shadow: none; border-radius: 0; }
-    #fm-service .fi-cite img.fi-logo { height: 19pt; width: auto; max-width: none; margin: 0; }
+    /* Part 1: technological advances (AION-1, AION-Search). */
+    #fm-advances .collab-logo { height: 36px; top: 18px; }
+    #fm-advances .ad-layout { display: grid; grid-template-columns: 1fr 1.12fr; grid-template-rows: repeat(4, auto); column-gap: 26pt; row-gap: 0; text-align: left; }
+    #fm-advances .ad-col { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+    #fm-advances .ad-head { display: flex; align-items: center; gap: 9pt; margin: 0 0 10pt 0; font-family: var(--lc-font-heading); font-weight: 400; font-size: 21pt; color: var(--lc-text); }
+    #fm-advances .ad-head i { color: var(--lc-warm); font-size: 16pt; }
+    #fm-advances .ad-graph { display: block; align-self: center; width: 76%; height: auto; margin: 0 auto; border: none; box-shadow: none; border-radius: 0; background: transparent; }
+    #fm-advances .ad-text { margin: 8pt 0 0 0; font-size: 16pt; line-height: 1.4; color: #4a505c; }
+    #fm-advances .ad-text b { color: var(--lc-text); }
+    #fm-advances .ad-chips { display: flex; flex-wrap: wrap; gap: 6pt; margin-top: 10pt; }
+    #fm-advances .ad-chips span { padding: 3pt 10pt; background: rgba(var(--lc-warm-rgb), 0.14); font-family: var(--lc-font-ui); font-size: 13pt; color: var(--lc-text); }
+    #fm-advances .ad-cite { display: flex; align-items: center; gap: 6pt; margin: 10pt 0 0 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
+    #fm-advances .ad-cite img { display: block; height: 16pt; margin: 0; border: none; box-shadow: none; }
+    #fm-advances .ad-video { width: 88%; margin: 0 auto; align-self: center; }
+    #fm-advances .ad-video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 6px solid #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    /* Part 1: takeaways for the Schmidt Observatory System. */
+    #fm-invest .tk-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30pt; align-items: center; max-width: 1110px; margin: 0 auto; text-align: left; }
+    #fm-invest .tk-list { list-style: none; margin: 0; padding: 0; }
+    #fm-invest .tk-list li { position: relative; padding-left: 22pt; font-size: 17pt; line-height: 1.4; color: #4a505c; }
+    #fm-invest .tk-list li + li { margin-top: 12pt; }
+    #fm-invest .tk-list li::before { content: ''; position: absolute; left: 3pt; top: 0.55em; width: 9pt; height: 9pt; background: var(--lc-warm); }
+    #fm-invest .tk-list li b { color: var(--lc-text); }
+    #fm-invest .tk-side { display: flex; flex-direction: column; }
+    #fm-invest .tk-aside { margin: 0 0 8pt 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 16pt; color: var(--lc-text); }
+    #fm-invest .tk-shot { margin: 0; }
+    #fm-invest .tk-shot img { display: block; width: 100%; height: auto; aspect-ratio: 942 / 480; object-fit: cover; object-position: top; margin: 0; border: 1px solid #d9d6ce; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    #fm-invest .tk-src { margin: 6pt 0 0 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); text-align: right; }
+    #fm-invest .tk-src a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    #fm-invest .iv-schmidt { max-width: 1110px; margin: 24pt auto 0; }
+    #fm-invest .iv-lead { margin: 0 0 8pt 0; font-family: var(--lc-font-heading); font-size: 18pt; color: var(--lc-highlight); }
+    #fm-invest .iv-lead b { color: inherit; }
+    #fm-invest .iv-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14pt; }
+    #fm-invest .iv-chip { display: flex; align-items: center; gap: 12pt; padding: 7pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-highlight); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); text-align: left; }
+    #fm-invest .iv-chip i { font-size: 18pt; color: var(--lc-highlight); width: 24pt; text-align: center; }
+    #fm-invest .iv-chip span { display: flex; flex-direction: column; font-family: var(--lc-font-ui); font-size: 15pt; line-height: 1.2; color: var(--lc-text); }
+    #fm-invest .iv-chip small { font-size: 12.5pt; color: var(--lc-muted); }
     .reveal .fm-bet strong { color: inherit; }
     .reveal .fm-bet {
       display: flex;
@@ -397,19 +430,6 @@
       color: var(--lc-highlight);
       text-wrap: balance;
     }
-    #fm-search .fs-layout { display: grid; grid-template-columns: 1.25fr 1fr; gap: 26pt; align-items: center; text-align: left; }
-    #fm-search .fs-video { margin: 0; display: flex; flex-direction: column; }
-    #fm-search .fs-video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 6px solid #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
-    #fm-search .fs-video figcaption { font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); margin-top: 8pt; }
-    #fm-search .fs-video figcaption a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
-    #fm-search .fs-steps { display: flex; flex-direction: column; gap: 9pt; }
-    #fm-search .fs-step { display: grid; grid-template-columns: 30pt 1fr; gap: 12pt; align-items: center; padding: 8pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-primary); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
-    #fm-search .fs-step__icon { display: inline-flex; align-items: center; justify-content: center; width: 30pt; height: 30pt; border-radius: 50%; background: rgba(var(--lc-primary-rgb), 0.1); color: var(--lc-primary); font-size: 12pt; }
-    #fm-search .fs-step__name { font-family: var(--lc-font-ui); font-size: 13pt; font-weight: 600; line-height: 1.2; color: var(--lc-text); margin: 0 0 2pt 0; }
-    #fm-search .fs-step__desc { font-size: 11.5pt; line-height: 1.35; color: #4a505c; margin: 0; }
-    #fm-search .fs-result { padding: 9pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-warm); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
-    #fm-search .fs-result p { margin: 0; font-size: 11.5pt; line-height: 1.4; color: #4a505c; }
-    #fm-search .fs-result b { display: block; font-family: var(--lc-font-heading); font-weight: 400; font-size: 15pt; color: var(--lc-text); margin-bottom: 2pt; }
     /* ASTRA schema slide: a slice of the GD-1 record as a dependency graph, one node per ASTRA
        type, decisions showing their options, outputs showing the recipe that made them. astra-ui kind colours; square corners (house rule). */
     #astra-schema .as-stage { position: relative; width: 1160px; height: 420px; margin: 0 auto; text-align: left; }
@@ -600,7 +620,7 @@
     #approach-record .rg-key--figure { border-top: 3px solid #3b7a73; height: 16px; background: linear-gradient(135deg, #cfd7e3, #f0e6d6); }
     #approach-record .rg-key--finding { border: 1.5px solid #a45a43; border-left: 5px solid #a45a43; background: rgb(164 90 67 / 0.1); }
     #approach-record .rg-key--decision { width: 11px; height: 11px; background: #a67c3c; transform: rotate(45deg); border: 0; margin: 0 4px; }
-    #approach-record .rg-key--supported { box-shadow: inset 0 0 0 2px #a67c3c, inset 0 0 0 4px #f8f7f3; }
+    #approach-record .rg-key--supported { box-shadow: inset 0 0 0 2px #a67c3c, inset 0 0 0 4px #ffffff; }
     #approach-record .rg-glyph { font-family: var(--lc-font-ui); font-style: normal; margin-left: -2pt; }
     #approach-record .rg-legend .rg-link { display: inline-block; width: 22px; height: 0; border-top: 2px solid rgb(166 124 60 / 0.7); }
     #approach-record .pp-caption { font-family: var(--lc-font-ui); font-size: 10pt; color: var(--lc-muted); margin: 4pt 0 0 0; }
@@ -830,7 +850,7 @@
       </section>
 
       <section id="fm-workflow-conv" class="no-brand-mark" data-auto-animate>
-        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning in Astrophysics</h2>
 
         <div class="wf-layout">
           <div class="card-glow wf-card" data-id="wf-card" style="border-left: 3px solid var(--lc-primary);">
@@ -859,7 +879,7 @@
       </section>
 
       <section id="fm-workflow-fm" class="no-brand-mark" data-auto-animate>
-        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning</h2>
+        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Rethinking the way we use Deep Learning in Astrophysics</h2>
 
         <div class="wf-layout">
           <div class="card-glow wf-card" data-id="wf-card" style="border-left: 3px solid var(--lc-warm);">
@@ -882,71 +902,85 @@
           </figure>
         </div>
 
-        <p class="fm-bet fragment">
+        <div class="wf-takes">
+        <p class="fm-bet wf-take fragment" data-fragment-index="0">
           <i class="fa-solid fa-arrow-right-long"></i>
-          <span>Greatly reduces <strong>time to science</strong></span>
+          <span>Deep learning becomes <strong>a tool for every astronomer</strong>, not a research project, and greatly speeds up <strong>time to science</strong>.</span>
         </p>
-      </section>
-
-      <section id="fm-service" class="no-brand-mark">
-        <h2 style="font-size: 28pt; margin-bottom: 16pt;">Models are now an infrastructure investment, like software</h2>
-
-        <div class="fi-layout">
-            <div class="card-glow fi-card" style="border-left: 3px solid var(--lc-primary);">
-              <h4><i class="fa-solid fa-microchip" style="color: var(--lc-primary);"></i>Costly to build</h4>
-              <p>Expertise in both machine learning and the science, large-scale compute, and curated multimodal training data.</p>
-            </div>
-            <div class="card-glow fi-card" style="border-left: 3px solid var(--lc-warm);">
-              <h4><i class="fa-solid fa-server" style="color: var(--lc-warm);"></i>Valuable once shared</h4>
-              <p>Served next to the data behind standard APIs, versioned and maintained like Astropy or NumPy, built into everyday scientific workflows.</p>
-            </div>
-            <div class="card-glow fi-card fragment fade-up" style="border-left: 3px solid var(--lc-secondary);">
-              <p class="fi-eyebrow">A recent precedent &middot; <a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/" target="_blank" rel="noopener">15 October 2026</a></p>
-              <h4><i class="fa-solid fa-atom" style="color: var(--lc-secondary);"></i>CERN &times; Mistral AI</h4>
-              <p>A long-term partnership to build a Large Physics Model for collider physics. CERN brings the physics, the data and the computing; Mistral brings large-scale training.</p>
-              <p class="fi-quote">&ldquo;&hellip;serve the whole physics community and be shared.&rdquo; <span>&mdash; Enrica Porcari, CERN</span></p>
-            </div>
-            <div class="card-glow fi-card fragment fade-up" style="border-left: 3px solid var(--lc-accent);">
-              <h4><i class="fa-solid fa-people-group" style="color: var(--lc-accent);"></i>Schmidt Sciences already has the team</h4>
-              <p>Polymathic AI builds open scientific foundation models, e.g. AION-1 for astronomy, trained on 200M+ observations from five surveys.</p>
-              <p class="fi-cite"><span>Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></span><img class="fi-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI"></p>
-            </div>
+        <p class="fm-bet wf-take fragment" data-fragment-index="1">
+          <i class="fa-solid fa-arrow-right-long"></i>
+          <span>Foundation models bear a strong parallel to <strong>research software infrastructure</strong>: reusable, and able to <strong>serve a whole community</strong>.</span>
+        </p>
         </div>
-
-        <p class="fm-bet fragment">
-          <i class="fa-solid fa-arrow-right-long"></i>
-          <span>Designing the data system for multimodal science is the moment to make these models a shared service.</span>
-        </p>
       </section>
 
-      <section id="fm-search" class="no-brand-mark">
+      <section id="fm-advances" class="no-brand-mark">
         <img class="collab-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI">
-        <h2 style="font-size: 25pt; margin-bottom: 4pt;">Natural-language queries over 100M+ galaxy images</h2>
-        <p class="cite-line">Koblischke et al. 2025 <a href="https://arxiv.org/abs/2512.11982" target="_blank"><img src="https://img.shields.io/badge/arXiv-2512.11982-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;"></a></p>
+        <h2 style="font-size: 28pt; margin-bottom: 14pt;">Recent advances boost reusability and versatility</h2>
 
-        <div class="fs-layout">
-          <figure class="fs-video">
-            <video data-autoplay muted loop playsinline preload="metadata" src="../assets/aionsearchlaunch.mp4"></video>
-            <figcaption>AION-Search on HSC and Legacy Survey images &middot; try it: <a href="https://astronolan-aion-search.hf.space/" target="_blank" rel="noopener">astronolan-aion-search.hf.space</a></figcaption>
-          </figure>
-
-          <div class="fs-steps">
-            <div class="fs-step">
-              <span class="fs-step__icon"><i class="fa-solid fa-pen-nib"></i></span>
-              <div><p class="fs-step__name">Describe</p><p class="fs-step__desc">A vision-language model writes descriptions for ~300k galaxy images.</p></div>
-            </div>
-            <div class="fs-step">
-              <span class="fs-step__icon"><i class="fa-solid fa-link"></i></span>
-              <div><p class="fs-step__name">Align</p><p class="fs-step__desc">Contrastive training links AION-1 image embeddings to text embeddings of those descriptions.</p></div>
-            </div>
-            <div class="fs-step">
-              <span class="fs-step__icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <div><p class="fs-step__name">Search</p><p class="fs-step__desc">Any free-form query ranks the whole archive, with no human labels and no bespoke classifier.</p></div>
-            </div>
-            <div class="fs-result fragment fade-up">
-              <p><b>Rare objects become searchable</b>Strong lenses: nDCG@10 of 0.18, against 0.015 for the best image-similarity baseline.</p>
+        <div class="ad-layout">
+          <div class="ad-col">
+            <h4 class="ad-head"><i class="fa-solid fa-layer-group"></i>Multimodal and multi-science</h4>
+            <img class="ad-graph" src="../assets/aion/aion_crossmatch_graph.png" alt="AION-1 training data: Legacy Survey, HSC, SDSS, DESI and Gaia, cross-matched on the same objects">
+            <p class="ad-text">AION-1 learns jointly from <b>39 modalities</b> across five surveys: images, spectra and catalog values for 200M+ observations.</p>
+            <div class="ad-extra">
+              <div class="ad-chips">
+                <span>Galaxy formation</span><span>Cosmology</span><span>Stellar physics</span><span>Galactic archaeology</span>
+              </div>
+              <p class="ad-cite">Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></p>
             </div>
           </div>
+
+          <div class="ad-col fragment fade-up">
+            <h4 class="ad-head"><i class="fa-solid fa-comments"></i>New ways to interact with data</h4>
+            <figure class="ad-video">
+              <video data-autoplay muted loop playsinline preload="metadata" src="../assets/aionsearchlaunch.mp4"></video>
+            </figure>
+            <p class="ad-text">Representation learning enables <b>zero-shot</b>, <b>cross-modal similarity searches</b>: no labels, no retraining.</p>
+            <p class="ad-cite">AION-Search, Koblischke et al. 2025 <a href="https://arxiv.org/abs/2512.11982" target="_blank"><img src="https://img.shields.io/badge/arXiv-2512.11982-B31B1B.svg" class="plain" alt="arXiv 2512.11982"></a></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="fm-invest" class="no-brand-mark">
+        <h2 style="font-size: 28pt; margin-bottom: 18pt;">Takeaways for the Schmidt Observatory System</h2>
+
+        <div class="tk-layout">
+          <ul class="tk-list">
+            <li><b>Foundation models are research infrastructure:</b> built once, reused by everyone, like software.</li>
+            <li class="fragment" data-fragment-index="0"><b>Plan for them from day one:</b> serve models and embeddings next to the data, versioned with each release, behind standard APIs.</li>
+            <li class="fragment" data-fragment-index="1"><b>The observatory system is multimodal by design:</b> imaging, spectroscopy and radio across facilities, exactly where multimodal models shine.</li>
+            <li class="fragment" data-fragment-index="2"><b>The ingredients are rare:</b> data infrastructure, ML expertise and compute (AION-1: ~1,500 H100 GPUs on Jean Zay). Others are starting to invest.</li>
+          </ul>
+
+          <div class="tk-side fragment fade-up" data-fragment-index="2">
+            <p class="tk-aside">Apparently, I'm not the only one to think so&hellip;</p>
+            <figure class="tk-shot">
+              <img src="../assets/cern_mistral_2026.png" alt="CERN press release, 15 October 2026: CERN and Mistral join forces to accelerate AI for science">
+            </figure>
+            <p class="tk-src"><a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/" target="_blank" rel="noopener">home.cern</a> &middot; 15 October 2026</p>
+          </div>
+        </div>
+
+        <div class="iv-schmidt fragment fade-up" data-fragment-index="3">
+          <p class="iv-lead"><b>Schmidt Sciences</b> already supports</p>
+          <div class="iv-row">
+            <div class="iv-chip"><i class="fa-solid fa-satellite-dish"></i><span><b>The observatory</b><small>Eric &amp; Wendy Schmidt Observatory System</small></span></div>
+            <div class="iv-chip"><i class="fa-solid fa-database"></i><span><b>The data infrastructure</b><small>LINCC Frameworks</small></span></div>
+            <div class="iv-chip"><i class="fa-solid fa-cubes"></i><span><b>Foundation-model expertise</b><small>Polymathic AI</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- TRANSITION — from foundation models to research agents             -->
+      <!-- ================================================================== -->
+      <section id="divider-agents" data-background-glow>
+        <div class="divider-inner">
+          <i class="fa-solid fa-jedi divider-icon" aria-hidden="true"></i>
+          <div class="divider-title">This is not the AI you are looking for</div>
+          <hr style="width: 80px; margin: 22pt auto 0;">
+          <p class="divider-sub">From foundation models to research agents</p>
         </div>
       </section>
 
@@ -961,7 +995,7 @@
 
           <!-- The example: OpenAI's announcement figure -->
           <figure class="ns-figure">
-            <img src="../assets/lightcone/openai_navier_stokes_spiral.jpg"
+            <img src="../assets/lightcone/openai_navier_stokes_spiral_white.jpg"
                  alt="OpenAI's illustration of the blow-up mechanism: a swirling vortex with an inward spiral and axial stretching.">
             <figcaption>
               <p class="evidence-eyebrow" style="color: var(--lc-primary); margin-bottom: 4pt;">OpenAI &middot; 8 Sept 2026</p>
