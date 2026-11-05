@@ -51,23 +51,6 @@
       pointer-events: none;
     }
 
-    /* Framing slide — the question first, then the months-vs-decades contrast,
-       then the question the rest of the talk actually tries to answer. */
-    #framing .fr-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
-    #framing .fr-question { max-width: 1060px; margin: 0; font-family: var(--lc-font-heading); font-size: 36pt; font-weight: 400; letter-spacing: -0.015em; line-height: 1.22; color: var(--lc-text); text-wrap: balance; }
-    #framing .fr-question b { font-weight: 400; color: var(--lc-warm); }
-    #framing .fr-contrast { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 26pt; width: 100%; max-width: 960px; margin-top: 38pt; }
-    #framing .fr-card { display: flex; flex-direction: column; align-items: center; padding: 16pt 20pt 14pt; background: var(--lc-surface-lowest); border-top: 3px solid var(--lc-secondary); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
-    #framing .fr-card--obs { border-top-color: var(--lc-warm); }
-    #framing .fr-card i { font-size: 22pt; color: var(--lc-secondary); margin-bottom: 8pt; }
-    #framing .fr-card--obs i { color: var(--lc-warm); }
-    #framing .fr-card__label { font-family: var(--lc-font-ui); font-size: 11pt; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lc-muted); }
-    #framing .fr-card__scale { font-family: var(--lc-font-heading); font-size: 40pt; line-height: 1.1; color: var(--lc-text); margin: 4pt 0 2pt; }
-    #framing .fr-card__desc { font-family: var(--lc-font-ui); font-size: 14pt; color: #4a505c; }
-    #framing .fr-vs { align-self: center; font-family: var(--lc-font-heading); font-style: italic; font-size: 22pt; color: var(--lc-muted); }
-    #framing .fr-followup { max-width: 980px; margin: 38pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 22pt; line-height: 1.35; color: var(--lc-primary); text-wrap: balance; }
-    #framing .fr-followup b { font-weight: 700; color: var(--lc-highlight); }
-
     /* Evidence cards — eyebrow, stat cells, source line. */
     .reveal .evidence-card {
       display: flex;
@@ -108,6 +91,17 @@
       color: var(--lc-muted);
       line-height: 1.25;
     }
+
+    /* Trajectory slide — METR plot on the left, two points on the right. */
+    #trajectory .tj-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 26pt; align-items: center; max-width: 1180px; margin: 0 auto; text-align: left; }
+    #trajectory .tj-figure { margin: 0; }
+    #trajectory .tj-figure img { display: block; width: 100%; height: auto; margin: 0; border: 1px solid #d9d6ce; box-shadow: 0 18px 38px -26px rgba(20, 30, 50, 0.45); }
+    #trajectory .tj-figure figcaption { margin-top: 6pt; font-family: var(--lc-font-ui); font-size: 11.5pt; color: var(--lc-muted); text-align: center; }
+    #trajectory .tj-points { display: flex; flex-direction: column; gap: 14pt; }
+    #trajectory .tj-point { padding: 12pt 16pt 12pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--c); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
+    #trajectory .tj-point__title { display: flex; align-items: center; gap: 8pt; margin: 0 0 5pt 0; font-family: var(--lc-font-heading); font-size: 18pt; line-height: 1.2; color: var(--c); }
+    #trajectory .tj-point__text { margin: 0; font-family: var(--lc-font-ui); font-size: 14.5pt; line-height: 1.4; color: #4a505c; }
+    #trajectory .tj-point__text b { font-weight: 600; color: var(--lc-text); }
 
     /* Navier–Stokes slide — the OpenAI figure on the left, three observations
        revealed one by one on the right, then the durable-needs argument. */
@@ -154,11 +148,6 @@
     /* Closing slide — one large statement, three enduring needs, the ask. */
     #endures .en-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-bottom: 110px; box-sizing: border-box; text-align: center; }
     #endures .en-title { margin: 0; font-family: var(--lc-font-heading); font-size: 48pt; font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; color: var(--lc-warm); }
-    #endures .en-sub { margin: 14pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 24pt; color: var(--lc-primary); }
-    #endures .en-rule { width: 720px; margin: 30pt auto 26pt; border: none; height: 1px; background: linear-gradient(to right, transparent, rgba(var(--lc-primary-rgb), 0.35) 15%, rgba(var(--lc-primary-rgb), 0.35) 85%, transparent); }
-    #endures .en-row { display: flex; gap: 46pt; }
-    #endures .en-item { display: flex; flex-direction: column; align-items: center; gap: 8pt; font-family: var(--lc-font-ui); font-size: 17pt; color: var(--lc-text); }
-    #endures .en-item i { font-size: 22pt; color: var(--lc-warm); }
 
     #endures .en-qr { position: absolute; right: 56pt; bottom: 50pt; display: flex; align-items: center; gap: 12pt; text-decoration: none; border: none; }
     #endures .en-qr img { display: block; margin: 0; border: none; box-shadow: none; }
@@ -210,8 +199,6 @@
       color: var(--lc-muted);
       margin: 0 0 5pt 0;
     }
-    .corpus-slide .corpus-key { max-width: 1100px; margin: 22pt auto 0; padding-top: 12pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.2); font-family: var(--lc-font-heading); font-size: 20pt; line-height: 1.4; color: var(--lc-primary); text-wrap: balance; }
-    .corpus-slide .corpus-key b { font-weight: 700; color: var(--lc-highlight); }
     .corpus-slide .props { list-style: none; margin: 0; padding: 0; }
     .corpus-slide .props li {
       display: grid;
@@ -583,6 +570,9 @@
     #approach-paper .pp-panel--original { width: 590px; }
     #approach-paper .pp-panel--repro { width: 590px; }
     #approach-paper .pp-panel figcaption { font-family: var(--lc-font-ui); font-size: 10.5pt; color: var(--lc-muted); text-align: left; margin: 0 0 5pt 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #approach-paper .pp-panel--repro figcaption { display: flex; align-items: center; justify-content: space-between; gap: 8pt; }
+    #approach-paper .pp-panel--repro figcaption > span { overflow: hidden; text-overflow: ellipsis; }
+    #approach-paper .pp-myst { flex: none; display: block; height: 20px; width: auto; margin: 0; border: none; box-shadow: none; }
     #approach-paper .pp-tag { display: inline-block; padding: 1pt 6pt; margin-right: 5pt; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: var(--lc-muted); }
     #approach-paper .pp-panel--repro .pp-tag { background: var(--lc-warm); }
     #approach-paper .pp-frame.pp-pdf { overflow-y: auto; background: #e9e6df; padding: 10px; box-sizing: content-box; height: 490px; width: auto; border-top-color: var(--lc-muted); scrollbar-width: thin; }
@@ -728,33 +718,6 @@
         <!-- Affiliation: anchored lower-right, balancing the presenter card. -->
         <div style="position: absolute; right: 56pt; bottom: 72pt; display: flex; align-items: center; gap: 16pt;">
           <img src="../assets/cnrs-blue.png" alt="CNRS" style="height: 76pt; display: block;">
-        </div>
-      </section>
-
-      <!-- ================================================================== -->
-      <!-- FRAMING — the question the talk tries to answer                    -->
-      <!-- ================================================================== -->
-      <section id="framing" class="no-brand-mark">
-        <div class="fr-inner">
-          <p class="fr-question">What would an <b>AI-forward research environment</b> for the Schmidt Observatory System look like?</p>
-
-          <div class="fr-contrast fragment fade-up" data-fragment-index="0">
-            <div class="fr-card fr-card--ai">
-              <i class="fa-solid fa-microchip" aria-hidden="true"></i>
-              <span class="fr-card__label">AI capabilities</span>
-              <span class="fr-card__scale">Months</span>
-              <span class="fr-card__desc">Rapidly evolving technologies</span>
-            </div>
-            <span class="fr-vs">vs</span>
-            <div class="fr-card fr-card--obs">
-              <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
-              <span class="fr-card__label">Observatory infrastructure</span>
-              <span class="fr-card__scale">Decades</span>
-              <span class="fr-card__desc">Long-lived scientific investments</span>
-            </div>
-          </div>
-
-          <p class="fr-followup fragment fade-up" data-fragment-index="1">We cannot predict the tools of tomorrow, but we can <b>anticipate some of the infrastructure</b> they will need.</p>
         </div>
       </section>
 
@@ -1033,6 +996,31 @@
       </section>
 
       <!-- ================================================================== -->
+      <!-- 1b. THE TRAJECTORY — METR time horizons (from lcr_talks/LBNL2026)   -->
+      <!-- ================================================================== -->
+      <section id="trajectory" class="no-brand-mark">
+        <h2 style="font-size: 28pt; margin-bottom: 14pt;">Who is going to be doing the science within a few years?</h2>
+
+        <div class="tj-layout">
+          <figure class="tj-figure">
+            <img src="../assets/metr_th11_hybrid.png" alt="METR time horizon: the length of software tasks models can complete half the time, doubling every few months, with Claude Mythos Preview at 16 hours or more">
+            <figcaption>METR, <em>Task-Completion Time Horizons</em> (metr.org/time-horizons, May 2026 snapshot, CC-BY)</figcaption>
+          </figure>
+
+          <div class="tj-points">
+            <div class="tj-point" style="--c: var(--lc-highlight);">
+              <p class="tj-point__title"><i class="fa-solid fa-chart-line"></i>Exponential improvement</p>
+              <p class="tj-point__text">The length of tasks agents can complete is <b>doubling every few months</b>. Today&rsquo;s &ldquo;mildly useful&rdquo; outputs won&rsquo;t stay that way: <b>build for where models will be in a year</b>, not where they are today.</p>
+            </div>
+            <div class="tj-point fragment fade-up" style="--c: var(--lc-warm);">
+              <p class="tj-point__title"><i class="fa-solid fa-recycle"></i>AI co-scientists become obsolete fast</p>
+              <p class="tj-point__text">Denario, Kosmos, Sakana: all <b>tightly coupled to yesterday&rsquo;s models</b>. As models improve, these systems are replaced wholesale.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
       <!-- PART 2 — Research agents (~10 min), adapted from slides-london     -->
       <!-- 2. TAKEAWAYS — early machine-scale discovery (Navier–Stokes)        -->
       <!-- ================================================================== -->
@@ -1073,7 +1061,7 @@
           </div>
         </div>
 
-        <p class="ns-key fragment fade-up" data-fragment-index="3">We don't know what future research agents will look like. But whatever their architecture, they will need a way to <b>preserve their work</b>, and to <b>connect it to human science</b>.</p>
+        <p class="ns-key fragment fade-up" data-fragment-index="3">We don't know what future research agents will look like. But whatever their architecture, they will need a way to build a <b>compounding corpus of knowledge</b>, and to <b>connect it to human science</b>.</p>
       </section>
 
       <!-- ================================================================== -->
@@ -1169,8 +1157,6 @@
           </div>
 
         </div>
-
-        <p class="corpus-key fragment fade-up" data-fragment-index="6">A <b>shared research record</b> can connect machine-scale investigations to human-scale scientific understanding.</p>
       </section>
 
       <!-- ================================================================== -->
@@ -1314,7 +1300,7 @@
             </div>
           </figure>
           <figure class="pp-panel pp-panel--repro">
-            <figcaption><span class="pp-tag">Reproduced</span> MySTRA edition &middot; every figure and number re-executed from the record</figcaption>
+            <figcaption><span><span class="pp-tag">Reproduced</span> MySTRA edition &middot; every figure and number re-executed from the record</span><img class="pp-myst" src="../assets/myst_logo.svg" alt="MyST Markdown"></figcaption>
             <div class="pp-frame">
               <iframe class="crisp-frame" data-frame-height="510"
                       src="../assets/lightcone/gd1-paper/"
@@ -1363,18 +1349,11 @@
       </section>
 
       <!-- ================================================================== -->
-      <!-- 7. CLOSE — build for what endures                                   -->
+      <!-- 7. CLOSE — thank you + fellowship QR                                -->
       <!-- ================================================================== -->
       <section id="endures" class="no-brand-mark" data-background-glow>
         <div class="en-inner">
-          <p class="en-title">Build for what endures.</p>
-          <p class="en-sub">Not for the AI systems of today.</p>
-          <hr class="en-rule">
-          <div class="en-row">
-            <div class="en-item"><i class="fa-solid fa-brain"></i>Reusable scientific capabilities</div>
-            <div class="en-item"><i class="fa-solid fa-code-branch"></i>Verifiable research records</div>
-            <div class="en-item"><i class="fa-solid fa-user-group"></i>Human&ndash;agent collaboration</div>
-          </div>
+          <p class="en-title">Thank you for your attention</p>
         </div>
 
         <a class="en-qr" href="https://www.lightconeresearch.org/fellowship" target="_blank" rel="noopener">
