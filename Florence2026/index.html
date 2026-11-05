@@ -51,6 +51,23 @@
       pointer-events: none;
     }
 
+    /* Framing slide — the question first, then the months-vs-decades contrast,
+       then the question the rest of the talk actually tries to answer. */
+    #framing .fr-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+    #framing .fr-question { max-width: 1060px; margin: 0; font-family: var(--lc-font-heading); font-size: 36pt; font-weight: 400; letter-spacing: -0.015em; line-height: 1.22; color: var(--lc-text); text-wrap: balance; }
+    #framing .fr-question b { font-weight: 400; color: var(--lc-warm); }
+    #framing .fr-contrast { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 26pt; width: 100%; max-width: 960px; margin-top: 38pt; }
+    #framing .fr-card { display: flex; flex-direction: column; align-items: center; padding: 16pt 20pt 14pt; background: var(--lc-surface-lowest); border-top: 3px solid var(--lc-secondary); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
+    #framing .fr-card--obs { border-top-color: var(--lc-warm); }
+    #framing .fr-card i { font-size: 22pt; color: var(--lc-secondary); margin-bottom: 8pt; }
+    #framing .fr-card--obs i { color: var(--lc-warm); }
+    #framing .fr-card__label { font-family: var(--lc-font-ui); font-size: 11pt; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lc-muted); }
+    #framing .fr-card__scale { font-family: var(--lc-font-heading); font-size: 40pt; line-height: 1.1; color: var(--lc-text); margin: 4pt 0 2pt; }
+    #framing .fr-card__desc { font-family: var(--lc-font-ui); font-size: 14pt; color: #4a505c; }
+    #framing .fr-vs { align-self: center; font-family: var(--lc-font-heading); font-style: italic; font-size: 22pt; color: var(--lc-muted); }
+    #framing .fr-followup { max-width: 980px; margin: 38pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 22pt; line-height: 1.35; color: var(--lc-primary); text-wrap: balance; }
+    #framing .fr-followup b { font-weight: 700; color: var(--lc-highlight); }
+
     /* Evidence cards — eyebrow, stat cells, source line. */
     .reveal .evidence-card {
       display: flex;
@@ -92,79 +109,63 @@
       line-height: 1.25;
     }
 
-    /* Navier–Stokes case slide — the announcement figure on the left, two
-       takeaways (substrate, connection to human science) stacked on the right. */
-    #ns-case .ns-layout {
-      display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 26pt;
-      align-items: center;
-      text-align: left;
-    }
+    /* Navier–Stokes slide — the OpenAI figure on the left, three observations
+       revealed one by one on the right, then the durable-needs argument. */
+    #ns-case .ns-layout { display: grid; grid-template-columns: 0.62fr 1.38fr; gap: 24pt; align-items: center; max-width: 1150px; margin: 0 auto; text-align: left; }
     #ns-case .ns-figure { margin: 0; display: flex; flex-direction: column; align-items: center; }
-    #ns-case .ns-figure img {
-      display: block;
-      width: 100%;
-      max-width: 400px;
-      height: auto;   /* white-balanced copy: the original plate was tinted to parchment */
-    }
-    #ns-case .ns-figure figcaption { width: 100%; max-width: 420px; margin-top: 4pt; }
-    #ns-case .ns-figure__headline {
-      font-family: var(--lc-font-heading);
-      font-size: 14pt;
-      line-height: 1.3;
-      color: var(--lc-text);
-      margin: 0 0 6pt 0;
-    }
-    #ns-case .lessons { display: flex; flex-direction: column; gap: 11pt; }
-    #ns-case .lesson { display: flex; flex-direction: column; padding: 11pt 20pt 10pt; }
-    #ns-case .lesson__title {
-      font-family: var(--lc-font-heading);
-      font-size: 15pt;
-      font-weight: 400;
-      line-height: 1.3;
-      color: var(--lc-text);
-      margin: 0 0 9pt 0;
-    }
-    #ns-case .crystal-row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 10pt;
-    }
-    #ns-case .crystal-row > i { color: var(--lc-accent); font-size: 14pt; }
-    #ns-case .lesson__quote {
-      font-family: var(--lc-font-heading);
-      font-style: italic;
-      font-size: 14pt;
-      line-height: 1.4;
-      color: var(--lc-primary);
-      margin: 0;
-      padding-left: 10pt;
-      border-left: 2px solid rgba(var(--lc-primary-rgb), 0.25);
-    }
-    #ns-case .lesson__quote cite {
-      display: block;
-      margin-top: 4pt;
-      font-family: var(--lc-font-ui);
-      font-style: normal;
-      font-size: 11pt;
-      color: var(--lc-muted);
-    }
-    #ns-case .lesson__implication {
-      display: flex;
-      align-items: baseline;
-      gap: 8pt;
-      margin: 9pt 0 0 0;
-      padding-top: 8pt;
-      border-top: 1px solid rgba(var(--lc-primary-rgb), 0.18);
-      font-family: var(--lc-font-heading);
-      font-size: 13pt;
-      line-height: 1.3;
-      color: var(--lc-highlight);
-      text-wrap: balance;
-    }
+    #ns-case .ns-figure img { display: block; width: 100%; max-width: 330px; height: auto; margin: 0; border: none; box-shadow: none; }
+    #ns-case .ns-figure figcaption { width: 100%; max-width: 380px; margin-top: 6pt; font-family: var(--lc-font-ui); font-size: 12.5pt; line-height: 1.35; color: var(--lc-muted); }
+    #ns-case .ns-figure figcaption b { font-weight: 600; color: var(--lc-text); }
+    #ns-case .ns-obs-list { display: flex; flex-direction: column; gap: 9pt; }
+    #ns-case .ns-obs { display: grid; grid-template-columns: 34pt 1fr; gap: 12pt; align-items: start; padding: 10pt 16pt 10pt 12pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--obs); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); }
+    #ns-case .ns-obs__num { font-family: var(--lc-font-heading); font-size: 26pt; line-height: 1; color: var(--obs); text-align: center; padding-top: 2pt; }
+    #ns-case .ns-obs__title { margin: 0; font-family: var(--lc-font-heading); font-size: 20pt; line-height: 1.2; color: var(--lc-text); }
+    #ns-case .ns-obs__text { margin: 3pt 0 0 0; font-family: var(--lc-font-ui); font-size: 15.5pt; line-height: 1.35; color: #4a505c; }
+    #ns-case .ns-obs__stat { margin: 4pt 0 0 0; font-family: var(--lc-font-ui); font-size: 14pt; color: var(--lc-muted); }
+    #ns-case .ns-obs__stat b { font-weight: 600; color: var(--lc-secondary); }
+    #ns-case .ns-obs__cite { margin: 6pt 0 0 0; padding-left: 10pt; border-left: 2px solid rgba(var(--lc-warm-rgb), 0.45); font-family: var(--lc-font-heading); font-style: italic; font-size: 15pt; line-height: 1.35; color: var(--lc-primary); }
+    #ns-case .ns-obs__cite cite { display: block; margin-top: 3pt; font-family: var(--lc-font-ui); font-style: normal; font-size: 12pt; color: var(--lc-muted); }
+    #ns-case .ns-key { max-width: 1100px; margin: 14pt auto 0; padding-top: 12pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.2); font-family: var(--lc-font-heading); font-size: 19pt; line-height: 1.4; color: var(--lc-primary); text-wrap: balance; }
+    #ns-case .ns-key b { font-weight: 700; color: var(--lc-highlight); }
 
+    /* Culmination slide — one calm frame: scientific teams on top, the shared
+       environment (agents + records) outlined in gold, resources along the
+       bottom. Plain icon + label items, no cards inside the frame. */
+    #ai-env .env-diagram { width: 100%; max-width: 1060px; margin: 0 auto; padding: 18pt 28pt 16pt; border: 1px solid rgba(var(--lc-primary-rgb), 0.3); border-radius: 10px; display: flex; flex-direction: column; align-items: stretch; }
+    #ai-env .env-teams { text-align: center; }
+    #ai-env .env-teams__head { display: flex; align-items: center; justify-content: center; gap: 12pt; font-family: var(--lc-font-ui); font-weight: 700; font-size: 20pt; line-height: 1.2; color: var(--lc-text); }
+    #ai-env .env-teams__head i { font-size: 17pt; color: var(--lc-warm); }
+    #ai-env .env-teams p { margin: 5pt 0 0 0; font-family: var(--lc-font-ui); font-size: 15pt; color: #4a505c; }
+    #ai-env .env-link { margin: 7pt 0; text-align: center; font-size: 18pt; line-height: 1; color: var(--lc-text); }
+    #ai-env .env-box { padding: 12pt 26pt 13pt; border: 1.5px solid var(--lc-warm); border-radius: 2px; }
+    #ai-env .env-box__label { margin: 0 0 12pt 0; text-align: center; font-family: var(--lc-font-ui); font-weight: 700; font-size: 18pt; color: var(--lc-text); }
+    #ai-env .env-box__row { display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; }
+    #ai-env .env-part { display: flex; flex-direction: column; align-items: center; }
+    #ai-env .env-part i { font-size: 17pt; color: var(--c); margin-bottom: 6pt; }
+    #ai-env .env-part b { font-family: var(--lc-font-ui); font-weight: 700; font-size: 16pt; line-height: 1.2; color: var(--lc-text); }
+    #ai-env .env-part span { margin-top: 3pt; font-family: var(--lc-font-ui); font-size: 14.5pt; color: #4a505c; }
+    #ai-env .env-box__foot { margin: 12pt 0 0 0; text-align: center; font-family: var(--lc-font-ui); font-size: 14.5pt; color: #4a505c; }
+    #ai-env .env-base { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16pt; }
+    #ai-env .env-res { display: flex; flex-direction: column; align-items: center; gap: 5pt; font-family: var(--lc-font-ui); font-weight: 600; font-size: 14.5pt; color: var(--lc-text); }
+    #ai-env .env-res i { font-size: 16pt; color: var(--lc-primary); }
+    #ai-env .env-key { max-width: 1120px; margin: 12pt auto 0; padding-top: 10pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.2); font-family: var(--lc-font-heading); font-size: 18pt; line-height: 1.4; color: var(--lc-primary); text-wrap: balance; }
+    #ai-env .env-key b { font-weight: 700; color: var(--lc-highlight); }
+
+    /* Closing slide — one large statement, three enduring needs, the ask. */
+    #endures .en-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-bottom: 110px; box-sizing: border-box; text-align: center; }
+    #endures .en-title { margin: 0; font-family: var(--lc-font-heading); font-size: 48pt; font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; color: var(--lc-warm); }
+    #endures .en-sub { margin: 14pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 24pt; color: var(--lc-primary); }
+    #endures .en-rule { width: 720px; margin: 30pt auto 26pt; border: none; height: 1px; background: linear-gradient(to right, transparent, rgba(var(--lc-primary-rgb), 0.35) 15%, rgba(var(--lc-primary-rgb), 0.35) 85%, transparent); }
+    #endures .en-row { display: flex; gap: 46pt; }
+    #endures .en-item { display: flex; flex-direction: column; align-items: center; gap: 8pt; font-family: var(--lc-font-ui); font-size: 17pt; color: var(--lc-text); }
+    #endures .en-item i { font-size: 22pt; color: var(--lc-warm); }
+
+    #endures .en-qr { position: absolute; right: 56pt; bottom: 50pt; display: flex; align-items: center; gap: 12pt; text-decoration: none; border: none; }
+    #endures .en-qr img { display: block; margin: 0; border: none; box-shadow: none; }
+    #endures .en-qr__code { width: 132px; height: 132px; }
+    #endures .en-qr__logo { width: 100%; height: auto; margin-bottom: 8pt !important; }  /* as wide as the text block */
+    #endures .en-qr span { display: flex; flex-direction: column; align-items: flex-start; text-align: left; font-family: var(--lc-font-ui); font-size: 18pt; line-height: 1.3; color: var(--lc-secondary); }
+    #endures .en-qr span b { font-weight: 600; color: var(--lc-text); }
     /* Corpus slide — machine-scale layer and human layer, joined by the
        distillation / impulse loop (from the whiteboard). */
     .corpus-slide .corpus-diagram {
@@ -209,24 +210,21 @@
       color: var(--lc-muted);
       margin: 0 0 5pt 0;
     }
+    .corpus-slide .corpus-key { max-width: 1100px; margin: 22pt auto 0; padding-top: 12pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.2); font-family: var(--lc-font-heading); font-size: 20pt; line-height: 1.4; color: var(--lc-primary); text-wrap: balance; }
+    .corpus-slide .corpus-key b { font-weight: 700; color: var(--lc-highlight); }
     .corpus-slide .props { list-style: none; margin: 0; padding: 0; }
     .corpus-slide .props li {
       display: grid;
       grid-template-columns: 14pt 1fr;
       align-items: baseline;
       gap: 0 6pt;
-      margin: 0 0 5pt 0;
+      margin: 0 0 7pt 0;
       font-family: var(--lc-font-ui);
-      font-size: 12.5pt;
+      font-size: 15pt;
       line-height: 1.25;
       color: var(--lc-text);
     }
-    .corpus-slide .props li i { font-size: 10pt; }
-    .corpus-slide .props li small {
-      grid-column: 2;
-      font-size: 10pt;
-      color: var(--lc-muted);
-    }
+    .corpus-slide .props li i { font-size: 11pt; }
     .corpus-slide .layer--machine .props li i { color: var(--lc-secondary); }
     .corpus-slide .layer--human .props li i { color: var(--lc-warm); }
     .corpus-slide .loop { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -319,10 +317,6 @@
     @keyframes db-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
     @media (prefers-reduced-motion: reduce) { #fm-boom .db-col { animation: none !important; } }
     /* Part transition divider. */
-    #divider-agents .divider-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
-    #divider-agents .divider-icon { font-size: 30pt; color: var(--lc-warm); opacity: 0.8; margin-bottom: 18pt; }
-    #divider-agents .divider-title { max-width: 980px; margin: 0; font-family: var(--lc-font-heading); font-size: 44pt; font-weight: 400; letter-spacing: -0.02em; line-height: 1.12; color: var(--lc-warm); text-wrap: balance; }
-    #divider-agents .divider-sub { margin: 18pt 0 0 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 20pt; color: var(--lc-primary); }
     /* Part 1 opening (from AAS247): foundation model paradigm + workflows. */
     .reveal .fp-fig { margin: 0; display: flex; flex-direction: column; }
     .reveal .fp-fig img { display: block; width: 100%; height: auto; margin: 0; background: #fff; border: 6px solid #fff; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
@@ -384,36 +378,61 @@
     #fm-workflow-fm .wf-box span { position: absolute; left: -3px; bottom: 100%; margin-bottom: 4pt; white-space: nowrap; font-family: var(--lc-font-ui); font-size: 14pt; font-weight: 600; color: var(--lc-highlight); }
     /* Part 1: technological advances (AION-1, AION-Search). */
     #fm-advances .collab-logo { height: 36px; top: 18px; }
-    #fm-advances .ad-layout { display: grid; grid-template-columns: 1fr 1.12fr; grid-template-rows: repeat(4, auto); column-gap: 26pt; row-gap: 0; text-align: left; }
-    #fm-advances .ad-col { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+    #fm-advances .ad-layout { display: grid; grid-template-columns: 1fr 1.12fr; grid-template-rows: repeat(5, auto); column-gap: 26pt; row-gap: 0; text-align: left; }
+    #fm-advances .ad-col { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
+    #fm-advances .ad-col .ad-cite { grid-row: 5; }  /* both citations share the last subgrid row */
     #fm-advances .ad-head { display: flex; align-items: center; gap: 9pt; margin: 0 0 10pt 0; font-family: var(--lc-font-heading); font-weight: 400; font-size: 21pt; color: var(--lc-text); }
     #fm-advances .ad-head i { color: var(--lc-warm); font-size: 16pt; }
-    #fm-advances .ad-graph { display: block; align-self: center; width: 76%; height: auto; margin: 0 auto; border: none; box-shadow: none; border-radius: 0; background: transparent; }
+    #fm-advances .ad-graph { display: block; align-self: center; width: 84%; height: auto; margin: 0 auto; border: none; box-shadow: none; border-radius: 0; background: transparent; }
     #fm-advances .ad-text { margin: 8pt 0 0 0; font-size: 16pt; line-height: 1.4; color: #4a505c; }
     #fm-advances .ad-text b { color: var(--lc-text); }
     #fm-advances .ad-chips { display: flex; flex-wrap: wrap; gap: 6pt; margin-top: 10pt; }
     #fm-advances .ad-chips span { padding: 3pt 10pt; background: rgba(var(--lc-warm-rgb), 0.14); font-family: var(--lc-font-ui); font-size: 13pt; color: var(--lc-text); }
     #fm-advances .ad-cite { display: flex; align-items: center; gap: 6pt; margin: 10pt 0 0 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); }
     #fm-advances .ad-cite img { display: block; height: 16pt; margin: 0; border: none; box-shadow: none; }
-    #fm-advances .ad-video { width: 88%; margin: 0 auto; align-self: center; }
+    #fm-advances .ad-video { width: 94%; margin: 0 auto; align-self: center; }
     #fm-advances .ad-video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 6px solid #fff; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
     /* Part 1: takeaways for the Schmidt Observatory System. */
-    #fm-invest .tk-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30pt; align-items: center; max-width: 1110px; margin: 0 auto; text-align: left; }
-    #fm-invest .tk-list { list-style: none; margin: 0; padding: 0; }
-    #fm-invest .tk-list li { position: relative; padding-left: 22pt; font-size: 17pt; line-height: 1.4; color: #4a505c; }
-    #fm-invest .tk-list li + li { margin-top: 12pt; }
-    #fm-invest .tk-list li::before { content: ''; position: absolute; left: 3pt; top: 0.55em; width: 9pt; height: 9pt; background: var(--lc-warm); }
-    #fm-invest .tk-list li b { color: var(--lc-text); }
-    #fm-invest .tk-side { display: flex; flex-direction: column; }
-    #fm-invest .tk-aside { margin: 0 0 8pt 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 16pt; color: var(--lc-text); }
-    #fm-invest .tk-shot { margin: 0; }
-    #fm-invest .tk-shot img { display: block; width: 100%; height: auto; aspect-ratio: 942 / 480; object-fit: cover; object-position: top; margin: 0; border: 1px solid #d9d6ce; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
-    #fm-invest .tk-src { margin: 6pt 0 0 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); text-align: right; }
-    #fm-invest .tk-src a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
-    #fm-invest .iv-schmidt { max-width: 1110px; margin: 24pt auto 0; }
+    /* Opening state: the CERN x Mistral announcement, big; it then gives way
+       (same stack cell) to the infrastructure diagram. Schmidt row stays below. */
+    #fm-invest .iv-stage { width: 100%; max-width: 1110px; margin: 0 auto; }
+    #fm-invest .iv-infra { width: 100%; }
+    #fm-invest .iv-news { margin: 0 auto; }
+    #fm-invest .iv-shot { margin: 0; }
+    #fm-invest .iv-shot img { display: block; width: auto; height: 560px; margin: 0; border: 1px solid #d9d6ce; border-radius: 0; box-shadow: 0 18px 38px -22px rgba(20, 30, 50, 0.55); }
+    #fm-invest .iv-src { margin: 6pt 0 0 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-muted); text-align: right; }
+    #fm-invest .iv-src a { color: var(--lc-secondary); text-decoration: none; border-bottom: 1px solid var(--lc-secondary); }
+    /* Diagram: models live inside the data infrastructure, versioned with the
+       releases, and reach the research environment through standard APIs. */
+    #fm-invest .rq-diagram { display: grid; grid-template-columns: 1fr 150px 300px; align-items: center; max-width: 1110px; margin: 0 auto; text-align: left; }
+    #fm-invest .rq-frame { position: relative; padding: 24pt 16pt 14pt; border: 1.5px dashed rgba(var(--lc-primary-rgb), 0.5); border-radius: 6px; }
+    #fm-invest .rq-frame__label { position: absolute; top: 7pt; left: 16pt; margin: 0; font-family: var(--lc-font-ui); font-size: 10.5pt; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lc-primary); }
+    #fm-invest .rq-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; }
+    #fm-invest .rq-node { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72px; padding: 8pt 12pt; background: rgba(var(--lc-primary-rgb), 0.08); border: 1px solid rgba(var(--lc-primary-rgb), 0.35); border-radius: 4px; font-family: var(--lc-font-heading); font-size: 19pt; line-height: 1.2; color: var(--lc-text); text-align: center; }
+    #fm-invest .rq-node--models { background: rgba(var(--lc-warm-rgb), 0.14); border-color: rgba(var(--lc-warm-rgb), 0.6); }
+    #fm-invest .rq-node small { display: block; margin-top: 3pt; font-family: var(--lc-font-ui); font-size: 12.5pt; color: #4a505c; }
+    #fm-invest .rq-arrow { position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 10pt; }
+    #fm-invest .rq-arrow__lab { margin: 0 0 4pt 0; font-family: var(--lc-font-ui); font-size: 12pt; color: var(--lc-primary); white-space: nowrap; }
+    #fm-invest .rq-arrow__line { position: relative; width: 100%; height: 2px; background: rgba(var(--lc-primary-rgb), 0.5); }
+    #fm-invest .rq-arrow__line::after { content: ''; position: absolute; right: -1px; top: -5px; border: 6px solid transparent; border-left: 9px solid rgba(var(--lc-primary-rgb), 0.7); border-right: 0; }
+    #fm-invest .rq-node--env { min-height: 96px; }
+    #fm-invest .rq-tag { max-width: 1180px; margin: 24pt auto 0; font-family: var(--lc-font-heading); font-style: italic; font-size: 21pt; line-height: 1.3; color: var(--lc-primary); text-wrap: balance; }
+    #fm-invest .rq-tag b { font-weight: 700; color: var(--lc-text); }
+    #fm-invest .iv-schmidt { width: 100%; max-width: 1110px; margin: 0 auto; }
+    #fm-invest .iv-arch { margin-top: 0; }
+    #fm-invest .iv-sep { width: 70%; height: 1px; margin: 22pt auto 20pt; border: none; background: linear-gradient(to right, transparent, rgba(var(--lc-primary-rgb), 0.28) 20%, rgba(var(--lc-primary-rgb), 0.28) 80%, transparent); }
     #fm-invest .iv-lead { margin: 0 0 8pt 0; font-family: var(--lc-font-heading); font-size: 18pt; color: var(--lc-highlight); }
     #fm-invest .iv-lead b { color: inherit; }
-    #fm-invest .iv-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14pt; }
+    #fm-invest .iv-row { display: grid; grid-template-columns: repeat(3, 1fr) 0.5fr; gap: 12pt; align-items: stretch; }
+    /* Chips that carry the funded programme's logo under the label. */
+    #fm-invest .iv-chip--logo { flex-direction: column; align-items: center; justify-content: space-between; gap: 5pt; padding: 7pt 14pt 8pt; }
+    #fm-invest .iv-chip--logo > b { font-family: var(--lc-font-ui); font-size: 15pt; font-weight: 400; line-height: 1.2; color: var(--lc-text); white-space: nowrap; }
+    #fm-invest .iv-logo { display: block; width: auto; margin: 0; border: none; box-shadow: none; border-radius: 0; background: transparent; }
+    #fm-invest .iv-logo--sos { height: 46px; }
+    #fm-invest .iv-logo--lincc { height: 42px; }
+    #fm-invest .iv-logo--poly { height: 27px; margin: 7px 0 8px; }
+    /* The one ingredient not (yet) on the list: dashed, unfilled. */
+    #fm-invest .iv-chip--open { justify-content: center; background: transparent; box-shadow: none; border: 1.5px dashed rgba(var(--lc-highlight-rgb), 0.55); border-left-width: 3px; }
     #fm-invest .iv-chip { display: flex; align-items: center; gap: 12pt; padding: 7pt 14pt; background: var(--lc-surface-lowest); border-left: 3px solid var(--lc-highlight); box-shadow: 0 10px 24px -16px rgba(78, 90, 112, 0.35); text-align: left; }
     #fm-invest .iv-chip i { font-size: 18pt; color: var(--lc-highlight); width: 24pt; text-align: center; }
     #fm-invest .iv-chip span { display: flex; flex-direction: column; font-family: var(--lc-font-ui); font-size: 15pt; line-height: 1.2; color: var(--lc-text); }
@@ -461,9 +480,9 @@
     #astra-schema .as-recipe__d { color: #8a6530; }
     #astra-schema .as-recipe__i { color: #4e5a70; }
     #astra-schema .as-props { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: start; width: 1160px; margin: 8pt auto 0; padding-top: 10pt; border-top: 1px solid rgba(var(--lc-primary-rgb), 0.18); text-align: left; }
-    #astra-schema .as-props p { display: flex; align-items: flex-start; gap: 10pt; margin: 0; font-size: 11.5pt; line-height: 1.32; color: #4a505c; }
+    #astra-schema .as-props p { display: flex; align-items: flex-start; gap: 10pt; margin: 0; font-size: 13pt; line-height: 1.32; color: #4a505c; }
     #astra-schema .as-props p i { flex: none; width: 26pt; height: 26pt; display: inline-flex; align-items: center; justify-content: center; background: var(--lc-primary); color: #fff; font-size: 12pt; border-radius: 0; }
-    #astra-schema .as-props b { display: block; font-family: var(--lc-font-heading); font-weight: 400; font-size: 14pt; color: var(--lc-text); margin-bottom: 1pt; }
+    #astra-schema .as-props b { display: block; font-family: var(--lc-font-heading); font-weight: 400; font-size: 16pt; color: var(--lc-text); margin-bottom: 1pt; }
     #astra-schema .as-links { display: flex; flex-direction: column; align-items: flex-start; gap: 7pt; }
     #astra-schema .as-link { display: inline-flex; align-items: center; gap: 6pt; font-family: var(--lc-font-ui); font-size: 12.5pt; font-weight: 600; color: var(--lc-secondary); text-decoration: none; border-bottom: 1.5px solid var(--lc-secondary); white-space: nowrap; }
     /* Slide 5: how we build it — describe / execute & record / explain, in one repository. */
@@ -713,10 +732,37 @@
       </section>
 
       <!-- ================================================================== -->
+      <!-- FRAMING — the question the talk tries to answer                    -->
+      <!-- ================================================================== -->
+      <section id="framing" class="no-brand-mark">
+        <div class="fr-inner">
+          <p class="fr-question">What would an <b>AI-forward research environment</b> for the Schmidt Observatory System look like?</p>
+
+          <div class="fr-contrast fragment fade-up" data-fragment-index="0">
+            <div class="fr-card fr-card--ai">
+              <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+              <span class="fr-card__label">AI capabilities</span>
+              <span class="fr-card__scale">Months</span>
+              <span class="fr-card__desc">Rapidly evolving technologies</span>
+            </div>
+            <span class="fr-vs">vs</span>
+            <div class="fr-card fr-card--obs">
+              <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+              <span class="fr-card__label">Observatory infrastructure</span>
+              <span class="fr-card__scale">Decades</span>
+              <span class="fr-card__desc">Long-lived scientific investments</span>
+            </div>
+          </div>
+
+          <p class="fr-followup fragment fade-up" data-fragment-index="1">We cannot predict the tools of tomorrow, but we can <b>anticipate some of the infrastructure</b> they will need.</p>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
       <!-- PART 1 — Foundation models served by the data system (~2 min)       -->
       <!-- ================================================================== -->
       <section id="fm-boom" class="no-brand-mark">
-        <h2 style="font-size: 28pt; margin-bottom: 4pt;">The deep learning boom in astrophysics</h2>
+        <h2 style="font-size: 28pt; margin-bottom: 4pt;">The Deep Learning boom in Astrophysics</h2>
         <p class="cite-line">Huertas-Company &amp; Lanusse 2023 <a href="https://arxiv.org/abs/2210.01813" target="_blank"><img src="https://img.shields.io/badge/arXiv-2210.01813-B31B1B.svg" class="plain" style="height:18px;vertical-align:middle;" alt="arXiv 2210.01813"></a></p>
         <p class="db-sub">astro-ph papers per year whose abstract mentions deep learning, neural networks or CNNs</p>
         <div class="db-wrap">
@@ -905,30 +951,28 @@
         <div class="wf-takes">
         <p class="fm-bet wf-take fragment" data-fragment-index="0">
           <i class="fa-solid fa-arrow-right-long"></i>
-          <span>Deep learning becomes <strong>a tool for every astronomer</strong>, not a research project, and greatly speeds up <strong>time to science</strong>.</span>
+          <span>Deep learning becomes <strong>a tool for any astronomer</strong>, not a research project in itself.</span>
         </p>
         <p class="fm-bet wf-take fragment" data-fragment-index="1">
           <i class="fa-solid fa-arrow-right-long"></i>
-          <span>Foundation models bear a strong parallel to <strong>research software infrastructure</strong>: reusable, and able to <strong>serve a whole community</strong>.</span>
+          <span>A <strong>reusable model</strong> is an investment that can serve an <strong>entire scientific community</strong>, much like a <strong>software library</strong>.</span>
         </p>
         </div>
       </section>
 
       <section id="fm-advances" class="no-brand-mark">
         <img class="collab-logo" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI">
-        <h2 style="font-size: 28pt; margin-bottom: 14pt;">Recent advances boost reusability and versatility</h2>
+        <h2 style="font-size: 28pt; margin-bottom: 14pt;">Recent advances make models increasingly versatile</h2>
 
         <div class="ad-layout">
           <div class="ad-col">
             <h4 class="ad-head"><i class="fa-solid fa-layer-group"></i>Multimodal and multi-science</h4>
             <img class="ad-graph" src="../assets/aion/aion_crossmatch_graph.png" alt="AION-1 training data: Legacy Survey, HSC, SDSS, DESI and Gaia, cross-matched on the same objects">
             <p class="ad-text">AION-1 learns jointly from <b>39 modalities</b> across five surveys: images, spectra and catalog values for 200M+ observations.</p>
-            <div class="ad-extra">
-              <div class="ad-chips">
-                <span>Galaxy formation</span><span>Cosmology</span><span>Stellar physics</span><span>Galactic archaeology</span>
-              </div>
-              <p class="ad-cite">Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></p>
+            <div class="ad-chips">
+              <span>Galaxy formation</span><span>Cosmology</span><span>Stellar physics</span><span>Galactic archaeology</span>
             </div>
+            <p class="ad-cite">Parker et al. 2025 <a href="https://arxiv.org/abs/2510.17960" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.17960-B31B1B.svg" class="plain" alt="arXiv 2510.17960"></a></p>
           </div>
 
           <div class="ad-col fragment fade-up">
@@ -943,44 +987,48 @@
       </section>
 
       <section id="fm-invest" class="no-brand-mark">
-        <h2 style="font-size: 28pt; margin-bottom: 18pt;">Takeaways for the Schmidt Observatory System</h2>
+        <h2 style="font-size: 28pt; margin-bottom: 14pt;">Foundation models as part of scientific data infrastructure</h2>
 
-        <div class="tk-layout">
-          <ul class="tk-list">
-            <li><b>Foundation models are research infrastructure:</b> built once, reused by everyone, like software.</li>
-            <li class="fragment" data-fragment-index="0"><b>Plan for them from day one:</b> serve models and embeddings next to the data, versioned with each release, behind standard APIs.</li>
-            <li class="fragment" data-fragment-index="1"><b>The observatory system is multimodal by design:</b> imaging, spectroscopy and radio across facilities, exactly where multimodal models shine.</li>
-            <li class="fragment" data-fragment-index="2"><b>The ingredients are rare:</b> data infrastructure, ML expertise and compute (AION-1: ~1,500 H100 GPUs on Jean Zay). Others are starting to invest.</li>
-          </ul>
-
-          <div class="tk-side fragment fade-up" data-fragment-index="2">
-            <p class="tk-aside">Apparently, I'm not the only one to think so&hellip;</p>
-            <figure class="tk-shot">
+        <div class="iv-stage r-stack">
+          <div class="iv-news fragment fade-out" data-fragment-index="0">
+            <figure class="iv-shot">
               <img src="../assets/cern_mistral_2026.png" alt="CERN press release, 15 October 2026: CERN and Mistral join forces to accelerate AI for science">
             </figure>
-            <p class="tk-src"><a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/" target="_blank" rel="noopener">home.cern</a> &middot; 15 October 2026</p>
+            <p class="iv-src"><a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/" target="_blank" rel="noopener">home.cern</a> &middot; 15 October 2026</p>
           </div>
-        </div>
 
-        <div class="iv-schmidt fragment fade-up" data-fragment-index="3">
-          <p class="iv-lead"><b>Schmidt Sciences</b> already supports</p>
-          <div class="iv-row">
-            <div class="iv-chip"><i class="fa-solid fa-satellite-dish"></i><span><b>The observatory</b><small>Eric &amp; Wendy Schmidt Observatory System</small></span></div>
-            <div class="iv-chip"><i class="fa-solid fa-database"></i><span><b>The data infrastructure</b><small>LINCC Frameworks</small></span></div>
-            <div class="iv-chip"><i class="fa-solid fa-cubes"></i><span><b>Foundation-model expertise</b><small>Polymathic AI</small></span></div>
+          <div class="iv-infra fragment fade-in" data-fragment-index="0">
+            <div class="iv-schmidt">
+              <p class="iv-lead"><b>Schmidt Sciences</b> already funds key ingredients</p>
+              <div class="iv-row">
+                <div class="iv-chip iv-chip--logo"><b>The instrument</b><img class="iv-logo iv-logo--sos" src="../assets/schmidt_observatory_system_logo.png" alt="The Eric and Wendy Schmidt Observatory System"></div>
+                <div class="iv-chip iv-chip--logo"><b>The data infrastructure</b><img class="iv-logo iv-logo--lincc" src="../assets/lincc_frameworks_logo.png" alt="LINCC Frameworks"></div>
+                <div class="iv-chip iv-chip--logo"><b>Foundation-model expertise</b><img class="iv-logo iv-logo--poly" src="../assets/polymathic_logo_dark.png" alt="Polymathic AI"></div>
+                <div class="iv-chip iv-chip--open"><i class="fa-solid fa-microchip"></i><span><b>Compute</b></span></div>
+              </div>
+            </div>
+
+            <div class="iv-arch fragment fade-up" data-fragment-index="1">
+              <hr class="iv-sep" aria-hidden="true">
+              <div class="rq-diagram">
+                <div class="rq-frame">
+                  <p class="rq-frame__label">Observatory data infrastructure</p>
+                  <div class="rq-boxes">
+                    <div class="rq-node">Data releases<small>images, spectra, catalogs</small></div>
+                    <div class="rq-node rq-node--models">Models &amp; embeddings<small>served next to the data</small></div>
+                  </div>
+                </div>
+                <div class="rq-arrow">
+                  <p class="rq-arrow__lab">standard APIs</p>
+                  <span class="rq-arrow__line" aria-hidden="true"></span>
+                </div>
+                <div class="rq-node rq-node--env">Research environment<small>notebooks, pipelines, agents</small></div>
+              </div>
+
+              <p class="rq-tag">Accessing foundation models should become <b>as natural as accessing observational data</b>.</p>
+            </div>
+
           </div>
-        </div>
-      </section>
-
-      <!-- ================================================================== -->
-      <!-- TRANSITION — from foundation models to research agents             -->
-      <!-- ================================================================== -->
-      <section id="divider-agents" data-background-glow>
-        <div class="divider-inner">
-          <i class="fa-solid fa-jedi divider-icon" aria-hidden="true"></i>
-          <div class="divider-title">This is not the AI you are looking for</div>
-          <hr style="width: 80px; margin: 22pt auto 0;">
-          <p class="divider-sub">From foundation models to research agents</p>
         </div>
       </section>
 
@@ -988,63 +1036,50 @@
       <!-- PART 2 — Research agents (~10 min), adapted from slides-london     -->
       <!-- 2. TAKEAWAYS — early machine-scale discovery (Navier–Stokes)        -->
       <!-- ================================================================== -->
-      <section id="ns-case">
-        <h2 style="font-size: 25pt; margin-bottom: 10pt;">Takeaways from early examples of machine-scale discovery</h2>
+      <section id="ns-case" class="no-brand-mark">
+        <h2 style="font-size: 28pt; margin-bottom: 12pt;">A glimpse of machine-scale scientific discovery</h2>
 
         <div class="ns-layout">
-
-          <!-- The example: OpenAI's announcement figure -->
           <figure class="ns-figure">
             <img src="../assets/lightcone/openai_navier_stokes_spiral_white.jpg"
-                 alt="OpenAI's illustration of the blow-up mechanism: a swirling vortex with an inward spiral and axial stretching.">
-            <figcaption>
-              <p class="evidence-eyebrow" style="color: var(--lc-primary); margin-bottom: 4pt;">OpenAI &middot; 8 Sept 2026</p>
-              <p class="ns-figure__headline">&ldquo;An OpenAI model proposes a solution to the Navier&ndash;Stokes Millennium Prize Problem&rdquo;</p>
-              <p class="evidence-source">Image: OpenAI. Finite-time blow-up with forcing (Clay alternatives C &amp; D).</p>
-            </figcaption>
+                 alt="OpenAI's illustration of the proposed blow-up mechanism: a swirling vortex with an inward spiral and axial stretching.">
+            <figcaption><b>OpenAI, September 2026:</b> a proposed construction for the <em>forced</em> Navier&ndash;Stokes problem. Image: OpenAI.</figcaption>
           </figure>
 
-          <!-- Two realizations -->
-          <div class="lessons">
-
-            <div class="card-glow evidence-card lesson fragment fade-up" style="border-left: 3px solid var(--lc-accent);">
-              <p class="evidence-eyebrow" style="color: var(--lc-accent);">
-                <i class="fa-solid fa-layer-group" style="margin-right: 5pt;"></i>1 &middot; Substrate for machine research
-              </p>
-              <div class="crystal-row">
-                <div class="scale-cell"><b>~130B tokens</b><span>from ~10,000 agents</span></div>
-                <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
-                <div class="scale-cell"><b>Lean + Mathlib</b><span>the format to check and extend it</span></div>
+          <div class="ns-obs-list">
+            <div class="ns-obs fragment fade-up" data-fragment-index="0" style="--obs: var(--lc-secondary);">
+              <span class="ns-obs__num">1</span>
+              <div>
+                <p class="ns-obs__title">Agentic Research Engine</p>
+                <p class="ns-obs__text">Large numbers of agents conducting investigations at machine scale.</p>
+                <p class="ns-obs__stat"><b>~10,000 agents</b> &middot; <b>~130B tokens</b> exchanged</p>
               </div>
-              <p class="lesson__implication">
-                <i class="fa-solid fa-arrow-right-long"></i>
-                <span>Machine-scale research requires a shared, verifiable, machine-native substrate</span>
-              </p>
             </div>
-
-            <div class="card-glow evidence-card lesson fragment fade-up" style="border-left: 3px solid var(--lc-warm);">
-              <p class="evidence-eyebrow" style="color: var(--lc-warm);">
-                <i class="fa-solid fa-people-group" style="margin-right: 5pt;"></i>2 &middot; Connection to human science
-              </p>
-              <p class="lesson__quote">
-                &ldquo;Our ideas we disseminate in talks, private discussions and careful writeups, connecting them to the
-                previous ideas of others. These processes invariably take time and are based on human interaction.&rdquo;
-                <cite>&mdash; <em>A Severe Misalignment of AI in Mathematics</em>, signed by 28 Fields Medallists, 11 Sept 2026</cite>
-              </p>
-              <p class="lesson__implication">
-                <i class="fa-solid fa-arrow-right-long"></i>
-                <span>Staying connected to human scientific communities imposes fundamental boundary conditions</span>
-              </p>
+            <div class="ns-obs fragment fade-up" data-fragment-index="1" style="--obs: var(--lc-accent);">
+              <span class="ns-obs__num">2</span>
+              <div>
+                <p class="ns-obs__title">Research Substrate</p>
+                <p class="ns-obs__text">Lean and Mathlib provide a formal representation that can be checked and extended.</p>
+              </div>
             </div>
-
+            <div class="ns-obs fragment fade-up" data-fragment-index="2" style="--obs: var(--lc-warm);">
+              <span class="ns-obs__num">3</span>
+              <div>
+                <p class="ns-obs__title">Human Boundary Conditions</p>
+                <p class="ns-obs__text">Scientists still need to understand, evaluate and build upon the results.</p>
+                <p class="ns-obs__cite">&ldquo;Our ideas we disseminate in talks, private discussions and careful writeups, connecting them to the previous ideas of others. These processes invariably take time and are based on human interaction.&rdquo; <cite>&mdash; <em>A Severe Misalignment of AI in Mathematics</em>, 28 Fields Medallists, Sept 2026</cite></p>
+              </div>
+            </div>
           </div>
         </div>
+
+        <p class="ns-key fragment fade-up" data-fragment-index="3">We don't know what future research agents will look like. But whatever their architecture, they will need a way to <b>preserve their work</b>, and to <b>connect it to human science</b>.</p>
       </section>
 
       <!-- ================================================================== -->
       <!-- 3. THE CORPUS — machine layer, human layer, distillation/impulse     -->
       <!-- ================================================================== -->
-      <section id="corpus" class="corpus-slide">
+      <section id="corpus" class="corpus-slide no-brand-mark">
         <h2 style="font-size: 25pt; margin-bottom: 18pt;">Machine-scale research that preserves human understanding and agency</h2>
 
         <div class="corpus-diagram">
@@ -1074,9 +1109,9 @@
             </div>
             <p class="layer__label">The record must be</p>
             <ul class="props">
-              <li><i class="fa-solid fa-check"></i><span>Standardized</span><small>a common format that makes the work shareable with any person or agent</small></li>
-              <li><i class="fa-solid fa-check"></i><span>Verifiable</span><small>every result can be checked and traced to how it was made</small></li>
-              <li><i class="fa-solid fa-check"></i><span>Compounding</span><small>new work builds directly on prior results</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Standardized</span></li>
+              <li><i class="fa-solid fa-check"></i><span>Verifiable</span></li>
+              <li><i class="fa-solid fa-check"></i><span>Compounding</span></li>
             </ul>
             <div style="flex: 1;"></div>
             <p class="layer__takeaway fragment" data-fragment-index="5">
@@ -1122,9 +1157,9 @@
             </div>
             <p class="layer__label">The record must support</p>
             <ul class="props">
-              <li><i class="fa-solid fa-check"></i><span>Human understanding</span><small>people need to understand enough to assess, use, and redirect the work</small></li>
-              <li><i class="fa-solid fa-check"></i><span>Human communication</span><small>insights travel through talks, discussions and careful writeups</small></li>
-              <li><i class="fa-solid fa-check"></i><span>Human agency</span><small>people own the questions, out of curiosity or for social good</small></li>
+              <li><i class="fa-solid fa-check"></i><span>Human understanding</span></li>
+              <li><i class="fa-solid fa-check"></i><span>Human communication</span></li>
+              <li><i class="fa-solid fa-check"></i><span>Human agency</span></li>
             </ul>
             <div style="flex: 1;"></div>
             <p class="layer__takeaway fragment" data-fragment-index="5">
@@ -1135,32 +1170,18 @@
 
         </div>
 
-        <p class="bet fragment" data-fragment-index="6">
-          <i class="fa-solid fa-arrow-right-long"></i>
-          <span>Our bet: invest in shared, durable <strong class="bet__em">building blocks</strong> designed around these boundary conditions.</span>
-        </p>
-
-        <div class="pillars fragment fade-up" data-fragment-index="7">
-          <div class="pillar pillar--astra" style="border-top: 3px solid var(--lc-secondary);">
-            <div class="pillar__head"><i class="pillar__icon fa-solid fa-diagram-project" style="color: var(--lc-secondary);"></i><p class="pillar__name">ASTRA</p></div>
-            <p class="pillar__what">An open standard for <strong>AI-generated research</strong>, with trust, composition and reuse built in.</p>
-          </div>
-          <div class="pillar" style="border-top: 3px solid var(--lc-warm);">
-            <div class="pillar__head"><i class="pillar__icon fa-regular fa-file-lines" style="color: var(--lc-warm);"></i><p class="pillar__name">MySTRA</p><img class="pillar__logo" src="../assets/myst-logo.svg" alt="MyST"></div>
-            <p class="pillar__what">A bridge from the machine record to <strong>human&#8209;authored publications</strong>.</p>
-          </div>
-          <div class="pillar" style="border-top: 3px solid var(--lc-accent);">
-            <div class="pillar__head"><i class="pillar__icon fa-solid fa-flask" style="color: var(--lc-accent);"></i><p class="pillar__name">Lightcone Lab</p><img class="pillar__logo" src="../assets/lightcone/jupyter-logo.svg" alt="Jupyter"></div>
-            <p class="pillar__what">An open research workbench for ASTRA analyses, where <strong>people direct the work</strong>.</p>
-          </div>
-        </div>
+        <p class="corpus-key fragment fade-up" data-fragment-index="6">A <b>shared research record</b> can connect machine-scale investigations to human-scale scientific understanding.</p>
       </section>
 
       <!-- ================================================================== -->
-      <!-- 4b. THE ASTRA STANDARD — its node types, as a small schema diagram  -->
+      <!-- 4b. ASTRA (vertical stack: the schema slide, then the live record    -->
+      <!--     graph below it, then the paper below that)                       -->
       <!-- ================================================================== -->
+      <section class="no-brand-mark">
+
       <section id="astra-schema">
-        <h2 style="font-size: 26pt; margin-bottom: 16pt;">ASTRA: Agentic Schema for Transparent Research Analysis</h2>
+        <h2 style="font-size: 26pt; margin-bottom: 16pt;">ASTRA: a shared scientific research record</h2>
+
 
         <div class="as-stage">
           <svg class="as-edges" viewBox="0 0 1160 400" width="1160" height="400" aria-hidden="true">
@@ -1227,18 +1248,15 @@
           <div class="as-node fragment" data-fragment-index="1" style="left: 300px; top: 298px; --k: #3b7a73;">
             <p class="as-type"><span>&#9670;</span>Output &middot; data</p>
             <p class="as-title">Orbit fit</p>
-            <code class="as-recipe"><span class="as-recipe__cmd">python fit_orbit.py</span><span>--potential <i class="as-recipe__d">{decisions.potential}</i></span></code>
           </div>
           <div class="as-node fragment" data-fragment-index="1" style="left: 600px; top: 298px; --k: #3b7a73;">
             <p class="as-type"><span>&#9670;</span>Output &middot; data</p>
             <p class="as-title">Particle-spray toy streams</p>
-            <code class="as-recipe"><span class="as-recipe__cmd">python spray_stream.py</span><span>--mass <i class="as-recipe__d">{decisions.progenitor_mass}</i></span></code>
           </div>
           <div class="as-node as-node--figure fragment" data-fragment-index="1" style="left: 900px; top: 0; --k: #3b7a73;">
             <p class="as-type"><span>&#9670;</span>Output &middot; figure</p>
             <img src="../assets/lightcone/astra-graph/figures/figure2_track_observables.jpg" alt="">
             <p class="as-title">Figure 2: data vs toy streams</p>
-            <code class="as-recipe"><span class="as-recipe__cmd">python plot_density.py</span><span>--models <i class="as-recipe__i">{outputs.toy_streams}</i></span></code>
           </div>
           <div class="as-node fragment" data-fragment-index="3" style="left: 900px; top: 298px; --k: #a45a43;">
             <p class="as-type"><span>&#9679;</span>Finding</p>
@@ -1248,9 +1266,9 @@
         </div>
 
         <div class="as-props fragment fade-up" data-fragment-index="4">
-          <p><i class="fa-solid fa-fingerprint"></i><span><b>Provenance&#8209;certified</b>Every plot, number and claim ties back to the data, code and decisions that produced it.</span></p>
-          <p><i class="fa-solid fa-magnifying-glass"></i><span><b>Fully observable</b>Code and artifacts, but also every consequential decision and the reasoning behind it, are inspectable.</span></p>
-          <p><i class="fa-solid fa-book-open"></i><span><b>Scientifically legible</b>Organized around the claims, decisions and insights that matter, with direct paths down into the evidence.</span></p>
+          <p><i class="fa-solid fa-fingerprint"></i><span><b>Traceable</b>Results linked to the data, code and choices that produced them.</span></p>
+          <p><i class="fa-solid fa-magnifying-glass"></i><span><b>Inspectable</b>Scientific reasoning and consequential decisions can be examined.</span></p>
+          <p><i class="fa-solid fa-code-branch"></i><span><b>Reusable</b>Research can be shared, continued and branched by other scientists or agents.</span></p>
           <div class="as-links">
             <a class="as-link" href="https://astra-spec.org" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i>astra&#8209;spec.org</a>
             <a class="as-link" href="https://zenodo.org/records/20181269/preview/Lanusse_Parker_2026.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i>Position paper</a>
@@ -1258,83 +1276,7 @@
         </div>
       </section>
 
-      <!-- ================================================================== -->
-      <!-- 5. HOW WE BUILD IT (vertical stack: architecture, the record graph, then the paper)  -->
-      <!-- ================================================================== -->
-      <section class="no-brand-mark">
-
-      <section id="approach">
-        <h2 style="font-size: 26pt; margin-bottom: 12pt;">Structure of an ASTRA project managed by an AI agent</h2>
-
-        <div class="ar">
-          <p class="ar__repo"><i class="fa-solid fa-folder-tree"></i>one ASTRA project &middot; one git repository</p>
-
-          <div class="ar__cols">
-            <!-- 1 · describe -->
-            <div class="ar__col fragment fade-up" data-fragment-index="1">
-              <div class="ar__head"><img src="../assets/lightcone/logos/astra.svg" alt="ASTRA" class="ar__logo"><div><p class="ar__step">1 &middot; Describe</p><p class="ar__name">ASTRA</p></div></div>
-              <pre class="ar__code ar__code--yaml"><span class="k">prior_insights:</span>
-  <span class="k">gaussian_noise:</span>
-    <span class="k">claim:</span> <span class="s">noise is Gaussian at this depth</span>
-<span class="k">decisions:</span>
-  <span class="k">noise_model:</span>
-    <span class="k">rationale:</span> <span class="s">drives the error budget</span>
-    <span class="k">options:</span>
-      <span class="k">gaussian:</span>
-        <span class="k">insights:</span> <span class="p">[</span><span class="ref">gaussian_noise</span><span class="p">]</span>
-      <span class="k">heavy_tailed:</span>
-        <span class="k">excluded:</span> <span class="b">true</span>
-<span class="k">outputs:</span>
-  <span class="p">-</span> <span class="k">id:</span> <span class="id">fit_results</span>
-    <span class="k">decisions:</span> <span class="p">[</span><span class="ref">noise_model</span><span class="p">]</span>
-    <span class="k">recipe:</span>
-      <span class="k">command:</span> <span class="s">python fit.py</span> <span class="ph">{decisions.noise_model}</span></pre>
-              <p class="ar__file"><code>astra.yaml</code> The analysis as structured data: <b>insights</b>, <b>decisions</b>, <b>rationale</b>, <b>recipes</b>, <b>outputs</b>, <b>findings</b>.</p>
-            </div>
-
-            <!-- 2 · execute and record -->
-            <div class="ar__col ar__col--mid fragment fade-up" data-fragment-index="2">
-              <div class="ar__head"><img src="../assets/lightcone/logos/lightcone-mark.svg" alt="Lightcone" class="ar__logo"><div><p class="ar__step">2 &middot; Execute &amp; record</p><p class="ar__name">Lightcone CLI</p></div></div>
-              <div class="ar__layer">
-                <span class="ar__logos"><img src="../assets/lightcone/logos/git.svg" alt="git"><img src="../assets/lightcone/logos/git-annex.svg" alt="git-annex"></span>
-                <p><b>Code and artifact versioning</b> Code and spec in git, data and results in git-annex: every output committed with a content-addressed run record.</p>
-              </div>
-              <div class="ar__layer">
-                <span class="ar__logos"><img src="../assets/lightcone/logos/uv.svg" alt="uv"><i class="fa-brands fa-docker ar__docker" aria-label="Docker"></i></span>
-                <p><b>Reusable environment</b> A uv lockfile, optionally in a container image, hashed on every output; recipes run sandboxed.</p>
-              </div>
-              <div class="ar__layer">
-                <span class="ar__logos ar__logos--grid"><img src="../assets/lightcone/logos/kubernetes.svg" alt="Kubernetes"><img src="../assets/lightcone/logos/dask.svg" alt="Dask"><img src="../assets/lightcone/logos/slurm.png" alt="Slurm" class="slurm"></span>
-                <p><b>Connection to compute</b> From a laptop to Dask, Kubernetes or Slurm clusters, under the same run record.</p>
-              </div>
-              <div style="flex: 1;"></div>
-              <p class="ar__file"><code>lc</code> An agentic CLI that any agent harness can drive. Every output it produces carries <b>certified provenance</b>: what ran, on which inputs, in which environment, under which sandbox.</p>
-            </div>
-
-            <!-- 3 · explain -->
-            <div class="ar__col fragment fade-up" data-fragment-index="3">
-              <div class="ar__head"><img src="../assets/myst-logo.svg" alt="MyST" class="ar__logo ar__logo--wide"><div><p class="ar__step">3 &middot; Explain</p><p class="ar__name">MySTRA</p></div></div>
-              <div style="flex: 1;"></div>
-              <pre class="ar__code ar__code--myst">We adopt the
-<span class="role">{astra}</span><span class="tgt">`decisions.noise_model`</span>
-and measure the amplitude at
-<span class="role">{astra:value}</span><span class="tgt">`outputs.fit_results`</span>.
-
-<span class="dir">:::</span><span class="role">{astra}</span> <span class="tgt">outputs.residual_check</span>
-<span class="dir">:::</span></pre>
-              <div style="flex: 1;"></div>
-              <p class="ar__file"><code>index.md</code> A human write-up that cites the record instead of copying it, so numbers and figures never drift.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="ar__share fragment fade-up" data-fragment-index="4">
-          <i class="fa-brands fa-github"></i>
-          <p><b>Pushed to any git host, every output becomes citable.</b> Another analysis consumes <code>fit_results@released_v1</code> at a pinned commit, without re-running it.</p>
-        </div>
-      </section>
-
-      <!-- 5b. Below slide 5: an ASTRA record, as a live graph. -->
+      <!-- 5a. An ASTRA record, as a live graph. -->
       <section id="approach-record">
         <div class="rg-legend">
           <span><i class="rg-key rg-key--input"></i><i class="rg-glyph" style="color:#4e5a70">&#9636;</i>Input</span>
@@ -1387,49 +1329,63 @@ and measure the amplitude at
       </section>
 
       <!-- ================================================================== -->
-      <!-- 5d. THE ECOSYSTEM — a whiteboard map of open, shareable components  -->
+      <!-- 6. CULMINATION — a collaborative, AI-forward research environment   -->
+      <!--    (built bottom-up: Part 1 resources, Part 2 environment, people)  -->
       <!-- ================================================================== -->
-      <section id="ecosystem">
-        <h2 style="font-size: 26pt; margin-bottom: 12pt;">An ecosystem of open, shareable components</h2>
-        <figure class="eco">
-          <img src="../assets/lightcone/ecosystem-whiteboard.jpg" alt="Whiteboard sketch of the landscape of open components for AI-assisted science, from data and compute up to code, records and the literature">
-          <figcaption>An attempt at mapping the landscape: from data and compute, through code and research records, up to the literature that humans and agents read.</figcaption>
-        </figure>
-      </section>
+      <section id="ai-env" class="no-brand-mark">
+        <h2 style="font-size: 28pt; margin-bottom: 12pt;">Toward a collaborative, AI-forward research environment</h2>
 
-      <!-- ================================================================== -->
-      <!-- 6. OPEN QUESTIONS                                                   -->
-      <!-- ================================================================== -->
-      <section id="open-questions">
-        <h2 style="font-size: 26pt; margin-bottom: 10pt;">Open questions to work on together</h2>
+        <div class="env-diagram">
+          <div class="env-teams fragment fade-up" data-fragment-index="2">
+            <div class="env-teams__head"><i class="fa-solid fa-user-group"></i><span>Scientific teams</span><i class="fa-solid fa-user-group"></i></div>
+            <p>Shared questions &middot; Collaboration &middot; Scientific judgement</p>
+          </div>
+          <div class="env-link fragment" data-fragment-index="2" aria-hidden="true">&#8645;</div>
 
-        <p class="oq-core">What is the necessary and sufficient set of properties for a scientific record to be <span style="color: #426b78;">navigable and certifiable</span> for agents, and <span style="color: #a67c3c;">digestible and understandable</span> for people?</p>
+          <div class="env-box fragment fade-up" data-fragment-index="1">
+            <p class="env-box__label">Shared research environment</p>
+            <div class="env-box__row">
+              <div class="env-part" style="--c: var(--lc-secondary);"><i class="fa-solid fa-robot"></i><b>Research agents</b><span>Execute and investigate</span></div>
+              <div class="env-part" style="--c: var(--lc-highlight);"><i class="fa-solid fa-code-branch"></i><b>Research records</b><span>Preserve and reuse</span></div>
+            </div>
+            <p class="env-box__foot">Shared projects, context and scientific knowledge</p>
+          </div>
+          <div class="env-link fragment" data-fragment-index="1" aria-hidden="true">&#8645;</div>
 
-        <div class="oq">
-          <div class="oq-card fragment fade-up" data-fragment-index="1" style="--c: var(--lc-secondary);">
-            <p class="oq-kicker"><i class="fa-solid fa-square-root-variable"></i>Formalization</p>
-            <p class="oq-q">How far should we formalize?</p>
-            <p class="oq-p">Enough structure for agents to navigate and check, without over-formalizing: leave room for science that does not fit a schema.</p>
-          </div>
-          <div class="oq-card fragment fade-up" data-fragment-index="2" style="--c: var(--lc-accent);">
-            <p class="oq-kicker"><i class="fa-solid fa-clipboard-check"></i>Verification</p>
-            <p class="oq-q">Beyond reproducibility, what should a standard certify?</p>
-            <p class="oq-p">Provenance is certified; robustness to analysis choices, replication and review each need their own evidence.</p>
-          </div>
-          <div class="oq-card fragment fade-up" data-fragment-index="3" style="--c: var(--lc-warm);">
-            <p class="oq-kicker"><i class="fa-solid fa-fingerprint"></i>Addressability</p>
-            <p class="oq-q">How do we make data and results universally addressable?</p>
-            <p class="oq-p">Which checkpoints to keep, and how another team finds and builds on them to continue or branch the work.</p>
-          </div>
-          <div class="oq-card fragment fade-up" data-fragment-index="4" style="--c: var(--lc-highlight);">
-            <p class="oq-kicker"><i class="fa-solid fa-people-group"></i>Adoption</p>
-            <p class="oq-q">What will make researchers adopt it?</p>
-            <p class="oq-p">Credit in hiring, funding and publication; which communities lead; a record easier to keep than to skip.</p>
+          <div class="env-base">
+            <div class="env-res"><i class="fa-solid fa-database"></i>Observatory data</div>
+            <div class="env-res"><i class="fa-solid fa-brain"></i>Foundation models</div>
+            <div class="env-res"><i class="fa-solid fa-server"></i>Computing resources</div>
           </div>
         </div>
 
-        <p class="oq-contact fragment" data-fragment-index="5"><b>Thank you for your attention!</b></p>
+        <p class="env-key fragment fade-up" data-fragment-index="3">We don't yet have established patterns for <b>human teams working alongside teams of research agents</b>. But shared context, persistent records and interoperability are valuable whatever the interaction model.</p>
       </section>
+
+      <!-- ================================================================== -->
+      <!-- 7. CLOSE — build for what endures                                   -->
+      <!-- ================================================================== -->
+      <section id="endures" class="no-brand-mark" data-background-glow>
+        <div class="en-inner">
+          <p class="en-title">Build for what endures.</p>
+          <p class="en-sub">Not for the AI systems of today.</p>
+          <hr class="en-rule">
+          <div class="en-row">
+            <div class="en-item"><i class="fa-solid fa-brain"></i>Reusable scientific capabilities</div>
+            <div class="en-item"><i class="fa-solid fa-code-branch"></i>Verifiable research records</div>
+            <div class="en-item"><i class="fa-solid fa-user-group"></i>Human&ndash;agent collaboration</div>
+          </div>
+        </div>
+
+        <a class="en-qr" href="https://www.lightconeresearch.org/fellowship" target="_blank" rel="noopener">
+          <img class="en-qr__code" src="../assets/lightcone_fellowship_qr.svg" alt="QR code: lightconeresearch.org/fellowship">
+          <span>
+            <img class="en-qr__logo" src="theme/Primary Logo.svg" alt="Lightcone Research">
+            <b>Lightcone Research Fellowship</b>lightconeresearch.org/fellowship
+          </span>
+        </a>
+      </section>
+
     </div>
   </div>
 
